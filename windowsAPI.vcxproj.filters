@@ -46,6 +46,15 @@
     <Filter Include="2DFramework\action">
       <UniqueIdentifier>{29ce7e2b-17af-439c-a519-f3ca2bf12ff1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\Scenes">
+      <UniqueIdentifier>{8a7fc662-d23d-48a2-ad12-9853bf1f58ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\skills">
+      <UniqueIdentifier>{ff072f1f-f276-441e-b1a4-f57418e11691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayGround\units">
+      <UniqueIdentifier>{8134c06e-531c-4a30-bd93-fa20478edc15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -120,6 +129,48 @@
     <ClInclude Include="keyAniManager.h">
       <Filter>2DFramework\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="loadingScene.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="skills.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="camera2D.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="aStar.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="mapEditor.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="mainmenu.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="options.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="home.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="stage1_1.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="stageBoss1.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
+    <ClInclude Include="enemyMgr.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -181,6 +232,48 @@
     </ClCompile>
     <ClCompile Include="keyAniManager.cpp">
       <Filter>2DFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingScene.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="skills.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="camera2D.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="aStar.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="mapEditor.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="mainmenu.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="options.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="home.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="stage1_1.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="stageBoss1.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="enemyMgr.cpp">
+      <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="tile.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
