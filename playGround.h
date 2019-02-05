@@ -6,6 +6,7 @@ class playGround : public gameNode
 {
 private:
 	
+	
 public:
 	virtual HRESULT init();
 	virtual void release();

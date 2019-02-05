@@ -171,6 +171,9 @@
     <ClInclude Include="tile.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
+    <ClInclude Include="tileNode.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

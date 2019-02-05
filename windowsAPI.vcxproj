@@ -181,6 +181,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="tile.h" />
+    <ClInclude Include="tileNode.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
