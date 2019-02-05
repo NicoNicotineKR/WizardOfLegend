@@ -62,6 +62,8 @@ private:
 	CHAR*				_fileName;		//파일이름에 사용할 캐릭터포인터
 	BOOL				_trans;			//특정 칼라를 뺄꺼냐?
 	COLORREF			_transColor;	//제외할 칼라의 RGB 값은?
+	BOOL				_alpha;			//알파블렌드 사용?
+	BYTE				_alphaValue;	//알파값
 
 	BLENDFUNCTION		_blendFunc;		//알파블렌드 관련 함수를 포함
 	LPIMAGE_INFO		_blendImage;	//알파처리할 이미지
@@ -96,6 +98,7 @@ public:
 	void release();
 
 	void setTransColor(BOOL trans, COLORREF transColor);
+	void setAlpahBlend(BOOL alpahs, BYTE alpahValue = 255);
 
 	void render(HDC hdc);
 	//이미지 렌더함수(뿌려줄DC, 
@@ -118,6 +121,11 @@ public:
 	void alphaRender(HDC hdc, int destX, int destY, BYTE alpha);
 
 	void aniRender(HDC hdc, int destX, int destY, animation* ani);
+
+	void alphaFrameRender(HDC hdc, int destX, int destY);
+	void alphaFrameRender(HDC hdc, int destX, int destY, BYTE alpha);
+	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
+	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 

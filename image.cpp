@@ -384,6 +384,31 @@ void image::setTransColor(BOOL trans, COLORREF transColor)
 	_transColor = transColor;
 }
 
+void image::setAlpahBlend(BOOL alpha, BYTE alphaValue)
+{
+	_alpha = alpha;
+	_alphaValue = alphaValue;
+
+	HDC hdc = GetDC(_hWnd);
+
+	//알파블렌드 설정함.
+	//진형 + 치영이는 집중해서 봐라
+	_blendFunc.BlendFlags = 0;
+	_blendFunc.AlphaFormat = 0;
+	_blendFunc.BlendOp = AC_SRC_OVER;	//<-- 이건 한 번 조사해보세요 여러분
+
+	_blendImage = new IMAGE_INFO;
+	_blendImage->loadType = LOAD_EMPTY;
+	_blendImage->resID = 0;
+	_blendImage->hMemDC = CreateCompatibleDC(hdc);
+	_blendImage->hBit = (HBITMAP)CreateCompatibleBitmap(hdc, WINSIZEX, WINSIZEY);
+	_blendImage->hOBit = (HBITMAP)SelectObject(_blendImage->hMemDC, _blendImage->hBit);
+	_blendImage->width = WINSIZEX;
+	_blendImage->height = WINSIZEY;
+
+	ReleaseDC(_hWnd, hdc);
+}
+
 void image::render(HDC hdc)
 {
 	if (_trans)
@@ -674,4 +699,81 @@ void image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 void image::aniRender(HDC hdc, int destX, int destY, animation* ani)
 {
 	render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
+}
+
+
+void image::alphaFrameRender(HDC hdc, int destX, int destY)
+{
+	// 알파 설정 안하면 일반 프레임 렌더 사용
+	if (!_alpha)
+	{
+		frameRender(hdc, destX, destY);
+		return;
+	}
+
+	//이것을 해야 알파값이 적용됨!!!
+	_blendFunc.SourceConstantAlpha = _alphaValue;
+
+	if (_trans)
+	{
+		BitBlt(_blendImage->hMemDC
+			, 0, 0
+			, _imageInfo->frameWidth, _imageInfo->frameHeight
+			, hdc
+			, destX, destY
+			, SRCCOPY);
+
+		//특정칼라를 제외하고 DC -> DC 사이로 고속복사 해주는 함수
+		GdiTransparentBlt(
+			_blendImage->hMemDC,								//복사될 DC
+			0,												//이미지 그려줄 시작X좌표(left)
+			0,												//이미지 그려줄 시작Y좌표(top)
+			_imageInfo->frameWidth,								//복사될 가로크기
+			_imageInfo->frameHeight,							//복사될 세로크기
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,//복사시작할 XY좌표
+			_imageInfo->frameWidth,								//복사할 가로/세로크기
+			_imageInfo->frameHeight,
+			_transColor											//복사때 제외할 칼라(뺄 칼라)
+		);
+
+		AlphaBlend(hdc
+			, destX, destY
+			, _imageInfo->frameWidth, _imageInfo->frameHeight
+			, _blendImage->hMemDC
+			, 0, 0
+			, _imageInfo->frameWidth, _imageInfo->frameHeight
+			, _blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc
+			, destX, destY
+			, _imageInfo->frameWidth, _imageInfo->frameHeight
+			, _blendImage->hMemDC
+			, 0, 0
+			, _imageInfo->frameWidth, _imageInfo->frameHeight
+			, _blendFunc);
+	}
+}
+
+void image::alphaFrameRender(HDC hdc, int destX, int destY, BYTE alpha)
+{
+	_alphaValue = alpha;
+	alphaFrameRender(hdc, destX, destY);
+}
+
+void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY)
+{
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	alphaFrameRender(hdc, destX, destY);
+}
+
+void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha)
+{
+	_alphaValue = alpha;
+	alphaFrameRender(hdc, destX, destY, currentFrameX, currentFrameY);
 }
