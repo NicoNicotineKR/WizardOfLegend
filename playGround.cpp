@@ -33,7 +33,6 @@ void playGround::update()
 {
 	gameNode::update();
 
-	
 }
 
 
@@ -42,7 +41,6 @@ void playGround::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	
-
 
 	
 	//===========================================================
