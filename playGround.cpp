@@ -16,6 +16,8 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
+	//_introScene = new introScene;
+	//_introScene->init();
 
 	return S_OK;
 }
@@ -33,6 +35,8 @@ void playGround::update()
 {
 	gameNode::update();
 
+	//_introScene->update();
+
 }
 
 
@@ -41,7 +45,7 @@ void playGround::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	
-
+	//_introScene->render();
 	
 	//===========================================================
 	IMAGEMANAGER->findImage("backBuffer")->render(getHDC(), 0, 0);
