@@ -9,6 +9,7 @@ struct tagImgSet {
 	int frameX;
 	int frameY;
 	int attribute;
+	string imgKeyValue;
 
 };
 
@@ -30,6 +31,6 @@ enum E_TILE_ATR {
 
 };
 
-enum E_TILE_OBJ {
+enum E_OBJ_ATR {
 	OBJ_NONE,
 };
