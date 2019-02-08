@@ -130,8 +130,10 @@ void optionManager::render()
 		}
 	}
 
-	_mouse->frameRender(getMemDC(), _ptMouse.x - _mouse->getFrameWidth() / 2, _ptMouse.y - _mouse->getFrameHeight() / 2, _smallButton[1].ratio,0);
-	
+	//if ((0 < _ptMouse.x && _ptMouse.x < WINSIZEX) && (0 < _ptMouse.y && _ptMouse.y < WINSIZEY))
+	//{
+		_mouse->frameRender(getMemDC(), _ptMouse.x - _mouse->getFrameWidth() / 2, _ptMouse.y - _mouse->getFrameHeight() / 2, _smallButton[1].ratio, 0);
+	//}
 }
 
 void optionManager::SelectOption()

@@ -52,7 +52,7 @@ HRESULT mainmenu::init()
 	_selectMenu = SINGLE_PLAYER;
 	_button[_selectMenu].idxX = 1;
 
-
+	_startCount = 0;
 
 	_mainMenuState = RUN_WIZARD;
 
