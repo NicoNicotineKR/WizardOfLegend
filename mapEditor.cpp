@@ -40,6 +40,12 @@ HRESULT mapEditor::init()
 		IMAGEMANAGER->addFrameImage("btn_units", "images/mapEditor/btn_units.bmp", 72, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_erase", "images/mapEditor/btn_erase.bmp", 72, 42, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_arrow", "images/mapEditor/btn_arrow.bmp", 56, 56, 2, 2, true, 0xFF00FF);
+
+		IMAGEMANAGER->addFrameImage("btn_castle", "images/mapEditor/btn_castle.bmp", 73, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_ice", "images/mapEditor/btn_ice.bmp", 37, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_fire", "images/mapEditor/btn_fire.bmp", 45, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_earth", "images/mapEditor/btn_earth.bmp", 67, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_common", "images/mapEditor/btn_common.bmp", 113, 30, 1, 2, false, 0x000000);
 	}
 
 	//	기본 크기
@@ -138,6 +144,13 @@ void mapEditor::render()
 	for (int i = 0; i < E_BUTTONS_END; i++)
 	{
 		_buttons[i].img->frameRender(getMemDC(), _buttons[i].rc.left, _buttons[i].rc.top, _buttons[i].frameX, _buttons[i].frameY);
+	}
+	//종류선택버튼 출력
+	for (int i = 0; i < 3; i++) {	//	tile/obj/unit
+		for (int j = 0; j < BTN_KINDS_END; j++) {
+			_kindButtons[i][j].img->frameRender(getMemDC(), _kindButtons[i][j].rc.left, _kindButtons[i][j].rc.top,
+				0, _kindButtons[i][j].isOn);
+		}
 	}
 
 	//화살표출력
@@ -366,6 +379,55 @@ void mapEditor::InitButtons()
 		_buttons[i].rc = RectMakeCenter(_buttons[i].pos.x, _buttons[i].pos.y, _buttons[i].img->getFrameWidth(), _buttons[i].img->getFrameHeight());
 		
 
+	}
+	//	_kindButtons 이닛
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < BTN_KINDS_END; j++) {
+			switch (j) {
+			case BTN_CASTLE:
+				_kindButtons[i][j].img = IMAGEMANAGER->findImage("btn_castle");
+				_kindButtons[i][j].pos.y = 550;
+				break;
+
+			case BTN_ICE:
+				_kindButtons[i][j].img = IMAGEMANAGER->findImage("btn_ice");
+				_kindButtons[i][j].pos.y = 600;
+				break;
+
+			case BTN_FIRE:
+				_kindButtons[i][j].img = IMAGEMANAGER->findImage("btn_fire");
+				_kindButtons[i][j].pos.y = 650;
+				break;
+
+			case BTN_EARTH:
+				_kindButtons[i][j].img = IMAGEMANAGER->findImage("btn_earth");
+				_kindButtons[i][j].pos.y = 700;
+				break;
+
+			case BTN_COMMON:
+				_kindButtons[i][j].img = IMAGEMANAGER->findImage("btn_common");
+				_kindButtons[i][j].pos.y = 750;
+				break;
+
+			}
+			switch (i) {
+			case 0:	//	타일
+				_kindButtons[i][j].pos.x = 1225;
+				break;
+			case 1:	//	obj
+				_kindButtons[i][j].pos.x = 1375;
+				break;
+			case 2:	//	unit
+				_kindButtons[i][j].pos.x = 1525;
+				break;
+
+
+			}
+			_kindButtons[i][j].rc = RectMakeCenter(_kindButtons[i][j].pos.x, _kindButtons[i][j].pos.y,
+				_kindButtons[i][j].img->getFrameWidth(), _kindButtons[i][j].img->getFrameHeight());
+			_kindButtons[i][j].isOn = false;
+			
+		}
 	}
 
 
@@ -790,6 +852,92 @@ void mapEditor::OverlayClickFunc()
 		
 		
 	}
+
+	//tile/obj/unit의 종류버튼들 클릭
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < BTN_KINDS_END; j++) {
+			if (PtInRect(&_kindButtons[i][j].rc, _ptMouse)) {
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)) {
+					_kindButtons[i][j].isOn = true;
+					//	프레임Y는 bool 값으로 대체하고있어서 안건들어도 적용됨.
+
+					//	나머진 다 false;
+					for (int ii = 0; ii < 3; ii++) {
+						for (int jj = 0; jj < BTN_KINDS_END; jj++) {
+							if (ii == i && jj == j) {
+								continue;
+							}
+							else {
+								_kindButtons[ii][jj].isOn = false;
+							}
+						}
+					}
+
+
+					//	tile / Obj / Unit도 자동으로 따라감
+					switch (i) {
+						//tile
+					case 0:
+						_curSampleKind = SELECT_TILE;
+						_curTileSampleIdx = 0;
+						
+						//	tile/obj/unit 버튼들 따로 놀고있어서...어쩔수없이 직접 다 해줘야함
+						_buttons[TILES].frameY = 1;
+						_buttons[OBJECTS].frameY = 0;
+						_buttons[UNITS].frameY = 0;
+
+
+						if		(j == BTN_CASTLE)	{ _curTileKind = CASTLE_TILE; }
+						else if (j == BTN_ICE)		{ _curTileKind = ICE_TILE; }
+						else if (j == BTN_FIRE)		{ _curTileKind = FIRE_TILE; }
+						else if (j == BTN_EARTH)	{ _curTileKind = EARTH_TILE; }
+						else if (j == BTN_COMMON)	{ _curTileKind = COMMON_TILE; }
+						break;
+
+						//obj
+					case 1:
+						_curSampleKind = SELECT_OBJ;
+						_curTileSampleIdx = 0;
+
+						//	tile/obj/unit 버튼들 따로 놀고있어서...어쩔수없이 직접 다 해줘야함
+						_buttons[TILES].frameY = 0;
+						_buttons[OBJECTS].frameY = 1;
+						_buttons[UNITS].frameY = 0;
+
+						if		(j == BTN_CASTLE)	{ _curObjKind = CASTLE_OBJ; }
+						else if (j == BTN_ICE)		{ _curObjKind = ICE_OBJ; }
+						else if (j == BTN_FIRE)		{ _curObjKind = FIRE_OBJ; }
+						else if (j == BTN_EARTH)	{ _curObjKind = EARTH_OBJ; }
+						else if (j == BTN_COMMON)	{ _curObjKind = COMMON_OBJ; }
+						break;
+
+						//unit
+					case 2:
+						_curSampleKind = SELECT_UNIT;
+						_curTileSampleIdx = 0;
+
+						//	tile/obj/unit 버튼들 따로 놀고있어서...어쩔수없이 직접 다 해줘야함
+						_buttons[TILES].frameY = 0;
+						_buttons[OBJECTS].frameY = 0;
+						_buttons[UNITS].frameY = 1;
+
+						if		(j == BTN_CASTLE)	{ _curObjKind = CASTLE_UNIT; }
+						else if (j == BTN_ICE)		{ _curObjKind = ICE_UNIT; }
+						else if (j == BTN_FIRE)		{ _curObjKind = FIRE_UNIT; }
+						else if (j == BTN_EARTH)	{ _curObjKind = EARTH_UNIT; }
+						else if (j == BTN_COMMON)	{ _curObjKind = COMMON_UNIT; }
+						break;
+
+					}
+					
+
+
+
+				}
+
+			}
+		}
+	}
 }
 
 void mapEditor::ArrowClickFunc()
@@ -801,8 +949,9 @@ void mapEditor::ArrowClickFunc()
 			if (PtInRect(&_arrowButtons[i][j].rc, _ptMouse))
 			{
 				//	staykeydown떄문에 예외로 따로 처리
-				if (j == ARROW_MAPSIZEX || j == ARROW_MAPSIZEY || i == 0 || i == 1) 
+				if (j == ARROW_MAPSIZEX || j == ARROW_MAPSIZEY) 
 				{
+					//	staykeydown 적용하는 애들부분
 					if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
 						switch (j) {
 						case ARROW_MAPSIZEX:
@@ -840,137 +989,159 @@ void mapEditor::ArrowClickFunc()
 							break;
 						}
 					}
-				}
+				} //	staykeydown 적용하는 애들부분 끗
 				
 
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-				{
-					//	왼쪽화살표
-					if (i == 0) {
-						switch (j)
-						{
-						case ARROW_AREAMODE:
-							_curAreaIdx--;
-							if (_curAreaIdx < 0)
-								_curAreaIdx = 0;
-							break;
-						case ARROW_MAPIDX:
-							_curMapIdx--;
-							if (_curMapIdx < 0)
-								_curMapIdx = 0;
-							break;
-
-						//case ARROW_MAPSIZEX:
-						//	_tileNumX--;
-						//	if (_tileNumX < 1) {
-						//		_tileNumX = 1;
-						//		break;
-						//	}
-						//		
-						//	EraseMapX();
-						//	break;
-						//
-						//case ARROW_MAPSIZEY:
-						//	_tileNumY--;
-						//	if (_tileNumY < 1) {
-						//		_tileNumY = 1;
-						//		break;
-						//	}
-						//	EraseMapY();
-						//	break;
-
-						case ARROW_TILES:
-							_curTileSampleIdx--;
-							//캐슬타일중일경우,
-							if (_curTileKind == CASTLE_TILE) {
-								if (_curTileSampleIdx < 0) {
-									_curTileSampleIdx = CASTLETILE_KINDS_END - 1;
-								}
-								//	다른 종류 타일 추가시 여기에 추가
-								//else if () {
-								//
-								//}
-								
-							}
-
-							break;
-
-						case ARROW_OBJECTS:
-							_curTileSampleIdx--;
-							//캐슬오브제일경우
-							if (_curObjKind == CASTLE_OBJ) {
-								if (_curTileSampleIdx < 0) {
-									_curTileSampleIdx = CASTLEOBJ_KINDS_END - 1;
-								}
-							}
-							break;
-							
-						case ARROW_UNITS:
-							_curUnitKind--;
-							if (_curUnitKind < 0)
-								_curUnitKind = UNIT_KINDS_END - 1;
-							break;
-						}
-					}
-					//	오른쪽 화살표
-					else if (i == 1)
+				//	oncekeydown 적용하는 애들부분
+				else {
+					if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 					{
-						switch (j)
-						{
-						case ARROW_AREAMODE:
-							_curAreaIdx++;
-							break;
-						case ARROW_MAPIDX:
-							_curMapIdx++;
-							break;
+						//	왼쪽화살표
+						if (i == 0) {
+							switch (j)
+							{
+							case ARROW_AREAMODE:
+								_curAreaIdx--;
+								if (_curAreaIdx < 0)
+									_curAreaIdx = 0;
+								break;
+							case ARROW_MAPIDX:
+								_curMapIdx--;
+								if (_curMapIdx < 0)
+									_curMapIdx = 0;
+								break;
 
-						//case ARROW_MAPSIZEX:
-						//	_tileNumX++;
-						//	AddMapX();
-						//	break;
-						//
-						//case ARROW_MAPSIZEY:
-						//	_tileNumY++;
-						//	AddMapY();
-						//	break;
-
-						case ARROW_TILES:
-							_curTileSampleIdx++;
-							//	캐슬타일중일경우,
-							if (_curTileKind == CASTLE_TILE) {
-							
-								if (_curTileSampleIdx >= CASTLETILE_KINDS_END) {
-								
-									_curTileSampleIdx = 0;
-								}
-								//	다른 종류 타일 추가시 여기에 추가
-								//else if () {
+								//case ARROW_MAPSIZEX:
+								//	_tileNumX--;
+								//	if (_tileNumX < 1) {
+								//		_tileNumX = 1;
+								//		break;
+								//	}
+								//		
+								//	EraseMapX();
+								//	break;
 								//
-								//}
+								//case ARROW_MAPSIZEY:
+								//	_tileNumY--;
+								//	if (_tileNumY < 1) {
+								//		_tileNumY = 1;
+								//		break;
+								//	}
+								//	EraseMapY();
+								//	break;
 
-							}
+							case ARROW_TILES:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_TILE) {
+									_curTileSampleIdx--;
+									//캐슬타일중일경우,
+									if (_curTileKind == CASTLE_TILE) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = CASTLETILE_KINDS_END - 1;
+										}
+										//	다른 종류 타일 추가시 여기에 추가
+										//else if () {
+										//
+										//}
 
-							break;
-
-						case ARROW_OBJECTS:
-							_curTileSampleIdx++;
-							//	캐슬오브제인경우,
-							if (_curObjKind == CASTLE_OBJ) {
-
-								if (_curTileSampleIdx >= CASTLEOBJ_KINDS_END) {
-									_curTileSampleIdx = 0;
+									}
 								}
-							}
-							break;
+								
 
-						case ARROW_UNITS:
-							_curUnitKind++;
-							if (_curUnitKind == UNIT_KINDS_END)
-								_curUnitKind = 0;
-							break;
+								break;
+
+							case ARROW_OBJECTS:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_OBJ) {
+									_curTileSampleIdx--;
+									//캐슬오브제일경우
+									if (_curObjKind == CASTLE_OBJ) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = CASTLEOBJ_KINDS_END - 1;
+										}
+									}
+								}
+								break;
+
+							case ARROW_UNITS:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_UNIT) {
+									_curUnitKind--;
+									if (_curUnitKind < 0)
+										_curUnitKind = UNIT_KINDS_END - 1;
+								}
+								break;
+							}
+						}
+						//	오른쪽 화살표
+						else if (i == 1)
+						{
+							switch (j)
+							{
+							case ARROW_AREAMODE:
+								_curAreaIdx++;
+								break;
+							case ARROW_MAPIDX:
+								_curMapIdx++;
+								break;
+
+								//case ARROW_MAPSIZEX:
+								//	_tileNumX++;
+								//	AddMapX();
+								//	break;
+								//
+								//case ARROW_MAPSIZEY:
+								//	_tileNumY++;
+								//	AddMapY();
+								//	break;
+
+							case ARROW_TILES:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_TILE) {
+									_curTileSampleIdx++;
+									//	캐슬타일중일경우,
+									if (_curTileKind == CASTLE_TILE) {
+
+										if (_curTileSampleIdx >= CASTLETILE_KINDS_END) {
+
+											_curTileSampleIdx = 0;
+										}
+										//	다른 종류 타일 추가시 여기에 추가
+										//else if () {
+										//
+										//}
+
+									}
+								}
+								break;
+
+							case ARROW_OBJECTS:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_OBJ) {
+									_curTileSampleIdx++;
+									//	캐슬오브제인경우,
+									if (_curObjKind == CASTLE_OBJ) {
+
+										if (_curTileSampleIdx >= CASTLEOBJ_KINDS_END) {
+											_curTileSampleIdx = 0;
+										}
+									}
+								}
+								break;
+
+							case ARROW_UNITS:
+								//	현재 선택된거랑 일치할경우만 적용!
+								if (_curSampleKind == SELECT_UNIT) {
+									_curUnitKind++;
+									if (_curUnitKind == UNIT_KINDS_END)
+										_curUnitKind = 0;
+								}
+								break;
+							}
 						}
 					}
-				}
+				}	//	oncekeydown 적용하는 애들부분
+				
 			}
 		}
 	}
@@ -1848,8 +2019,6 @@ void mapEditor::LoadFunc()
 					tmpTile->setTopObjImage(IMAGEMANAGER->findImage(token));
 				}
 			}
-
-
 
 			vLineX.push_back(tmpTile);
 

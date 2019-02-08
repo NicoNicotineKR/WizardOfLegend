@@ -40,14 +40,14 @@ private:
 
 		SELECT_KIND_END,
 	};
-	enum E_CASTLETILE_KINDS {
+	enum E_CASTLETILE_KINDS {	//	_curTileSampleIdx
 		CASTLETILE1 = 0,
 		CASTLETILE2,
 		CASTLETILE3,
 		CASTLETILE4,
 		CASTLETILE_KINDS_END,
 	};
-	enum E_CASTLEOBJ_KINDS {
+	enum E_CASTLEOBJ_KINDS {	//	_curTileSampleIdx
 		CASTLEOBJ1 = 0,
 		CASTLEOBJ2,
 		//CASTLEOBJ3,		//	울타리 추가시 해제
@@ -57,6 +57,10 @@ private:
 	enum E_TILE_KINDS	//_curTileKind
 	{
 		CASTLE_TILE = 0,
+		ICE_TILE,
+		FIRE_TILE,
+		EARTH_TILE,
+		COMMON_TILE,
 
 
 		TILE_KINDS_END,
@@ -64,6 +68,10 @@ private:
 	enum E_OBJ_KINDS	//_curObjKind
 	{
 		CASTLE_OBJ = 0,
+		ICE_OBJ,
+		FIRE_OBJ,
+		EARTH_OBJ,
+		COMMON_OBJ,
 
 
 		OBJ_KINDS_END,
@@ -71,11 +79,28 @@ private:
 	enum E_UNIT_KINDS	//	_curUnitKind
 	{
 		CASTLE_UNIT = 0,
+		ICE_UNIT,
+		FIRE_UNIT,
+		EARTH_UNIT,
+		COMMON_UNIT,
 
 
 		UNIT_KINDS_END,
 	};
-
+	struct tagButtons {
+		image* img;
+		POINT pos;
+		RECT rc;
+		bool isOn;
+	};
+	enum E_KINDSBUTTONS {	//	_kindButtons[][E_KINDSBUTTONS]
+		BTN_CASTLE = 0,
+		BTN_ICE,
+		BTN_FIRE,
+		BTN_EARTH,
+		BTN_COMMON,
+		BTN_KINDS_END,
+	};
 
 
 
@@ -103,6 +128,7 @@ private:
 	image* _frame;
 	tagImgSet _buttons[14];
 	tagImgSet _arrowButtons[2][7];
+	tagButtons _kindButtons[3][5];	//[타일/오브제/유닛] [캐슬/아이스/파이어/어스/커먼]
 	
 	RECT _sampleRc[14][14];
 	image* _sampleMask;
