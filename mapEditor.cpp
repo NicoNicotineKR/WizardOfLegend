@@ -15,7 +15,8 @@ HRESULT mapEditor::init()
 {
 	//	이미지매니저
 	IMAGEMANAGER->addFrameImage("tileCastle", "images/map/CastleBaseTileSet.bmp", 704, 384, 22, 12, true, 0xFF00FF);
-	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 896, 384, 28, 12, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
+
 	IMAGEMANAGER->addImage("mapEditorFrame", "images/mapEditor/mapEditorFrame.bmp", 1600, 900, true, 0xFF00FF);
 	IMAGEMANAGER->addImage("sampleMask", "images/mapEditor/sampleMask.bmp", 32, 32, false, 0x000000);
 
@@ -23,6 +24,10 @@ HRESULT mapEditor::init()
 	{
 		IMAGEMANAGER->addFrameImage("btn_areamode", "images/mapEditor/btn_areamode.bmp", 141, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_autofill", "images/mapEditor/btn_autofill.bmp", 105, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_eraseTile", "images/mapEditor/btn_eraseTile.bmp", 125, 44, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_eraseObj", "images/mapEditor/btn_eraseObj.bmp", 120, 56, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_eraseUnit", "images/mapEditor/btn_eraseUnit.bmp", 134, 44, 1, 2, false, 0x000000);
+
 		IMAGEMANAGER->addFrameImage("btn_select", "images/mapEditor/btn_select.bmp", 77, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_info", "images/mapEditor/btn_info.bmp", 55, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_save", "images/mapEditor/btn_save.bmp", 61, 42, 1, 2, false, 0x000000);
@@ -64,17 +69,28 @@ HRESULT mapEditor::init()
 
 	//	샘플종류
 	_curSampleKind = SELECT_TILE;
+	_buttons[TILES].frameY = 1;
+	_curTileKind = CASTLE_TILE;
+	_curObjKind = CASTLE_OBJ;
+	_curUnitKind = CASTLE_UNIT;
+	_curTileSampleIdx = 0;
 
-	//	tileCastle 샘플 생성
+	//	=== tileCastle 샘플 생성 ===
 	InitSampleCastleTile();
-	
+	InitSampleCastleObj();
 
-	_curTileSampleIdx = CASTLETILE1;
+
+
+
+	
 
 
 	_isAreaMode = false;
 	_isAutoFill = false;
 	_isErase = false;
+	_isEraseTile = false;
+	_isEraseObj = false;
+	_isEraseUnit = false;
 
 	_cursorSampleIdx[0] = { 0,0 };
 	_cursorSampleIdx[1] = { 0,0 };
@@ -140,7 +156,11 @@ void mapEditor::render()
 	{
 		for (int j = 0; j < 14; j++)
 		{
-			Rectangle(getMemDC(), _sampleRc[i][j]);
+			//Rectangle(getMemDC(), _sampleRc[i][j]);
+			HBRUSH brush;
+			brush = CreateSolidBrush(RGB(150,100,100));
+			FrameRect(getMemDC(), &_sampleRc[i][j], brush);
+			DeleteObject(brush);
 		}
 	}
 
@@ -213,7 +233,6 @@ void mapEditor::SetNewTile(tile* tile, int idxX, int idxY)
 void mapEditor::SetNewSampleTile(tile * tile, int idxX, int idxY)
 {
 	
-
 	POINT tmpIdx = { idxX, idxY };
 	tile->setTopIdx(tmpIdx);
 
@@ -247,6 +266,38 @@ void mapEditor::SetNewSampleTile(tile * tile, int idxX, int idxY)
 	
 }
 
+void mapEditor::SetNewSampleObj(tile * tile, int idxX, int idxY)
+{
+	POINT tmpIdx = { idxX, idxY };
+	//tile->setTopIdx(tmpIdx);
+
+	tagImgSet tmpTileSet;
+	tmpTileSet.attribute = TILE_NONE;
+	tmpTileSet.frameX = 0;		//	타일 셋트할땐 여기에 인덱스
+	tmpTileSet.frameY = 0;
+	tmpTileSet.img = nullptr;
+	tmpTileSet.pos.x = 1150 + TOP_TILESIZE / 2 + TOP_TILESIZE * idxX;
+	tmpTileSet.pos.y = TOP_TILESIZE / 2 + TOP_TILESIZE * idxY;
+	tmpTileSet.rc = RectMakeCenter(tmpTileSet.pos.x, tmpTileSet.pos.y, TOP_TILESIZE, TOP_TILESIZE);
+	tmpTileSet.imgKeyValue = "none";
+	tile->setTopTileImageSet(tmpTileSet);
+
+
+	tagImgSet tmpObjSet;
+	tmpObjSet.attribute = OBJ_NONE;
+	tmpObjSet.frameX = idxX;			//	오브젝트 셋트할땐 여기에 인덱스
+	tmpObjSet.frameY = idxY;
+	tmpObjSet.img = nullptr;
+	tmpObjSet.pos.x = 1150 + TOP_TILESIZE / 2 + TOP_TILESIZE * idxX;
+	tmpObjSet.pos.y = TOP_TILESIZE / 2 + TOP_TILESIZE * idxY;
+	tmpObjSet.rc = RectMakeCenter(tmpObjSet.pos.x, tmpObjSet.pos.y, TOP_TILESIZE, TOP_TILESIZE);
+	tmpObjSet.imgKeyValue = "none";
+	tile->setTopObjImageSet(tmpObjSet);
+
+	tile->setIsAvailMove(false);
+	tile->setParent(nullptr);
+}
+
 void mapEditor::InitButtons()
 {
 	for (int i = 0; i < E_BUTTONS_END; i++) {
@@ -255,14 +306,18 @@ void mapEditor::InitButtons()
 			_buttons[i].img = IMAGEMANAGER->findImage("btn_areamode");
 			_buttons[i].pos = { 174,814 };
 			break;
-		case AUTOFILL:
-			_buttons[i].img = IMAGEMANAGER->findImage("btn_autofill");
+		case ERASE_TILE:
+			_buttons[i].img = IMAGEMANAGER->findImage("btn_eraseTile");
 			_buttons[i].pos = { 1087,36 };
 			break;
-		case SELECT:
-			_buttons[i].img = IMAGEMANAGER->findImage("btn_select");
+		case ERASE_OBJ:
+			_buttons[i].img = IMAGEMANAGER->findImage("btn_eraseObj");
 			_buttons[i].pos = { 1087,92 };
 			break;
+	//	case ERASE_UNIT:
+	//		_buttons[i].img = IMAGEMANAGER->findImage("btn_eraseUnit");
+	//		_buttons[i].pos = { 1087,148 };
+	//		break;
 		case INFO:
 			_buttons[i].img = IMAGEMANAGER->findImage("btn_info");
 			_buttons[i].pos = { 1087,257 };
@@ -418,6 +473,7 @@ void mapEditor::InitSampleCastleTile()
 				_castleTileSample[i][j] = new tile;
 				SetNewSampleTile(_castleTileSample[i][j], j, i);
 				_castleTileSample[i][j]->setTopTileImage(IMAGEMANAGER->findImage("tileCastle"));
+				_castleTileSample[i][j]->setTopTileImgKey("tileCastle");
 
 				//	개별적 셋팅
 				//	1번
@@ -483,7 +539,7 @@ void mapEditor::InitSampleCastleTile()
 
 
 			}
-		}
+		}	//for i 종료
 
 		//캐슬 타일 프레임 갯수 이닛
 		{
@@ -496,6 +552,137 @@ void mapEditor::InitSampleCastleTile()
 			_castleTileFrameIdx[0][CASTLETILE4] = { 12,7 };
 			_castleTileFrameIdx[1][CASTLETILE4] = { 15,11 };
 		}
+
+	}
+}
+
+void mapEditor::InitSampleCastleObj()
+{
+	
+	for (int i = 0; i <= IMAGEMANAGER->findImage("objCastle")->getMaxFrameY(); i++)	//	11
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("objCastle")->getMaxFrameX(); j++)	//	22
+		{
+			_castleObjSample[i][j] = new tile;
+
+			SetNewSampleObj(_castleObjSample[i][j], j, i);
+			_castleObjSample[i][j]->setTopObjImage(IMAGEMANAGER->findImage("objCastle"));
+			_castleObjSample[i][j]->setTopObjImgKey("objCastle");
+
+			//	개별적 셋팅
+			//	벽,동상,기둥, 창문들
+			if (i <= 4) {
+				if (j <= 2) {
+					_castleObjSample[i][j]->setIsAvailMove(false);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+				}
+				if (i <= 2) {
+					if (2 <= j && j <= 5) {
+						_castleObjSample[i][j]->setIsAvailMove(true);
+						_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (3 <= i && i <= 4) {
+					if (2 <= j && j <= 5) {
+						_castleObjSample[i][j]->setIsAvailMove(false);
+						_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i <= 2) {
+					if (6 <= j && j <= 11) {
+						_castleObjSample[i][j]->setIsAvailMove(false);
+						_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+					}
+				}
+				if (3 <= i && i <= 4) {
+					if (6 <= j && j <= 11) {
+						_castleObjSample[i][j]->setIsAvailMove(true);
+						_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+					}
+				}
+			}
+			//	깃발
+			if (j <= 2) {
+				if (5 <= i && i <= 7) {
+					_castleObjSample[i][j]->setIsAvailMove(false);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+				}
+			}
+			//	책장, 잡동사니
+			if (3 <= j && j <= 11) {
+				if (5 <= i && i <= 7) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+				}
+			}
+			//	나무의자, 나무들
+			if (j <= 9) {
+				if (8 <= i && i <= 9) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+				}
+			}
+			//	돌아치
+			if (i <= 5) {
+				//왼쪽다리
+				if (12 <= j && j <= 13) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+				}
+				//아치
+				if (i <= 2) {
+					if (12 <= j && j <= 18) {
+						_castleObjSample[i][j]->setIsAvailMove(true);
+						_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				//오른쪽다리
+				if (17 <= j && j <= 18) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+				}
+			}
+			//	돌아치 기둥 밑부분
+			if (i == 6) {
+				if (j == 12 || j == 18) {
+					_castleObjSample[i][j]->setIsAvailMove(false);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+				}
+			}
+			//	나무문
+			if (2 <= i && i <= 6) {
+				if (19 <= j && j <= 22) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+				}
+
+			}
+			//	촛대
+			if (12 <= j && j <= 13) {
+				if (7 <= i && i <= 9) {
+					_castleObjSample[i][j]->setIsAvailMove(true);
+					_castleObjSample[i][j]->setTopObjAttr(OBJ_BREAKABLE);
+				}
+			}
+			//	촛불
+			if (j == 14 && i == 7) {
+				_castleObjSample[i][j]->setIsAvailMove(true);
+				_castleObjSample[i][j]->setTopObjAttr(OBJ_CANDLE);
+			}
+
+			
+
+
+
+		}
+	}	//	for i 종료
+	//캐슬 Obj 프레임 갯수 이닛
+	{
+		_castleObjFrameIdx[0][CASTLEOBJ1] = { 0,0 };
+		_castleObjFrameIdx[1][CASTLEOBJ1] = { 11,9 };
+
+		_castleObjFrameIdx[0][CASTLEOBJ2] = { 12,0 };
+		_castleObjFrameIdx[1][CASTLEOBJ2] = { 22,9 };
 
 	}
 }
@@ -516,7 +703,7 @@ void mapEditor::OverlayClickFunc()
 				}
 			}
 		}
-		else if (i == AREAMODE || i == AUTOFILL || i == ERASE)
+		else if (i == AREAMODE || i == ERASE_TILE || i == ERASE || i == ERASE_OBJ)
 		{
 			if (PtInRect(&_buttons[i].rc, _ptMouse)) 
 			{
@@ -530,9 +717,9 @@ void mapEditor::OverlayClickFunc()
 						else             _buttons[i].frameY = 0;
 						
 						break;
-					case AUTOFILL:
-						_isAutoFill = !_isAutoFill;
-						if (_isAutoFill) _buttons[i].frameY = 1;
+					case ERASE_TILE:
+						_isEraseTile = !_isEraseTile;
+						if (_isEraseTile) _buttons[i].frameY = 1;
 						else             _buttons[i].frameY = 0;
 
 						break;
@@ -540,12 +727,67 @@ void mapEditor::OverlayClickFunc()
 						_isErase = !_isErase;
 						if (_isErase) _buttons[i].frameY = 1;
 						else          _buttons[i].frameY = 0;
+						break;
+
+					case ERASE_OBJ:
+						_isEraseObj = !_isEraseObj;
+						if (_isEraseObj) _buttons[i].frameY = 1;
+						else             _buttons[i].frameY = 0;
 
 						break;
+					//case ERASE_UNIT:
+					//	_isEraseUnit = !_isEraseUnit;
+					//	if (_isEraseUnit) _buttons[i].frameY = 1;
+					//	else             _buttons[i].frameY = 0;
+					//
+					//	break;
 					}
 				}
 			}
 		}
+		else if (i == TILES) {
+			if (PtInRect(&_buttons[i].rc, _ptMouse))
+			{
+				
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_buttons[i].frameY = 1;
+					_buttons[OBJECTS].frameY = 0;
+					_buttons[UNITS].frameY = 0;
+					_curSampleKind = SELECT_TILE;
+					_curTileSampleIdx = 0;
+				}
+			}
+		}
+		else if (i == OBJECTS) {
+			if (PtInRect(&_buttons[i].rc, _ptMouse))
+			{
+				
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_buttons[i].frameY = 1;
+					_buttons[TILES].frameY = 0;
+					_buttons[UNITS].frameY = 0;
+					_curSampleKind = SELECT_OBJ;
+					_curTileSampleIdx = 0;
+				}
+			}
+		}
+		else if (i == UNITS) {
+			if (PtInRect(&_buttons[i].rc, _ptMouse))
+			{
+				
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					_buttons[i].frameY = 1;
+					_buttons[TILES].frameY = 0;
+					_buttons[OBJECTS].frameY = 0;
+					_curSampleKind = SELECT_UNIT;
+					_curTileSampleIdx = 0;
+				}
+			}
+		}
+		
 		
 	}
 }
@@ -558,6 +800,49 @@ void mapEditor::ArrowClickFunc()
 		{
 			if (PtInRect(&_arrowButtons[i][j].rc, _ptMouse))
 			{
+				//	staykeydown떄문에 예외로 따로 처리
+				if (j == ARROW_MAPSIZEX || j == ARROW_MAPSIZEY || i == 0 || i == 1) 
+				{
+					if (KEYMANAGER->isStayKeyDown(VK_LBUTTON)) {
+						switch (j) {
+						case ARROW_MAPSIZEX:
+							if (i == 0) {
+								_tileNumX--;
+								if (_tileNumX < 1) {
+									_tileNumX = 1;
+
+								}
+								EraseMapX();
+
+							}
+							else if (i == 1) {
+								_tileNumX++;
+								AddMapX();
+							}
+							break;
+
+
+						case ARROW_MAPSIZEY:
+							if (i == 0) {
+								_tileNumY--;
+								if (_tileNumY < 1) {
+									_tileNumY = 1;
+
+								}
+								EraseMapY();
+							}
+							else if (i == 1) {
+								_tileNumY++;
+								AddMapY();
+
+							}
+
+							break;
+						}
+					}
+				}
+				
+
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//	왼쪽화살표
@@ -575,31 +860,30 @@ void mapEditor::ArrowClickFunc()
 								_curMapIdx = 0;
 							break;
 
-						case ARROW_MAPSIZEX:
-							_tileNumX--;
-							if (_tileNumX < 1) {
-								_tileNumX = 1;
-								break;
-							}
-								
-							EraseMapX();
-							break;
-
-						case ARROW_MAPSIZEY:
-							_tileNumY--;
-							if (_tileNumY < 1) {
-								_tileNumY = 1;
-								break;
-							}
-							EraseMapY();
-							break;
+						//case ARROW_MAPSIZEX:
+						//	_tileNumX--;
+						//	if (_tileNumX < 1) {
+						//		_tileNumX = 1;
+						//		break;
+						//	}
+						//		
+						//	EraseMapX();
+						//	break;
+						//
+						//case ARROW_MAPSIZEY:
+						//	_tileNumY--;
+						//	if (_tileNumY < 1) {
+						//		_tileNumY = 1;
+						//		break;
+						//	}
+						//	EraseMapY();
+						//	break;
 
 						case ARROW_TILES:
 							_curTileSampleIdx--;
 							//캐슬타일중일경우,
 							if (_curTileKind == CASTLE_TILE) {
-								if (_curTileKind < 0) {
-								
+								if (_curTileSampleIdx < 0) {
 									_curTileSampleIdx = CASTLETILE_KINDS_END - 1;
 								}
 								//	다른 종류 타일 추가시 여기에 추가
@@ -608,14 +892,17 @@ void mapEditor::ArrowClickFunc()
 								//}
 								
 							}
-								
-							
+
 							break;
 
 						case ARROW_OBJECTS:
-							_curObjKind--;
-							if (_curObjKind < 0)
-								_curObjKind = OBJ_KINDS_END - 1;
+							_curTileSampleIdx--;
+							//캐슬오브제일경우
+							if (_curObjKind == CASTLE_OBJ) {
+								if (_curTileSampleIdx < 0) {
+									_curTileSampleIdx = CASTLEOBJ_KINDS_END - 1;
+								}
+							}
 							break;
 							
 						case ARROW_UNITS:
@@ -625,6 +912,7 @@ void mapEditor::ArrowClickFunc()
 							break;
 						}
 					}
+					//	오른쪽 화살표
 					else if (i == 1)
 					{
 						switch (j)
@@ -636,15 +924,15 @@ void mapEditor::ArrowClickFunc()
 							_curMapIdx++;
 							break;
 
-						case ARROW_MAPSIZEX:
-							_tileNumX++;
-							AddMapX();
-							break;
-
-						case ARROW_MAPSIZEY:
-							_tileNumY++;
-							AddMapY();
-							break;
+						//case ARROW_MAPSIZEX:
+						//	_tileNumX++;
+						//	AddMapX();
+						//	break;
+						//
+						//case ARROW_MAPSIZEY:
+						//	_tileNumY++;
+						//	AddMapY();
+						//	break;
 
 						case ARROW_TILES:
 							_curTileSampleIdx++;
@@ -665,9 +953,14 @@ void mapEditor::ArrowClickFunc()
 							break;
 
 						case ARROW_OBJECTS:
-							_curObjKind++;
-							if (_curObjKind == OBJ_KINDS_END)
-								_curObjKind = 0;
+							_curTileSampleIdx++;
+							//	캐슬오브제인경우,
+							if (_curObjKind == CASTLE_OBJ) {
+
+								if (_curTileSampleIdx >= CASTLEOBJ_KINDS_END) {
+									_curTileSampleIdx = 0;
+								}
+							}
 							break;
 
 						case ARROW_UNITS:
@@ -760,33 +1053,41 @@ void mapEditor::SampleRender()
 						_sampleRc[0][0].left + (j - xStartIdx) * TOP_TILESIZE,
 						_sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE,
 						j, i);
-
-					//	위와 같은 내용
-					//_castleTileSample[i][j]->getTileImg()->frameRender(getMemDC(),
-					//	_sampleRc[0][0].left + (j - xStartIdx) * TOP_TILESIZE,
-					//	_sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE,
-					//	_castleTileFrameIdx[0][_curTileSampleIdx].x
-					//	_castleTileFrameIdx[0][_curTileSampleIdx].y,
-					//	);
-
-
 				}
 			}
 
-			//for (int i = _castleTileFrameIdx[0][_curTileSampleIdx].y; i <= _castleTileFrameIdx[1][_curTileSampleIdx].y; i++) {
-			//	for (int j = _castleTileFrameIdx[0][_curTileSampleIdx].x; j <= _castleTileFrameIdx[1][_curTileSampleIdx].y; j++) {
-			//		_castleTileSampleImg->frameRender(getMemDC(), _sampleRc[0][0].left + j * TOP_TILESIZE, _sampleRc[0][0].top + i * TOP_TILESIZE,
-			//			_castleTileFrameIdx[0][_curTileSampleIdx].x + j, _castleTileFrameIdx[0][_curTileSampleIdx].y + i);
-			//	}
-			//}
 		}
+		//다른 타일이면,
+		//else if()
 		
-		
-
 		break;
+
+		//오브제인경우,
+	case SELECT_OBJ:
+		//캐슬 오브제이면,
+		if (_curObjKind == CASTLE_OBJ)
+		{
+			int xStartIdx = _castleObjFrameIdx[0][_curTileSampleIdx].x;
+			int yStartIdx = _castleObjFrameIdx[0][_curTileSampleIdx].y;
+			int xEndIdx = _castleObjFrameIdx[1][_curTileSampleIdx].x;
+			int yEndIdx = _castleObjFrameIdx[1][_curTileSampleIdx].y;
+
+			for (int i = yStartIdx; i <= yEndIdx; i++) {
+				for (int j = xStartIdx; j <= xEndIdx; j++) {
+					//_castleTileSampleImg->frameRender(getMemDC(), _sampleRc[0][0].left + (j-xStartIdx) * TOP_TILESIZE, _sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE, j, i);	//일단 죽여봄
+					_castleObjSample[i][j]->getTopObjImg()->frameRender(getMemDC(),
+						_sampleRc[0][0].left + (j - xStartIdx) * TOP_TILESIZE,
+						_sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE,
+						j, i);
+				}
+			}
+			
+		}
+
 	}
 }
 
+//	더이상 건들필요없음
 void mapEditor::SampleSelectedRectRender()
 {
 	int iStart = _cursorSampleIdx[0].y;
@@ -861,17 +1162,22 @@ void mapEditor::TileInfoRender()
 	SetBkMode(getMemDC(), TRANSPARENT);
 	char tmpStr[128];
 	
+	//	맵 인덱스
+	sprintf_s(tmpStr, "MapIdx : [%d][%d]", _currentCursorTileInfo->getTopIdx().x, _currentCursorTileInfo->getTopIdx().y);
+	TextOut(getMemDC(), 1024, 300, tmpStr, strlen(tmpStr));
+	//sprintf_s(tmpStr, "MapIdxY : [%d]", _currentCursorTileInfo->getTopIdx().y);
+	//TextOut(getMemDC(), 1024, 320, tmpStr, strlen(tmpStr));
+	sprintf_s(tmpStr, "AvailMove? : [%d]", _currentCursorTileInfo->getIsAvailMove());
+	TextOut(getMemDC(), 1024, 320, tmpStr, strlen(tmpStr));
+
+
 	if (_currentCursorTileInfo->getTopTileImg() != nullptr) {
 
 		string toptileImgName = _currentCursorTileInfo->getTopTileImgKey();
 		//	이미지 이름
-		TextOut(getMemDC(), 1024, 300, toptileImgName.c_str(), strlen(toptileImgName.c_str()));
+		TextOut(getMemDC(), 1024, 360, toptileImgName.c_str(), strlen(toptileImgName.c_str()));
 
-		//	맵 인덱스
-		sprintf_s(tmpStr, "MapIdxX : %d", _currentCursorTileInfo->getTopIdx().x);
-		TextOut(getMemDC(), 1024, 320, tmpStr, strlen(tmpStr));
-		sprintf_s(tmpStr, "MapIdxY : %d", _currentCursorTileInfo->getTopIdx().y);
-		TextOut(getMemDC(), 1024, 340, tmpStr, strlen(tmpStr));
+		
 
 		//	타일 속성
 		sprintf_s(tmpStr, "Tile Atr : ");
@@ -899,6 +1205,47 @@ void mapEditor::TileInfoRender()
 		sprintf_s(tmpStr, "Tile frameY : %d", _currentCursorTileInfo->getTopTileFrameY());
 		TextOut(getMemDC(), 1024, 440, tmpStr, strlen(tmpStr));
 	}
+
+	
+
+	if (_currentCursorTileInfo->getTopObjImg() != nullptr) {
+		sprintf_s(tmpStr, "===========");
+		TextOut(getMemDC(), 1024, 460, tmpStr, strlen(tmpStr));
+
+		string topObjImgName = _currentCursorTileInfo->getTopObjImgKey();
+		TextOut(getMemDC(), 1024, 480, topObjImgName.c_str(), strlen(topObjImgName.c_str()));
+
+		//	d오브제 속성
+		sprintf_s(tmpStr, "Obj Atr : ");
+		TextOut(getMemDC(), 1024, 500, tmpStr, strlen(tmpStr));
+		switch (_currentCursorTileInfo->getTopObjAttr()) {
+		case OBJ_NONE:
+			sprintf_s(tmpStr, "OBJ_NONE");
+			break;
+		case OBJ_BREAKABLE:
+			sprintf_s(tmpStr, "OBJ_BREAKABLE");
+			break;
+		case OBJ_UNBREAKABLE:
+			sprintf_s(tmpStr, "OBJ_UNBREAKABLE");
+			break;
+		case OBJ_CANDLE:
+			sprintf_s(tmpStr, "OBJ_CANDLE");
+			break;
+
+		}
+		TextOut(getMemDC(), 1024, 520, tmpStr, strlen(tmpStr));
+
+		//	타일프레임
+		sprintf_s(tmpStr, "Obj frameX : %d", _currentCursorTileInfo->getTopObjFrameX());
+		TextOut(getMemDC(), 1024, 540, tmpStr, strlen(tmpStr));
+		sprintf_s(tmpStr, "Obj frameY : %d", _currentCursorTileInfo->getTopObjFrameY());
+		TextOut(getMemDC(), 1024, 560, tmpStr, strlen(tmpStr));
+
+
+
+
+	}
+
 
 	
 
@@ -953,7 +1300,7 @@ void mapEditor::CursorClickOnMap()
 					{
 						_cursorMapIdx.x = j;
 						_cursorMapIdx.y = i;
-						if (!_isErase)
+						if (!_isErase && !_isEraseTile && !_isEraseObj)
 						{
 							CursorAdjustOnMap();
 						}
@@ -961,6 +1308,15 @@ void mapEditor::CursorClickOnMap()
 						{
 							CursorEraseMap(_vvMap[i][j]);
 						}
+						if (_isEraseTile)
+						{
+							CursorEraseTile(_vvMap[i][j]);
+						}
+						if (_isEraseObj)
+						{
+							CursorEraseObj(_vvMap[i][j]);
+						}
+						
 
 
 
@@ -1002,15 +1358,27 @@ void mapEditor::CursorAdjustOnMap()
 		for (int j = jStart; j <= jEnd; j++)
 		{
 			if (_curSampleKind == SELECT_TILE) {
-				if (_curTileKind == TILETYPE_CASTLE) {
+				if (_curTileKind == CASTLE_TILE) {
 					//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
 					int adjustIdxY = i + _castleTileFrameIdx[0][_curTileSampleIdx].y;
 					int adjustIdxX = j + _castleTileFrameIdx[0][_curTileSampleIdx].x;
 					//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 					//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
-					TransTileSampleToMap(_castleTileSample[adjustIdxY][adjustIdxX], _vvMap[mapIdxY + (i - iStart)][mapIdxX + (j - jStart)]);
-					_vvMap[mapIdxY + (i - iStart)][mapIdxX + (j - jStart)]->setTopTileImgKey("tileCastle");	//	트랜스 타일에서 안되서...ㅠ_ㅠ 별도로 써줌
+					TransTileSampleToMap(_castleTileSample[adjustIdxY][adjustIdxX], _vvMap[mapIdxY + (i - iStart)][mapIdxX + (j - jStart)]);	//	오브제를 전송하는건지, 타일전송하는건지 구분!
 					
+					
+					
+				}
+				//elseif(다른타일)
+			}
+			else if (_curSampleKind == SELECT_OBJ) {
+				if (_curObjKind == CASTLE_OBJ) {
+					//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
+					int adjustIdxY = i + _castleObjFrameIdx[0][_curTileSampleIdx].y;	
+					int adjustIdxX = j + _castleObjFrameIdx[0][_curTileSampleIdx].x;
+					//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
+					//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
+					TransObjSampleToMap(_castleObjSample[adjustIdxY][adjustIdxX], _vvMap[mapIdxY + (i - iStart)][mapIdxX + (j - jStart)]);		//	오브제를 전송하는건지, 타일전송하는건지 구분!
 					
 				}
 			}
@@ -1031,9 +1399,59 @@ void mapEditor::CursorEraseMap(tile * mapTile)
 	mapTile->setTopTileAttr(TILE_NONE);
 	mapTile->setTopTileImgKey("none");
 
+	mapTile->setTopObjImage(nullptr);
+	mapTile->setTopObjFrameX(0);
+	mapTile->setTopObjFrameY(0);
+	mapTile->setTopObjAttr(OBJ_NONE);
+	mapTile->setTopObjImgKey("none");
+
+
+
 	mapTile->setIsAvailMove(false);
 
 	mapTile->setAreaIdx(0);
+}
+
+void mapEditor::CursorEraseTile(tile * mapTile)
+{
+	mapTile->setTopTileImage(nullptr);
+	mapTile->setTopTileFrameX(0);
+	mapTile->setTopTileFrameY(0);
+	mapTile->setTopTileAttr(TILE_NONE);
+	mapTile->setTopTileImgKey("none");
+
+	//mapTile->setTopObjImage(nullptr);
+	//mapTile->setTopObjFrameX(0);
+	//mapTile->setTopObjFrameY(0);
+	//mapTile->setTopObjAttr(OBJ_NONE);
+	//mapTile->setTopObjImgKey("none");
+
+
+
+	mapTile->setIsAvailMove(false);
+
+	mapTile->setAreaIdx(0);
+}
+
+void mapEditor::CursorEraseObj(tile * mapTile)
+{
+	//mapTile->setTopTileImage(nullptr);
+	//mapTile->setTopTileFrameX(0);
+	//mapTile->setTopTileFrameY(0);
+	//mapTile->setTopTileAttr(TILE_NONE);
+	//mapTile->setTopTileImgKey("none");
+
+	mapTile->setTopObjImage(nullptr);
+	mapTile->setTopObjFrameX(0);
+	mapTile->setTopObjFrameY(0);
+	mapTile->setTopObjAttr(OBJ_NONE);
+	mapTile->setTopObjImgKey("none");
+
+
+
+	//mapTile->setIsAvailMove(false);
+	//
+	//mapTile->setAreaIdx(0);
 }
 
 void mapEditor::TransTileSampleToMap(tile * sampleTile, tile * mapTile)
@@ -1043,12 +1461,27 @@ void mapEditor::TransTileSampleToMap(tile * sampleTile, tile * mapTile)
 	mapTile->setTopTileFrameX(sampleTile->getTopTileFrameX());
 	mapTile->setTopTileFrameY(sampleTile->getTopTileFrameY());
 	mapTile->setTopTileAttr(sampleTile->getTopTileAttr());
-
+	mapTile->setTopTileImgKey(sampleTile->getTopTileImgKey());
 	
 	mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
 
 	mapTile->setAreaIdx(_curAreaIdx);
 	
+}
+
+void mapEditor::TransObjSampleToMap(tile * sampleTile, tile * mapTile)
+{
+	mapTile->setTopObjImage(sampleTile->getTopObjImg());
+	mapTile->setTopObjFrameX(sampleTile->getTopObjFrameX());
+	mapTile->setTopObjFrameY(sampleTile->getTopObjFrameY());
+	mapTile->setTopObjAttr(sampleTile->getTopObjAttr());
+	mapTile->setTopObjImgKey(sampleTile->getTopObjImgKey());
+	
+	
+
+	mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
+
+	//mapTile->setAreaIdx(_curAreaIdx);
 }
 
 void mapEditor::CamMove()
@@ -1156,46 +1589,60 @@ void mapEditor::SaveFunc()
 				//	이미지 키값
 				strcat_s(token, sizeof(token), _vvMap[i][j]->getTopTileImgKey().c_str());
 				strcat_s(token, sizeof(token), "/");
+			}
+			//	타일정보 저장 끝
 
+			//	오브젝 정보 저장 - pos, rc, framex/y, attr, imgKey
+			{
+				//	Pos
+				itoa((_vvMap[i][j]->getTopObjPos().x), tmp, 10);		//	tmp 에 char로 변경
+				strcat_s(token, sizeof(token), tmp);	//	토큰에 넣고	
+				strcat_s(token, sizeof(token), "/");	//	구분자추가
 
-
-
-
-				//	밑에 오브젝트들도 해야함...
-
-				/*
-				
-
-
-
-				//	오브젝타입
-				itoa(_vvTable[i][j]->getObjAttr(), tmp, 10);
-				strcat_s(token, sizeof(token), tmp);		//	정수하나임.10자리까지
+				itoa((_vvMap[i][j]->getTopObjPos().y), tmp, 10);		//	tmp 에 char로 변경
+				strcat_s(token, sizeof(token), tmp);	//	토큰에 넣고	
 				strcat_s(token, sizeof(token), "/");	//	구분자추가
 
 
+				//	렉트
+				itoa(_vvMap[i][j]->getTopObjRc().left, tmp, 10);
+				strcat_s(token, sizeof(token), tmp);
+				strcat_s(token, sizeof(token), "/");	//	구분자추가
+				itoa(_vvMap[i][j]->getTopObjRc().top, tmp, 10);
+				strcat_s(token, sizeof(token), tmp);
+				strcat_s(token, sizeof(token), "/");	//	구분자추가
+				itoa(_vvMap[i][j]->getTopObjRc().right, tmp, 10);
+				strcat_s(token, sizeof(token), tmp);
+				strcat_s(token, sizeof(token), "/");	//	구분자추가
+				itoa(_vvMap[i][j]->getTopObjRc().bottom, tmp, 10);
+				strcat_s(token, sizeof(token), tmp);
+				strcat_s(token, sizeof(token), "/");	//	구분자추가
 
-				
-				//	objframeX
-				itoa(_vvTable[i][j]->getObjFrameX(), tmp, 10);
+
+				//	tileframeX
+				itoa(_vvMap[i][j]->getTopObjFrameX(), tmp, 10);
 				strcat_s(token, sizeof(token), tmp);
 				strcat_s(token, sizeof(token), "/");
-				//	objframeY
-				itoa(_vvTable[i][j]->getObjFrameY(), tmp, 10);
+				//	tileframeY
+				itoa(_vvMap[i][j]->getTopObjFrameY(), tmp, 10);
 				strcat_s(token, sizeof(token), tmp);
 				strcat_s(token, sizeof(token), "/");
-				*/
 
-				strcat_s(save, sizeof(save), token);
+				//	타일속성
+				itoa(_vvMap[i][j]->getTopObjAttr(), tmp, 10);
+				strcat_s(token, sizeof(token), tmp);
+				strcat_s(token, sizeof(token), "/");
+
+				//	이미지 키값
+				strcat_s(token, sizeof(token), _vvMap[i][j]->getTopObjImgKey().c_str());
+				strcat_s(token, sizeof(token), "/");
 			}
-			
 
-
-			for (int i = 0; i < 10000; i++)	
+			strcat_s(save, sizeof(save), token);
+			for (int i = 0; i < 10000; i++)
 				token[i] = '\0';
 		}
-
-
+	
 	}
 
 
@@ -1343,44 +1790,65 @@ void mapEditor::LoadFunc()
 				}
 				
 
-			}	//	타일정보 로드 끗
+			}
+			//	타일정보 로드 끗
 
-			/*
+			// 오브젝트정보 로드 - pos, rc, framex/y, attr, imgKey
+			{
+				//	pos
+				POINT tmpPos;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpPos.x = tmpInt;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpPos.y = tmpInt;
+				tmpTile->setTopObjPos(tmpPos);
 
-			// idxX
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setIdxX(tmpInt);
-			// idxY
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setIdxY(tmpInt);
+				// rect
+				RECT tmpRc;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpRc.left = tmpInt;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpRc.top = tmpInt;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpRc.right = tmpInt;
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpRc.bottom = tmpInt;
+				tmpTile->setTopObjRc(tmpRc);
 
+				//	tileframeX
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpTile->setTopObjFrameX(tmpInt);
 
-			// tileType
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setTileAttr(tmpInt);
+				//	tileframeY
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpTile->setTopObjFrameY(tmpInt);
 
-			// objType
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setObjAttr(tmpInt);
+				//	attribute
+				token = strtok_s(NULL, "/", &context);
+				tmpInt = atoi(token);
+				tmpTile->setTopObjAttr(tmpInt);
 
+				//	imgKeyValue
+				token = strtok_s(NULL, "/", &context);
+				tmpTile->setTopObjImgKey(token);
 
+				//	이미지 키로 받은다음 찾아서 넣어줘야함
+				if (token == "none") {
+					tmpTile->setTopObjImage(nullptr);
+				}
+				else {
+					tmpTile->setTopObjImage(IMAGEMANAGER->findImage(token));
+				}
+			}
 
-			//	objFrameX
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setObjFrameX(tmpInt);
-			//	objFrameY
-			token = strtok_s(NULL, "/", &context);
-			tmpInt = atoi(token);
-			tmpTile->setObjFrameY(tmpInt);
-
-			tmpTile->setTileImg(tileImg);
-			tmpTile->setObjImg(objImg);
-			*/
 
 
 			vLineX.push_back(tmpTile);

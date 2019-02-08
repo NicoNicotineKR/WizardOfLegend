@@ -22,7 +22,7 @@ private:
 	int _areaIdx;
 
 	tile* _parent;
-
+	
 	
 
 
@@ -66,8 +66,28 @@ public:
 	
 	//	============ 鸥老包访 百悸 昌 ==========
 
-	RECT getObjRc() { return _topObj.rc; }
-	void setTopObjImageSet(tagImgSet imgSet) { _topObj = imgSet; }
+	//	============ Obj包访 百悸 ==========
+	
+	image* getTopObjImg()		{ return _topObj.img; }
+	int getTopObjFrameX()		{ return _topObj.frameX; }
+	int getTopObjFrameY()		{ return _topObj.frameY; }
+	POINT getTopObjPos()		{ return _topObj.pos; }
+	RECT getTopObjRc()			{ return _topObj.rc; }
+	int getTopObjAttr()			{ return _topObj.attribute; }
+	string getTopObjImgKey()	{ return _topObj.imgKeyValue; }
+
+
+	void setTopObjImage(image* topObjImage)	{ _topObj.img = topObjImage; }
+	void setTopObjImageSet(tagImgSet imgSet)	{ _topObj = imgSet; }
+	void setTopObjFrameX(int frameX)			{ _topObj.frameX = frameX; }
+	void setTopObjFrameY(int frameY)			{ _topObj.frameY = frameY; }
+	void setTopObjPos(POINT pos)				{ _topObj.pos = pos; }
+	void setTopObjRc(RECT rc)					{ _topObj.rc = rc; }
+	void setTopObjAttr(int attr)				{ _topObj.attribute = attr; }
+	void setTopObjImgKey(string keyValue)		{ _topObj.imgKeyValue = keyValue; }
+
+	//	============ Obj包访 百悸 昌 ==========
+
 	
 
 	tile* getParent() { return _parent; }
