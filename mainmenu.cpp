@@ -92,6 +92,17 @@ void mainmenu::update()
 		}
 	}
 
+	if (_mainMenuState == MAIN_MENU)
+	{
+		if (_selectMenu == END)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
+			{
+				PostQuitMessage(0);
+			}
+		}
+	}
+
 
 }
 
@@ -142,6 +153,11 @@ void mainmenu::TitleAlphaUp()
 	{
 		_startCount++;
 		if (_startCount > TITLE_START_COUNT)
+		{
+			_mainMenuState = TITLE_ALPHA_UP;
+		}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_ESCAPE)))
 		{
 			_mainMenuState = TITLE_ALPHA_UP;
 		}

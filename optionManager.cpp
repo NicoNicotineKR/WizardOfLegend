@@ -141,7 +141,6 @@ void optionManager::SelectOption()
 	//선택 옵션 조절
 	UpDownSelectOption();
 
-
 	//볼륨조절
 	longButtonControl();
 
