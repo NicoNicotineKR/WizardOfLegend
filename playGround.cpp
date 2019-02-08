@@ -63,7 +63,9 @@ void playGround::render()
 	
 	SCENEMANAGER->render();
 	OPTIONMANAGER->render();
-	
+
+
+	TIMEMANAGER->render(getMemDC());
 	//===========================================================
 	IMAGEMANAGER->findImage("backBuffer")->render(getHDC(), 0, 0);
 }

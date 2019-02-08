@@ -95,7 +95,7 @@ void testStage::LoadMap()
 	//	로드할 파일이름 설정
 	//itoa(_curMapIdx, tmp, 10);
 	//strcat_s(fileName, sizeof(fileName), tmp);
-	strcat_s(fileName, sizeof(fileName), "0");
+	strcat_s(fileName, sizeof(fileName), "10");
 	strcat_s(fileName, sizeof(fileName), ".map");
 
 

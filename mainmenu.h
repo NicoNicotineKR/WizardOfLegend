@@ -68,7 +68,7 @@ private:
 	//mainMenuState = 1
 	const int LOADING_ALPHA_SPEED = 6;
 	//mainMenuState = 2
-	const int TITLE_START_COUNT = 400;
+	const int TITLE_START_COUNT = 300;
 	//const int TITLE_START_COUNT = 0;
 	const int TITLE_ALPHA_UP_SPEED = 1;
 	//mainMenuState = 3
