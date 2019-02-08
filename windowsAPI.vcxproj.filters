@@ -180,6 +180,9 @@
     <ClInclude Include="testStage.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="optionManager.h">
+      <Filter>2DFramework\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -289,6 +292,9 @@
     </ClCompile>
     <ClCompile Include="testStage.cpp">
       <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="optionManager.cpp">
+      <Filter>2DFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

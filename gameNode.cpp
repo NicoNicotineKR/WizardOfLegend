@@ -27,6 +27,7 @@ HRESULT gameNode::init(bool managerInit)
 	if (_managerInit)
 	{
 		SetTimer(_hWnd, 1, 10, NULL);
+		OPTIONMANAGER->LinkDC(_backBuffer);
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TXTDATA->init();
@@ -36,6 +37,7 @@ HRESULT gameNode::init(bool managerInit)
 		SCENEMANAGER->init();
 		KEYANIMANAGER->init();
 		INIDATA->init();
+		OPTIONMANAGER->init();
 		
 	}
 
@@ -72,6 +74,9 @@ void gameNode::release()
 
 		KEYANIMANAGER->release();
 		KEYANIMANAGER->releaseSingleton();
+
+		OPTIONMANAGER->release();
+		OPTIONMANAGER->releaseSingleton();
 	}
 
 	ReleaseDC(_hWnd, _hdc);

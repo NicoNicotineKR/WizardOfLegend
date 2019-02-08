@@ -13,20 +13,19 @@ introScene::~introScene()
 
 HRESULT introScene::init()
 {
-	IMAGEMANAGER->addImage("검은화면", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("니코니코틴", "images/nikonikotin.bmp", 653, 100, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("니코", "images/niko.bmp", 651, 323, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("연기", "images/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikotin.bmp", 653, 100, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("niko", "images/introScene/niko.bmp", 651, 323, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("smoke", "images/introScene/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
+	SOUNDMANAGER->addSound("logoSound", "sound/logoSound.mp3", true, false);
 
-	SOUNDMANAGER->addSound("니코음성", "sound/logoSound.mp3", true, false);
-
-	_nikotin = IMAGEMANAGER->findImage("니코니코틴");
+	_nikotin = IMAGEMANAGER->findImage("nikonikotin");
 	_nikotinAlpha = 0;
 
-	_niko = IMAGEMANAGER->findImage("니코");
+	_niko = IMAGEMANAGER->findImage("niko");
 	_nikoAlpha = 0;
 
-	_smoke = IMAGEMANAGER->findImage("연기");
+	_smoke = IMAGEMANAGER->findImage("smoke");
 	_smoke->setAlpahBlend(true, 255);
 	_smokeAlpha = 0;
 	_smokeIndex = 0;
@@ -47,6 +46,11 @@ void introScene::release()
 
 void introScene::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+	{
+		SCENEMANAGER->changeScene("mainmenu");
+	}
+
 	//기다리는 프레임이다되면, _isStart를 true로한다.
 	StartWaitingFunc();
 
@@ -62,7 +66,6 @@ void introScene::update()
 		SmokeAlphaFunc();
 		//담배연기프레임
 		SmokeFrameFunc();
-
 		//음성이끝낫을때 니코쨩이등장
 		NikoEnterTheStage();
 	}
@@ -73,12 +76,20 @@ void introScene::update()
 
 void introScene::render()
 {
-	IMAGEMANAGER->render("검은화면", getMemDC());
+	IMAGEMANAGER->render("blackWindow", getMemDC());
 	_niko->alphaRender(getMemDC(), WINSIZEX / 3 - 50, WINSIZEY / 3 - 50, _nikoAlpha);
 	_nikotin->alphaRender(getMemDC(), WINSIZEX / 3 - 50, WINSIZEY / 3 - 100, _nikotinAlpha);
 
 
 	_smoke->alphaFrameRender(getMemDC(), WINSIZEX / 2 - 205, WINSIZEY / 2 - 10, _smokeIndex, 0, _smokeAlpha);
+	
+	//SOUNDMANAGER->isPlaySound("logoSound") == false && _isOncePlaySound == true
+
+	//char str[128];
+	//sprintf_s(str, " 음악플레이 : %d , %d", SOUNDMANAGER->isPlaySound("logoSound"), _isOncePlaySound);
+	//TextOut(getMemDC(), 50, 50, str, strlen(str));
+
+
 }
 
 void introScene::StartWaitingFunc()
@@ -108,9 +119,10 @@ void introScene::FontAlphaFunc()
 
 void introScene::PlayVoiceOnce()
 {
-	if (SOUNDMANAGER->isPlaySound("니코음성") == false && _isOncePlaySound == false)
+	if (SOUNDMANAGER->isPlaySound("logoSound") == false && _isOncePlaySound == false)
 	{
-		SOUNDMANAGER->play("니코음성", 1.0f);
+		bool tmpIsSoundPlay = false;
+		tmpIsSoundPlay = SOUNDMANAGER->play("logoSound", 1.0f);
 		_isOncePlaySound = true;
 	}
 }
@@ -143,7 +155,7 @@ void introScene::SmokeFrameFunc()
 
 void introScene::NikoEnterTheStage()
 {
-	if (SOUNDMANAGER->isPlaySound("니코음성") == false && _isOncePlaySound == true)
+	if (SOUNDMANAGER->isPlaySound("logoSound") == false && _isOncePlaySound == true)
 	{
 		if (_nikoAlpha < 255)
 		{

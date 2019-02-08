@@ -124,6 +124,13 @@ void mapEditor::update()
 	CursorGetTileInfoFunc();
 
 	CamMove();
+	
+	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE)) 
+	{
+		SCENEMANAGER->changeScene("mainmenu");
+	}
+
+
 }
 
 void mapEditor::render()

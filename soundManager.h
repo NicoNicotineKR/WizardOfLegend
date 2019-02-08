@@ -33,7 +33,7 @@ public:
 	void update();
 
 	void addSound(string keyName, string soundName, bool bgm, bool loop);
-	void play(string keyName, float volume = 1.0f); // 0.0 ~ 1.0f -> 0 ~ 255
+	bool play(string keyName, float volume = 1.0f); // 0.0 ~ 1.0f -> 0 ~ 255
 	void stop(string keyName);
 	void pause(string keyName);
 	void resume(string keyName);

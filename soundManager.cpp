@@ -103,7 +103,7 @@ void soundManager::addSound(string keyName, string soundName, bool bgm, bool loo
 	_mTotalSounds.insert(make_pair(keyName, &_sound[_mTotalSounds.size()]));
 }
 
-void soundManager::play(string keyName, float volume)// 0.0 ~ 1.0f -> 0 ~ 255
+bool soundManager::play(string keyName, float volume)// 0.0 ~ 1.0f -> 0 ~ 255
 {
 	arrSoundsIter iter = _mTotalSounds.begin();
 
@@ -116,9 +116,12 @@ void soundManager::play(string keyName, float volume)// 0.0 ~ 1.0f -> 0 ~ 255
 			_system->playSound(FMOD_CHANNEL_FREE, *iter->second, false, &_channel[count]);
 
 			_channel[count]->setVolume(volume);
+			return true;
 			break;
 		}
 	}
+
+	return false;
 }
 
 void soundManager::stop(string keyName)
