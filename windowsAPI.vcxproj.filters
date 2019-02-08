@@ -177,6 +177,9 @@
     <ClInclude Include="introScene.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="testStage.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -282,6 +285,9 @@
       <Filter>2DFramework</Filter>
     </ClCompile>
     <ClCompile Include="introScene.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="testStage.cpp">
       <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>

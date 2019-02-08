@@ -79,11 +79,12 @@ private:
 
 
 
-	typedef vector<tile*> vLine;
-	typedef vector<vLine> vvMap;
 
 	int _tileNumX;
 	int _tileNumY;
+
+	typedef vector<tile*> vLine;
+	typedef vector<vLine> vvMap;
 
 	vvMap		_vvMap;
 	RECT _mapZoneRc;

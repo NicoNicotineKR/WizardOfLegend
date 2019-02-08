@@ -21,13 +21,14 @@ HRESULT playGround::init()
 
 	//	======	재만 테스트용 ======
 	_mapEditor = new mapEditor;
-
+	_testStage = new testStage;
 
 
 
 	//	======	공유 테스트용 ======
 	SCENEMANAGER->addScene("mapEditor", _mapEditor);		//	테스트해볼 씬 추가하고
-	SCENEMANAGER->changeScene("mapEditor");					//	체인지 해준다.
+	SCENEMANAGER->addScene("testStage", _testStage);
+	SCENEMANAGER->changeScene("testStage");					//	체인지 해준다.
 
 	return S_OK;
 }
