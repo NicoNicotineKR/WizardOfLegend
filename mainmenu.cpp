@@ -103,6 +103,17 @@ void mainmenu::update()
 		}
 	}
 
+	if (_mainMenuState == MAIN_MENU)
+	{
+		if (_selectMenu == SINGLE_PLAYER)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
+			{
+				SCENEMANAGER->changeScene("testStage");
+			}
+		}
+	}
+
 
 }
 
