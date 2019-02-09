@@ -16,18 +16,19 @@ HRESULT testStage::init()
 	IMAGEMANAGER->addFrameImage("tileCastle", "images/map/CastleBaseTileSet.bmp", 704, 384, 22, 12, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
 
-
 	_tileNumX = 0;
 	_tileNumY = 0;
 	_vvMap.clear();
 
-
-
 	LoadMap();	//	saveMap0.map 로드, _vvMap, _tileNumX,Y 세팅
 
+	_aStar = new aStar;
+	_aStar->init();
+	_aStar->setMap(_vvMap);
 
+	_test = RectMakeCenter(_vvMap[19][16]->getTopTilePos().x, _vvMap[19][16]->getTopTilePos().y,32,32);
 
-
+	_myWay.clear();
 
 	return S_OK;
 }
@@ -38,11 +39,30 @@ void testStage::release()
 
 void testStage::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+		_myWay.clear();
+		_aStar->pathFinder(PointMake(16, 19), PointMake(3, 4), PointMake(16, 19), _myWay);
+	}
 }
 
 void testStage::render()
 {
 	RenderMap();
+
+	if (_myWay.size() != 0)
+	{
+		for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)
+		{
+			int idX = (*_imyWay).x;
+			int idY = (*_imyWay).y;
+	
+			RECT temp = _vvMap[idY][idX]->getTopTileRc();
+	
+			Rectangle(getMemDC(), temp);
+		}
+	}
+	Rectangle(getMemDC(), _test);
 }
 
 void testStage::RenderMap()
@@ -248,7 +268,20 @@ void testStage::LoadMap()
 					tmpTile->setTopObjImage(IMAGEMANAGER->findImage(token));
 				}
 			}
+			//	obj정보 끗
 
+			//	isAvailMove
+			token = strtok_s(NULL, "/", &context);
+			tmpInt = atoi(token);
+			if (tmpInt == 0)
+				tmpTile->setIsAvailMove(false);
+			else if (tmpInt == 1)
+				tmpTile->setIsAvailMove(true);
+
+			//	AreaIdx
+			token = strtok_s(NULL, "/", &context);
+			tmpInt = atoi(token);
+			tmpTile->setAreaIdx(tmpInt);
 
 
 			vLineX.push_back(tmpTile);

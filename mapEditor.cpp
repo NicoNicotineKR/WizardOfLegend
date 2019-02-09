@@ -1656,8 +1656,27 @@ void mapEditor::TransObjSampleToMap(tile * sampleTile, tile * mapTile)
 	mapTile->setTopObjImgKey(sampleTile->getTopObjImgKey());
 	
 	
-
-	mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
+	if (!mapTile->getIsAvailMove()) {
+		if (sampleTile->getIsAvailMove()) {
+			//	적용안함
+		}
+		else {
+			//	적용함
+			mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
+		}
+	}
+	else if (mapTile->getIsAvailMove()) {
+		if (sampleTile->getIsAvailMove()) {
+			//	적용함
+			mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
+		}
+		else {
+			//	적용함
+			mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
+		}
+		
+	}
+	//mapTile->setIsAvailMove(sampleTile->getIsAvailMove());
 
 	//mapTile->setAreaIdx(_curAreaIdx);
 }
@@ -1815,6 +1834,18 @@ void mapEditor::SaveFunc()
 				strcat_s(token, sizeof(token), _vvMap[i][j]->getTopObjImgKey().c_str());
 				strcat_s(token, sizeof(token), "/");
 			}
+
+			//	isAvailMove
+			itoa(_vvMap[i][j]->getIsAvailMove(), tmp, 10);
+			strcat_s(token, sizeof(token), tmp);
+			strcat_s(token, sizeof(token), "/");
+			
+			//	AreaIdx
+			itoa(_vvMap[i][j]->getAreaIdx(), tmp, 10);
+			strcat_s(token, sizeof(token), tmp);
+			strcat_s(token, sizeof(token), "/");
+
+
 
 			strcat_s(save, sizeof(save), token);
 			for (int i = 0; i < 10000; i++)
@@ -2025,7 +2056,22 @@ void mapEditor::LoadFunc()
 				else {
 					tmpTile->setTopObjImage(IMAGEMANAGER->findImage(token));
 				}
-			}
+			}	
+			//	obj 끗
+
+			//	isAvailMove
+			token = strtok_s(NULL, "/", &context);
+			tmpInt = atoi(token);
+			if (tmpInt == 0)
+				tmpTile->setIsAvailMove(false);
+			else if (tmpInt == 1)
+				tmpTile->setIsAvailMove(true);
+
+			//	AreaIdx
+			token = strtok_s(NULL, "/", &context);
+			tmpInt = atoi(token);
+			tmpTile->setAreaIdx(tmpInt);
+			
 
 			vLineX.push_back(tmpTile);
 

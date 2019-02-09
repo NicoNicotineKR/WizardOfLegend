@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tileNode.h"
 #include "tile.h"
+#include "aStar.h"
 class testStage : public gameNode
 {
 	typedef vector<tile*> vLine;
@@ -11,8 +12,12 @@ class testStage : public gameNode
 	int _tileNumX;
 	int _tileNumY;
 
+	aStar* _aStar;
 
+	list<POINT> _myWay;
+	list<POINT>::iterator _imyWay;
 
+	RECT _test;
 
 public:
 	testStage();

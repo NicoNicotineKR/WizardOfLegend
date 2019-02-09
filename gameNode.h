@@ -26,6 +26,5 @@ public:
 	//DC Á¢±ÙÀÚ
 	HDC getMemDC() { return _backBuffer->getMemDC(); }
 	HDC getHDC() { return _hdc; }
-
 };
 

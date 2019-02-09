@@ -14,17 +14,18 @@ private:
 	//	int attribute;
 	//
 	//};
-	POINT _topIdx;
-	tagImgSet _topTile;
-	tagImgSet _topObj;
+	POINT _topIdx;		// 해당 타일 인덱스
+	tagImgSet _topTile;	// 타일 정보
+	tagImgSet _topObj;	// 오브젝트 정보 -> null로 초기화 되어있슴(없다면)
 
-	bool _isAvailMove;
-	int _areaIdx;
+	bool _isAvailMove;  // 트루면 갈수잇슴
+	int _areaIdx;		// 전투방의 네이밍
 
-	tile* _parent;
+	tile* _parent;		// 엄마
 	
-	
-
+	int _gScore;
+	int _hScore;
+	int _fScore;
 
 public:
 	tile();
@@ -50,6 +51,9 @@ public:
 	bool getIsAvailMove() { return _isAvailMove; }
 	int getAreaIdx() { return _areaIdx; }
 
+	int getGScore() { return _gScore; }
+	int getHScore() { return _hScore; }
+	int getFScore() { return _fScore; }
 
 	void setTopIdx(POINT topIdx) { _topIdx = topIdx; }
 	void setTopTileImage(image* topTileImage) { _topTile.img = topTileImage; }
@@ -63,6 +67,10 @@ public:
 
 	void setIsAvailMove(bool value) { _isAvailMove = value; }
 	void setAreaIdx(int areaIdx) { _areaIdx = areaIdx; }
+
+	void setGScore(int gScore) { _gScore = gScore; }
+	void setHScore(int hScore) { _hScore = hScore; }
+	void setFScore(int fScore) { _fScore = fScore; }
 	
 	//	============ 타일관련 겟셋 끗 ==========
 
