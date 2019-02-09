@@ -3,6 +3,19 @@
 #include "tile.h"
 #include <vector>
 
+/* ======타일 셋 추가할때 해야할 거======
+1.	변수선언
+	tile* _earthTileSample[14][14 * 4];		샘플이미지[프레임Y][프레임X] -> 타일별로 프레임 끊음
+	POINT _earthTileFrameIdx[2][4];			샘플페이지 넘길때 한 페이지의 시작-끝 프레임인덱스 숫자로 저장
+
+2.	이닛에 이미지매니저 프레임이미지 추가.
+3.	이닛에 초기화함수 맹글어. 
+
+4.	이넘 추가
+5.	밑에 함수들에 다 추가 -> 배열로 고쳐야하는데 ㅠㅠㅠ
+
+*/
+
 class mapEditor : public gameNode
 {
 private:
@@ -54,6 +67,16 @@ private:
 		CASTLEOBJ_KINDS_END,
 
 	};
+
+	enum E_EARTHTILE_KINDS {	//	_curTileSampleIdx
+		EARTHTILE1 = 0,
+		EARTHTILE2,
+		EARTHTILE3,
+		EARTHTILE4,
+		EARTHTILE_KINDS_END,
+	};
+
+
 	enum E_TILE_KINDS	//_curTileKind
 	{
 		CASTLE_TILE = 0,
@@ -120,6 +143,12 @@ private:
 
 	tile* _castleObjSample[12][23];
 	POINT _castleObjFrameIdx[2][3];		// [시작/끝][종류]
+
+	tile* _earthTileSample[14][14 * 4];
+	POINT _earthTileFrameIdx[2][4];
+
+	tile* _earthObjSample[14][14 * 4];
+	POINT _eartObjFrameIdx[2][4];
 
 	//=========== 샘플 data 끗 =============
 
@@ -189,6 +218,8 @@ public:
 
 	void InitSampleCastleTile();	//	샘플 프레임, 이미지, 개별 속성입력 + 타일셋 종류별 프레임갯수
 	void InitSampleCastleObj();
+	void InitSampleEarthTile();	//	샘플 프레임, 이미지, 개별 속성입력 + 타일셋 종류별 프레임갯수
+	void InitSampleEarthObj();
 
 
 	void OverlayClickFunc();
@@ -204,7 +235,8 @@ public:
 	void SampleRender();			//--- 타일/오브제 추가할때마다 수정필요 ---
 	void SampleSelectedRectRender();
 	void TextNumberRender();
-	void TileInfoRender();		//	오브제 내용 추가요망
+	void TileInfoRender();		
+	void AreaIdxRender();		
 
 	
 	void CursorSampleSelectFunc();
