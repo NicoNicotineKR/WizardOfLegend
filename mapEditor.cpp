@@ -1535,6 +1535,11 @@ void mapEditor::CursorAdjustOnMap()
 	{
 		for (int j = jStart; j <= jEnd; j++)
 		{
+			//	맵 벡터 밖으로 나가는것 방지
+			if (mapIdxY + (i - iStart) > _tileNumY-1 || mapIdxX + (j - jStart) > _tileNumX-1)
+				continue;
+
+
 			if (_curSampleKind == SELECT_TILE) {
 				if (_curTileKind == CASTLE_TILE) {
 					//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
