@@ -171,6 +171,7 @@
     <ClInclude Include="optionManager.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerState.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
@@ -181,6 +182,17 @@
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1_1.h" />
     <ClInclude Include="stageBoss1.h" />
+    <ClInclude Include="state_Dash.h" />
+    <ClInclude Include="state_Dead.h" />
+    <ClInclude Include="state_Fall.h" />
+    <ClInclude Include="state_Hit.h" />
+    <ClInclude Include="state_idle.h" />
+    <ClInclude Include="state_Move.h" />
+    <ClInclude Include="state_Skill_Five.h" />
+    <ClInclude Include="state_Skill_Four.h" />
+    <ClInclude Include="state_Skill_One.h" />
+    <ClInclude Include="state_Skill_Three.h" />
+    <ClInclude Include="state_Skill_Two.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="commonMacroFunction.h" />
@@ -222,6 +234,17 @@
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1_1.cpp" />
     <ClCompile Include="stageBoss1.cpp" />
+    <ClCompile Include="state_Dash.cpp" />
+    <ClCompile Include="state_Dead.cpp" />
+    <ClCompile Include="state_Fall.cpp" />
+    <ClCompile Include="state_Hit.cpp" />
+    <ClCompile Include="state_Idle.cpp" />
+    <ClCompile Include="state_Move.cpp" />
+    <ClCompile Include="state_Skill_Five.cpp" />
+    <ClCompile Include="state_Skill_Four.cpp" />
+    <ClCompile Include="state_Skill_One.cpp" />
+    <ClCompile Include="state_Skill_Three.cpp" />
+    <ClCompile Include="state_Skill_Two.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
