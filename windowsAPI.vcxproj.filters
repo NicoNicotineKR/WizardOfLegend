@@ -55,6 +55,9 @@
     <Filter Include="PlayGround\units">
       <UniqueIdentifier>{8134c06e-531c-4a30-bd93-fa20478edc15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\playerState">
+      <UniqueIdentifier>{47a1c7e4-839d-474e-9feb-dabb6fb9fa41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -183,6 +186,42 @@
     <ClInclude Include="optionManager.h">
       <Filter>2DFramework\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="playerState.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Move.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_idle.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Dash.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Skill_Five.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Skill_Four.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Skill_One.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Skill_Three.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Skill_Two.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Hit.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Dead.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
+    <ClInclude Include="state_Fall.h">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -295,6 +334,39 @@
     </ClCompile>
     <ClCompile Include="optionManager.cpp">
       <Filter>2DFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Move.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Idle.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Dash.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Skill_Five.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Skill_Four.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Skill_One.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Skill_Three.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Skill_Two.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Hit.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Dead.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="state_Fall.cpp">
+      <Filter>PlayGround\units\playerState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
