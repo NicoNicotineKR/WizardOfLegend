@@ -58,6 +58,9 @@
     <Filter Include="PlayGround\units\playerState">
       <UniqueIdentifier>{47a1c7e4-839d-474e-9feb-dabb6fb9fa41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\enemyState">
+      <UniqueIdentifier>{0e8438d8-d250-429d-a66d-5b77acc79b02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -222,6 +225,24 @@
     <ClInclude Include="playerState.h">
       <Filter>PlayGround\units\playerState</Filter>
     </ClInclude>
+    <ClInclude Include="enemyState.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Attack.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Charging.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Idle.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Move.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Spawn.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -367,6 +388,21 @@
     </ClCompile>
     <ClCompile Include="state_Skill_Two.cpp">
       <Filter>PlayGround\units\playerState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Attack.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Charging.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Idle.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Move.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Spawn.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
