@@ -61,6 +61,9 @@
     <Filter Include="PlayGround\units\enemyState">
       <UniqueIdentifier>{0e8438d8-d250-429d-a66d-5b77acc79b02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\enemyType">
+      <UniqueIdentifier>{39b6865a-213d-4ed9-9fd9-4eafd61ce31e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -168,9 +171,6 @@
     <ClInclude Include="player.h">
       <Filter>PlayGround\units</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>PlayGround\units</Filter>
-    </ClInclude>
     <ClInclude Include="enemyMgr.h">
       <Filter>PlayGround\units</Filter>
     </ClInclude>
@@ -231,9 +231,6 @@
     <ClInclude Include="enemy_State_Attack.h">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_State_Charging.h">
-      <Filter>PlayGround\units\enemyState</Filter>
-    </ClInclude>
     <ClInclude Include="enemy_State_Idle.h">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClInclude>
@@ -242,6 +239,15 @@
     </ClInclude>
     <ClInclude Include="enemy_State_Spawn.h">
       <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Charge.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Knight.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>PlayGround\units\enemyType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,9 +344,6 @@
     <ClCompile Include="player.cpp">
       <Filter>PlayGround\units</Filter>
     </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>PlayGround\units</Filter>
-    </ClCompile>
     <ClCompile Include="enemyMgr.cpp">
       <Filter>PlayGround\units</Filter>
     </ClCompile>
@@ -392,9 +395,6 @@
     <ClCompile Include="enemy_State_Attack.cpp">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
-    <ClCompile Include="enemy_State_Charging.cpp">
-      <Filter>PlayGround\units\enemyState</Filter>
-    </ClCompile>
     <ClCompile Include="enemy_State_Idle.cpp">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
@@ -403,6 +403,15 @@
     </ClCompile>
     <ClCompile Include="enemy_State_Spawn.cpp">
       <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Charge.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Knight.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
