@@ -58,6 +58,7 @@ private:
 	MOVEDIRECTION	_moveDirection;			//이동용 방향
 	STATE			_state;					//플레이어 상태
 
+	bool _isPlayerAniOnce;
 
 	playerState* _playerState;
 	playerState* _arrState[static_cast<const int>(STATE::MAX)];
@@ -78,6 +79,7 @@ public:
 
 	void currentPlayerState();
 	void playerMove();
+	void playerDash();
 
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
 	inline void			setAniDirection(ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }
@@ -87,6 +89,16 @@ public:
 
 	inline MOVEDIRECTION getMoveDirection() { return _moveDirection; }
 	inline void			 setMoveDirection(MOVEDIRECTION moveDirection) { _moveDirection = moveDirection; }
+
+	inline POINTFLOAT getVec() { return _vec; }
+	inline void setVec(POINTFLOAT vec) { _vec = vec; }
+	inline void setVecX(float vecX) { _vec.x = vecX; }
+	inline void setVecY(float vecY) { _vec.y = vecY; }
+
+	inline void setIsPlayerAniOnce(bool isOnce) { _isPlayerAniOnce = isOnce; }
+	inline bool getIsPlayerAniOnce() { return _isPlayerAniOnce; }
+
+	inline float getSpeed() { return _speed; }
 
 	static void playerIdle(void* obj);
 };

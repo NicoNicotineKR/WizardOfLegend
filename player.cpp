@@ -44,6 +44,7 @@ HRESULT player::init()
 	_moveDirection = MOVEDIRECTION::BOTTOM;
 	_state = STATE::IDLE;
 
+	_isPlayerAniOnce = false;
 	return S_OK;
 }
 
@@ -53,10 +54,14 @@ void player::release()
 
 void player::update()
 {
+	_vec.x = 0;
+	_vec.y = 0;
 	KEYANIMANAGER->update();
+	playerMove();
 	_playerState->update(this);
 	inPutKey();
-	playerMove();
+
+
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
 }
@@ -65,14 +70,15 @@ void player::render(HDC hdc)
 {
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 	char str[128];
-	sprintf_s(str, "%d : state", _state, strlen(str));
+	sprintf_s(str, "%d : state", _moveDirection, strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1530, 10, 9, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1700, 10, 10, true, RGB(255, 0, 255));
 
+	//idle
 	int frontIdle[] = { 0 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontIdle", "player", frontIdle, 1, 10, false);
 
@@ -84,7 +90,7 @@ void player::playerKeyAnimationInit()
 
 	int leftIdle[] = { 3 };
 	KEYANIMANAGER->addArrayFrameAnimation("leftIdle", "player", leftIdle, 1, 10, false);
-
+	//move
 	int frontMove[] = { 10,11,12,13,14,15,16,17,18,19 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontMove", "player", frontMove, 10, 10, true);
 
@@ -96,18 +102,42 @@ void player::playerKeyAnimationInit()
 
 	int leftMove[] = { 49,48,47,46,45,44,43,42,41,40 };
 	KEYANIMANAGER->addArrayFrameAnimation("leftMove", "player", leftMove, 10, 10, true);
-
+	//dash
 	int frontDash[] = { 10,11,12,13,14,15 };
-	KEYANIMANAGER->addArrayFrameAnimation("frontDash", "player", frontDash, 5, 10, false, playerIdle,this);
+	KEYANIMANAGER->addArrayFrameAnimation("frontDash", "player", frontDash, 5, 15, false, playerIdle,this);
 
 	int backDash[] = { 20,21,22,23,24,25 };
-	KEYANIMANAGER->addArrayFrameAnimation("backDash", "player", backDash, 5, 10, false, playerIdle, this);
+	KEYANIMANAGER->addArrayFrameAnimation("backDash", "player", backDash, 5, 15, false, playerIdle, this);
 
 	int rightDash[] = { 70,71,72,73,74,75,76,77 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 8, 10, false, playerIdle, this);
+	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 8, 15, false, playerIdle, this);
 
 	int leftDash[] = { 87,86,85,84,83,82,81,80 };
-	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 8, 10, false, playerIdle, this);
+	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 8, 15, false, playerIdle, this);
+	//hit
+	int frontHit[] = { 4 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontHit", "player", frontHit, 1, 20, false, playerIdle, this);
+
+	int BackHit[] = { 5 };
+	KEYANIMANAGER->addArrayFrameAnimation("BackHit", "player", frontHit, 1, 20, false, playerIdle, this);
+
+	int LeftHit[] = { 6 };
+	KEYANIMANAGER->addArrayFrameAnimation("LeftHit", "player", LeftHit, 1, 20, false, playerIdle, this);
+
+	int rightHit[] = { 7 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightHit", "player", rightHit, 1, 20, false, playerIdle, this);
+	//fall
+	int frontFall[] = { 4 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontFall", "player", frontFall, 1, 20, false);
+
+	int BackFall[] = { 5 };
+	KEYANIMANAGER->addArrayFrameAnimation("BackFall", "player", BackFall, 1, 20, false);
+
+	int LeftFall[] = { 6 };
+	KEYANIMANAGER->addArrayFrameAnimation("LeftFall", "player", LeftFall, 1, 20, false);
+
+	int rightFall[] = { 7 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightFall", "player", rightFall, 1, 20, false);
 
 }
 
@@ -146,8 +176,6 @@ void player::inPutKey()
 	{
 		_playerState->offButtonA(this);
 	}
-
-
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
@@ -282,50 +310,11 @@ void player::currentPlayerState()
 
 void player::playerMove()
 {
-	if (_state == STATE::IDLE)
-	{
-		_vec.x = 0;
-		_vec.y = 0;
-	}
+}
 
-	if (_state == STATE::MOVE)
-	{
-		switch (_moveDirection)
-		{
-		case MOVEDIRECTION::TOP:
-			_vec.y = -_speed * TIMEMANAGER->getElapsedTime();
-			_vec.x = 0;
-			break;
-		case MOVEDIRECTION::BOTTOM:
-			_vec.y = _speed * TIMEMANAGER->getElapsedTime();
-			_vec.x = 0;
-			break;
-		case MOVEDIRECTION::LEFT:
-			_vec.x = -_speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = 0;
-			break;
-		case MOVEDIRECTION::RIGHT:
-			_vec.x = _speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = 0;
-			break;
-		case MOVEDIRECTION::LEFT_TOP:
-			_vec.x = -_speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = -_speed * TIMEMANAGER->getElapsedTime();
-			break;
-		case MOVEDIRECTION::LEFT_BOTTOM:
-			_vec.x = -_speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = _speed * TIMEMANAGER->getElapsedTime();
-			break;
-		case MOVEDIRECTION::RIGHT_TOP:
-			_vec.x = _speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = -_speed * TIMEMANAGER->getElapsedTime();
-			break;
-		case MOVEDIRECTION::RIGHT_BOTTOM:
-			_vec.x = _speed * TIMEMANAGER->getElapsedTime();
-			_vec.y = _speed * TIMEMANAGER->getElapsedTime();
-			break;
-		}
-	}
+void player::playerDash()
+{
+	
 }
 
 void player::playerIdle(void * obj)

@@ -99,6 +99,48 @@ void state_Idle::update(player* Player)
 	{
 		Player->setState(STATE::MOVE);
 		Player->currentPlayerState();
+
+		if (KEYMANAGER->isStayKeyDown('W') && KEYMANAGER->isStayKeyDown('A'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::LEFT_TOP);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('W') && KEYMANAGER->isStayKeyDown('D'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT_TOP);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S') && KEYMANAGER->isStayKeyDown('A'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::LEFT_BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S') && KEYMANAGER->isStayKeyDown('D'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT_BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('W'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::TOP);
+			Player->setAniDirection(ANIDIRECTION::BACK);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::FRONT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('A'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::LEFT);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('D'))
+		{
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
 		Player->startAni();
+
 	}
 }

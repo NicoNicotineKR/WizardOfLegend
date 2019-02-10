@@ -69,4 +69,56 @@ void state_Dash::onButtonRB(player* Player)
 
 void state_Dash::update(player* Player)
 {
+		POINTFLOAT vec;
+		switch (Player->getMoveDirection())
+		{
+		case MOVEDIRECTION::TOP:
+			vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			vec.x = 0;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::BOTTOM:
+			vec.x = 0;
+			vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::LEFT:
+			vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			vec.y = 0;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::RIGHT:
+			vec.x = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			vec.y = 0;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::LEFT_TOP:
+			vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::LEFT_BOTTOM:
+			vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::RIGHT_TOP:
+			vec.x =  Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		case MOVEDIRECTION::RIGHT_BOTTOM:
+			vec.x = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			Player->setVecX(vec.x);
+			Player->setVecY(vec.y);
+			break;
+		}
 }

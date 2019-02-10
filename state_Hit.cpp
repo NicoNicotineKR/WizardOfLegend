@@ -68,4 +68,9 @@ void state_Hit::onButtonRB(player* Player)
 
 void state_Hit::update(player* Player)
 {
+	if (Player->getIsPlayerAniOnce())
+	{
+		Player->setIsPlayerAniOnce(false);
+		Player->startAni();
+	}
 }

@@ -244,4 +244,141 @@ void state_Move::update(player* Player)
 		Player->currentPlayerState();
 		Player->startAni();
 	}
+	else if (KEYMANAGER->isStayKeyDown('W') ||
+		KEYMANAGER->isStayKeyDown('S') ||
+		KEYMANAGER->isStayKeyDown('A') ||
+		KEYMANAGER->isStayKeyDown('D'))
+	{
+		//Player->setState(STATE::MOVE);
+		//Player->currentPlayerState();
+
+		if (KEYMANAGER->isStayKeyDown('W') && KEYMANAGER->isStayKeyDown('A'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::LEFT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::LEFT_TOP);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+
+		}
+		else if (KEYMANAGER->isStayKeyDown('W') && KEYMANAGER->isStayKeyDown('D'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::RIGHT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT_TOP);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S') && KEYMANAGER->isStayKeyDown('A'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::LEFT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::LEFT_BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S') && KEYMANAGER->isStayKeyDown('D'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::RIGHT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT_BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('W'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::BACK)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::TOP);
+			Player->setAniDirection(ANIDIRECTION::BACK);
+		}
+		else if (KEYMANAGER->isStayKeyDown('S'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::FRONT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::BOTTOM);
+			Player->setAniDirection(ANIDIRECTION::FRONT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('A'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::LEFT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::LEFT);
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+		}
+		else if (KEYMANAGER->isStayKeyDown('D'))
+		{
+			if (Player->getAniDirection() != ANIDIRECTION::RIGHT)
+			{
+				Player->setIsPlayerAniOnce(true);
+			}
+			Player->setMoveDirection(MOVEDIRECTION::RIGHT);
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+		}
+		if (Player->getIsPlayerAniOnce())
+		{
+			Player->setIsPlayerAniOnce(false);
+			Player->startAni();
+		}
+	}
+	switch (Player->getMoveDirection())
+	{
+	case MOVEDIRECTION::TOP:
+		Player->setVecX(0);
+		Player->setVecY(-Player->getSpeed()* TIMEMANAGER->getElapsedTime());
+		break;
+	case MOVEDIRECTION::BOTTOM:
+		//vec.x = 0;
+		//vec.y =;
+		Player->setVecX(0);
+		Player->setVecY(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		break;
+	case MOVEDIRECTION::LEFT:
+		//vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		//vec.y = 0;
+		Player->setVecX(-Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(0);
+		break;
+	case MOVEDIRECTION::RIGHT:
+		//vec.x = Player->getSpeed() * TIMEMANAGER->getElapsedTime();
+		//vec.y = 0;
+		Player->setVecX(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(0);
+		break;
+	case MOVEDIRECTION::LEFT_TOP:
+		//vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		//vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecX(-Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(-Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		break;
+	case MOVEDIRECTION::LEFT_BOTTOM:
+		//vec.x = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		//vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime();
+		Player->setVecX(-Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		break;
+	case MOVEDIRECTION::RIGHT_TOP:
+		//vec.x =  Player->getSpeed() * TIMEMANAGER->getElapsedTime();
+		//vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecX(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(-Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		break;
+	case MOVEDIRECTION::RIGHT_BOTTOM:
+		//vec.x = Player->getSpeed() * TIMEMANAGER->getElapsedTime();
+		//vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime();
+		Player->setVecX(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		Player->setVecY(Player->getSpeed() * TIMEMANAGER->getElapsedTime());
+		break;
+	}
+
 }

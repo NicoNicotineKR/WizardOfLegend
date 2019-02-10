@@ -69,4 +69,9 @@ void state_Fall::onButtonRB(player * Player)
 
 void state_Fall::update(player * Player)
 {
+	if (Player->getIsPlayerAniOnce())
+	{
+		Player->setIsPlayerAniOnce(false);
+		Player->startAni();
+	}
 }
