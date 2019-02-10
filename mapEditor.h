@@ -9,7 +9,7 @@
 	POINT _earthTileFrameIdx[2][4];			샘플페이지 넘길때 한 페이지의 시작-끝 프레임인덱스 숫자로 저장
 
 2.	이닛에 이미지매니저 프레임이미지 추가.
-3.	이닛에 초기화함수 맹글어. 
+3.	이닛에 초기화함수 맹글어.
 
 4.	이넘 추가
 5.	밑에 함수들에 다 추가 -> 배열로 고쳐야하는데 ㅠㅠㅠ
@@ -76,6 +76,13 @@ private:
 		EARTHTILE_KINDS_END,
 	};
 
+	enum E_EARTHOBJ_KINDS {	//	_curTileSampleIdx
+		EARTHOBJ1 = 0,
+		EARTHOBJ2,
+		EARTHOBJ3,
+		EARTHOBJ4,
+		EARTHOBJ_KINDS_END,
+	};
 
 	enum E_TILE_KINDS	//_curTileKind
 	{
@@ -138,6 +145,14 @@ private:
 	RECT _mapZoneRc;
 
 	//	======= 샘플들 시작~! ==========
+
+	tile* _totalSamples[3][5][14][56];	//[타일/오브젝트/유닛] [castle/earth...] [y][x];
+	//		[_curSampleKind][_curTileKind/_curObjKind/_curUnitKind][][]
+	POINT _totalFrameIdx[3][5][2][5];
+	//[타일/오브젝트/유닛] [castle/earth...] [시작/끝][프레임 수];
+	//		[_curSampleKind][_curTileKind/_curObjKind/_curUnitKind][0/1][_curTileSampleIdx]
+
+
 	tile* _castleTileSample[12][22];
 	POINT _castleTileFrameIdx[2][4];	// [시작/끝][종류]
 
@@ -152,13 +167,13 @@ private:
 
 	//=========== 샘플 data 끗 =============
 
-	
+
 
 	image* _frame;
 	tagImgSet _buttons[14];
 	tagImgSet _arrowButtons[2][7];
 	tagButtons _kindButtons[3][5];	//[타일/오브제/유닛] [캐슬/아이스/파이어/어스/커먼]
-	
+
 	RECT _sampleRc[14][14];
 	image* _sampleMask;
 
@@ -173,7 +188,7 @@ private:
 	int _curAreaIdx;
 	int _curMapIdx;
 
-	
+
 	bool _isAreaMode;
 	bool _isAutoFill;
 	bool _isErase;			//	오브제/타일/유닛 구분할것
@@ -191,12 +206,17 @@ private:
 
 	POINT _camLeftTop;
 
-	
+
+	int _mapResizeCount;
+
 
 	const int ARROWBUTTON_GAP = 15;
 	const POINT SAMPLEZONE_CENTER = { 1375,225 };
 	const int SAMPLE_MASK_ALPHA = 120;
 	const int CAM_MOVESPD = 2;
+	const int RESIZE_COUNTFRAME = 5;		//	맵크기 리사이즈 할때 카운트할 프레임
+
+	const int INFO_SHOW_X = 1030;
 
 public:
 	mapEditor();
@@ -232,13 +252,13 @@ public:
 	void CursorGetTileInfoFunc();
 
 	//	렌더들 모음
-	void SampleRender();			//--- 타일/오브제 추가할때마다 수정필요 ---
+	void SampleRender();			// (이제 수정 안해도됨) --- 타일/오브제 추가할때마다 수정필요 --- 
 	void SampleSelectedRectRender();
 	void TextNumberRender();
-	void TileInfoRender();		
-	void AreaIdxRender();		
+	void TileInfoRender();
+	void AreaIdxRender();
 
-	
+
 	void CursorSampleSelectFunc();
 	void CursorClickOnMap();
 	void CursorAdjustOnMap();	//	현재 샘플맵에 따라, sampleidx적용하여 설정 //--- 타일/오브제 추가할때마다 수정필요 ---
@@ -247,12 +267,14 @@ public:
 	void CursorEraseObj(tile* mapTile);
 	void TransTileSampleToMap(tile* sampleTile, tile* mapTile);
 	void TransObjSampleToMap(tile* sampleTile, tile* mapTile);
-	
+
 	void CamMove();
 
 	void SaveFunc();
 	void LoadFunc();
 
+	void MapResizeCountDelayFunc();
+	bool IsRdyToResize();
 
 };
 
