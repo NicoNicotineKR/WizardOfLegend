@@ -249,9 +249,6 @@
     <ClInclude Include="enemy.h">
       <Filter>PlayGround\units\enemyType</Filter>
     </ClInclude>
-    <ClInclude Include="hpUI.h">
-      <Filter>PlayGround\UIs</Filter>
-    </ClInclude>
     <ClInclude Include="printNumber.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
@@ -424,9 +421,6 @@
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>PlayGround\units\enemyType</Filter>
-    </ClCompile>
-    <ClCompile Include="hpUI.cpp">
-      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
     <ClCompile Include="printNumber.cpp">
       <Filter>PlayGround\UIs</Filter>
