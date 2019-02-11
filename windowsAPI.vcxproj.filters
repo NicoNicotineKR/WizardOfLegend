@@ -189,9 +189,6 @@
     <ClInclude Include="testStage.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="optionManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="state_Dash.h">
       <Filter>PlayGround\units\playerState</Filter>
     </ClInclude>
@@ -257,6 +254,15 @@
     </ClInclude>
     <ClInclude Include="printNumber.h">
       <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_Death.h">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="optionManager.h">
+      <Filter>2DFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_State_MoveStart.h">
+      <Filter>PlayGround\units\enemyState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +371,6 @@
     <ClCompile Include="testStage.cpp">
       <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="optionManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="state_Dash.cpp">
       <Filter>PlayGround\units\playerState</Filter>
     </ClCompile>
@@ -427,6 +430,15 @@
     </ClCompile>
     <ClCompile Include="printNumber.cpp">
       <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_Death.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="optionManager.cpp">
+      <Filter>2DFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_State_MoveStart.cpp">
+      <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

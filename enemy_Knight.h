@@ -1,5 +1,7 @@
 #pragma once
-class enemy_Knight
+#include "enemy.h"
+
+class enemy_Knight : public enemy
 {
 public:
 	enemy_Knight();
@@ -11,7 +13,9 @@ public:
 	void render();
 
 	void enemyKeyAnimationInit();
+	void enemyArrStateInit();
+	void startAni();
 
-	static void knight_rightMoving(void* obj);
+	static void knight_Moving(void* obj);
 };
 

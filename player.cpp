@@ -379,6 +379,6 @@ void player::playerIdle(void * obj)
 
 	Player->setState(STATE::IDLE);
 	Player->currentPlayerState();
-	Player->startAni();
+	Player->startAni();                                                                                                                          
 
 }

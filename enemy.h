@@ -1,12 +1,12 @@
 #pragma once
 #include "gameNode.h"
 
+
 class enemyState;
+class player;
 
 enum class E_ANIDIRECTION
 {
-	FRONT,
-	BACK,
 	LEFT,
 	RIGHT
 };
@@ -15,9 +15,11 @@ enum class E_STATE
 {
 	IDLE,
 	SPAWN,
+	MOVESTART,
 	MOVE,
 	CHARGE,
 	ATTACK,
+	DEATH,
 	MAX
 };
 
@@ -35,28 +37,29 @@ enum class  E_MOVEDIRECTION
 
 class enemy
 {
-private:
+protected:
 	image*			_img;				//이미지
-	animation*		_ani;				//적 애니메숑
-	RECT			_collisionRc;		//적 충돌 렉트
+	animation*		_ani;				//에너미 애니메숑
+	RECT			_collisionRc;		//에너미 충돌 렉트
 
-	int				_maxHp;				//적 최대 체력
-	int				_curHp;				//적 현재 체력
+	int				_maxHp;				//에너미 최대 체력
+	int				_curHp;				//에너미 현재 체력
 										
-	float			_speed;				//적 스피드
-	float			_angle;				//적 각도
-	POINTFLOAT		_pos;				//적 좌표
-	POINTFLOAT		_vec;				//적 벡터 값
+	float			_speed;				//에너미 스피드
+	float			_angle;				//에너미 각도
+	POINTFLOAT		_pos;				//에너미 좌표
+	POINTFLOAT		_vec;				//에너미 벡터 값
 										
-	E_ANIDIRECTION	_aniDirection;		//적 애니메이션
-	E_STATE			_state;				//적 상태
-	E_MOVEDIRECTION	_moveDirection;		//적 이동 방향
+	E_ANIDIRECTION	_aniDirection;		//에너미 애니메이션
+	E_STATE			_state;				//에너미 상태
+	E_MOVEDIRECTION	_moveDirection;		//에너미 이동 방향
 										
 	bool			_isAniOnce;			//애니메이션 한번만 재생할 불값(안쓸수도있음)
 
 	enemyState*		_enemyState;
 	enemyState*		_arrState[static_cast<const int>(E_STATE::MAX)];
 
+	player* _player;					//플레이어 주소 여따 넣을거임
 
 public:
 	enemy();
@@ -68,5 +71,10 @@ public:
 	virtual void render();
 
 	virtual void enemyKeyAnimationInit();
+	virtual void enemyArrStateInit();
+
+	virtual void setPlayerAdress(player* player) { _player = player; }
+
+
 };
 
