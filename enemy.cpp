@@ -7,6 +7,7 @@
 #include "enemy_State_Move.h"
 #include "enemy_State_Charge.h"
 #include "enemy_State_Attack.h"
+#include "enemy_State_Hit.h"
 #include "enemy_State_Death.h"
 
 enemy::enemy()

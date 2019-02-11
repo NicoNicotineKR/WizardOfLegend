@@ -162,6 +162,7 @@
     <ClInclude Include="enemy_State_Attack.h" />
     <ClInclude Include="enemy_State_Charge.h" />
     <ClInclude Include="enemy_State_Death.h" />
+    <ClInclude Include="enemy_State_Hit.h" />
     <ClInclude Include="enemy_State_Idle.h" />
     <ClInclude Include="enemy_State_Move.h" />
     <ClInclude Include="enemy_State_MoveStart.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="enemy_State_Attack.cpp" />
     <ClCompile Include="enemy_State_Charge.cpp" />
     <ClCompile Include="enemy_State_Death.cpp" />
+    <ClCompile Include="enemy_State_Hit.cpp" />
     <ClCompile Include="enemy_State_Idle.cpp" />
     <ClCompile Include="enemy_State_Move.cpp" />
     <ClCompile Include="enemy_State_MoveStart.cpp" />

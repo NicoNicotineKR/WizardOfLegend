@@ -19,6 +19,7 @@ enum class E_STATE
 	MOVE,
 	CHARGE,
 	ATTACK,
+	HIT,
 	DEATH,
 	MAX
 };
@@ -40,7 +41,9 @@ class enemy
 protected:
 	image*			_img;				//이미지
 	animation*		_ani;				//에너미 애니메숑
-	RECT			_collisionRc;		//에너미 충돌 렉트
+	RECT			_collisionRc;		//에너미 충돌용 렉트
+	RECT			_renderRc;			//에너미 렌더용 렉트
+	RECT			_moveRc;			//에너미 무브용 렉트
 
 	int				_maxHp;				//에너미 최대 체력
 	int				_curHp;				//에너미 현재 체력
