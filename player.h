@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "playerStatusUI.h"
 
 class playerState;
 
@@ -71,6 +72,7 @@ private:
 	POINTFLOAT		_playerCirclePos;
 	POINTFLOAT		_playerCircleDirectionPos;
 
+	playerStatusUI* _playerStatusUI;
 public:
 	player();
 	~player();

@@ -48,6 +48,9 @@ HRESULT player::init()
 	_state = STATE::IDLE;
 
 	_isPlayerAniOnce = false;
+
+	_playerStatusUI = new playerStatusUI;
+	_playerStatusUI->init();
 	return S_OK;
 }
 
@@ -62,7 +65,7 @@ void player::update()
 	KEYANIMANAGER->update();
 	_playerState->update(this);
 	inPutKey();
-
+	_playerStatusUI->update();
 
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
@@ -75,9 +78,10 @@ void player::update()
 
 void player::render(HDC hdc)
 {
+	_playerStatusUI->render();
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
-
+	
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 	char str[128];
 	sprintf_s(str, "%d : state", _moveDirection, strlen(str));
@@ -191,6 +195,11 @@ void player::inPutKey()
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		_playerState->onButtonSpace(this);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('X'))
+	{
+		_playerStatusUI->setCurHp(400);
 	}
 }
 

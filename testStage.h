@@ -3,6 +3,8 @@
 #include "tileNode.h"
 #include "tile.h"
 #include "aStar.h"
+#include "player.h"
+
 class testStage : public gameNode
 {
 	typedef vector<tile*> vLine;
@@ -18,7 +20,7 @@ class testStage : public gameNode
 	list<POINT>::iterator _imyWay;
 
 	RECT _test;
-
+	player* _player;
 public:
 	testStage();
 	~testStage();

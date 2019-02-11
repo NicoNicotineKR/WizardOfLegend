@@ -15,6 +15,8 @@ HRESULT testStage::init()
 {
 	IMAGEMANAGER->addFrameImage("tileCastle", "images/map/CastleBaseTileSet.bmp", 704, 384, 22, 12, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
+	_player = new player;
+	_player->init();
 
 	_tileNumX = 0;
 	_tileNumY = 0;
@@ -39,6 +41,7 @@ void testStage::release()
 
 void testStage::update()
 {
+	_player->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		_myWay.clear();
@@ -49,7 +52,7 @@ void testStage::update()
 void testStage::render()
 {
 	RenderMap();
-
+	_player->render(getMemDC());
 	if (_myWay.size() != 0)
 	{
 		for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)

@@ -30,7 +30,7 @@ HRESULT playerStatusUI::init()
 	_hpBar.rc = RectMake(61, 54, _hpBar.img->GetWidth(), _hpBar.img->GetHeight());
 	_hpBarCurWid = _hpBar.img->GetWidth();
 
-	_hpBackBar.img = IMAGEMANAGER->findImage("backBar");
+	_hpBackBar.img = IMAGEMANAGER->findImage("hpBackBar");
 	_hpBackBar.posLT = _hpBar.posLT;
 	_hpBackBar.rc = _hpBar.rc;
 	_hpBackBarCurWid = _hpBackBar.img->GetWidth();
@@ -40,7 +40,7 @@ HRESULT playerStatusUI::init()
 	_mpBar.rc = RectMake(118, 91, _mpBar.img->GetWidth(), _mpBar.img->GetHeight());
 	_mpBarCurWid = _mpBar.img->GetWidth();
 
-	_playerPortrait.img = IMAGEMANAGER->findImage("portraitRed");
+	_playerPortrait.img = IMAGEMANAGER->findImage("portrait");
 	_playerPortrait.img->SetFrameX(0);
 	_playerPortrait.img->SetFrameY(0);
 	_playerPortrait.posLT = { 61,54 };
@@ -69,6 +69,9 @@ void playerStatusUI::update()
 
 void playerStatusUI::render()
 {
+	// statusFrame
+	_statusBarFrame.img->render(getMemDC(), _statusBarFrame.posLT.x, _statusBarFrame.posLT.y);
+
 	//ÃÊ»óÈ­
 	_playerPortrait.img->frameRender(getMemDC(), _playerPortrait.posLT.x, _playerPortrait.posLT.y,
 		_playerPortrait.img->getFrameX(), _playerPortrait.img->getFrameY());
@@ -86,8 +89,7 @@ void playerStatusUI::render()
 	_mpBar.img->render(getMemDC(), _mpBar.posLT.x, _mpBar.posLT.y, 0, 0,
 		_mpBarCurWid, _mpBar.img->GetHeight());
 
-	// statusFrame
-	_statusBarFrame.img->render(getMemDC(), _statusBarFrame.posLT.x, _statusBarFrame.posLT.y);
+
 
 }
 
