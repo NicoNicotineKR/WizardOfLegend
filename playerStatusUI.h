@@ -14,19 +14,21 @@ class playerStatusUI : public gameNode
 	tagImgSet _hpBackBar;
 	tagImgSet _mpBar;
 	
+	int _hpBarMaxWid;
 	int _hpBarCurWid;
 	int _hpBackBarCurWid;
 	int _mpBarCurWid;
 
 	tagImgSet _playerPortrait;
 
-	int _curHp;
+	float _curHp;
 	float _curMp;
-	int _maxHp;
+	float _maxHp;
 	float _maxMp;
 	float _hpRatio;
 	float _mpRatio;
 	
+
 
 	const int BACK_HPBAR_DIM_SPD = 1;
 	const int MP_DIM_SPD = 2;

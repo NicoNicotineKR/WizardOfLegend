@@ -26,7 +26,7 @@ HRESULT playerStatusUI::init()
 	_statusBarFrame.rc = RectMake(54, 48, _statusBarFrame.img->GetWidth(), _statusBarFrame.img->GetHeight());
 	
 	_hpBar.img = IMAGEMANAGER->findImage("hpBar");
-	_hpBar.posLT = { 61, 54 };
+	_hpBar.posLT = { 118, 58 };
 	_hpBar.rc = RectMake(61, 54, _hpBar.img->GetWidth(), _hpBar.img->GetHeight());
 	_hpBarCurWid = _hpBar.img->GetWidth();
 
@@ -46,11 +46,14 @@ HRESULT playerStatusUI::init()
 	_playerPortrait.posLT = { 61,54 };
 	_playerPortrait.rc = RectMake(61, 54, _playerPortrait.img->getFrameWidth(), _playerPortrait.img->getFrameHeight());
 
-	_maxMp = MAX_MP;
+	
+
+	_hpBarMaxWid = _hpBar.img->GetWidth();
 
 	//	임시설정
 	_maxHp = 500;
-
+	_curHp = 500;
+	_maxMp = MAX_MP;
 
 	return S_OK;
 }
@@ -90,13 +93,28 @@ void playerStatusUI::render()
 		_mpBarCurWid, _mpBar.img->GetHeight());
 
 
+	char str[128];
+
+	sprintf_s(str, "curHP / MaxHp %f, %f", _curHp, _maxHp);
+	TextOut(getMemDC(), 100, 100, str, strlen(str));
+	sprintf_s(str, "hp_bar Ratio : %f", _hpRatio);
+	TextOut(getMemDC(), 100, 120, str, strlen(str));
+
+	
+	sprintf_s(str, "HpbarWid : %d", _hpBarCurWid);
+	TextOut(getMemDC(), 100, 140, str, strlen(str));
+	sprintf_s(str, "_hpbackbarcurwid : %d", _hpBackBarCurWid);
+	TextOut(getMemDC(), 100, 160, str, strlen(str));
 
 }
 
 void playerStatusUI::SetRatioFunc()
 {
-	_hpRatio = _curHp / _maxHp;
-	_mpRatio = _curMp / _maxMp;
+	_hpRatio = (_curHp / _maxHp);
+	_mpRatio = (float)_curMp / _maxMp;
+	
+	_hpBarCurWid = _hpBarMaxWid * _hpRatio;
+
 
 }
 
