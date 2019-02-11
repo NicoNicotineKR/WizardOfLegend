@@ -55,3 +55,20 @@ void tile::CamRender(int camLeft, int camTop)
 	}
 }
 
+void tile::AlphaFrameRender(int destX, int destY,  BYTE alpha)
+{
+
+	//void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha)
+	if (_topTile.img != nullptr)
+	{
+		
+		_topTile.img->alphaFrameRenderFixed(getMemDC(), destX, destY, _topTile.frameX, _topTile.frameY, alpha);
+		
+		
+	}
+	if (_topObj.img != nullptr)
+	{
+		_topObj.img->alphaFrameRenderFixed(getMemDC(), destX, destY, _topObj.frameX, _topObj.frameY, alpha);
+	}
+}
+
