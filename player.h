@@ -24,6 +24,7 @@ enum class STATE
 	SKILL_FOUR,
 	SKILL_FIVE,
 	HIT,
+	FALL,
 	DEAD,
 	MAX
 };
@@ -42,7 +43,7 @@ enum class MOVEDIRECTION
 class player : gameNode
 {
 private:
-	image*			_img;
+	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
 	RECT			_collisionRc;			//플레이어 충돌 렉트
 
@@ -63,6 +64,13 @@ private:
 	playerState* _playerState;
 	playerState* _arrState[static_cast<const int>(STATE::MAX)];
 
+	image*			_playerCircleImg;
+	image*			_playerCircleDirectionImg;
+	float			_playerCircleDirectionAngle;
+	float			_playerCircleRadius;
+	POINTFLOAT		_playerCirclePos;
+	POINTFLOAT		_playerCircleDirectionPos;
+
 public:
 	player();
 	~player();
@@ -78,8 +86,7 @@ public:
 	void arrStateInit();
 
 	void currentPlayerState();
-	void playerMove();
-	void playerDash();
+	void playerCirclePosition();
 
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
 	inline void			setAniDirection(ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }

@@ -23,16 +23,16 @@ namespace BRAVO_UTIL
 		float distance = sqrtf(x * x + y * y);
 
 		//¾ÆÅºÅõ
-		//float angle = -atan2f(y, x);
+		float angle = -atan2f(y, x);
 
-		float angle = acosf(x / distance);
+		//float angle = acosf(x / distance);
 
-		//¿¹¿ÜÃ³¸® ÇÊ¾¥
-		if (y2 > y1)
-		{
-			angle = 2 * PI - angle;
-			if (angle >= PI * 2) angle -= PI * 2;
-		}
+		////¿¹¿ÜÃ³¸® ÇÊ¾¥
+		//if (y2 > y1)
+		//{
+		//	angle = 2 * PI - angle;
+		//	if (angle >= PI * 2) angle -= PI * 2;
+		//}
 
 
 		return angle;

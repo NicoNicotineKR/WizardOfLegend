@@ -7,21 +7,21 @@ public:
 	state_Fall();
 	~state_Fall();
 public:
-	virtual void onButtonW(player* Player)  abstract;
-	virtual void onButtonS(player* Player)	abstract;
-	virtual void onButtonA(player* Player)	abstract;
-	virtual void onButtonD(player* Player)	abstract;
-	virtual void offButtonW(player* Player)  abstract;
-	virtual void offButtonS(player* Player)	abstract;
-	virtual void offButtonA(player* Player)	abstract;
-	virtual void offButtonD(player* Player)	abstract;
+	virtual void onButtonW(player* Player)		override;
+	virtual void onButtonS(player* Player)		override;
+	virtual void onButtonA(player* Player)		override;
+	virtual void onButtonD(player* Player)		override;
+	virtual void offButtonW(player* Player)		override;
+	virtual void offButtonS(player* Player)		override;
+	virtual void offButtonA(player* Player)		override;
+	virtual void offButtonD(player* Player)		override;
 
-	virtual void onButtonQ(player* Player)	abstract;
-	virtual void onButtonE(player* Player)	abstract;
-	virtual void onButtonR(player* Player)	abstract;
-	virtual void onButtonSpace(player* Player)	abstract;
-	virtual void onButtonLB(player* Player)	abstract;
-	virtual void onButtonRB(player* Player)	abstract;
-	virtual void update(player* Player)	abstract;
+	virtual void onButtonQ(player* Player)		override;
+	virtual void onButtonE(player* Player)		override;
+	virtual void onButtonR(player* Player)		override;
+	virtual void onButtonSpace(player* Player)	override;
+	virtual void onButtonLB(player* Player)		override;
+	virtual void onButtonRB(player* Player)		override;
+	virtual void update(player* Player)			override;
 };
 

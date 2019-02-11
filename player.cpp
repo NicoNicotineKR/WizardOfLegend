@@ -9,6 +9,7 @@
 #include "state_Skill_Four.h"
 #include "state_Skill_Five.h"
 #include "state_Hit.h"
+#include "state_Fall.h"
 #include "state_Dead.h"
 
 player::player()
@@ -26,9 +27,11 @@ HRESULT player::init()
 	arrStateInit();
 	_img = IMAGEMANAGER->findImage("player");
 	_ani = KEYANIMANAGER->findAnimation("frontIdle");
-
+	_playerCircleImg = IMAGEMANAGER->findImage("playerCircle");
+	_playerCircleDirectionImg = IMAGEMANAGER->findImage("playerCircleDirection");
 	//_collisionRc = RectMake(WINSIZEX/2,WINSIZEY/2,30,30);			
-
+	_playerCircleDirectionAngle = -90 * (PI / 180);
+	_playerCircleRadius = 50;
 	_maxHp = 500;					
 	_curHp = 500;					
 
@@ -57,17 +60,24 @@ void player::update()
 	_vec.x = 0;
 	_vec.y = 0;
 	KEYANIMANAGER->update();
-	playerMove();
 	_playerState->update(this);
 	inPutKey();
 
 
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
+
+	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
+	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
+	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x, _playerCirclePos.y, _ptMouse.x, _ptMouse.y);
+	playerCirclePosition();
 }
 
 void player::render(HDC hdc)
 {
+	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
+	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
+
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 	char str[128];
 	sprintf_s(str, "%d : state", _moveDirection, strlen(str));
@@ -76,8 +86,9 @@ void player::render(HDC hdc)
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1700, 10, 10, true, RGB(255, 0, 255));
-
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1870, 10, 11, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
 	//idle
 	int frontIdle[] = { 0 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontIdle", "player", frontIdle, 1, 10, false);
@@ -250,6 +261,53 @@ void player::startAni()
 		_ani = KEYANIMANAGER->findAnimation("frontDash");
 		_ani->start();
 	}
+
+	//Hit 애니메이션
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::HIT)
+	{
+		_ani = KEYANIMANAGER->findAnimation("frontHit");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::HIT)
+	{
+		_ani = KEYANIMANAGER->findAnimation("backHit");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::HIT)
+	{
+		_ani = KEYANIMANAGER->findAnimation("rightHit");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::HIT)
+	{
+		_ani = KEYANIMANAGER->findAnimation("LeftHit");
+		_ani->start();
+	}
+
+	//Fall 애니메이션
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::FALL)
+	{
+		_ani = KEYANIMANAGER->findAnimation("frontFall");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::FALL)
+	{
+		_ani = KEYANIMANAGER->findAnimation("backFall");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::FALL)
+	{
+		_ani = KEYANIMANAGER->findAnimation("rightFall");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::FALL)
+	{
+		_ani = KEYANIMANAGER->findAnimation("LeftFall");
+		_ani->start();
+	}
+
+	
+
 }
 
 void player::arrStateInit()
@@ -263,6 +321,7 @@ void player::arrStateInit()
 	_arrState[static_cast<const int>(STATE::SKILL_FOUR)] = new state_Skill_Four();
 	_arrState[static_cast<const int>(STATE::SKILL_FIVE)] = new state_Skill_Five();
 	_arrState[static_cast<const int>(STATE::HIT)] = new state_Hit();
+	_arrState[static_cast<const int>(STATE::FALL)] = new state_Fall();
 	_arrState[static_cast<const int>(STATE::DEAD)] = new state_Dead();
 
 	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
@@ -308,13 +367,10 @@ void player::currentPlayerState()
 	}
 }
 
-void player::playerMove()
+void player::playerCirclePosition()
 {
-}
-
-void player::playerDash()
-{
-	
+	_playerCircleDirectionPos.x = cosf(_playerCircleDirectionAngle) * _playerCircleRadius + (_playerCirclePos.x + (_playerCircleImg->GetWidth()/2)-15);
+	_playerCircleDirectionPos.y = -sinf(_playerCircleDirectionAngle) * _playerCircleRadius +  (_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2)-15);
 }
 
 void player::playerIdle(void * obj)
