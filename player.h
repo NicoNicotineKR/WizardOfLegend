@@ -47,6 +47,9 @@ private:
 	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
 	RECT			_collisionRc;			//플레이어 충돌 렉트
+	RECT			_tileCheckRc;
+	POINTFLOAT		_tileCheckRcPos;
+	int				_tileCheckIdx[2];
 
 	int				_maxHp;					//플레이어 최대 체력
 	int				_curHp;					//플레이어 현재 체력
@@ -89,6 +92,8 @@ public:
 
 	void currentPlayerState();
 	void playerCirclePosition();
+	void tileCheck();
+
 
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
 	inline void			setAniDirection(ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }
@@ -104,11 +109,16 @@ public:
 	inline void setVecX(float vecX) { _vec.x = vecX; }
 	inline void setVecY(float vecY) { _vec.y = vecY; }
 
+	inline POINTFLOAT getPos() { return _pos; }
+	inline image* getImg() { return _img; }
+
 	inline void setIsPlayerAniOnce(bool isOnce) { _isPlayerAniOnce = isOnce; }
 	inline bool getIsPlayerAniOnce() { return _isPlayerAniOnce; }
 
 	inline float getSpeed() { return _speed; }
 
+	inline RECT getPlayerTileCheckRc() { return _tileCheckRc; }
 	static void playerIdle(void* obj);
+
 };
 

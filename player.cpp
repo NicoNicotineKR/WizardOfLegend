@@ -74,6 +74,9 @@ void player::update()
 	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
 	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x, _playerCirclePos.y, _ptMouse.x, _ptMouse.y);
 	playerCirclePosition();
+	_tileCheckRcPos.x = _playerCirclePos.x + (_playerCircleImg->GetWidth() / 2) - 15;
+	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
+	_tileCheckRc = RectMake(_tileCheckRcPos.x,_tileCheckRcPos.y, 32, 32);
 }
 
 void player::render(HDC hdc)
@@ -81,7 +84,7 @@ void player::render(HDC hdc)
 	_playerStatusUI->render();
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
-	
+	Rectangle(getMemDC(), _tileCheckRc);
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 	char str[128];
 	sprintf_s(str, "%d : state", _moveDirection, strlen(str));
@@ -199,7 +202,7 @@ void player::inPutKey()
 
 	if (KEYMANAGER->isOnceKeyDown('X'))
 	{
-		_playerStatusUI->setCurHp(400);
+		_playerStatusUI->setCurHp(499);
 	}
 }
 
@@ -380,6 +383,13 @@ void player::playerCirclePosition()
 {
 	_playerCircleDirectionPos.x = cosf(_playerCircleDirectionAngle) * _playerCircleRadius + (_playerCirclePos.x + (_playerCircleImg->GetWidth()/2)-15);
 	_playerCircleDirectionPos.y = -sinf(_playerCircleDirectionAngle) * _playerCircleRadius +  (_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2)-15);
+}
+
+void player::tileCheck()
+{
+	_vec.x = 0;
+	_vec.y = 0;
+	
 }
 
 void player::playerIdle(void * obj)
