@@ -126,6 +126,7 @@ public:
 	void alphaFrameRender(HDC hdc, int destX, int destY, BYTE alpha);
 	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
+	void alphaFrameRenderFixed(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 
