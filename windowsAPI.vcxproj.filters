@@ -64,6 +64,9 @@
     <Filter Include="PlayGround\units\enemyType">
       <UniqueIdentifier>{39b6865a-213d-4ed9-9fd9-4eafd61ce31e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\UIs">
+      <UniqueIdentifier>{095866d4-7631-4732-a75e-8495ad8a3d17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -249,6 +252,12 @@
     <ClInclude Include="enemy.h">
       <Filter>PlayGround\units\enemyType</Filter>
     </ClInclude>
+    <ClInclude Include="hpUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="printNumber.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -412,6 +421,12 @@
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="hpUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="printNumber.cpp">
+      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
