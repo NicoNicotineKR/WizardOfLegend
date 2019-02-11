@@ -181,6 +181,7 @@
     <ClInclude Include="options.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerState.h" />
+    <ClInclude Include="playerStatusUI.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="printNumber.h" />
     <ClInclude Include="progressBar.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="optionManager.cpp" />
     <ClCompile Include="options.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerStatusUI.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="printNumber.cpp" />
     <ClCompile Include="progressBar.cpp" />

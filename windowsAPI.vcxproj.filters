@@ -261,6 +261,9 @@
     <ClInclude Include="enemy_State_MoveStart.h">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClInclude>
+    <ClInclude Include="playerStatusUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -433,6 +436,9 @@
     </ClCompile>
     <ClCompile Include="enemy_State_MoveStart.cpp">
       <Filter>PlayGround\units\enemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="playerStatusUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
