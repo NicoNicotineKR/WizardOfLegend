@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "aStar.h"
 #include "player.h"
+#include "enemyMgr.h"
 
 class testStage : public gameNode
 {
@@ -21,6 +22,9 @@ class testStage : public gameNode
 
 	RECT _test;
 	player* _player;
+
+	enemyMgr* _em;
+	
 public:
 	testStage();
 	~testStage();

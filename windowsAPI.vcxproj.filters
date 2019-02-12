@@ -258,9 +258,6 @@
     <ClInclude Include="optionManager.h">
       <Filter>2DFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_State_MoveStart.h">
-      <Filter>PlayGround\units\enemyState</Filter>
-    </ClInclude>
     <ClInclude Include="playerStatusUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
@@ -445,9 +442,6 @@
     </ClCompile>
     <ClCompile Include="optionManager.cpp">
       <Filter>2DFramework\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy_State_MoveStart.cpp">
-      <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
     <ClCompile Include="playerStatusUI.cpp">
       <Filter>PlayGround\UIs</Filter>

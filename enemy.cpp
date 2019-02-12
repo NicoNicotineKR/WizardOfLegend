@@ -3,7 +3,6 @@
 #include "player.h"
 #include "enemy_State_Idle.h"
 #include "enemy_State_Spawn.h"
-#include "enemy_State_MoveStart.h"
 #include "enemy_State_Move.h"
 #include "enemy_State_Charge.h"
 #include "enemy_State_Attack.h"
@@ -69,9 +68,6 @@ void enemy::currentEnemyState()
 		break;
 		case E_STATE::SPAWN:
 			_enemyState = _arrState[static_cast<const int>(E_STATE::SPAWN)];
-		break;
-		case E_STATE::MOVESTART:
-			_enemyState = _arrState[static_cast<const int>(E_STATE::MOVESTART)];
 		break;
 		case E_STATE::MOVE:
 			_enemyState = _arrState[static_cast<const int>(E_STATE::MOVE)];

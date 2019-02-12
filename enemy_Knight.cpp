@@ -3,7 +3,6 @@
 #include "enemy_Knight.h"
 #include "enemy_State_Idle.h"
 #include "enemy_State_Spawn.h"
-#include "enemy_State_MoveStart.h"
 #include "enemy_State_Move.h"
 #include "enemy_State_Charge.h"
 #include "enemy_State_Attack.h"
@@ -42,7 +41,7 @@ HRESULT enemy_Knight::init()
 	_state = E_STATE::IDLE;
 
 	_isAniOnce = false;
-	_isClose = false;
+	_isClose = true;
 
 
 	return S_OK;
@@ -76,7 +75,7 @@ void enemy_Knight::render()
 
 void enemy_Knight::enemyKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("knight", "images/enemy/knight.bmp", 516, 1008, 6, 8, true, 0xff00ff);
+	IMAGEMANAGER->addFrameImage("knight", "images/enemy/knight.bmp", 1032, 2016, 6, 8, true, 0xff00ff);
 
 	//idle
 	int rightIdle[] = { 0 };
@@ -87,20 +86,15 @@ void enemy_Knight::enemyKeyAnimationInit()
 	//spawn -> 추후에 추가할것.
 
 	//move
-	int rightMoveStart[] = { 7,8,6,9,10 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMoveStart", "knight", rightMoveStart, 5, 5, false, knight_Move, this);
-	int rightMoving[] = { 6,7,8,9,10,11 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMove", "knight", rightMoving, 6, 5, true);
-
-	int leftMoveStart[] = { 16,15,17,14,13 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMoveStart", "knight", leftMoveStart, 5, 5, false, knight_Move, this);
-	int leftMoving[] = { 17,16,15,14,13,12 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMove", "knight", leftMoving, 6, 5, true);
+	int rightMove[] = { 6,7,8,9,10,11 };
+	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMove", "knight", rightMove, 6, 3, true);
+	int leftMove[] = { 17,16,15,14,13,12 };
+	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMove", "knight", leftMove, 6, 3, true);
 
 	//charge
 	int rightCharge[] = { 18 };
 	KEYANIMANAGER->addArrayFrameAnimation("knight_rightCharge", "knight", rightCharge, 1, 5, true, knight_rightAttack, this);
-	int leftCharge[] = { 20 };
+	int leftCharge[] = { 21 };
 	KEYANIMANAGER->addArrayFrameAnimation("knight_leftCharge", "knight", leftCharge, 1, 5, true, knight_leftAttack, this);
 
 	//attack
@@ -120,7 +114,6 @@ void enemy_Knight::enemyArrStateInit()
 {
 	_arrState[static_cast<const int>(E_STATE::IDLE)] = new enemy_State_Idle;
 	_arrState[static_cast<const int>(E_STATE::SPAWN)] = new enemy_State_Spawn;
-	_arrState[static_cast<const int>(E_STATE::MOVESTART)] = new enemy_State_MoveStart;
 	_arrState[static_cast<const int>(E_STATE::MOVE)] = new enemy_State_Move;
 	_arrState[static_cast<const int>(E_STATE::CHARGE)] = new enemy_State_Charge;
 	_arrState[static_cast<const int>(E_STATE::ATTACK)] = new enemy_State_Attack;
@@ -145,18 +138,6 @@ void enemy_Knight::startAni()
 		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::IDLE)
 		{
 			_ani = KEYANIMANAGER->findAnimation("knight_leftIdle");
-			_ani->start();
-		}
-
-		//moveStart
-		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::MOVESTART)
-		{
-			_ani = KEYANIMANAGER->findAnimation("knight_rightMoveStart");
-			_ani->start();
-		}
-		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::MOVESTART)
-		{
-			_ani = KEYANIMANAGER->findAnimation("knight_leftMoveStart");
 			_ani->start();
 		}
 

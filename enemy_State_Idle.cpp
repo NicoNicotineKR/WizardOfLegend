@@ -17,7 +17,7 @@ void enemy_State_Idle::direction_Left(enemy * enemy)
 	if (enemy->getAniDirection() == E_ANIDIRECTION::LEFT)
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
-		enemy->setState(E_STATE::MOVESTART);
+		enemy->setState(E_STATE::MOVE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
@@ -25,7 +25,7 @@ void enemy_State_Idle::direction_Left(enemy * enemy)
 	else if (enemy->getAniDirection() == E_ANIDIRECTION::RIGHT)
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
-		enemy->setState(E_STATE::MOVESTART);
+		enemy->setState(E_STATE::MOVE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
@@ -38,7 +38,7 @@ void enemy_State_Idle::direction_right(enemy * enemy)
 	if (enemy->getAniDirection() == E_ANIDIRECTION::LEFT)
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
-		enemy->setState(E_STATE::MOVESTART);
+		enemy->setState(E_STATE::MOVE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
@@ -46,7 +46,7 @@ void enemy_State_Idle::direction_right(enemy * enemy)
 	else if (enemy->getAniDirection() == E_ANIDIRECTION::RIGHT)
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
-		enemy->setState(E_STATE::MOVESTART);
+		enemy->setState(E_STATE::MOVE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();

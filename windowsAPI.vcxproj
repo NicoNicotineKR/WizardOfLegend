@@ -168,7 +168,6 @@
     <ClInclude Include="enemy_State_Hit.h" />
     <ClInclude Include="enemy_State_Idle.h" />
     <ClInclude Include="enemy_State_Move.h" />
-    <ClInclude Include="enemy_State_MoveStart.h" />
     <ClInclude Include="enemy_State_Spawn.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="home.h" />
@@ -238,7 +237,6 @@
     <ClCompile Include="enemy_State_Hit.cpp" />
     <ClCompile Include="enemy_State_Idle.cpp" />
     <ClCompile Include="enemy_State_Move.cpp" />
-    <ClCompile Include="enemy_State_MoveStart.cpp" />
     <ClCompile Include="enemy_State_Spawn.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="home.cpp" />

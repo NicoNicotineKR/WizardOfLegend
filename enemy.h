@@ -15,7 +15,6 @@ enum class E_STATE
 {
 	IDLE,
 	SPAWN,
-	MOVESTART,
 	MOVE,
 	CHARGE,
 	ATTACK,

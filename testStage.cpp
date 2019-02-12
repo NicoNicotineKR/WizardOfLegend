@@ -32,16 +32,22 @@ HRESULT testStage::init()
 
 	_myWay.clear();
 
+	_em = new enemyMgr;
+	_em->setPlayerAdress(_player);
+	_em->init();
+
 	return S_OK;
 }
 
 void testStage::release()
 {
+	_em->release();
 }
 
 void testStage::update()
 {
 	_player->update();
+	_em->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		_myWay.clear();
@@ -53,6 +59,7 @@ void testStage::render()
 {
 	RenderMap();
 	_player->render(getMemDC());
+	_em->render();
 	if (_myWay.size() != 0)
 	{
 		for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)
