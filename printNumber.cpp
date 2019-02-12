@@ -18,7 +18,7 @@ HRESULT printNumber::init()
 	
 	_img = IMAGEMANAGER->findImage("numbers");
 
-	return S_OK;
+	return S_OK; 
 }
 
 void printNumber::release()
