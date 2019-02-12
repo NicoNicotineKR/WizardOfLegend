@@ -16,6 +16,8 @@ public:
 	void enemyArrStateInit();
 	void startAni();
 
-	static void knight_Moving(void* obj);
+	void move();
+
+	static void knight_Move(void* obj);
 };
 

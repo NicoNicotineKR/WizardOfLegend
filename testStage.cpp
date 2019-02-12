@@ -42,7 +42,7 @@ void testStage::release()
 void testStage::update()
 {
 	_player->update();
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
 		_myWay.clear();
 		_aStar->pathFinder(PointMake(16, 19), PointMake(3, 4), PointMake(16, 19), _myWay);

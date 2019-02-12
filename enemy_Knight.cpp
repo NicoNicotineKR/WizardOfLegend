@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "player.h"
 #include "enemy_Knight.h"
 #include "enemy_State_Idle.h"
 #include "enemy_State_Spawn.h"
@@ -37,11 +38,11 @@ HRESULT enemy_Knight::init()
 	_vec.x = 0;
 	_vec.y = 0;
 
-	_aniDirection = E_ANIDIRECTION::LEFT;
-	_moveDirection = E_MOVEDIRECTION::BOTTOM;
+	_aniDirection = E_ANIDIRECTION::RIGHT;
 	_state = E_STATE::IDLE;
 
 	_isAniOnce = false;
+	_isClose = false;
 
 
 	return S_OK;
@@ -59,12 +60,19 @@ void enemy_Knight::update()
 	KEYANIMANAGER->update();
 	_enemyState->update(this);
 
+	//플레이어가 사정거리 or 구역에 들어오면 그곳에 있는 적들의 _isClose를 트루로 바꿔줘야함 -> 한번 트루되면 계속 트루인상태로 고정임
+	if (_isClose) 
+	{
+		move();
+	}
+
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
 }
 
 void enemy_Knight::render()
 {
+	_img->aniRender(getMemDC(), _pos.x, _pos.y, _ani);
 }
 
 void enemy_Knight::enemyKeyAnimationInit()
@@ -81,12 +89,12 @@ void enemy_Knight::enemyKeyAnimationInit()
 
 	//move
 	int rightMoveStart[] = { 7,8,6,9,10 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMoveStart", "knight", rightMoveStart, 5, 5, false, knight_Moving, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMoveStart", "knight", rightMoveStart, 5, 5, false, knight_Move, this);
 	int rightMoving[] = { 6,7,8,9,10,11 };
 	KEYANIMANAGER->addArrayFrameAnimation("knight_rightMove", "knight", rightMoving, 6, 5, true);
 
 	int leftMoveStart[] = { 16,15,17,14,13 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMoveStart", "knight", leftMoveStart, 5, 5, false, knight_Moving, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMoveStart", "knight", leftMoveStart, 5, 5, false, knight_Move, this);
 	int leftMoving[] = { 17,16,15,14,13,12 };
 	KEYANIMANAGER->addArrayFrameAnimation("knight_leftMove", "knight", leftMoving, 6, 5, true);
 
@@ -98,9 +106,9 @@ void enemy_Knight::enemyKeyAnimationInit()
 
 	//attack
 	int rightAttack[] = { 19 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightAttack", "knight", rightAttack, 1, 3, false, knight_Moving, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_rightAttack", "knight", rightAttack, 1, 3, false, knight_Move, this);
 	int leftAttack[] = { 20 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftAttack", "knight", leftAttack, 1, 3, false, knight_Moving, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_leftAttack", "knight", leftAttack, 1, 3, false, knight_Move, this);
 
 	//death
 	int rightDeath[] = { 24,25,26,27,28,29,30,31,32 };
@@ -200,7 +208,24 @@ void enemy_Knight::startAni()
 	}
 }
 
-void enemy_Knight::knight_Moving(void * obj)
+void enemy_Knight::move()
 {
-	//플레이어 x 좌표가 나보다 낮으면(왼쪽에있으면) 왼쪽이미지 <-> 나보다 크면 오른쪽이미지와 상태를 부여하자
+	if (_aniDirection == E_ANIDIRECTION::LEFT)
+	{
+		_enemyState->direction_Left(this);
+	}
+	else if (_aniDirection == E_ANIDIRECTION::RIGHT)
+	{
+		_enemyState->direction_right(this);
+	}
+}
+
+void enemy_Knight::knight_Move(void * obj)
+{
+	enemy_Knight* knight = (enemy_Knight*)obj;
+
+	knight->setState(E_STATE::MOVE);
+	knight->fixDirection();
+	knight->currentEnemyState();
+	knight->startAni();
 }

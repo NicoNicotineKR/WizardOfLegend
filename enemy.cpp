@@ -43,3 +43,54 @@ void enemy::enemyKeyAnimationInit()
 void enemy::enemyArrStateInit()
 {
 }
+
+void enemy::startAni()
+{
+}
+
+void enemy::fixDirection()
+{
+	if (_pos.x + _img->getFrameWidth() < _player->getPos().x + _player->getImg()->getFrameWidth())
+	{
+		_aniDirection = E_ANIDIRECTION::RIGHT;
+	}
+	if (_pos.x + _img->getFrameWidth() >= _player->getPos().x + _player->getImg()->getFrameWidth())
+	{
+		_aniDirection = E_ANIDIRECTION::LEFT;
+	}
+}
+
+void enemy::currentEnemyState()
+{
+	switch (_state)
+	{
+		case E_STATE::IDLE:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::IDLE)];
+		break;
+		case E_STATE::SPAWN:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::SPAWN)];
+		break;
+		case E_STATE::MOVESTART:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::MOVESTART)];
+		break;
+		case E_STATE::MOVE:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::MOVE)];
+		break;
+		case E_STATE::CHARGE:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::CHARGE)];
+		break;
+		case E_STATE::ATTACK:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::ATTACK)];
+		break;
+		case E_STATE::HIT:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::HIT)];
+		break;
+		case E_STATE::DEATH:
+			_enemyState = _arrState[static_cast<const int>(E_STATE::DEATH)];
+		break;
+	}
+}
+
+void enemy::move()
+{
+}
