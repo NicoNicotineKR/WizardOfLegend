@@ -41,7 +41,7 @@ HRESULT testStage::init()
 
 void testStage::release()
 {
-	_em->release();
+//	_em->release();
 }
 
 void testStage::update()

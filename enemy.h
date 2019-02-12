@@ -60,6 +60,9 @@ protected:
 	list<POINT>				_listPath;
 	list<POINT>::iterator	_listIPath;
 
+	float _curCharge;
+	float _maxCharge;
+
 public:
 	enemy();
 	~enemy();
@@ -104,5 +107,11 @@ public:
 	float getSpeed() { return _speed; }
 
 	RECT getTileCheckRc() { return _tileCheckRc; }
+
+	void setCurCharge(float curCharge) { _curCharge = curCharge; }
+	float getCurCharge() { return _curCharge; }
+
+	void setMaxCharge(float maxCharge) { _curCharge = maxCharge; }
+	float getMaxCharge() { return _maxCharge; }
 };
 
