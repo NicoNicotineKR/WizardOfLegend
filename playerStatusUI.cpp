@@ -91,10 +91,6 @@ void playerStatusUI::update()
 		MpAlphaFunc();
 	}
 
-	if (KEYMANAGER->isStayKeyDown(VK_NUMPAD0)) {
-		_curHp--;
-	}
-
 }
 
 void playerStatusUI::render()
@@ -126,22 +122,6 @@ void playerStatusUI::render()
 
 	//	숫자출력
 	NumberRenderFunc();
-
-
-	/*
-	char str[128];
-
-	sprintf_s(str, "curHP / MaxHp %f, %f", _curHp, _maxHp);
-	TextOut(getMemDC(), 100, 100, str, strlen(str));
-	sprintf_s(str, "hp_bar Ratio : %f", _hpRatio);
-	TextOut(getMemDC(), 100, 120, str, strlen(str));
-
-	
-	sprintf_s(str, "HpbarWid : %f", _hpBarCurWid);
-	TextOut(getMemDC(), 100, 140, str, strlen(str));
-	sprintf_s(str, "_hpbackbarcurwid : %f", _hpBackBarCurWid);
-	TextOut(getMemDC(), 100, 160, str, strlen(str));
-	*/
 
 }
 
