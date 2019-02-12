@@ -1864,6 +1864,17 @@ void mapEditor::InitSampleIceObj()
 						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
 					}
 				}
+				//다리사이
+				if (i == 7)
+				{
+					if (44 <= j && j <= 46)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//석상
 				if (8 <= i && i <= 9)
 				{
 					if (42 <= j && j <= 44)
