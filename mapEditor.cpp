@@ -18,6 +18,10 @@ HRESULT mapEditor::init()
 	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("tileEarth", "images/map/EarthBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objEarth", "images/map/EarthBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	//추가 - 유형우
+	IMAGEMANAGER->addFrameImage("tileIce", "images/map/IceBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objIce", "images/map/IceBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+
 
 	IMAGEMANAGER->addImage("mapEditorFrame", "images/mapEditor/mapEditorFrame.bmp", 1600, 900, true, 0xFF00FF);
 	IMAGEMANAGER->addImage("sampleMask", "images/mapEditor/sampleMask.bmp", 32, 32, false, 0x000000);
@@ -89,6 +93,10 @@ HRESULT mapEditor::init()
 	InitSampleEarthTile();
 	InitSampleEarthObj();
 
+	//추가 - 유형우
+	InitSampleIceTile();
+	InitSampleIceObj();
+
 
 
 
@@ -137,8 +145,6 @@ void mapEditor::update()
 	{
 		SCENEMANAGER->changeScene("mainmenu");
 	}
-
-
 }
 
 void mapEditor::render()
@@ -169,6 +175,7 @@ void mapEditor::render()
 	{
 		_buttons[i].img->frameRender(getMemDC(), _buttons[i].rc.left, _buttons[i].rc.top, _buttons[i].frameX, _buttons[i].frameY);
 	}
+
 	//종류선택버튼 출력
 	for (int i = 0; i < 3; i++) {	//	tile/obj/unit
 		for (int j = 0; j < BTN_KINDS_END; j++) {
@@ -227,11 +234,8 @@ void mapEditor::render()
 	TextOut(getMemDC(), 30, 30, str, strlen(str));
 
 
-
-
-
-
-
+	//길보여짐
+	LoadView();
 }
 
 void mapEditor::SetNewMap(int tilenumX, int tileNumY)
@@ -768,7 +772,7 @@ void mapEditor::InitSampleCastleObj()
 					_totalSamples[SELECT_OBJ][CASTLE_OBJ][i][j]->setIsAvailMove(true);
 					_totalSamples[SELECT_OBJ][CASTLE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE12);
 				}
-				if(6 <= j && j <= 9) {
+				if (6 <= j && j <= 9) {
 					_totalSamples[SELECT_OBJ][CASTLE_OBJ][i][j]->setIsAvailMove(true);
 					_totalSamples[SELECT_OBJ][CASTLE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE13);
 				}
@@ -1071,7 +1075,7 @@ void mapEditor::InitSampleEarthObj()
 							_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setIsAvailMove(true);
 							_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE4);
 						}
-						
+
 					}
 					if (10 <= j && j <= 11) {
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setIsAvailMove(true);
@@ -1143,7 +1147,7 @@ void mapEditor::InitSampleEarthObj()
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
 					}
 				}
-				
+
 				//	창문들
 				if (6 <= i && i <= 8) {
 					if (22 <= j && j <= 27) {
@@ -1161,9 +1165,9 @@ void mapEditor::InitSampleEarthObj()
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setIsAvailMove(true);
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE11);
 					}
-					
+
 				}
-				
+
 
 
 			}
@@ -1221,7 +1225,7 @@ void mapEditor::InitSampleEarthObj()
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setIsAvailMove(true);
 						_totalSamples[SELECT_OBJ][EARTH_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE15);
 					}
-					
+
 				}
 				//	통나무
 				if (6 <= i && i <= 9) {
@@ -1346,6 +1350,552 @@ void mapEditor::InitSampleEarthObj()
 
 	}
 
+}
+
+void mapEditor::InitSampleIceTile()
+{
+	for (int i = 0; i <= IMAGEMANAGER->findImage("tileIce")->getMaxFrameY(); i++)
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("tileIce")->getMaxFrameX(); j++)
+		{
+			_totalSamples[SELECT_TILE][ICE_TILE][i][j] = new tile;
+			SetNewSampleTile(_totalSamples[SELECT_TILE][ICE_TILE][i][j], j, i);
+			_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileImage(IMAGEMANAGER->findImage("tileIce"));
+			_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileImgKey("tileIce");
+
+			//	개별적 셋팅
+			//	1번 페이지
+			{
+				//위벽
+				if (0 <= i && i <= 3) {
+					if (0 <= j && j <= 11) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				//좌우벽
+				if (0 <= i && i <= 11) {
+					//왼쪽벽
+					if (j == 0) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+					//오른쪽벽
+					else if (j == 11) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+
+				//아래벽
+				if (i == 11) {
+					if (0 <= j && j <= 11) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				//	벽내부바닥
+				if (4 <= i && i <= 10) {
+					if (1 <= j && j <= 10) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+
+
+				//오른쪽 타일들
+				if (0 <= i && i <= 8)
+				{
+					if (12 <= j && j <= 13) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+			}
+			//	1번페이지 끗
+
+			//	2번페이지
+			{
+				//위벽
+				if (0 <= i && i <= 3) {
+					if (14 <= j && j <= 25) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				//좌우벽
+				if (0 <= i && i <= 11) {
+					//왼쪽벽
+					if (j == 14) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+					//오른쪽벽
+					else if (j == 25) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+
+				//아래벽
+				if (i == 11) {
+					if (14 <= j && j <= 25) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				//	벽내부바닥
+				if (4 <= i && i <= 10) {
+					if (15 <= j && j <= 24) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+
+
+				//오른쪽 타일들
+				if (0 <= i && i <= 8)
+				{
+					if (26 <= j && j <= 28) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+
+				//아래에있는 타일들
+				if (12 <= i && i <= 14)
+				{
+					if (14 <= j && j <= 22) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+
+			}
+			//	2번페이지 끗
+
+			//	3번페이지
+			{
+				//타일
+				if (0 <= i && i <= 11) {
+					if (28 <= j && j <= 35) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				//사다리
+				if (i == 0) {
+					if (j == 36) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (i == 1) {
+					if (j == 36) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (i == 2) {
+					if (j == 36) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (i == 3) {
+					if (j == 36) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+
+				//구멍
+				if (0 <= i && i <= 3) {
+					if (37 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (4 <= i && i <= 6) {
+					if (37 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_HOLE);
+					}
+				}
+				if (7 <= i && i <= 10) {
+					if (37 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (11 <= i && i <= 13) {
+					if (37 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_HOLE);
+					}
+				}
+			}
+			//	3번 페이지 끗
+
+			//4페이지 시작
+			{
+				if (0 <= i && i <= 9) {
+					if (42 <= j && j <= 53) {
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][ICE_TILE][i][j]->setTopTileAttr(TILE_HOLE);
+					}
+				}
+			}
+			//4페이지 끗
+
+		}	//	for j 종료
+	}	//for i 종료
+
+
+	//earth 타일 시작/끗 프레임인덱스 이닛
+	{
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][0][ICETILE1] = { 0,0 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][1][ICETILE1] = { 13,13 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][0][ICETILE2] = { 14,0 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][1][ICETILE2] = { 27,13 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][0][ICETILE3] = { 28,0 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][1][ICETILE3] = { 41,13 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][0][ICETILE4] = { 42,0 };
+		_totalFrameIdx[SELECT_TILE][ICE_TILE][1][ICETILE4] = { 55,13 };
+	}
+
+}
+
+void mapEditor::InitSampleIceObj()
+{
+	for (int i = 0; i <= IMAGEMANAGER->findImage("objIce")->getMaxFrameY(); i++)
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("objIce")->getMaxFrameX(); j++)
+		{
+			_totalSamples[SELECT_OBJ][ICE_OBJ][i][j] = new tile;
+			SetNewSampleObj(_totalSamples[SELECT_OBJ][ICE_OBJ][i][j], j, i);
+			_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjImage(IMAGEMANAGER->findImage("objIce"));
+			_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjImgKey("objIce");
+
+			//1페이지
+			{
+				//	얼음들
+				if (0 <= i && i <= 1) {
+					if (0 <= j && j <= 1) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE1);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (2 <= j && j <= 3) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE2);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (4 <= j && j <= 5) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE3);
+					}
+				}
+
+				if (2 <= i && i <= 4) {
+					if (0 <= j && j <= 2) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE4);
+					}
+				}
+				if (2 <= i && i <= 4) {
+					if (3 <= j && j <= 5) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE5);
+					}
+				}
+				if (5 <= i && i <= 8) {
+					if (0 <= j && j <= 2) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE6);
+					}
+				}
+				if (5 <= i && i <= 7) {
+					if (3 <= j && j <= 5) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE7);
+					}
+				}
+				if (8 <= i && i <= 10) {
+					if (3 <= j && j <= 5) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE8);
+					}
+				}
+				if (0 <= i && i <= 4) {
+					if (6 <= j && j <= 7) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE9);
+					}
+				}
+				if (0 <= i && i <= 2) {
+					if (8 <= j && j <= 9) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE10);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (10 <= j && j <= 11) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE11);
+					}
+				}
+				if (10 <= i && i <= 13) {
+					if (5 <= j && j <= 9) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE12);
+					}
+				}
+
+				//2페이지 - 창문과 문?
+				if (0 <= i && i <= 13)
+				{
+					if (14 <= j && j <= 27)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				//다리사이
+				if (i == 6)
+				{
+					if (20 <= j && j <= 21)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 6)
+				{
+					if (25 <= j && j <= 26)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//28번~37번
+				//3페이지
+				if (0 <= i && i <= 1)
+				{
+					if (28 <= j && j <= 30)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE13);
+					}
+				}
+				if (0 <= i && i <= 1)
+				{
+					if (31 <= j && j <= 33)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE14);
+					}
+				}
+				if (2 <= i && i <= 3)
+				{
+					if (28 <= j && j <= 30)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE15);
+					}
+				}
+				if (i == 2)
+				{
+					if (j == 31)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE16);
+					}
+				}
+				if (i == 2)
+				{
+					if (j == 32)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE17);
+					}
+				}
+
+				//가시
+				if (4 <= i && i <= 5)
+				{
+					if (28 <= j && j <= 34)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//해골 및 구조물
+				if (7 <= i && i <= 8)
+				{
+					if (28 <= j && j <= 29)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 7)
+				{
+					if (30 <= j && j <= 31)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 8)
+				{
+					if (30 <= j && j <= 31)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (7 <= i && i <= 8)
+				{
+					if (32 <= j && j <= 33)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//해골들과 철장
+				if (9 <= i && i <= 11)
+				{
+					if (28 <= j && j <= 31)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 12)
+				{
+					if (28 <= j && j <= 31)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (9 <= i && i <= 11)
+				{
+					if (32 <= j && j <= 36)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE18);
+					}
+				}
+				if (i == 12)
+				{
+					if (32 <= j && j <= 36)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE18);
+					}
+				}
+
+				//깃발
+				if (6 <= i && i <= 8)
+				{
+					if (35 <= j && j <= 36)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE19);
+					}
+				}
+
+				//기둥
+				if (0 <= i && i <= 2)
+				{
+					if (38 <= j && j <= 41)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				//기둥
+				if (3 <= i && i <= 4)
+				{
+					if (38 <= j && j <= 41)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (5 <= i && i <= 9)
+				{
+					if (38 <= j && j <= 41)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//4페이지
+				if (0 <= i && i <= 6)
+				{
+					if (42 <= j && j <= 48)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 7)
+				{
+					if (42 <= j && j <= 43)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 7)
+				{
+					if (47 <= j && j <= 48)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (8 <= i && i <= 9)
+				{
+					if (42 <= j && j <= 44)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (10 <= i && i <= 11)
+				{
+					if (42 <= j && j <= 44)
+					{
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+			}
+		}	//	for j end
+	}	//	for i end
+
+	//earth 타일 시작/끗 프레임인덱스 이닛
+	{
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][0][ICETILE1] = { 0,0 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE1] = { 13,13 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][0][ICETILE2] = { 14,0 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE2] = { 27,13 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][0][ICETILE3] = { 28,0 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE3] = { 41,13 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][0][ICETILE4] = { 42,0 };
+		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE4] = { 55,13 };
+	}
 }
 
 void mapEditor::OverlayClickFunc()
@@ -1673,6 +2223,12 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = EARTHTILE_KINDS_END - 1;
 										}
 									}
+									//추가 - 유형우
+									else if (_curTileKind == ICE_TILE) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = ICETILE_KINDS_END - 1;
+										}
+									}
 									//	다른 종류 타일 추가시 여기에 추가
 										//else if () {
 										//
@@ -1695,6 +2251,12 @@ void mapEditor::ArrowClickFunc()
 									else if (_curObjKind == EARTH_OBJ) {
 										if (_curTileSampleIdx < 0) {
 											_curTileSampleIdx = EARTHOBJ_KINDS_END - 1;
+										}
+									}
+									//추가 - 유형우
+									else if (_curObjKind == ICE_OBJ) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = ICEOBJ_KINDS_END - 1;
 										}
 									}
 									//어스오브제일경우
@@ -1753,6 +2315,13 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = 0;
 										}
 									}
+									//추가 - 유형우
+									else if (_curTileKind == ICE_TILE) {
+										if (_curTileSampleIdx >= ICETILE_KINDS_END) {
+
+											_curTileSampleIdx = 0;
+										}
+									}
 									//	다른 종류 타일 추가시 여기에 추가
 										//else if () {
 										//
@@ -1774,6 +2343,12 @@ void mapEditor::ArrowClickFunc()
 									else if (_curObjKind == EARTH_OBJ) {
 
 										if (_curTileSampleIdx >= EARTHOBJ_KINDS_END) {
+											_curTileSampleIdx = 0;
+										}
+									}
+									else if (_curObjKind == ICE_OBJ) {
+
+										if (_curTileSampleIdx >= ICEOBJ_KINDS_END) {
 											_curTileSampleIdx = 0;
 										}
 									}
@@ -2109,9 +2684,6 @@ void mapEditor::AreaIdxRender()
 
 		}
 	}
-
-
-
 }
 
 void mapEditor::PreviewSampleRender()
@@ -2146,12 +2718,12 @@ void mapEditor::PreviewSampleRender()
 				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curTileKind][0][_curTileSampleIdx].y;
 				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curTileKind][0][_curTileSampleIdx].x;
 				//	뿌려줄 좌표 위치계산
-				POINT pos = {(_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
-							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y};
+				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
+							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
 				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
 				_totalSamples[_curSampleKind][_curTileKind][adjustIdxY][adjustIdxX]->AlphaFrameRender(pos.x, pos.y, PREVIEW_ALPHA);
-				
+
 
 			}
 			else if (_curSampleKind == SELECT_OBJ) {
@@ -2160,13 +2732,13 @@ void mapEditor::PreviewSampleRender()
 				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curObjKind][0][_curTileSampleIdx].y;
 				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curObjKind][0][_curTileSampleIdx].x;
 				//	뿌려줄 좌표 위치계산
-				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE -_camLeftTop.x,
+				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
 							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
 				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
 				_totalSamples[_curSampleKind][_curObjKind][adjustIdxY][adjustIdxX]->AlphaFrameRender(pos.x, pos.y, PREVIEW_ALPHA);
 
-				
+
 			}
 		}
 	}
@@ -2226,7 +2798,7 @@ void mapEditor::CursorClickOnMap()
 
 					if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 					{
-						
+
 						if (!_isErase && !_isEraseTile && !_isEraseObj)
 						{
 							CursorAdjustOnMap();
@@ -2856,5 +3428,24 @@ bool mapEditor::IsRdyToResize()
 		return true;
 
 	return false;
+}
+
+void mapEditor::LoadView()
+{
+	for (int i = 0; i < _tileNumY; i++)
+	{
+		for (int j = 0; j < _tileNumX; j++)
+		{
+			if (_vvMap[i][j]->getIsAvailMove() == true)
+			{
+				char str[128];
+				sprintf_s(str, "[길]");
+				TextOut(getMemDC(),
+					_vvMap[i][j]->getTopTileRc().left - _camLeftTop.x,
+					_vvMap[i][j]->getTopTileRc().bottom - _camLeftTop.y - 20,
+					str, strlen(str));
+			}
+		}
+	}
 }
 

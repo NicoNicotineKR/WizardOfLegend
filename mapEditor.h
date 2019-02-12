@@ -84,6 +84,23 @@ private:
 		EARTHOBJ_KINDS_END,
 	};
 
+	//추가 - 유형우
+	enum E_ICETILE_KINDS {	//	_curTileSampleIdx
+		ICETILE1 = 0,
+		ICETILE2,
+		ICETILE3,
+		ICETILE4,
+		ICETILE_KINDS_END,
+	};
+
+	enum E_ICEOBJ_KINDS {	//	_curTileSampleIdx
+		ICEOBJ1 = 0,
+		ICEOBJ2,
+		ICEOBJ3,
+		ICEOBJ4,
+		ICEOBJ_KINDS_END,
+	};
+
 	enum E_TILE_KINDS	//_curTileKind
 	{
 		CASTLE_TILE = 0,
@@ -165,6 +182,10 @@ private:
 	tile* _earthObjSample[14][14 * 4];
 	POINT _eartObjFrameIdx[2][4];
 
+	//추가 - 유형우
+	tile* _IceTileSample[14][14 * 4];
+	POINT _IceTileFrameIdx[2][4];	// [시작/끝][종류]
+
 	//=========== 샘플 data 끗 =============
 
 
@@ -242,6 +263,9 @@ public:
 	void InitSampleEarthTile();	//	샘플 프레임, 이미지, 개별 속성입력 + 타일셋 종류별 프레임갯수
 	void InitSampleEarthObj();
 
+	//추가 - 유형우
+	void InitSampleIceTile();	//	샘플 프레임, 이미지, 개별 속성입력 + 타일셋 종류별 프레임갯수
+	void InitSampleIceObj();
 
 	void OverlayClickFunc();
 	void ArrowClickFunc();			//--- 타일/오브제 추가할때마다 수정필요 ---
@@ -278,5 +302,7 @@ public:
 	void MapResizeCountDelayFunc();
 	bool IsRdyToResize();
 
+	//길 보여짐
+	void LoadView();
 };
 

@@ -14,7 +14,7 @@ introScene::~introScene()
 HRESULT introScene::init()
 {
 	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikotin.bmp", 653, 100, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikoteam.bmp", 651, 85, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("niko", "images/introScene/niko.bmp", 651, 323, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("smoke", "images/introScene/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
 	SOUNDMANAGER->addSound("logoSound", "sound/logoSound.mp3", true, false);
