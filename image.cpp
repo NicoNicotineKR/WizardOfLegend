@@ -803,7 +803,7 @@ void image::alphaFrameRenderFixed(HDC hdc, int destX, int destY, int currentFram
 			_imageInfo->frameHeight,							//복사될 세로크기
 			_imageInfo->hMemDC,
 			currentFrameX * _imageInfo->frameWidth,
-			currentFrameY * _imageInfo->frameHeight,//복사시작할 XY좌표
+			currentFrameY * _imageInfo->frameHeight,		//복사시작할 XY좌표
 			_imageInfo->frameWidth,								//복사할 가로/세로크기
 			_imageInfo->frameHeight,
 			_transColor											//복사때 제외할 칼라(뺄 칼라)
@@ -829,3 +829,80 @@ void image::alphaFrameRenderFixed(HDC hdc, int destX, int destY, int currentFram
 	}
 }
 
+void image::alphaRenderFixed(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWid, int sourHei, BYTE alpha)
+{
+
+
+	//이것을 해야 알파값이 적용됨!!!
+	_blendFunc.SourceConstantAlpha = alpha;
+
+	if (_trans)
+	{
+		BitBlt(_blendImage->hMemDC
+			, sourX, sourY					//	0,0
+			, sourWid, sourHei
+			, hdc
+			, destX, destY
+			, SRCCOPY);
+
+		//특정칼라를 제외하고 DC -> DC 사이로 고속복사 해주는 함수
+		GdiTransparentBlt(
+			_blendImage->hMemDC,								//복사될 DC
+			sourX,				//	0,0								//이미지 그려줄 시작X좌표(left)
+			sourY,				//	0,0						//이미지 그려줄 시작Y좌표(top)
+			sourWid,								//복사될 가로크기
+			sourHei,							//복사될 세로크기
+			_imageInfo->hMemDC,
+			sourX,			//	0,0
+			sourY,			//	0,0						//복사시작할 XY좌표
+			sourWid,								//복사할 가로/세로크기
+			sourHei,
+			_transColor											//복사때 제외할 칼라(뺄 칼라)
+		);
+
+		AlphaBlend(hdc
+			, destX, destY
+			, sourWid, sourHei
+			, _blendImage->hMemDC
+			, sourX, sourY				//	0,0
+			, sourWid, sourHei
+			, _blendFunc);
+	}
+	else
+	{
+		AlphaBlend(hdc
+			, destX, destY
+			, sourWid, sourHei
+			, _blendImage->hMemDC
+			, sourX, sourY				//	0,0
+			, sourWid, sourHei
+			, _blendFunc);
+	}
+
+	/*
+	if (_trans)
+	{
+		//특정칼라를 제외하고 DC -> DC 사이로 고속복사 해주는 함수
+		GdiTransparentBlt(
+			hdc,					//복사될 DC
+			destX,					//이미지 그려줄 시작X좌표(left)
+			destY,					//이미지 그려줄 시작Y좌표(top)
+			sourWidth,				//복사될 가로크기
+			sourHeight,				//복사될 세로크기
+			_imageInfo->hMemDC,
+			sourX, sourY,			//복사시작할 XY좌표
+			sourWidth,				//복사할 가로/세로크기
+			sourHeight,
+			_transColor				//복사때 제외할 칼라(뺄 칼라)
+		);
+	}
+	else
+	{
+		BitBlt(hdc, destX, destY,
+			sourWidth, sourHeight,
+			_imageInfo->hMemDC, sourX, sourY, SRCCOPY);
+	
+	*/
+
+
+}

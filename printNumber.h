@@ -15,5 +15,8 @@ public:
 	void render();
 	void renderNum(int num, int destCenX, int destCenY);
 
+	int getFrameWid() { return _img->getFrameWidth(); }
+	int getFrameHei() { return _img->getFrameHeight(); }
+
 };
 
