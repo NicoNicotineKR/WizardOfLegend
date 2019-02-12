@@ -63,7 +63,7 @@ HRESULT playerStatusUI::init()
 	}
 
 
-	//	임시설정
+	//	임시설정 - 테스트용
 	_maxHp = 500;
 	_curHp = 500;
 	_maxMp = MAX_MP;
