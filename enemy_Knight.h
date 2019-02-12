@@ -19,5 +19,7 @@ public:
 	void move();
 
 	static void knight_Move(void* obj);
+	static void knight_rightAttack(void* obj);
+	static void knight_leftAttack(void* obj);
 };
 

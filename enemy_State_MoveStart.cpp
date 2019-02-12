@@ -21,4 +21,10 @@ void enemy_State_MoveStart::direction_right(enemy * enemy)
 
 void enemy_State_MoveStart::update(enemy * enemy)
 {
+	E_ANIDIRECTION save = enemy->getAniDirection();
+	enemy->fixDirection();
+	if (save != enemy->getAniDirection())
+	{
+		enemy->startAni();
+	}
 }

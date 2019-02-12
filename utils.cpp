@@ -11,7 +11,7 @@ namespace BRAVO_UTIL
 		float x = x2 - x1;
 		float y = y2 - y1;
 
-		return sqrtf(x * x + y * y);
+		return x * x + y * y;
 	}
 
 	float getAngle(float x1, float y1, float x2, float y2)

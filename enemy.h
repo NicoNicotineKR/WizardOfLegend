@@ -54,6 +54,7 @@ protected:
 	// 순수혈통(에너미에게 필요해서 존재하는것들)이 아닌것
 
 	player* _player;					//플레이어 주소 여따 넣을거임
+	POINTFLOAT _playerPos;				//플레이어 좌표 박을거임
 
 	bool _isClose;						//플레이어가 근접해 있나?(구역의 타일을 플레이어가 밟으면 얘가 트루됨)
 
@@ -78,9 +79,13 @@ public:
 	void currentEnemyState();
 	virtual void move();
 
-	void setPlayerAdress(player* player) { _player = player; }
 
+	void setPlayerAdress(player* player) { _player = player; }
+	POINTFLOAT getPlayerPos() { return _playerPos; }
 	//접근자 설정자
+
+	bool getIsAniOnce() { return _isAniOnce; }
+	void setIsAniOnce(bool isAniOnce) { _isAniOnce = isAniOnce; }
 
 	E_ANIDIRECTION getAniDirection() { return _aniDirection; }
 	void setAniDirection(E_ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }
@@ -96,9 +101,6 @@ public:
 	POINTFLOAT getPos() { return _pos; }
 	image* getImg() { return _img; }
 	animation* getAni() { return _ani; }
-
-	void setIsAniOnce(bool isOnce) { _isAniOnce = isOnce; }
-	bool getIsAniOnce() { return _isAniOnce; }
 
 	float getSpeed() { return _speed; }
 

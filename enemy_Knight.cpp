@@ -61,10 +61,9 @@ void enemy_Knight::update()
 	_enemyState->update(this);
 
 	//플레이어가 사정거리 or 구역에 들어오면 그곳에 있는 적들의 _isClose를 트루로 바꿔줘야함 -> 한번 트루되면 계속 트루인상태로 고정임
-	if (_isClose) 
-	{
-		move();
-	}
+	move();
+
+	_playerPos = _player->getPos();
 
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
@@ -100,9 +99,9 @@ void enemy_Knight::enemyKeyAnimationInit()
 
 	//charge
 	int rightCharge[] = { 18 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightCharge", "knight", rightCharge, 1, 1, true);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_rightCharge", "knight", rightCharge, 1, 5, true, knight_rightAttack, this);
 	int leftCharge[] = { 20 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftCharge", "knight", leftCharge, 1, 1, true);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_leftCharge", "knight", leftCharge, 1, 5, true, knight_leftAttack, this);
 
 	//attack
 	int rightAttack[] = { 19 };
@@ -135,89 +134,102 @@ void enemy_Knight::enemyArrStateInit()
 
 void enemy_Knight::startAni()
 {
-	//idle
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::IDLE)
+	if (_isAniOnce)
 	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightIdle");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::IDLE)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftIdle");
-		_ani->start();
-	}
+		//idle
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::IDLE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightIdle");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::IDLE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftIdle");
+			_ani->start();
+		}
 
-	//moveStart
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::MOVESTART)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightMoveStart");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::MOVESTART)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftMoveStart");
-		_ani->start();
-	}
+		//moveStart
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::MOVESTART)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightMoveStart");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::MOVESTART)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftMoveStart");
+			_ani->start();
+		}
 
-	//move
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::MOVE)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightMove");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::MOVE)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftMove");
-		_ani->start();
-	}
+		//move
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::MOVE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightMove");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::MOVE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftMove");
+			_ani->start();
+		}
 
-	//charge
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::CHARGE)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightCharge");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::CHARGE)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftCharge");
-		_ani->start();
-	}
+		//charge
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::CHARGE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightCharge");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::CHARGE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftCharge");
+			_ani->start();
+		}
 
-	//attack
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::ATTACK)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightAttack");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::ATTACK)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftAttack");
-		_ani->start();
-	}
+		//attack
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::ATTACK)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightAttack");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::ATTACK)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftAttack");
+			_ani->start();
+		}
 
-	//death
-	if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::DEATH)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_rightDeath");
-		_ani->start();
-	}
-	else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::DEATH)
-	{
-		_ani = KEYANIMANAGER->findAnimation("knight_leftDeath");
-		_ani->start();
+		//death
+		if (_aniDirection == E_ANIDIRECTION::RIGHT && _state == E_STATE::DEATH)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_rightDeath");
+			_ani->start();
+		}
+		else if (_aniDirection == E_ANIDIRECTION::LEFT && _state == E_STATE::DEATH)
+		{
+			_ani = KEYANIMANAGER->findAnimation("knight_leftDeath");
+			_ani->start();
+		}
+		_isAniOnce = false;
 	}
 }
 
 void enemy_Knight::move()
 {
-	if (_aniDirection == E_ANIDIRECTION::LEFT)
+	//Idle 상태일떄
+	if (_isClose)
 	{
-		_enemyState->direction_Left(this);
+		if (_aniDirection == E_ANIDIRECTION::LEFT)
+		{
+			_enemyState->direction_Left(this);
+		}
+		else if (_aniDirection == E_ANIDIRECTION::RIGHT)
+		{
+			_enemyState->direction_right(this);
+		}
 	}
-	else if (_aniDirection == E_ANIDIRECTION::RIGHT)
-	{
-		_enemyState->direction_right(this);
-	}
+	//moveStart or move상태
+	//charge상태
+	//attack상태
+	//hit상태
+	//death상태
 }
 
 void enemy_Knight::knight_Move(void * obj)
@@ -227,5 +239,24 @@ void enemy_Knight::knight_Move(void * obj)
 	knight->setState(E_STATE::MOVE);
 	knight->fixDirection();
 	knight->currentEnemyState();
+	knight->setIsAniOnce(true);
+	knight->startAni();
+}
+
+void enemy_Knight::knight_rightAttack(void * obj)
+{
+	enemy_Knight* knight = (enemy_Knight*)obj;
+	knight->setState(E_STATE::ATTACK);
+	knight->currentEnemyState();
+	knight->setIsAniOnce(true);
+	knight->startAni();
+}
+
+void enemy_Knight::knight_leftAttack(void * obj)
+{
+	enemy_Knight* knight = (enemy_Knight*)obj;
+	knight->setState(E_STATE::ATTACK);
+	knight->currentEnemyState();
+	knight->setIsAniOnce(true);
 	knight->startAni();
 }
