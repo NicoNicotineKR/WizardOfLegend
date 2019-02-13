@@ -13,7 +13,7 @@ printNumber::~printNumber()
 
 HRESULT printNumber::init()
 {
-	IMAGEMANAGER->addFrameImage("numbers", "images/UIs/number/numbers.bmp", 220, 29, 11, 1, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("numbers", "images/UIs/number/numbers.bmp", 264, 29, 13, 1, true, 0xFF00FF);
 	
 	
 	_img = IMAGEMANAGER->findImage("numbers");
@@ -67,7 +67,13 @@ void printNumber::renderNum(int num, int destCenX, int destCenY)
 	case 10:
 		_img->frameRender(getMemDC(), destCenX - FRAME_WID / 2, destCenY - FRAME_HEI / 2, 10, 0);
 		break;
-		
+	case 11:
+		_img->frameRender(getMemDC(), destCenX - FRAME_WID / 2, destCenY - FRAME_HEI / 2, 11, 0);
+		break;
+	case 12:
+		_img->frameRender(getMemDC(), destCenX - FRAME_WID / 2, destCenY - FRAME_HEI / 2, 12, 0);
+		break;
+
 
 	}
 }

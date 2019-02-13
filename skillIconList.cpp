@@ -14,8 +14,12 @@ skillIconList::~skillIconList()
 HRESULT skillIconList::init()
 {
 	IMAGEMANAGER->addFrameImage("skillIcons", "images/UIs/skillIcons/skillIcons.bmp", 1008, 1008, 24, 24, true, 0xFF00FF);
+
+	_skillsImg = IMAGEMANAGER->findImage("skillIcons");
 	_frameWid = _skillsImg->getFrameWidth();
 	_frameHei = _skillsImg->getFrameHeight();
+
+	InitSkillList();
 
 	return S_OK;
 }
@@ -69,6 +73,7 @@ POINT skillIconList::FindSkillIdx(string keyName)
 {
 	POINT tmpIdx = { 0,0 };
 
+	_miSkillIdxList = _mSkillIdxList.begin();
 	_miSkillIdxList = _mSkillIdxList.find(keyName);
 	tmpIdx = _miSkillIdxList->second;
 

@@ -24,6 +24,8 @@ public:
 	void	InitSkillList();
 	void	AddSkillList(string keyName, int idxX, int idxY);
 	POINT	FindSkillIdx(string keyName);
+
+	image*	getIconsImg() { return _skillsImg; }
 	
 };
 
