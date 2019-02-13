@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "skillIconList.h"
-#include "printNumber.h";
+#include "printNumber.h"
 
 //	플레이어에 탑재해서 쓰세여
 //	init / update / render 걸어줘야함
@@ -39,6 +39,10 @@ private:
 		float lastingTime;		//남은 시간 = 쿨다운시간 - 지금까지의 시간
 
 		float curMaskWid;
+		float ratio;
+
+		POINT clock[4];		//	12,3,6,9
+		float angle;
 
 	};
 
@@ -70,6 +74,7 @@ public:
 	void DropSkill(int idx);
 	float CalLastingTime(int idx);
 	float CalMaskWid(int idx);
+
 
 
 	void setTotalReloadNum(int idx, int num)			{ _skills[idx].totalReloadNum = num; }

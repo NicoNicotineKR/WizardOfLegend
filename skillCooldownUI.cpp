@@ -64,8 +64,8 @@ void skillCooldownUI::update()
 
 void skillCooldownUI::render()
 {
-
 	
+		
 	for (int i = 0; i < 6; i++) {
 
 		//	스킬 창 테두리
@@ -133,7 +133,6 @@ void skillCooldownUI::DropSkill(int idx)
 	_skills[idx].lastingTime = 0;
 	_skills[idx].curMaskWid = MASK_MAX_WID;
 
-
 }
 
 float skillCooldownUI::CalLastingTime(int idx)
@@ -146,11 +145,8 @@ float skillCooldownUI::CalLastingTime(int idx)
 }
 
 float skillCooldownUI::CalMaskWid(int idx)
-{
-	float ratio;
-	ratio = _skills[idx].lastingTime / _skills[idx].coolDownTime;
+{	
+	_skills[idx].ratio = _skills[idx].lastingTime / _skills[idx].coolDownTime;
 
-	return MASK_MAX_WID * ratio;
+	return MASK_MAX_WID * _skills[idx].ratio;
 }
-
-
