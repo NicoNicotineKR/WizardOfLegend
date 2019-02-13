@@ -184,21 +184,22 @@ private:
 	//		[_curSampleKind][_curTileKind/_curObjKind/_curUnitKind][0/1][_curTileSampleIdx]
 
 
-	tile* _castleTileSample[12][22];
-	POINT _castleTileFrameIdx[2][4];	// [시작/끝][종류]
-
-	tile* _castleObjSample[12][23];
-	POINT _castleObjFrameIdx[2][3];		// [시작/끝][종류]
-
-	tile* _earthTileSample[14][14 * 4];
-	POINT _earthTileFrameIdx[2][4];
-
-	tile* _earthObjSample[14][14 * 4];
-	POINT _eartObjFrameIdx[2][4];
-
-	//추가 - 유형우
-	tile* _IceTileSample[14][14 * 4];
-	POINT _IceTileFrameIdx[2][4];	// [시작/끝][종류]
+	//	이제 사용안함. 위에 total로 통합했음
+	//tile* _castleTileSample[12][22];
+	//POINT _castleTileFrameIdx[2][4];	// [시작/끝][종류]
+	//
+	//tile* _castleObjSample[12][23];
+	//POINT _castleObjFrameIdx[2][3];		// [시작/끝][종류]
+	//
+	//tile* _earthTileSample[14][14 * 4];
+	//POINT _earthTileFrameIdx[2][4];
+	//
+	//tile* _earthObjSample[14][14 * 4];
+	//POINT _eartObjFrameIdx[2][4];
+	//
+	////추가 - 유형우
+	//tile* _IceTileSample[14][14 * 4];
+	//POINT _IceTileFrameIdx[2][4];	// [시작/끝][종류]
 
 	//=========== 샘플 data 끗 =============
 
