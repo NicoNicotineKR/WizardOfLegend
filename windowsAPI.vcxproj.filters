@@ -273,6 +273,9 @@
     <ClInclude Include="skillCooldownUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="objects.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -457,6 +460,9 @@
     </ClCompile>
     <ClCompile Include="skillCooldownUI.cpp">
       <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="objects.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
