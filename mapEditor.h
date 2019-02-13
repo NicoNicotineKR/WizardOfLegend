@@ -101,6 +101,20 @@ private:
 		ICEOBJ_KINDS_END,
 	};
 
+	enum E_FIREILE_KINDS {	//	_curTileSampleIdx
+		FIRETILE1 = 0,
+		FIRETILE2,
+		FIRETILE3,
+		FIRETILE4,
+		FIRETILE_KINDS_END,
+	};
+
+	enum E_FIREOBJ_KINDS {	//	_curTileSampleIdx
+		FIREOBJ1 = 0,
+		FIREOBJ2,
+		FIREOBJ_KINDS_END,
+	};
+
 	enum E_TILE_KINDS	//_curTileKind
 	{
 		CASTLE_TILE = 0,
@@ -264,8 +278,12 @@ public:
 	void InitSampleEarthObj();
 
 	//추가 - 유형우
-	void InitSampleIceTile();	//	샘플 프레임, 이미지, 개별 속성입력 + 타일셋 종류별 프레임갯수
+	void InitSampleIceTile();
 	void InitSampleIceObj();
+
+	void InitSampleFireTile();
+	void InitSampleFireObj();
+
 
 	void OverlayClickFunc();
 	void ArrowClickFunc();			//--- 타일/오브제 추가할때마다 수정필요 ---

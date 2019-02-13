@@ -21,6 +21,8 @@ HRESULT mapEditor::init()
 	//추가 - 유형우
 	IMAGEMANAGER->addFrameImage("tileIce", "images/map/IceBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objIce", "images/map/IceBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("tileFire", "images/map/FireBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objFire", "images/map/FireBaseObjSet.bmp", 896, 448, 28, 14, true, 0xFF00FF);
 
 
 	IMAGEMANAGER->addImage("mapEditorFrame", "images/mapEditor/mapEditorFrame.bmp", 1600, 900, true, 0xFF00FF);
@@ -55,8 +57,8 @@ HRESULT mapEditor::init()
 	}
 
 	//	기본 크기
-	_tileNumX = 10;
-	_tileNumY = 10;
+	_tileNumX = 30;
+	_tileNumY = 30;
 	_mapZoneRc = { 0,0,1024,768 };
 
 
@@ -97,7 +99,8 @@ HRESULT mapEditor::init()
 	InitSampleIceTile();
 	InitSampleIceObj();
 
-
+	InitSampleFireTile();
+	InitSampleFireObj();
 
 
 
@@ -1654,6 +1657,13 @@ void mapEditor::InitSampleIceObj()
 					}
 				}
 
+				if (5 <= i && i <= 7) {
+					if (6 <= j && j <= 8) {
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE20);
+					}
+				}
+
 				//2페이지 - 창문과 문?
 				if (0 <= i && i <= 13)
 				{
@@ -1906,6 +1916,402 @@ void mapEditor::InitSampleIceObj()
 		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE3] = { 41,13 };
 		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][0][ICETILE4] = { 42,0 };
 		_totalFrameIdx[SELECT_OBJ][ICE_OBJ][1][ICETILE4] = { 55,13 };
+	}
+}
+
+void mapEditor::InitSampleFireTile()
+{
+	for (int i = 0; i <= IMAGEMANAGER->findImage("tileFire")->getMaxFrameY(); i++)
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("tileFire")->getMaxFrameX(); j++)
+		{
+			_totalSamples[SELECT_TILE][FIRE_TILE][i][j] = new tile;
+			SetNewSampleTile(_totalSamples[SELECT_TILE][FIRE_TILE][i][j], j, i);
+			_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileImage(IMAGEMANAGER->findImage("tileFire"));
+			_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileImgKey("tileFire");
+
+			//	개별적 셋팅
+			//	1번 페이지
+			{
+				if (0 <= i && i <= 11)
+				{
+					if (0 <= j && j <= 11) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (0 <= i && i <= 3)
+				{
+					if (0 <= j && j <= 11) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (0 <= i && i <= 11)
+				{
+					if (j == 0) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (0 <= i && i <= 11)
+				{
+					if (j == 11) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (i == 11)
+				{
+					if (0 <= j && j <= 11) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+
+				if (0 <= i && i <= 12)
+				{
+					if (12 <= j && j <= 13) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+			}
+			//페이지2
+			{
+				if (0 <= i && i <= 13)
+				{
+					if (14 <= j && j <= 25) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (i == 1)
+				{
+					if (23 <= j && j <= 24) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (i == 4)
+				{
+					if (23 <= j && j <= 24) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				//하수구
+				if (8 <= i && i <= 10)
+				{
+					if (14 <= j && j <= 17) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (12 <= i && i <= 13)
+				{
+					if (j == 14) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (9 <= i && i <= 10)
+				{
+					if (j == 18) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (i == 10)
+				{
+					if (15 <= j && j <= 16) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+			}
+
+			//페이지3 // 4페이지포함
+			{
+				if (0 <= i && i <= 13)
+				{
+					if (28 <= j && j <= 45) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
+					}
+				}
+				if (4 <= i && i <= 6)
+				{
+					if (37 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+				if (9 <= i && i <= 13)
+				{
+					if (34 <= j && j <= 41) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopTileAttr(TILE_WALL);
+					}
+				}
+
+				//화로
+				if (0 <= i && i <= 4) {
+					if (46 <= j && j <= 55) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopObjAttr(TILE_FLOOR);
+					}
+				}
+				if (i == 2) {
+					if (46 <= j && j <= 48) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopObjAttr(TILE_WALL);
+					}
+				}
+				if (i == 4) {
+					if (49 <= j && j <= 52) {
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_TILE][FIRE_TILE][i][j]->setTopObjAttr(TILE_WALL);
+					}
+				}
+
+
+
+			}
+		}	//	for j 종료
+	}	//for i 종료
+
+
+	//earth 타일 시작/끗 프레임인덱스 이닛
+	{
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][0][FIRETILE1] = { 0,0 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][1][FIRETILE1] = { 13,13 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][0][FIRETILE2] = { 14,0 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][1][FIRETILE2] = { 27,13 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][0][FIRETILE3] = { 28,0 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][1][FIRETILE3] = { 41,13 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][0][FIRETILE4] = { 42,0 };
+		_totalFrameIdx[SELECT_TILE][FIRE_TILE][1][FIRETILE4] = { 55,13 };
+	}
+}
+
+void mapEditor::InitSampleFireObj()
+{
+	for (int i = 0; i <= IMAGEMANAGER->findImage("objFire")->getMaxFrameY(); i++)
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("objFire")->getMaxFrameX(); j++)
+		{
+			_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j] = new tile;
+			SetNewSampleObj(_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j], j, i);
+			_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjImage(IMAGEMANAGER->findImage("objFire"));
+			_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjImgKey("objFire");
+
+			//1페이지
+			{
+				//돌 부터시작
+				if (0 <= i && i <= 1) {
+					if (0 <= j && j <= 2) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE1);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (3 <= j && j <= 4) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE2);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (j == 5) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE3);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (6 <= j && j <= 8) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE4);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (9 <= j && j <= 10) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE5);
+					}
+				}
+				if (0 <= i && i <= 1) {
+					if (11 <= j && j <= 12) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE6);
+					}
+				}
+
+				//박스부터시작
+				if (2 <= i && i <= 3) {
+					if (0 <= j && j <= 2) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE7);
+					}
+				}
+				if (i == 3) {
+					if (j == 3) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE8);
+					}
+				}
+				if (i == 3) {
+					if (j == 4) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE9);
+					}
+				}
+				//가시
+				if (i == 3) {
+					if (j == 5) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_TRAP1);
+					}
+				}
+				if (i == 3) {
+					if (j == 6) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_TRAP2);
+					}
+				}
+
+				if (2 <= i && i <= 3) {
+					if (j == 7) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_TRAP3);
+					}
+				}
+				if (2 <= i && i <= 3) {
+					if (j == 8) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_TRAP4);
+					}
+				}
+				if (2 <= i && i <= 3) {
+					if (9 <= j && j <= 10) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_TRAP5);
+					}
+				}
+
+				//뻰치
+				if (2 <= i && i <= 4) {
+					if (11 <= j && j <= 12) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE14);
+					}
+				}
+
+				//화로 처음부터
+				if (5 <= i && i <= 13) {
+					if (0 <= j && j <= 20) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(false);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				//기둥2개
+				if (5 <= i && i <= 7) {
+					if (10 <= j && j <= 11) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+
+				//동상
+				if (9 <= i && i <= 10) {
+					if (0 <= j && j <= 2) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+			}
+			// 2페이지
+			{
+				//망치부터
+				if (0 <= i && i <= 2) {
+					if (15 <= j && j <= 16) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE15);
+					}
+				}
+				if (0 <= i && i <= 2) {
+					if (17 <= j && j <= 18) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE16);
+					}
+				}
+				if (0 <= i && i <= 2) {
+					if (19 <= j && j <= 20) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE17);
+					}
+				}
+				if (i == 0) {
+					if (21 <= j && j <= 22) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE18);
+					}
+				}
+				if (i == 1) {
+					if (21 <= j && j <= 22) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE19);
+					}
+				}
+				//갑옷부터
+				if (0 <= i && i <= 2) {
+					if (23 <= j && j <= 24) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE20);
+					}
+				}
+				if (0 <= i && i <= 2) {
+					if (25 <= j && j <= 26) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE21);
+					}
+				}
+				//문양?
+				if (3 <= i && i <= 4) {
+					if (21 <= j && j <= 22) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE22);
+					}
+				}
+				if (3 <= i && i <= 5) {
+					if (23 <= j && j <= 24) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE23);
+					}
+				}
+
+				//기둥
+				if (5 <= i && i <= 9) {
+					if (14 <= j && j <= 20) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+				if (i == 10) {
+					if (16 <= j && j <= 18) {
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setIsAvailMove(true);
+						_totalSamples[SELECT_OBJ][FIRE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					}
+				}
+			}
+		}	//	for j end
+	}	//	for i end
+
+	//earth 타일 시작/끗 프레임인덱스 이닛
+	{
+		_totalFrameIdx[SELECT_OBJ][FIRE_OBJ][0][FIRETILE1] = { 0,0 };
+		_totalFrameIdx[SELECT_OBJ][FIRE_OBJ][1][FIRETILE1] = { 13,13 };
+		_totalFrameIdx[SELECT_OBJ][FIRE_OBJ][0][FIRETILE2] = { 14,0 };
+		_totalFrameIdx[SELECT_OBJ][FIRE_OBJ][1][FIRETILE2] = { 27,13 };
 	}
 }
 
@@ -2240,6 +2646,11 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = ICETILE_KINDS_END - 1;
 										}
 									}
+									else if (_curTileKind == FIRE_TILE) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = FIRETILE_KINDS_END - 1;
+										}
+									}
 									//	다른 종류 타일 추가시 여기에 추가
 										//else if () {
 										//
@@ -2268,6 +2679,11 @@ void mapEditor::ArrowClickFunc()
 									else if (_curObjKind == ICE_OBJ) {
 										if (_curTileSampleIdx < 0) {
 											_curTileSampleIdx = ICEOBJ_KINDS_END - 1;
+										}
+									}
+									else if (_curObjKind == FIRE_OBJ) {
+										if (_curTileSampleIdx < 0) {
+											_curTileSampleIdx = FIREOBJ_KINDS_END - 1;
 										}
 									}
 									//어스오브제일경우
@@ -2333,6 +2749,12 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = 0;
 										}
 									}
+									else if (_curTileKind == FIRE_TILE) {
+										if (_curTileSampleIdx >= FIRETILE_KINDS_END) {
+
+											_curTileSampleIdx = 0;
+										}
+									}
 									//	다른 종류 타일 추가시 여기에 추가
 										//else if () {
 										//
@@ -2363,6 +2785,12 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = 0;
 										}
 									}
+									else if (_curObjKind == FIRE_OBJ) {
+
+										if (_curTileSampleIdx >= FIREOBJ_KINDS_END) {
+											_curTileSampleIdx = 0;
+										}
+									}
 
 
 
@@ -2389,7 +2817,6 @@ void mapEditor::ArrowClickFunc()
 			}
 		}
 	}
-
 }
 
 void mapEditor::EraseMapX()
