@@ -276,6 +276,30 @@
     <ClInclude Include="objects.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_Archer.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Lancer.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Summoner.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Rogue.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Mage.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Golem.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Ghoul.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_Blob.h">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -463,6 +487,30 @@
     </ClCompile>
     <ClCompile Include="objects.cpp">
       <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Archer.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Lancer.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Mage.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Rogue.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Summoner.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Golem.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Ghoul.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_Blob.cpp">
+      <Filter>PlayGround\units\enemyType</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

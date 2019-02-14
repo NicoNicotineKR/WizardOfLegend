@@ -161,7 +161,14 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyMgr.h" />
     <ClInclude Include="enemyState.h" />
+    <ClInclude Include="enemy_Archer.h" />
+    <ClInclude Include="enemy_Blob.h" />
+    <ClInclude Include="enemy_Ghoul.h" />
+    <ClInclude Include="enemy_Golem.h" />
     <ClInclude Include="enemy_Knight.h" />
+    <ClInclude Include="enemy_Lancer.h" />
+    <ClInclude Include="enemy_Mage.h" />
+    <ClInclude Include="enemy_Rogue.h" />
     <ClInclude Include="enemy_State_Attack.h" />
     <ClInclude Include="enemy_State_Charge.h" />
     <ClInclude Include="enemy_State_Death.h" />
@@ -169,6 +176,7 @@
     <ClInclude Include="enemy_State_Idle.h" />
     <ClInclude Include="enemy_State_Move.h" />
     <ClInclude Include="enemy_State_Spawn.h" />
+    <ClInclude Include="enemy_Summoner.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="home.h" />
     <ClInclude Include="image.h" />
@@ -231,7 +239,14 @@
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyMgr.cpp" />
+    <ClCompile Include="enemy_Archer.cpp" />
+    <ClCompile Include="enemy_Blob.cpp" />
+    <ClCompile Include="enemy_Ghoul.cpp" />
+    <ClCompile Include="enemy_Golem.cpp" />
     <ClCompile Include="enemy_Knight.cpp" />
+    <ClCompile Include="enemy_Lancer.cpp" />
+    <ClCompile Include="enemy_Mage.cpp" />
+    <ClCompile Include="enemy_Rogue.cpp" />
     <ClCompile Include="enemy_State_Attack.cpp" />
     <ClCompile Include="enemy_State_Charge.cpp" />
     <ClCompile Include="enemy_State_Death.cpp" />
@@ -239,6 +254,7 @@
     <ClCompile Include="enemy_State_Idle.cpp" />
     <ClCompile Include="enemy_State_Move.cpp" />
     <ClCompile Include="enemy_State_Spawn.cpp" />
+    <ClCompile Include="enemy_Summoner.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="home.cpp" />
     <ClCompile Include="image.cpp" />
