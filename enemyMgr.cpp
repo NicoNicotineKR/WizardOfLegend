@@ -22,6 +22,7 @@ HRESULT enemyMgr::init()
 	{
 		_vEnemy[i]->init();
 		_vEnemy[i]->setPlayerAdress(_player);
+		_vEnemy[i]->setMapAdress(_vvMap);
 	}
 
 	return S_OK;

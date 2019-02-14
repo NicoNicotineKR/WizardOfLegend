@@ -75,18 +75,18 @@ void enemy_Knight::update()
 	//플레이어가 사정거리 or 구역에 들어오면 그곳에 있는 적들의 _isClose를 트루로 바꿔줘야함 -> 한번 트루되면 계속 트루인상태로 고정임
 	move();
 
-	_playerPos = _player->getPos();
+	_playerPos = _player->getTileCheckRcPos();
 
 	//벡터값에 따른 베이스 좌표의 이동
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
 	_rc = RectMakeCenter(_pos.x, _pos.y, 32, 32);
-	
+
 	//이미지 이동
 	_imgPos.x = _pos.x;
 	_imgPos.y = _pos.y - POS_Y_IMAGE_SHAVE;
 
-	//충돌판정이동
+	//히트판정이동
 	_collisionPos.x = _pos.x;
 	_collisionPos.y = _pos.y - POS_Y_HIT_SHAVE;
 	_collisionRc = RectMakeCenter(_collisionPos.x, _collisionPos.y, HIT_RC_WIDTH, HIT_RC_HEIGHT);
@@ -94,7 +94,7 @@ void enemy_Knight::update()
 
 void enemy_Knight::render()
 {
-	//에너미 충돌판정 출력
+	//에너미 히트판정 출력
 	Rectangle(getMemDC(),_collisionRc);
 
 	//에너미 이미지 출력

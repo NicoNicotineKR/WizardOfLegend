@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "tile.h"
 
 
 class enemyState;
@@ -67,6 +68,8 @@ protected:
 	float _curCharge;
 	float _maxCharge;
 
+	vector<vector<tile*>> _vvMap;
+
 public:
 	enemy();
 	~enemy();
@@ -75,6 +78,13 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+
+	//주소 연결
+	void setPlayerAdress(player* player) { _player = player; }
+	POINTFLOAT getPlayerPos() { return _playerPos; }
+	void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
+
 
 	virtual void enemyKeyAnimationInit();
 	virtual void enemyArrStateInit();
@@ -85,9 +95,6 @@ public:
 	void currentEnemyState();
 	virtual void move();
 
-
-	void setPlayerAdress(player* player) { _player = player; }
-	POINTFLOAT getPlayerPos() { return _playerPos; }
 	//접근자 설정자
 
 	bool getIsAniOnce() { return _isAniOnce; }
@@ -121,6 +128,8 @@ public:
 
 	list<POINT>* getPath() { return &_listPath; }
 	list<POINT>::iterator* getIPath() { return &_listIPath; }
+
+	vector<vector<tile*>> getMap() { return _vvMap; }
 	
 };
 

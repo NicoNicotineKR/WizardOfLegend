@@ -152,9 +152,9 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			{
 				openTile->setParent(_vTotalList[curIdxY][curIdxX]);
 
-				openTile->setGScore(openTile->getParent()->getGScore() + gScore);
+			//	openTile->setGScore(openTile->getParent()->getGScore() + gScore);
 
-			//	openTile->setGScore(gScore);
+				openTile->setGScore(gScore);
 
 				openTile->setHScore(hScore);
 

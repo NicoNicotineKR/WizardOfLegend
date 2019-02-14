@@ -12,6 +12,8 @@ private:
 
 	player* _player;					//플레이어 주소 여따 넣을거임
 
+	vector<vector<tile*>> _vvMap;
+
 public:
 	enemyMgr();
 	~enemyMgr();
@@ -22,6 +24,7 @@ public:
 	virtual void render();
 
 	virtual void setPlayerAdress(player* player) { _player = player; }
+	virtual void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
 
 	vector<enemy*> getVEnemy() { return _vEnemy; }
 };

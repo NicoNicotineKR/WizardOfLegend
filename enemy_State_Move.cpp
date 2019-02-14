@@ -52,31 +52,51 @@ void enemy_State_Move::update(enemy * enemy)
 		//int x = (enemy->getPos().x * TILE_SIZE) + (TILE_SIZE / 2);
 		//int y = (enemy->getPos().y * TILE_SIZE) + (TILE_SIZE / 2);
 
-		float x = enemy->getPos().x;
-		float y = enemy->getPos().y;
+		int x = enemy->getPos().x / TILE_SIZE;
+		int y = enemy->getPos().y / TILE_SIZE;
 		
-		float tileX = (enemy->getPath()->begin()->x * TILE_SIZE);
-		float tileY = (enemy->getPath()->begin()->y * TILE_SIZE);
+		int posX = enemy->getPos().x;
+		int posY = enemy->getPos().y;
+
+	//	float tileX = (enemy->getPath()->begin()->x * TILE_SIZE);
+	//	float tileY = (enemy->getPath()->begin()->y * TILE_SIZE);
+
+		int tileX = enemy->getPath()->begin()->x;
+		int tileY = enemy->getPath()->begin()->y;
 		//x 
 		if (tileX > x)
 		{
 			enemy->setVecX(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
+			enemy->setVecX(3);
+
+		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
+		//	{
+		//		enemy->setVecX(0);
+		//	}
+
 			//더하고 바로 비교하게했음
-			if (tileX < x + enemy->getVec().x)
-			{
-				enemy->setPosX(tileX);
-			}
+		//	if (tileX <= (posX + enemy->getVec().x) / TILE_SIZE)
+		//	{
+		//		enemy->setPosX(tileX);
+		//	}
 		}
 		else if (tileX < x)
 		{
 			enemy->setVecX(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 
+			enemy->setVecX(-3);
+
+		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
+		//	{
+		//		enemy->setVecX(0);
+		//	}
+
 			//더하고 바로 비교하게했음
-			if (tileX > x + enemy->getVec().x)
-			{
-				enemy->setPosX(tileX);
-			}
+		//	if (tileX >= (posX + enemy->getVec().x) / TILE_SIZE)
+		//	{
+		//		enemy->setPosX(tileX);
+		//	}
 		}
 
 		//y
@@ -84,24 +104,47 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecY(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
+			enemy->setVecY(3);
+
+			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
+			//{
+			//	enemy->setVecY(0);
+			//}
+
 			//더하고 바로 비교하게했음
-			if (tileY < y + enemy->getVec().y)
-			{
-				enemy->setPosY(tileY);
-			}
+		//	if (tileY < (y - SHAVE_NUM) + enemy->getVec().y)
+		//	{
+		//		enemy->setPosY(tileY);
+		//	}
 		}
 		else if (tileY < y)
 		{
 			enemy->setVecY(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
+			
+			enemy->setVecY(-3);
+
+			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
+			//{
+			//	enemy->setVecY(0);
+			//}
 
 			//더하고 바로 비교하게했음
-			if (tileY > y + enemy->getVec().y)
-			{
-				enemy->setPosY(tileY);
-			}
+		//	if (tileY > (y + SHAVE_NUM) + enemy->getVec().y)
+		//	{
+		//		enemy->setPosY(tileY);
+		//	}
 		}
 
-		if (tileX == x && tileY == y)
+		if (!(enemy->getMap()[y][(int)((posX + enemy->getVec().x) / TILE_SIZE)]->getIsAvailMove()))
+		{
+			enemy->setVecX(0);
+		}
+		if (!(enemy->getMap()[(int)((posY + enemy->getVec().y) / TILE_SIZE)][x]->getIsAvailMove()))
+		{
+			enemy->setVecY(0);
+		}
+
+		if (x == tileX && y == tileY)
 		{
 			enemy->getPath()->pop_front();
 		}
