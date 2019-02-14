@@ -300,6 +300,12 @@
     <ClInclude Include="enemy_Blob.h">
       <Filter>PlayGround\units\enemyType</Filter>
     </ClInclude>
+    <ClInclude Include="playerInfoBox.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="playerInfoBoxUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -511,6 +517,12 @@
     </ClCompile>
     <ClCompile Include="enemy_Blob.cpp">
       <Filter>PlayGround\units\enemyType</Filter>
+    </ClCompile>
+    <ClCompile Include="playerInfoBox.cpp">
+      <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="playerInfoBoxUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
