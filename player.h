@@ -1,9 +1,9 @@
 #pragma once
 #include "gameNode.h"
 #include "playerStatusUI.h"
-//#include "testStage.h"
 #include "tile.h"
 #include "tileNode.h"
+#include "skillCooldownUI.h"
 class playerState;
 
 //애니메이션용 방향
@@ -51,7 +51,20 @@ enum class BOOLMOVEDIRECTION
 	LEFT_BOTTOM,
 	RIGHT_BOTTOM
 };
-//template <class T>
+
+enum class SKILLNAME
+{
+	FlameStrike,
+	stoneShot,
+	searingRush
+};
+/*
+skills _curSkill[0] = FlameStrike;
+
+
+
+
+*/
 class player : gameNode
 {
 private:
@@ -99,6 +112,9 @@ private:
 
 	playerStatusUI* _playerStatusUI;
 
+	skillCooldownUI* _skillUI;
+
+	int _curSkill[5];
 	int _count;
 
 public:

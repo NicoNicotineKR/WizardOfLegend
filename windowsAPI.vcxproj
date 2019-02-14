@@ -23,7 +23,7 @@
     <ProjectGuid>{BE5C2545-DA5C-402F-8068-3E1EDF185C1C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>windowsAPI</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -155,6 +155,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStar.h" />
     <ClInclude Include="camera2D.h" />
+    <ClInclude Include="chainLightning.h" />
     <ClInclude Include="dmgNumUI.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -177,6 +178,8 @@
     <ClInclude Include="enemy_State_Move.h" />
     <ClInclude Include="enemy_State_Spawn.h" />
     <ClInclude Include="enemy_Summoner.h" />
+    <ClInclude Include="flameStrike.h" />
+    <ClInclude Include="frostFan.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="home.h" />
     <ClInclude Include="image.h" />
@@ -200,8 +203,12 @@
     <ClInclude Include="printNumber.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
+    <ClInclude Include="reboundingIcicles.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="searingRush.h" />
+    <ClInclude Include="shatteringStrike.h" />
+    <ClInclude Include="shockNova.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="skillbookUI.h" />
     <ClInclude Include="skillCooldownUI.h" />
@@ -222,6 +229,7 @@
     <ClInclude Include="state_Skill_Three.h" />
     <ClInclude Include="state_Skill_Two.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stoneShot.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="testStage.h" />
@@ -237,6 +245,7 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="camera2D.cpp" />
+    <ClCompile Include="chainLightning.cpp" />
     <ClCompile Include="dmgNumUI.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
@@ -258,6 +267,8 @@
     <ClCompile Include="enemy_State_Move.cpp" />
     <ClCompile Include="enemy_State_Spawn.cpp" />
     <ClCompile Include="enemy_Summoner.cpp" />
+    <ClCompile Include="flameStrike.cpp" />
+    <ClCompile Include="frostFan.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="home.cpp" />
     <ClCompile Include="image.cpp" />
@@ -279,7 +290,11 @@
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="printNumber.cpp" />
     <ClCompile Include="progressBar.cpp" />
+    <ClCompile Include="reboundingIcicles.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="searingRush.cpp" />
+    <ClCompile Include="shatteringStrike.cpp" />
+    <ClCompile Include="shockNova.cpp" />
     <ClCompile Include="skillbookUI.cpp" />
     <ClCompile Include="skillCooldownUI.cpp" />
     <ClCompile Include="skillIconList.cpp" />
@@ -304,6 +319,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="stoneShot.cpp" />
     <ClCompile Include="testStage.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="timeManager.cpp" />

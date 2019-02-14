@@ -309,6 +309,30 @@
     <ClInclude Include="skillbookUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="stoneShot.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="shockNova.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="shatteringStrike.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="searingRush.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="reboundingIcicles.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="frostFan.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="flameStrike.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
+    <ClInclude Include="chainLightning.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -529,6 +553,30 @@
     </ClCompile>
     <ClCompile Include="skillbookUI.cpp">
       <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="chainLightning.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="flameStrike.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="frostFan.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="reboundingIcicles.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="searingRush.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="shatteringStrike.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="shockNova.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="stoneShot.cpp">
+      <Filter>PlayGround\skills</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

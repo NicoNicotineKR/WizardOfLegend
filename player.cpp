@@ -81,6 +81,9 @@ HRESULT player::init()
 	_tileCollVec[3].x = _tileCollVec[3].y = 0;
 
 	IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
+
+	_skillUI = new skillCooldownUI;
+	_skillUI->init();
 	return S_OK;
 }
 
@@ -97,7 +100,7 @@ void player::update()
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
-
+	_skillUI->update();
 
 	_count++;
 	if (_count > 3)
@@ -123,6 +126,7 @@ void player::update()
 void player::render(HDC hdc)
 {
 	_playerStatusUI->render();
+	_skillUI->render();
 	IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
 		IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
 		, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
@@ -141,6 +145,7 @@ void player::playerKeyAnimationInit()
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
+
 
 	//idle
 	int frontIdle[] = { 0 };
@@ -248,7 +253,7 @@ void player::inPutKey()
 
 	if (KEYMANAGER->isOnceKeyDown('X'))
 	{
-		_playerStatusUI->setCurHp(499);
+		_playerStatusUI->setCurHp(400);
 	}
 }
 
