@@ -37,12 +37,11 @@ HRESULT player::init()
 
 	_speed = 300.0f;					
 	//_angle = ;					
-	_pos.x = 600;
-	_pos.y = 300;
+	_pos.x = WINSIZEX/2;
+	_pos.y = WINSIZEY / 2;
 
 	_vec.x = 0;
 	_vec.y = 0;
-
 	_aniDirection = ANIDIRECTION::FRONT;		
 	_moveDirection = MOVEDIRECTION::BOTTOM;
 	_state = STATE::IDLE;
@@ -51,6 +50,37 @@ HRESULT player::init()
 
 	_playerStatusUI = new playerStatusUI;
 	_playerStatusUI->init();
+
+	_boolMoveDirection = BOOLMOVEDIRECTION::NONE;
+	_isLeftTopCheck = false;
+	_isRightTopCheck = false;
+	_isLeftBottomCheck = false;
+	_isRightBottomCheck = false;
+
+	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
+	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
+
+	_tileCheckRcPos.x = _playerCirclePos.x + (_playerCircleImg->GetWidth() / 2) - 15;
+	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
+	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 32, 32);
+	_tileCheckIndex[0].x = _tileCheckRc.left / 32 + _vec.x;
+	_tileCheckIndex[0].y = _tileCheckRc.top / 32 + _vec.y;
+
+	_tileCheckIndex[1].x = _tileCheckRc.right / 32 + _vec.x;
+	_tileCheckIndex[1].y = _tileCheckRc.top / 32 + _vec.y;
+
+	_tileCheckIndex[2].x = _tileCheckRc.left / 32 + _vec.x;
+	_tileCheckIndex[2].y = _tileCheckRc.bottom / 32 + _vec.y;
+
+	_tileCheckIndex[3].x = _tileCheckRc.right / 32 + _vec.x;
+	_tileCheckIndex[3].y = _tileCheckRc.bottom / 32 + _vec.y;
+
+	_tileCollVec[0].x =  _tileCollVec[0].y = 0;
+	_tileCollVec[1].x = _tileCollVec[1].y = 0;
+	_tileCollVec[2].x = _tileCollVec[2].y = 0;
+	_tileCollVec[3].x = _tileCollVec[3].y = 0;
+
+	IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
 	return S_OK;
 }
 
@@ -62,32 +92,46 @@ void player::update()
 {
 	_vec.x = 0;
 	_vec.y = 0;
+
 	KEYANIMANAGER->update();
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
 
-	_pos.x += _vec.x;
-	_pos.y += _vec.y;
 
+	_count++;
+	if (_count > 3)
+	{
+		_count = 0;
+		IMAGEMANAGER->findImage("thunder")->SetFrameX(IMAGEMANAGER->findImage("thunder")->getFrameX() + 1);
+		if (IMAGEMANAGER->findImage("thunder")->getMaxFrameX() == IMAGEMANAGER->findImage("thunder")->getFrameX())
+		{
+			IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
+		}
+	}
 	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
 	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
 	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x, _playerCirclePos.y, _ptMouse.x, _ptMouse.y);
 	playerCirclePosition();
 	_tileCheckRcPos.x = _playerCirclePos.x + (_playerCircleImg->GetWidth() / 2) - 15;
 	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
-	_tileCheckRc = RectMake(_tileCheckRcPos.x,_tileCheckRcPos.y, 32, 32);
+	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 32, 32);
+
+
 }
 
 void player::render(HDC hdc)
 {
 	_playerStatusUI->render();
+	IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
+		IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
+		, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
 	Rectangle(getMemDC(), _tileCheckRc);
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 	char str[128];
-	sprintf_s(str, "%d : state", _moveDirection, strlen(str));
+	sprintf_s(str, "%d : º¤ÅÍ°è»êÀü , %d : º¤ÅÍ°è»êÈÄ ", _tileCheckRc.right / 32, _tileCheckIndex[1].x, strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
@@ -96,6 +140,8 @@ void player::playerKeyAnimationInit()
 	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1870, 10, 11, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
+
 	//idle
 	int frontIdle[] = { 0 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontIdle", "player", frontIdle, 1, 10, false);
@@ -384,13 +430,118 @@ void player::playerCirclePosition()
 	_playerCircleDirectionPos.x = cosf(_playerCircleDirectionAngle) * _playerCircleRadius + (_playerCirclePos.x + (_playerCircleImg->GetWidth()/2)-15);
 	_playerCircleDirectionPos.y = -sinf(_playerCircleDirectionAngle) * _playerCircleRadius +  (_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2)-15);
 }
-
-void player::tileCheck()
+void player::isMoveOn()
 {
-	_vec.x = 0;
-	_vec.y = 0;
-	
+	//if (_isLeftTopCheck && _boolMoveDirection != BOOLMOVEDIRECTION::LEFT_TOP && _boolMoveDirection == BOOLMOVEDIRECTION::NONE)
+	//{
+	//	_isLeftTopCheck = false;
+	//}
+	//if (_isRightTopCheck && _boolMoveDirection != BOOLMOVEDIRECTION::RIGHT_TOP && _boolMoveDirection == BOOLMOVEDIRECTION::NONE)
+	//{
+	//	_isRightTopCheck = false;
+	//}
+	//if (_boolMoveDirection == BOOLMOVEDIRECTION::NONE)
+	//{
+	//	_isLeftTopCheck = false;
+	//	_isRightTopCheck = false;
+	//}
 }
+void player::isMoveOff()
+{
+}
+
+void player::vecZero(vvMap& vvMapLink)
+{
+	if (_isLeftTopCheck)
+	{
+		if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
+		{
+			if (!vvMapLink[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
+				_vec.x = -_tileCollVec[0].x;
+
+			if (!vvMapLink[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
+				_vec.y = -_tileCollVec[0].y;
+		}
+		if (_moveDirection == MOVEDIRECTION::LEFT)
+		{
+			_vec.x = -_tileCollVec[0].x;
+		}
+		if (_moveDirection == MOVEDIRECTION::TOP)
+		{
+			_vec.y = -_tileCollVec[0].y;
+		}
+	}
+
+	if (_isRightTopCheck)
+	{
+		if ( _moveDirection == MOVEDIRECTION::RIGHT_TOP)
+		{
+			if (!vvMapLink[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove())
+			{
+				_vec.x = -_tileCollVec[1].x;
+			}
+			if (!vvMapLink[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove())
+			{
+				_vec.y = -_tileCollVec[1].y;
+			}
+		}
+		if (_moveDirection == MOVEDIRECTION::RIGHT)
+		{
+			_vec.x = -_tileCollVec[1].x;
+		}
+		if (_moveDirection == MOVEDIRECTION::TOP)
+		{
+			_vec.y = -_tileCollVec[1].y;
+		}
+	}
+	if (_isLeftBottomCheck)
+	{
+		if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
+		{
+			if (!vvMapLink[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove())
+			{
+				_vec.x = -_tileCollVec[2].x;
+			}
+			if (!vvMapLink[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
+			{
+				_vec.y = -_tileCollVec[2].y;
+			}
+		}
+		if (_moveDirection == MOVEDIRECTION::LEFT )
+		{
+			_vec.x = -_tileCollVec[2].x;
+		}
+		if (_moveDirection == MOVEDIRECTION::BOTTOM)
+		{
+			_vec.y = -_tileCollVec[2].y;
+		}
+	}
+	if (_isRightBottomCheck)
+	{
+		if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
+		{
+			if (!vvMapLink[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove())
+			{
+				_vec.x = -_tileCollVec[3].x;
+			}
+			if (!vvMapLink[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove())
+			{
+				_vec.y = -_tileCollVec[3].y;
+			}
+		}
+		if (_moveDirection == MOVEDIRECTION::RIGHT)
+		{
+			_vec.x = -_tileCollVec[3].x;
+		}
+		if (_moveDirection == MOVEDIRECTION::BOTTOM )
+		{
+			_vec.y = -_tileCollVec[3].y;
+		}
+	}
+
+}
+
+
 
 void player::playerIdle(void * obj)
 {
@@ -398,6 +549,69 @@ void player::playerIdle(void * obj)
 
 	Player->setState(STATE::IDLE);
 	Player->currentPlayerState();
-	Player->startAni();                                                                                                                          
+	Player->startAni();           
+}
 
+void player::tileCheckFunc(vvMap& vvMapLink)
+{
+
+	_tileCheckIndex[0].x = (_tileCheckRc.left + _vec.x) / 32;
+	_tileCheckIndex[0].y = (_tileCheckRc.top + _vec.y) / 32;
+
+	_tileCheckIndex[1].x = (_tileCheckRc.right + _vec.x) / 32;
+	_tileCheckIndex[1].y = (_tileCheckRc.top + _vec.y) / 32;
+
+	_tileCheckIndex[2].x = (_tileCheckRc.left + _vec.x) / 32;
+	_tileCheckIndex[2].y = (_tileCheckRc.bottom + _vec.y) / 32;
+
+	_tileCheckIndex[3].x = (_tileCheckRc.right + _vec.x) / 32;
+	_tileCheckIndex[3].y = (_tileCheckRc.bottom + _vec.y) / 32;
+
+	if (!vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	{
+		_tileCollVec[0].x = _tileCheckRc.left - vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().right;
+		_tileCollVec[0].y = _tileCheckRc.top - vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().bottom;
+		_isLeftTopCheck = true;
+	}
+	else if (vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	{
+		_isLeftTopCheck = false;
+	}
+
+	if (!vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	{
+		_tileCollVec[1].x = _tileCheckRc.right - vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().left+1;
+		_tileCollVec[1].y = _tileCheckRc.top - vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().bottom;
+		_isRightTopCheck = true;
+	}
+	else if (vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	{
+		_isRightTopCheck = false;
+	}
+
+	if (!vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	{
+		_tileCollVec[2].x =  _tileCheckRc.left - vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().right;
+		_tileCollVec[2].y =  _tileCheckRc.bottom - vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().top+1;
+		_isLeftBottomCheck = true;
+	}
+	else if (vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	{
+		_isLeftBottomCheck = false;
+	}
+
+	if (!vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	{
+		_tileCollVec[3].x = _tileCheckRc.right - vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().left+1;
+		_tileCollVec[3].y = _tileCheckRc.bottom - vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().top+1;
+		_isRightBottomCheck = true;
+	}
+	else if (vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	{
+		_isRightBottomCheck = false;
+	}
+
+	vecZero(vvMapLink);
+	_pos.x += _vec.x;
+	_pos.y += _vec.y;
 }

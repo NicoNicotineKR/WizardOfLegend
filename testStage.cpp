@@ -47,6 +47,7 @@ void testStage::release()
 void testStage::update()
 {
 	_player->update();
+	_player->tileCheckFunc(_vvMap);
 	_em->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{

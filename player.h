@@ -1,7 +1,9 @@
 #pragma once
 #include "gameNode.h"
 #include "playerStatusUI.h"
-
+//#include "testStage.h"
+#include "tile.h"
+#include "tileNode.h"
 class playerState;
 
 //애니메이션용 방향
@@ -41,15 +43,27 @@ enum class MOVEDIRECTION
 	RIGHT,
 	LEFT
 };
+enum class BOOLMOVEDIRECTION
+{
+	NONE,
+	LEFT_TOP,
+	RIGHT_TOP,
+	LEFT_BOTTOM,
+	RIGHT_BOTTOM
+};
+//template <class T>
 class player : gameNode
 {
 private:
+	typedef vector<tile*> vLine;
+	typedef vector<vLine> vvMap;
+
 	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
 	RECT			_collisionRc;			//플레이어 충돌 렉트
 	RECT			_tileCheckRc;
 	POINTFLOAT		_tileCheckRcPos;
-	int				_tileCheckIdx[2];
+	//int				_tileCheckIdx[2];
 
 	int				_maxHp;					//플레이어 최대 체력
 	int				_curHp;					//플레이어 현재 체력
@@ -58,6 +72,7 @@ private:
 	float			_angle;					//플레이어 각도
 	POINTFLOAT		_pos;					//플레이어 좌표
 	POINTFLOAT		_vec;					//플레이어 벡터 값
+	POINTFLOAT		_tileCollVec[4];
 
 	ANIDIRECTION	_aniDirection;			//애니메이션 용(dragon 아님) 방향
 	MOVEDIRECTION	_moveDirection;			//이동용 방향
@@ -75,7 +90,17 @@ private:
 	POINTFLOAT		_playerCirclePos;
 	POINTFLOAT		_playerCircleDirectionPos;
 
+	POINT _tileCheckIndex[4];
+	bool _isLeftTopCheck;
+	bool _isRightTopCheck;
+	bool _isLeftBottomCheck;
+	bool _isRightBottomCheck;
+	BOOLMOVEDIRECTION _boolMoveDirection;
+
 	playerStatusUI* _playerStatusUI;
+
+	int _count;
+
 public:
 	player();
 	~player();
@@ -92,8 +117,9 @@ public:
 
 	void currentPlayerState();
 	void playerCirclePosition();
-	void tileCheck();
-
+	void isMoveOn();
+	void isMoveOff();
+	void vecZero(vvMap& vvMapLink);
 
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
 	inline void			setAniDirection(ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }
@@ -110,6 +136,9 @@ public:
 	inline void setVecY(float vecY) { _vec.y = vecY; }
 
 	inline POINTFLOAT getPos() { return _pos; }
+	inline void setPosX(float posX) { _pos.x = posX; }
+	inline void setPosY(float posY) { _pos.y = posY; }
+
 	inline image* getImg() { return _img; }
 
 	inline void setIsPlayerAniOnce(bool isOnce) { _isPlayerAniOnce = isOnce; }
@@ -120,5 +149,16 @@ public:
 	inline RECT getPlayerTileCheckRc() { return _tileCheckRc; }
 	static void playerIdle(void* obj);
 
+	inline void setBoolMoveDirection(BOOLMOVEDIRECTION boolMoveDirection) {_boolMoveDirection = boolMoveDirection;}
+	inline BOOLMOVEDIRECTION getBoolMoveDirection() { return _boolMoveDirection; }
+
+	inline POINT getLeftTopIndex() { return _tileCheckIndex[0]; }
+	inline POINT getRightTopIndex() { return _tileCheckIndex[1]; }
+	inline POINT getLeftBottomIndex() { return _tileCheckIndex[2]; }
+	inline POINT getRightBottomIndex() { return _tileCheckIndex[3]; }
+
+	inline POINTFLOAT getTileCheckRcPos() { return _tileCheckRcPos; }
+
+	void tileCheckFunc(vvMap& vvMapLink);
 };
 
