@@ -306,6 +306,9 @@
     <ClInclude Include="playerInfoBoxUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="skillbookUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -522,6 +525,9 @@
       <Filter>PlayGround\UIs</Filter>
     </ClCompile>
     <ClCompile Include="playerInfoBoxUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="skillbookUI.cpp">
       <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>

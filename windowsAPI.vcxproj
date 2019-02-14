@@ -203,6 +203,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="skillbookUI.h" />
     <ClInclude Include="skillCooldownUI.h" />
     <ClInclude Include="skillIconList.h" />
     <ClInclude Include="skills.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="printNumber.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="skillbookUI.cpp" />
     <ClCompile Include="skillCooldownUI.cpp" />
     <ClCompile Include="skillIconList.cpp" />
     <ClCompile Include="skills.cpp" />
