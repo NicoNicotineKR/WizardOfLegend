@@ -22,5 +22,7 @@ public:
 	virtual void render();
 
 	virtual void setPlayerAdress(player* player) { _player = player; }
+
+	vector<enemy*> getVEnemy() { return _vEnemy; }
 };
 

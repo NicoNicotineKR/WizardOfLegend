@@ -21,4 +21,8 @@ void enemy_State_Spawn::direction_right(enemy * enemy)
 
 void enemy_State_Spawn::update(enemy * enemy)
 {
+	if (enemy->getPath()->size() > 0)
+	{
+		enemy->getPath()->clear();
+	}
 }

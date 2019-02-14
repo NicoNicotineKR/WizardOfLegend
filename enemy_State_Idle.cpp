@@ -55,4 +55,8 @@ void enemy_State_Idle::direction_right(enemy * enemy)
 
 void enemy_State_Idle::update(enemy * enemy)
 {
+	if (enemy->getPath()->size() > 0)
+	{
+		enemy->getPath()->clear();
+	}
 }

@@ -27,15 +27,20 @@ class enemy : public gameNode
 {
 protected:
 	image*			_img;				//이미지
+	POINTFLOAT		_imgPos;			//이미지 출력용 좌표
 	animation*		_ani;				//에너미 애니메숑
-	RECT			_collisionRc;		//에너미 충돌 렉트
+	RECT			_rc;				//에너미 렉트
 
 	int				_maxHp;				//에너미 최대 체력
 	int				_curHp;				//에너미 현재 체력
 										
 	float			_speed;				//에너미 스피드
 	float			_angle;				//에너미 각도
-	POINTFLOAT		_pos;				//에너미 좌표
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	POINTFLOAT		_pos;				//에너미 좌표 얘가 모든것의 중심좌표임 얘변하면 나머지 다변함
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	POINTFLOAT		_vec;				//에너미 벡터 값
 										
 	E_ANIDIRECTION	_aniDirection;		//에너미 애니메이션
@@ -46,9 +51,8 @@ protected:
 	enemyState*		_enemyState;
 	enemyState*		_arrState[static_cast<const int>(E_STATE::MAX)];
 
-	RECT			_tileCheckRc;		//타일충돌용 렉트
-	POINTFLOAT		_tileCheckPos;		//타일충돌용 좌표
-	int				_tileCheckIdx[2];	//타일충돌용 인덱스
+	RECT			_collisionRc;		//충돌판정용 렉트
+	POINTFLOAT		_collisionPos;		//충돌판정 좌표
 
 	// 순수혈통(에너미에게 필요해서 존재하는것들)이 아닌것
 
@@ -103,15 +107,20 @@ public:
 	POINTFLOAT getPos() { return _pos; }
 	image* getImg() { return _img; }
 	animation* getAni() { return _ani; }
+	void setPos(POINTFLOAT pos) { _pos = pos; }
+	void setPosX(float posX) { _pos.x = posX; }
+	void setPosY(float posY) { _pos.y = posY; }
 
 	float getSpeed() { return _speed; }
-
-	RECT getTileCheckRc() { return _tileCheckRc; }
 
 	void setCurCharge(float curCharge) { _curCharge = curCharge; }
 	float getCurCharge() { return _curCharge; }
 
 	void setMaxCharge(float maxCharge) { _curCharge = maxCharge; }
 	float getMaxCharge() { return _maxCharge; }
+
+	list<POINT>* getPath() { return &_listPath; }
+	list<POINT>::iterator* getIPath() { return &_listIPath; }
+	
 };
 

@@ -41,7 +41,7 @@ HRESULT testStage::init()
 
 void testStage::release()
 {
-//	_em->release();
+	_em->release();
 }
 
 void testStage::update()
@@ -50,8 +50,46 @@ void testStage::update()
 	_em->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
-		_myWay.clear();
-		_aStar->pathFinder(PointMake(16, 19), PointMake(3, 4), PointMake(16, 19), _myWay);
+		_em->getVEnemy()[0]->getPath()->clear();
+
+		int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;
+		int e_posY = _em->getVEnemy()[0]->getPos().y / TOP_TILESIZE;
+
+		int p_posX = _player->getPos().x / TOP_TILESIZE;
+		int p_posY = _player->getPos().y / TOP_TILESIZE;
+
+		_aStar->pathFinder(PointMake(e_posX, e_posY), PointMake(p_posX, p_posY), PointMake(e_posX, e_posY), *(_em->getVEnemy()[0]->getPath()));
+		for (list<POINT>::iterator iter = _em->getVEnemy()[0]->getPath()->begin();
+			iter != _em->getVEnemy()[0]->getPath()->end(); ++iter)
+		{
+			_myWay.push_front(*iter);
+		}
+		
+	}
+	if (_em->getVEnemy()[0]->getState() == E_STATE::MOVE)
+	{
+		aStarCount += TIMEMANAGER->getElapsedTime();
+		if (aStarCount > 1)
+		{
+			_myWay.clear();
+
+			_em->getVEnemy()[0]->getPath()->clear();
+	
+			int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;
+			int e_posY = _em->getVEnemy()[0]->getPos().y / TOP_TILESIZE;
+	
+			int p_posX = _player->getPos().x / TOP_TILESIZE;
+			int p_posY = _player->getPos().y / TOP_TILESIZE;
+ 			_aStar->pathFinder(PointMake(e_posX, e_posY), PointMake(p_posX, p_posY), PointMake(e_posX, e_posY), *(_em->getVEnemy()[0]->getPath()));
+			aStarCount = 0;
+
+
+			for (list<POINT>::iterator iter = _em->getVEnemy()[0]->getPath()->begin();
+				iter != _em->getVEnemy()[0]->getPath()->end(); ++iter)
+			{
+				_myWay.push_front(*iter);
+			}
+		}
 	}
 }
 
@@ -73,6 +111,17 @@ void testStage::render()
 		}
 	}
 	Rectangle(getMemDC(), _test);
+
+	int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;
+	int e_posY = _em->getVEnemy()[0]->getPos().y / TOP_TILESIZE;
+
+	int p_posX = _player->getPos().x / TOP_TILESIZE;
+	int p_posY = _player->getPos().y / TOP_TILESIZE;
+
+//	Rectangle(getMemDC(), _vvMap[e_posY][e_posX]->getTopTileRc().left, _vvMap[e_posY][e_posX]->getTopTileRc().top
+//	, _vvMap[e_posY][e_posX]->getTopTileRc().right, _vvMap[e_posY][e_posX]->getTopTileRc().bottom);
+	Rectangle(getMemDC(), _vvMap[p_posY][p_posX]->getTopTileRc().left, _vvMap[p_posY][p_posX]->getTopTileRc().top
+		, _vvMap[p_posY][p_posX]->getTopTileRc().right, _vvMap[p_posY][p_posX]->getTopTileRc().bottom);
 }
 
 void testStage::RenderMap()
@@ -125,7 +174,7 @@ void testStage::LoadMap()
 	//	로드할 파일이름 설정
 	//itoa(_curMapIdx, tmp, 10);
 	//strcat_s(fileName, sizeof(fileName), tmp);
-	strcat_s(fileName, sizeof(fileName), "10");
+	strcat_s(fileName, sizeof(fileName), "9");
 	strcat_s(fileName, sizeof(fileName), ".map");
 
 

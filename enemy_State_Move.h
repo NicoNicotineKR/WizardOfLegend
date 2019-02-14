@@ -4,6 +4,8 @@ class enemy_State_Move : public enemyState
 {
 private:
 	const int ATTACK_RANGE = 100 * 100;
+
+	const int TILE_SIZE = 32;
 public:
 	enemy_State_Move();
 	~enemy_State_Move();

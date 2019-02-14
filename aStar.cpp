@@ -30,20 +30,12 @@ void aStar::render()
 
 void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POINT>& lMyWay)
 {
-	//길을 못찾았다면
-	if (_vOpenList.size() == 0 && _vCloseList.size() > 0)
-	{
-		//시작위치뱉고
-		lMyWay.push_front(PointMake(startPos.x, startPos.y));
-
-		//재귀 탈출
-		return;
-	}
-
 	//현재위치가 도착점이라면
 	if (currentPos.x == endPos.x && currentPos.y == endPos.y)
 	{
  		POINT road = { _vTotalList[currentPos.y][currentPos.x]->getTopIdx().x,_vTotalList[currentPos.y][currentPos.x]->getTopIdx().y };
+
+		lMyWay.clear();
 
 		while (1)
 		{
@@ -162,6 +154,8 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 
 				openTile->setGScore(openTile->getParent()->getGScore() + gScore);
 
+			//	openTile->setGScore(gScore);
+
 				openTile->setHScore(hScore);
 
 				openTile->setFScore(openTile->getGScore() + openTile->getHScore());
@@ -203,6 +197,38 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 				}
 			}
 		}
+	}
+
+	//길을 못찾았다면
+	if (_vOpenList.size() == 0 && _vCloseList.size() > 0)
+	{
+		//시작위치뱉고
+		lMyWay.clear();
+		lMyWay.push_front(PointMake(startPos.x, startPos.y));
+
+		//재귀 탈출전 기초정보 리셋
+		for (int i = 0; i < _vCloseList.size(); i++)
+		{
+			_vCloseList[i]->setParent(nullptr);
+			_vCloseList[i]->setFScore(0);
+			_vCloseList[i]->setGScore(0);
+			_vCloseList[i]->setHScore(0);
+		}
+
+		for (int i = 0; i < _vOpenList.size(); i++)
+		{
+			_vOpenList[i]->setParent(nullptr);
+			_vOpenList[i]->setFScore(0);
+			_vOpenList[i]->setGScore(0);
+			_vOpenList[i]->setHScore(0);
+		}
+
+		//오픈리스트와 클로즈리스트로 리셋
+		_vOpenList.clear();
+		_vCloseList.clear();
+
+		//재귀 탈출
+		return;
 	}
 
 	// 제일 저렴한 녀석을 찾아서 현재타일로 다시 박아줌

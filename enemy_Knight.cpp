@@ -22,7 +22,7 @@ HRESULT enemy_Knight::init()
 {
 	enemyKeyAnimationInit();
 	enemyArrStateInit();
-
+		
 	_img = IMAGEMANAGER->findImage("knight");
 	//spawn이면 카드스폰0으로(0은 아무이미지 없게)
 	_ani = KEYANIMANAGER->findAnimation("knight_LeftIdle");
@@ -31,9 +31,21 @@ HRESULT enemy_Knight::init()
 	_curHp = 100;
 
 	_speed = 200.f;
-	_pos.x =  _img->getFrameWidth();
-	_pos.y =  _img->getFrameHeight();
+	//기본 베이스 좌표(타일충돌)
+	_pos.x = WINSIZEX / 2;// _img->getFrameWidth();
+	_pos.y = WINSIZEY / 2;//_img->getFrameHeight();
+	_rc = RectMakeCenter(_pos.x, _pos.y, 32, 32);
 
+	//이미지 출력 좌표
+	_imgPos.x = _pos.x;
+	_imgPos.y = _pos.y - POS_Y_IMAGE_SHAVE;
+	
+	//충돌판정
+	_collisionPos.x = _pos.x;
+	_collisionPos.y = _pos.y - POS_Y_HIT_SHAVE;
+	_collisionRc = RectMakeCenter(_collisionPos.x,_collisionPos.y, HIT_RC_WIDTH, HIT_RC_HEIGHT);
+
+	//벡터값(이동용)
 	_vec.x = 0;
 	_vec.y = 0;
 
@@ -65,13 +77,34 @@ void enemy_Knight::update()
 
 	_playerPos = _player->getPos();
 
+	//벡터값에 따른 베이스 좌표의 이동
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
+	_rc = RectMakeCenter(_pos.x, _pos.y, 32, 32);
+	
+	//이미지 이동
+	_imgPos.x = _pos.x;
+	_imgPos.y = _pos.y - POS_Y_IMAGE_SHAVE;
+
+	//충돌판정이동
+	_collisionPos.x = _pos.x;
+	_collisionPos.y = _pos.y - POS_Y_HIT_SHAVE;
+	_collisionRc = RectMakeCenter(_collisionPos.x, _collisionPos.y, HIT_RC_WIDTH, HIT_RC_HEIGHT);
 }
 
 void enemy_Knight::render()
 {
-	_img->aniRender(getMemDC(), _pos.x, _pos.y, _ani);
+	//에너미 충돌판정 출력
+	Rectangle(getMemDC(),_collisionRc);
+
+	//에너미 이미지 출력
+	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2), _imgPos.y - (_img->getFrameHeight() / 2), _ani);
+
+	//플레이어 기준좌표 출력
+	Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
+
+	//에너미 기준 좌표 출력(타일충돌)
+	Rectangle(getMemDC(), _rc);
 }
 
 void enemy_Knight::enemyKeyAnimationInit()

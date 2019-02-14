@@ -37,8 +37,8 @@ HRESULT player::init()
 
 	_speed = 300.0f;					
 	//_angle = ;					
-	_pos.x = WINSIZEX/2;
-	_pos.y = WINSIZEY / 2;
+	_pos.x = 600;
+	_pos.y = 300;
 
 	_vec.x = 0;
 	_vec.y = 0;

@@ -3,6 +3,11 @@
 
 class enemy_Knight : public enemy
 {
+private:
+	const int POS_Y_IMAGE_SHAVE = 110;
+	const int POS_Y_HIT_SHAVE = 70;
+	const int HIT_RC_WIDTH = 50;
+	const int HIT_RC_HEIGHT = 140;
 public:
 	enemy_Knight();
 	~enemy_Knight();

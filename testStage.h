@@ -24,6 +24,8 @@ class testStage : public gameNode
 	player* _player;
 
 	enemyMgr* _em;
+
+	float aStarCount;
 	
 public:
 	testStage();
