@@ -13,25 +13,46 @@ enemy_State_Move::~enemy_State_Move()
 
 void enemy_State_Move::direction_Left(enemy * enemy)
 {
-	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y))
+	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
 		enemy->setState(E_STATE::CHARGE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
+
+		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
+		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * ATTACK_RANGE2);
+		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * ATTACK_RANGE2); 
+		enemy->setAtkRc(enemy->getAtkPos());
+
+		float angle = enemy->getAngle() + (PI2 / 72);
+		int frame = (int)(angle / (PI2 / 36));
+
+		enemy->getAtkImg()->SetFrameX(frame);
 	}
 }
 
 void enemy_State_Move::direction_right(enemy * enemy)
 {
-	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y))
+	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
 		enemy->setState(E_STATE::CHARGE);
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
+
+		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
+		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * ATTACK_RANGE2);
+		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * ATTACK_RANGE2);
+		enemy->setAtkRc(enemy->getAtkPos());
+
+		float angle = enemy->getAngle() + (PI2 / 72);
+		int frame = (int)(angle / (PI2 / 36));
+
+		//	360 -> 10 36 2pi
+		enemy->getAtkImg()->SetFrameX(frame);
 	}
 }
 

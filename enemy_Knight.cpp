@@ -30,7 +30,7 @@ HRESULT enemy_Knight::init()
 	_maxHp = 100;
 	_curHp = 100;
 
-	_speed = 50.f;
+	_speed = 200.f;
 	//기본 베이스 좌표(타일충돌)
 	_pos.x = WINSIZEX / 2;// _img->getFrameWidth();
 	_pos.y = WINSIZEY / 2;//_img->getFrameHeight();
@@ -58,7 +58,9 @@ HRESULT enemy_Knight::init()
 	_curCharge = 0.f;
 	_maxCharge = 0.5f;
 
-	_attImg = IMAGEMANAGER->addFrameImage("slash", "images/enemy/slash2.bmp", 2952, 82, 36, 1, true, 0xff00ff);
+	_atkImg = IMAGEMANAGER->addFrameImage("slash", "images/enemy/slash.bmp", 5904, 164, 36, 1, true, 0xff00ff);
+	_atkImg->SetFrameX(0);
+	_atkImg->SetFrameY(0);
 
 	return S_OK;
 }
@@ -98,16 +100,28 @@ void enemy_Knight::update()
 void enemy_Knight::render()
 {
 	//에너미 히트판정 출력
-	Rectangle(getMemDC(),_collisionRc);
+	//Rectangle(getMemDC(),_collisionRc);
 
 	//에너미 이미지 출력
 	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2), _imgPos.y - (_img->getFrameHeight() / 2), _ani);
 
+	//공격상태일때만 공격이미지 출력
+	if (_enemyState == _arrState[static_cast<const int>(E_STATE::ATTACK)])
+	{
+	//	Rectangle(getMemDC(), _atkRc);
+		_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+		char str[128];
+		sprintf_s(str, "frameX : %d", _atkImg->getFrameX());
+		TextOut(getMemDC(), 50, 200, str, strlen(str));
+	}
 	//플레이어 기준좌표 출력
-	Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
-
-	//에너미 기준 좌표 출력(타일충돌)
-	Rectangle(getMemDC(), _rc);
+	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
+	//
+	////에너미 기준 좌표 출력(타일충돌)
+	//Rectangle(getMemDC(), _rc);
+	//
+	//Rectangle(getMemDC(), _pos.x, _pos.y - 70, _pos.x + 10, _pos.y - 60);
+	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y - 50, _playerPos.x + 10, _playerPos.y - 40);
 }
 
 void enemy_Knight::enemyKeyAnimationInit()
@@ -254,6 +268,7 @@ void enemy_Knight::knight_Move(void * obj)
 	knight->currentEnemyState();
 	knight->setIsAniOnce(true);
 	knight->startAni();
+	knight->setAtkRc();
 }
 
 void enemy_Knight::knight_rightAttack(void * obj)

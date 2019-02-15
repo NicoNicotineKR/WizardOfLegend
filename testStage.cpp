@@ -102,18 +102,18 @@ void testStage::render()
 	RenderMap();
 	_player->render(getMemDC());
 	_em->render();
-	if (_myWay.size() != 0)
-	{
-		for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)
-		{
-			int idX = (*_imyWay).x;
-			int idY = (*_imyWay).y;
-	
-			RECT temp = _vvMap[idY][idX]->getTopTileRc();
-	
-			Rectangle(getMemDC(), temp);
-		}
-	}
+	//if (_myWay.size() != 0)
+	//{
+	//	for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)
+	//	{
+	//		int idX = (*_imyWay).x;
+	//		int idY = (*_imyWay).y;
+	//
+	//		RECT temp = _vvMap[idY][idX]->getTopTileRc();
+	//
+	//		Rectangle(getMemDC(), temp);
+	//	}
+	//}
 	Rectangle(getMemDC(), _test);
 
 	int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;

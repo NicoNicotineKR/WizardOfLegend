@@ -3,7 +3,9 @@
 class enemy_State_Move : public enemyState
 {
 private:
-	const int ATTACK_RANGE = 100 * 100;
+	const int ATTACK_RANGE = 120 * 120;
+
+	const int ATTACK_RANGE2 = 80;
 
 	const int TILE_SIZE = 32;
 

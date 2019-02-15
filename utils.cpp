@@ -34,6 +34,8 @@ namespace BRAVO_UTIL
 		//	if (angle >= PI * 2) angle -= PI * 2;
 		//}
 
+		if (angle < 0)		angle += PI2;
+		if (angle >= PI2)	angle -= PI2;
 
 		return angle;
 	}

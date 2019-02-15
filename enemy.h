@@ -70,9 +70,9 @@ protected:
 
 	vector<vector<tile*>> _vvMap;
 
-	image* _attImg;
-	POINTFLOAT _attPos;
-	RECT _attRc;
+	image* _atkImg;
+	POINTFLOAT _atkPos;
+	RECT _atkRc;
 
 public:
 	enemy();
@@ -124,6 +124,9 @@ public:
 
 	float getSpeed() { return _speed; }
 
+	float getAngle() { return _angle; }
+	void setAngle(float angle) { _angle = angle; }
+
 	void setCurCharge(float curCharge) { _curCharge = curCharge; }
 	float getCurCharge() { return _curCharge; }
 
@@ -134,6 +137,17 @@ public:
 	list<POINT>::iterator* getIPath() { return &_listIPath; }
 
 	vector<vector<tile*>> getMap() { return _vvMap; }
+
+	image* getAtkImg() { return _atkImg; }
+
+	POINTFLOAT getAtkPos() { return _atkPos; }
+	void setAtkPos(POINTFLOAT atkPos) { _atkPos = atkPos; }
+	void setAtkPosX(float x) { _atkPos.x = x; }
+	void setAtkPosY(float y) { _atkPos.y = y; }
+
+	RECT getAtkRc() { return _atkRc; }
+	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _atkImg->getFrameWidth(), _atkImg->getFrameHeight()); }
+	void setAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
 	
 };
 
