@@ -40,6 +40,9 @@ void enemy_State_Charge::direction_right(enemy * enemy)
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
+
+		enemy->getPlayerPos();
+		enemy->getPos();
 	}
 }
 

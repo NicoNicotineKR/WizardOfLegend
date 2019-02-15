@@ -29,8 +29,7 @@ class enemy : public gameNode
 protected:
 	image*			_img;				//이미지
 	POINTFLOAT		_imgPos;			//이미지 출력용 좌표
-	animation*		_ani;				//에너미 애니메숑
-	RECT			_rc;				//에너미 렉트
+	animation*		_ani;				//애니메이션용 변수
 
 	int				_maxHp;				//에너미 최대 체력
 	int				_curHp;				//에너미 현재 체력
@@ -39,7 +38,8 @@ protected:
 	float			_angle;				//에너미 각도
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-	POINTFLOAT		_pos;				//에너미 좌표 얘가 모든것의 중심좌표임 얘변하면 나머지 다변함
+	POINTFLOAT		_pos;				//중심 좌표 얘가 모든것의 중심좌표임 얘변하면 나머지 다변함
+	RECT			_rc;				//중심 렉트(타일크기)
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	POINTFLOAT		_vec;				//에너미 벡터 값
@@ -69,6 +69,10 @@ protected:
 	float _maxCharge;
 
 	vector<vector<tile*>> _vvMap;
+
+	image* _attImg;
+	POINTFLOAT _attPos;
+	RECT _attRc;
 
 public:
 	enemy();

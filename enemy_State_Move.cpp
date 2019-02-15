@@ -68,7 +68,7 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecX(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
-			enemy->setVecX(3);
+			//enemy->setVecX(3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
 		//	{
@@ -85,7 +85,7 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecX(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 
-			enemy->setVecX(-3);
+		//	enemy->setVecX(-3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
 		//	{
@@ -104,7 +104,7 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecY(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
-			enemy->setVecY(3);
+		//	enemy->setVecY(3);
 
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
 			//{
@@ -121,7 +121,7 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecY(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 			
-			enemy->setVecY(-3);
+		//	enemy->setVecY(-3);
 
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
 			//{
@@ -135,14 +135,14 @@ void enemy_State_Move::update(enemy * enemy)
 		//	}
 		}
 
-		if (!(enemy->getMap()[y][(int)((posX + enemy->getVec().x) / TILE_SIZE)]->getIsAvailMove()))
-		{
-			enemy->setVecX(0);
-		}
-		if (!(enemy->getMap()[(int)((posY + enemy->getVec().y) / TILE_SIZE)][x]->getIsAvailMove()))
-		{
-			enemy->setVecY(0);
-		}
+	//	if (!(enemy->getMap()[y][(int)((posX + enemy->getVec().x) / TILE_SIZE)]->getIsAvailMove()))
+	//	{
+	//		enemy->setVecX(0);
+	//	}
+	//	if (!(enemy->getMap()[(int)((posY + enemy->getVec().y) / TILE_SIZE)][x]->getIsAvailMove()))
+	//	{
+	//		enemy->setVecY(0);
+	//	}
 
 		if (x == tileX && y == tileY)
 		{

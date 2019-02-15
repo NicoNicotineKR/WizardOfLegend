@@ -49,11 +49,11 @@ void enemy::startAni()
 
 void enemy::fixDirection()
 {
-	if (_pos.x + _img->getFrameWidth() < _player->getPos().x + _player->getImg()->getFrameWidth())
+	if (_pos.x < _playerPos.x)
 	{
 		_aniDirection = E_ANIDIRECTION::RIGHT;
 	}
-	if (_pos.x + _img->getFrameWidth() >= _player->getPos().x + _player->getImg()->getFrameWidth())
+	if (_pos.x >= _playerPos.x)
 	{
 		_aniDirection = E_ANIDIRECTION::LEFT;
 	}

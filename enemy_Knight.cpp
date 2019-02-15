@@ -30,7 +30,7 @@ HRESULT enemy_Knight::init()
 	_maxHp = 100;
 	_curHp = 100;
 
-	_speed = 200.f;
+	_speed = 50.f;
 	//기본 베이스 좌표(타일충돌)
 	_pos.x = WINSIZEX / 2;// _img->getFrameWidth();
 	_pos.y = WINSIZEY / 2;//_img->getFrameHeight();
@@ -58,6 +58,8 @@ HRESULT enemy_Knight::init()
 	_curCharge = 0.f;
 	_maxCharge = 0.5f;
 
+	_attImg = IMAGEMANAGER->addFrameImage("slash", "images/enemy/slash2.bmp", 2952, 82, 36, 1, true, 0xff00ff);
+
 	return S_OK;
 }
 
@@ -75,7 +77,8 @@ void enemy_Knight::update()
 	//플레이어가 사정거리 or 구역에 들어오면 그곳에 있는 적들의 _isClose를 트루로 바꿔줘야함 -> 한번 트루되면 계속 트루인상태로 고정임
 	move();
 
-	_playerPos = _player->getTileCheckRcPos();
+	_playerPos.x = _player->getTileCheckRcPos().x + TOP_TILESIZE / 2;
+	_playerPos.y = _player->getTileCheckRcPos().y + TOP_TILESIZE / 2;
 
 	//벡터값에 따른 베이스 좌표의 이동
 	_pos.x += _vec.x;
