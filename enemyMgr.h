@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "enemy_Knight.h"
+#include "enemy_Ghoul.h"
 
 class player;
 

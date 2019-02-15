@@ -15,7 +15,7 @@ enemyMgr::~enemyMgr()
 HRESULT enemyMgr::init()
 {
 	//일단 기사 한마리만 밀어놓고
-	enemy* knight = new enemy_Knight;
+	enemy* knight = new enemy_Ghoul;
 	_vEnemy.push_back(knight);
 
 	for (int i = 0; i < _vEnemy.size(); i++)

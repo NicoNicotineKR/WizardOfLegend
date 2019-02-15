@@ -148,6 +148,9 @@ public:
 	RECT getAtkRc() { return _atkRc; }
 	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _atkImg->getFrameWidth(), _atkImg->getFrameHeight()); }
 	void setAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
+
+	virtual int getAtkRange() abstract;
+	virtual int getWeaponRange() abstract;
 	
 };
 

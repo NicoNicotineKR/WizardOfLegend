@@ -13,7 +13,7 @@ enemy_State_Move::~enemy_State_Move()
 
 void enemy_State_Move::direction_Left(enemy * enemy)
 {
-	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
+	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
 		enemy->setState(E_STATE::CHARGE);
@@ -22,8 +22,8 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 		enemy->startAni();
 
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
-		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * ATTACK_RANGE2);
-		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * ATTACK_RANGE2); 
+		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
+		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
 		enemy->setAtkRc(enemy->getAtkPos());
 
 		float angle = enemy->getAngle() + (PI2 / 72);
@@ -35,7 +35,7 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 
 void enemy_State_Move::direction_right(enemy * enemy)
 {
-	if (ATTACK_RANGE > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
+	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
 		enemy->setState(E_STATE::CHARGE);
@@ -44,8 +44,8 @@ void enemy_State_Move::direction_right(enemy * enemy)
 		enemy->startAni();
 
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
-		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * ATTACK_RANGE2);
-		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * ATTACK_RANGE2);
+		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
+		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
 		enemy->setAtkRc(enemy->getAtkPos());
 
 		float angle = enemy->getAngle() + (PI2 / 72);

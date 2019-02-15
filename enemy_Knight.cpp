@@ -271,20 +271,20 @@ void enemy_Knight::knight_Move(void * obj)
 	knight->setAtkRc();
 }
 
-void enemy_Knight::knight_rightAttack(void * obj)
-{
-	enemy_Knight* knight = (enemy_Knight*)obj;
-	knight->setState(E_STATE::ATTACK);
-	knight->currentEnemyState();
-	knight->setIsAniOnce(true);
-	knight->startAni();
-}
-
-void enemy_Knight::knight_leftAttack(void * obj)
-{
-	enemy_Knight* knight = (enemy_Knight*)obj;
-	knight->setState(E_STATE::ATTACK);
-	knight->currentEnemyState();
-	knight->setIsAniOnce(true);
-	knight->startAni();
-}
+//void enemy_Knight::knight_rightAttack(void * obj)
+//{
+//	enemy_Knight* knight = (enemy_Knight*)obj;
+//	knight->setState(E_STATE::ATTACK);
+//	knight->currentEnemyState();
+//	knight->setIsAniOnce(true);
+//	knight->startAni();
+//}
+//
+//void enemy_Knight::knight_leftAttack(void * obj)
+//{
+//	enemy_Knight* knight = (enemy_Knight*)obj;
+//	knight->setState(E_STATE::ATTACK);
+//	knight->currentEnemyState();
+//	knight->setIsAniOnce(true);
+//	knight->startAni();
+//}
