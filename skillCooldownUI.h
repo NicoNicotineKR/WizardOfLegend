@@ -3,13 +3,13 @@
 #include "skillIconList.h"
 #include "printNumber.h"
 
+//	마스크가 돌아간다아아아아아아 오오오오돈다아아아아
 //	플레이어에 탑재해서 쓰세여
 //	init / update / render 걸어줘야함
-//	플레이어에게 스킬이 추가되면 == this->ChangeSkill(int 몇번쨰(0~5)스킬, string 스킬이름, int 최대장전갯수, float 쿨다운 시간 입력)
-//	검정 마스크는 curTime과 coolDown타임을 비교. cooldownTime은 한개 장전되기까지 걸리는 시간, curTime 은 0~cooldownTime 임. (예외처리 다함)
+//	플레이어에게 스킬이 추가되면 == this->ChangeSkill(int 몇번쨰(0~5)스킬, string 스킬이름, int 최대장전갯수, float 쿨다운 시간 입력) - 주소넣어주셈
+//	ㅁ. cooldownTime은 한개 장전되기까지 걸리는 시간, curTime 은 0~cooldownTime 임. 
 
-//	*** 사용해서 쿨타임 돌아가고있는 스킬은, this->setCurTime(float 장전한 시간); 으로 개별 업데이트 필요. ***		(지난시간이, 쿨타임시간보다 더 크게됐으면, 자동으로 남은시간0으로 계산해줄거임)
-//	***	장전이 되었으면,					  this->curReloadNum(int 장전한 갯수); 으로 개별 업데이트 필요. ***
+//	플레이어의 사용예시는 업데이트 테스트용 코드 num8 눌렀을떄 발생하는걸 보면 됨.
 
 
 
@@ -31,18 +31,30 @@ private:
 		
 
 		image* maskImg;
+		image* maskImgDefault;
 
-		int totalReloadNum;		//총 장전 갯수
-		int curReloadNum;		//현재 장전 갯수
-		float coolDownTime;		//쿨다운시간 - 장전에 걸리는 총시간
-		float curTime;			//장전시작부터 지금까지의 시간
-		float lastingTime;		//남은 시간 = 쿨다운시간 - 지금까지의 시간
+		int* totalReloadNum;		//총 장전 갯수
+		int* curReloadNum;			//현재 장전 갯수
+		float* coolDownTime;		//쿨다운시간 - 장전에 걸리는 총시간
+		float* curTime;				//장전시작부터 지금까지의 시간
+		float lastingTime;			//남은 시간 = 쿨다운시간 - 지금까지의 시간
+
+		bool isStart;
+		bool isPrepareBlt;
 
 		float curMaskWid;
-		float ratio;
+		float lastTimeRatio;
+		float curTimeRatio;
+		float proceedRatio;		//	프레임당 진행된 비율
 
-		POINT clock[4];		//	12,3,6,9
+		
+
+		
 		float angle;
+		float preAngle;
+		POINT polygonPos[3];	//	중점, 이전앵글 좌표, 현재앵글 끝좌표
+
+		int maskAlpha;
 
 	};
 
@@ -50,6 +62,8 @@ private:
 	printNumber* _printNum;
 
 	tagSkillUI _skills[6];
+
+	image* _maskQuarter[3];
 
 	
 	const int BORDER_SIZE = 60;
@@ -59,6 +73,14 @@ private:
 	const int ICONSTART_X = 39 + 30;
 	const int ICONSTART_Y = 810 + 30;
 	const int ICONGAB = 60 + 4;
+
+	//	테스트용 변수
+	int testTotalReloadNum = 9;
+	int testCurReloadNum = 0;
+	float testCoolDownTime = 9.0f;
+	float testTimer = 0;
+	bool testIsUse = false;
+
 	
 
 public:
@@ -70,17 +92,38 @@ public:
 	void update();
 	void render();
 
-	void ChangeSkill(int idx, string name, int totalReloadedNum, float coolDownTime);
+	void ChangeSkill(int idx, string name, int* totalReloadedNum, int* curReloadNum, float* coolDownTime, float* curTime);
 	void DropSkill(int idx);
 	float CalLastingTime(int idx);
+	float CalLastTimeRatio(int idx);
+	float CalCurTimeRatio(int idx);
+	float CalProceedRatio(int idx);
 	float CalMaskWid(int idx);
+	
+
+	void BitBltMask(HDC destHDC, HDC sourHDC);
+	void BitBltMask(int idx);
+	void BitBltQuarterMask(int idx, int quarter);
+	void ClockwiseMaskFunc(int idx);
+	void PartialClockwiseFunc(int idx);
+
+	//	몇번째 스킬, 장전타이머의 주소, 현재 장전된 총알수(사용전)
+	void UseIdxSkill(int idx);
+	
+	
 
 
+	void setTotalReloadNum(int idx, int num)			{ *(_skills[idx].totalReloadNum) = num; }
+	void setCurReloadNum(int idx, int num)				{ *(_skills[idx].curReloadNum) = num; }
+	void setCoolDownTime(int idx, float cooldownTime)	{ *(_skills[idx].coolDownTime) = cooldownTime; }
+	void setCurTime(int idx, float curTime)				{ *(_skills[idx].curTime) = curTime; }
+	void setIsStart(int idx, bool value)				{ _skills[idx].isStart = value; }
 
-	void setTotalReloadNum(int idx, int num)			{ _skills[idx].totalReloadNum = num; }
-	void setCurReloadNum(int idx, int num)				{ _skills[idx].curReloadNum = num; }
-	void setCoolDownTime(int idx, float cooldownTime)	{ _skills[idx].coolDownTime = cooldownTime; }
-	void setCurTime(int idx, float curTime)				{ _skills[idx].curTime = curTime; }
+	void setAddressTotalReload(int idx, int* totalReloadAddr) { _skills[idx].totalReloadNum = totalReloadAddr; }
+	void setAddressCurReload(int idx, int* curReloadAddr) { _skills[idx].curReloadNum = curReloadAddr; }
+	void setAddressCoolDownTime(int idx, float* cooldownTimeAddr) { _skills[idx].coolDownTime = cooldownTimeAddr; }
+	void setAddressCurtime(int idx, float* curTimeAddr) { _skills[idx].curTime = curTimeAddr; }
+
 	
 	
 
