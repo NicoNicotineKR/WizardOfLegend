@@ -336,6 +336,9 @@
     <ClInclude Include="skillManager.h">
       <Filter>PlayGround\skills</Filter>
     </ClInclude>
+    <ClInclude Include="dialogueMaker.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -583,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="skillManager.cpp">
       <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogueMaker.cpp">
+      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
