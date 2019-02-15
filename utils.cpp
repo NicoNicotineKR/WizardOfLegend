@@ -4,6 +4,33 @@
 
 namespace BRAVO_UTIL
 {
+	//	각(rad)을 0~360도 사이로 만들어줌, 주소 집어넣으면 알아서 바뀜
+	void RefreshAngle(float* angle)
+	{
+		while (1)
+		{
+			if (0 <= *angle && *angle < PI2)	break;
+
+			if (*angle < 0)		*angle += PI2;
+			if (*angle >= PI2)	*angle -= PI2;
+			
+		}
+	}
+
+	//	각(rad)을 0~360도 사이로 만들어줌, 리턴받아라~
+	float getRefreshAngle(float angle)
+	{
+		while (1)
+		{
+			if (0 <= angle && angle < PI2)	break;
+
+			if (angle < 0)		angle += PI2;
+			if (angle >= PI2)	angle -= PI2;
+
+		}
+
+		return angle;
+	}
 
 	//거리 구하는 함수
 	float getDistance(float x1, float y1, float x2, float y2)

@@ -12,7 +12,13 @@
 
 namespace BRAVO_UTIL
 {
+	void RefreshAngle(float* angle);
+	float getRefreshAngle(float angle);
+
 	float getDistance(float x1, float y1, float x2, float y2);
 
 	float getAngle(float x1, float y1, float x2, float y2);
+
+
+	
 }
