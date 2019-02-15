@@ -73,6 +73,7 @@ HRESULT skillCooldownUI::init()
 	
 	//	테스트용코드
 	//	===		플레이어 변수들		=====
+	/*
 	testTotalReloadNum = 4;
 	testCurReloadNum = 0;
 	testCoolDownTime = 2.0f;
@@ -81,7 +82,7 @@ HRESULT skillCooldownUI::init()
 
 	//	===	 플레이어 사용예(스킬입력) 	=====
 	ChangeSkill(0, "FlameStrike", &testTotalReloadNum, &testCurReloadNum, &testCoolDownTime, &testTimer);
-
+	*/
 	return S_OK;
 }
 
@@ -93,7 +94,7 @@ void skillCooldownUI::update()
 {
 	//	테스트용코드
 	//	=======플레이어 참고하세여 ==========
-	
+	/*
 	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD8)) 
 	{
 		if (testCurReloadNum > 0) {
@@ -110,7 +111,7 @@ void skillCooldownUI::update()
 		testTimer += TIMEMANAGER->getElapsedTime();
 		testCurReloadNum = testTimer / testCoolDownTime;
 	}
-	
+	*/
 
 	for (int i = 0; i < 6; i++) {
 		//	스킬없는애는 끄지세여

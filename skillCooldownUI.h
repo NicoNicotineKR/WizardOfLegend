@@ -75,12 +75,13 @@ private:
 	const int ICONGAB = 60 + 4;
 
 	//	테스트용 변수
+	/*
 	int testTotalReloadNum = 9;
 	int testCurReloadNum = 0;
 	float testCoolDownTime = 9.0f;
 	float testTimer = 0;
 	bool testIsUse = false;
-
+	*/
 	
 
 public:
