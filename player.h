@@ -4,6 +4,9 @@
 #include "tile.h"
 #include "tileNode.h"
 #include "skillCooldownUI.h"
+#include "skills.h"
+
+class skills;
 class playerState;
 
 //애니메이션용 방향
@@ -51,12 +54,10 @@ enum class BOOLMOVEDIRECTION
 	LEFT_BOTTOM,
 	RIGHT_BOTTOM
 };
-
-enum class SKILLNAME
+enum class SKILL
 {
-	FlameStrike,
-	stoneShot,
-	searingRush
+	CHAiNLIGHTNING,
+	MAX
 };
 /*
 skills _curSkill[0] = FlameStrike;
@@ -70,6 +71,7 @@ class player : gameNode
 private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
+	vvMap* _vvMap;
 
 	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
@@ -95,6 +97,8 @@ private:
 
 	playerState* _playerState;
 	playerState* _arrState[static_cast<const int>(STATE::MAX)];
+	skills*		 _arrSkills[5];
+	bool		 _isUsingSkill;
 
 	image*			_playerCircleImg;
 	image*			_playerCircleDirectionImg;
@@ -117,11 +121,12 @@ private:
 	int _curSkill[5];
 	int _count;
 
+	float _chainPos;
 public:
 	player();
 	~player();
 
-	HRESULT init();
+	HRESULT init(vvMap& vvMapLink);
 	void release();
 	void update();
 	void render(HDC hdc);
@@ -133,48 +138,67 @@ public:
 
 	void currentPlayerState();
 	void playerCirclePosition();
-	void isMoveOn();
 	void isMoveOff();
-	void vecZero(vvMap& vvMapLink);
+	void vecZero();
 
+	//타일 충돌 예외처리
+	void tileCheckFunc();
+
+	//애니메이션 콜백함수
+	static void playerIdle(void* obj);
+
+	//애니메이션 방향 getset
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
 	inline void			setAniDirection(ANIDIRECTION aniDirection) { _aniDirection = aniDirection; }
-
+	//상태 getset
 	inline STATE getState() { return _state; }
 	inline void  setState(STATE state) { _state = state; }
-
+	//이동 방향 getset
 	inline MOVEDIRECTION getMoveDirection() { return _moveDirection; }
 	inline void			 setMoveDirection(MOVEDIRECTION moveDirection) { _moveDirection = moveDirection; }
 
+	//벡터 getset
 	inline POINTFLOAT getVec() { return _vec; }
 	inline void setVec(POINTFLOAT vec) { _vec = vec; }
 	inline void setVecX(float vecX) { _vec.x = vecX; }
 	inline void setVecY(float vecY) { _vec.y = vecY; }
-
+	//pos getset
 	inline POINTFLOAT getPos() { return _pos; }
 	inline void setPosX(float posX) { _pos.x = posX; }
 	inline void setPosY(float posY) { _pos.y = posY; }
-
+	//image get
 	inline image* getImg() { return _img; }
 
+	//애니메이션 한번 실행 bool getset
 	inline void setIsPlayerAniOnce(bool isOnce) { _isPlayerAniOnce = isOnce; }
 	inline bool getIsPlayerAniOnce() { return _isPlayerAniOnce; }
-
+	//스피드 get
 	inline float getSpeed() { return _speed; }
-
+	//타일 충돌 렉트 get
 	inline RECT getPlayerTileCheckRc() { return _tileCheckRc; }
-	static void playerIdle(void* obj);
 
-	inline void setBoolMoveDirection(BOOLMOVEDIRECTION boolMoveDirection) {_boolMoveDirection = boolMoveDirection;}
-	inline BOOLMOVEDIRECTION getBoolMoveDirection() { return _boolMoveDirection; }
+	
+	//inline void setBoolMoveDirection(BOOLMOVEDIRECTION boolMoveDirection) {_boolMoveDirection = boolMoveDirection;}
+	//inline BOOLMOVEDIRECTION getBoolMoveDirection() { return _boolMoveDirection; }
 
+	//타일 충돌렉트 타일 인덱스
 	inline POINT getLeftTopIndex() { return _tileCheckIndex[0]; }
 	inline POINT getRightTopIndex() { return _tileCheckIndex[1]; }
 	inline POINT getLeftBottomIndex() { return _tileCheckIndex[2]; }
 	inline POINT getRightBottomIndex() { return _tileCheckIndex[3]; }
 
+	//타일 충돌렉트 pos
 	inline POINTFLOAT getTileCheckRcPos() { return _tileCheckRcPos; }
 
-	void tileCheckFunc(vvMap& vvMapLink);
+	inline float getPlayerAngle() { return _playerCircleDirectionAngle; }
+	inline POINTFLOAT getCircleDirectionPos() { return _playerCircleDirectionPos; }
+	inline HDC getPlayerMemDC() { return getMemDC(); }
+
+	//스킬 사용여부 getset
+	inline bool getIsUsingSkill() { return _isUsingSkill; }
+	inline void setIsUsingSkill(bool isUsingSkill) { _isUsingSkill = isUsingSkill; }
+
+	inline skills* getArrSkills() { return _arrSkills[2]; }
+	inline vvMap* getVVMapMemoryAddress() { return _vvMap; }
 };
 

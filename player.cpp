@@ -11,7 +11,7 @@
 #include "state_Hit.h"
 #include "state_Fall.h"
 #include "state_Dead.h"
-
+#include "chainLightning.h"
 player::player()
 {
 }
@@ -21,8 +21,9 @@ player::~player()
 {
 }
 
-HRESULT player::init()
+HRESULT player::init(vvMap& vvMapLink)
 {
+	_vvMap = &vvMapLink;
 	playerKeyAnimationInit();
 	arrStateInit();
 	_img = IMAGEMANAGER->findImage("player");
@@ -30,7 +31,7 @@ HRESULT player::init()
 	_playerCircleImg = IMAGEMANAGER->findImage("playerCircle");
 	_playerCircleDirectionImg = IMAGEMANAGER->findImage("playerCircleDirection");
 	//_collisionRc = RectMake(WINSIZEX/2,WINSIZEY/2,30,30);			
-	_playerCircleDirectionAngle = -90 * (PI / 180);
+	_playerCircleDirectionAngle = -90 * (180 / PI);
 	_playerCircleRadius = 50;
 	_maxHp = 500;					
 	_curHp = 500;					
@@ -62,7 +63,7 @@ HRESULT player::init()
 
 	_tileCheckRcPos.x = _playerCirclePos.x + (_playerCircleImg->GetWidth() / 2) - 15;
 	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
-	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 32, 32);
+	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 28, 28);
 	_tileCheckIndex[0].x = _tileCheckRc.left / 32 + _vec.x;
 	_tileCheckIndex[0].y = _tileCheckRc.top / 32 + _vec.y;
 
@@ -84,6 +85,7 @@ HRESULT player::init()
 
 	_skillUI = new skillCooldownUI;
 	_skillUI->init();
+	_isUsingSkill = false;
 	return S_OK;
 }
 
@@ -114,12 +116,19 @@ void player::update()
 	}
 	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
 	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
-	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x, _playerCirclePos.y, _ptMouse.x, _ptMouse.y);
+	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x + (_playerCircleImg->GetWidth() / 2),
+		_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2),
+		_ptMouse.x, 
+		_ptMouse.y);
 	playerCirclePosition();
 	_tileCheckRcPos.x = _playerCirclePos.x + (_playerCircleImg->GetWidth() / 2) - 15;
 	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
-	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 32, 32);
+	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 28, 28);
 
+	if (_isUsingSkill)
+	{
+		_arrSkills[2]->update(this);
+	}
 
 }
 
@@ -127,25 +136,30 @@ void player::render(HDC hdc)
 {
 	_playerStatusUI->render();
 	_skillUI->render();
-	IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
-		IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
-		, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
+	//IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
+	//	IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
+	//	, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
+	if (_isUsingSkill)
+	{
+		_arrSkills[2]->render(this);
+	}
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
 	Rectangle(getMemDC(), _tileCheckRc);
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
+
 	char str[128];
-	sprintf_s(str, "%d : º¤ÅÍ°è»êÀü , %d : º¤ÅÍ°è»êÈÄ ", _tileCheckRc.right / 32, _tileCheckIndex[1].x, strlen(str));
+	sprintf_s(str, "%lf : state", _playerCircleDirectionAngle * (180/PI), strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 1870, 10, 11, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 2550, 10, 15, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
-
+	IMAGEMANAGER->addFrameImage("lightningChain", "images/player/lightningChain.bmp", 540, 1800, 4, 2, true, RGB(255, 0, 255));
 
 	//idle
 	int frontIdle[] = { 0 };
@@ -208,6 +222,20 @@ void player::playerKeyAnimationInit()
 	int rightFall[] = { 7 };
 	KEYANIMANAGER->addArrayFrameAnimation("rightFall", "player", rightFall, 1, 20, false);
 
+	//LightningChain
+	int frontLightningChain[] = { 50,51,52,53,54,55 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontLightningChain", "player", frontLightningChain, 6, 20, false, playerIdle, this);
+
+	int backLightningChain[] = { 110,111,112,113,114,115,116,117,118,119 };
+	KEYANIMANAGER->addArrayFrameAnimation("backLightningChain", "player", backLightningChain, 10, 30, false, playerIdle, this);
+
+	int rightLightningChain[] = { 120,121,122,123,124,125 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightLightningChain", "player", rightLightningChain, 6, 20, false, playerIdle, this);
+
+	int leftLightningChain[] = { 135,134,133,132,131,130 };
+	KEYANIMANAGER->addArrayFrameAnimation("leftLightningChain", "player", leftLightningChain, 6, 20, false, playerIdle, this);
+
+
 }
 
 void player::inPutKey()
@@ -244,6 +272,11 @@ void player::inPutKey()
 	if (KEYMANAGER->isOnceKeyUp('A'))
 	{
 		_playerState->offButtonA(this);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		_playerState->onButtonRB(this);
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -369,8 +402,32 @@ void player::startAni()
 		_ani->start();
 	}
 
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::FALL)
+	{
+		_ani = KEYANIMANAGER->findAnimation("frontFall");
+		_ani->start();
+	}
 	
-
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_TWO)
+	{
+		_ani = KEYANIMANAGER->findAnimation("frontLightningChain");
+		_ani->start();
+	}
+	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_TWO)
+	{
+		_ani = KEYANIMANAGER->findAnimation("backLightningChain");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_TWO)
+	{
+		_ani = KEYANIMANAGER->findAnimation("rightLightningChain");
+		_ani->start();
+	}
+	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_TWO)
+	{
+		_ani = KEYANIMANAGER->findAnimation("leftLightningChain");
+		_ani->start();
+	}
 }
 
 void player::arrStateInit()
@@ -386,6 +443,9 @@ void player::arrStateInit()
 	_arrState[static_cast<const int>(STATE::HIT)] = new state_Hit();
 	_arrState[static_cast<const int>(STATE::FALL)] = new state_Fall();
 	_arrState[static_cast<const int>(STATE::DEAD)] = new state_Dead();
+
+	
+	_arrSkills[2] = new chainLightning;
 
 	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
 
@@ -435,36 +495,20 @@ void player::playerCirclePosition()
 	_playerCircleDirectionPos.x = cosf(_playerCircleDirectionAngle) * _playerCircleRadius + (_playerCirclePos.x + (_playerCircleImg->GetWidth()/2)-15);
 	_playerCircleDirectionPos.y = -sinf(_playerCircleDirectionAngle) * _playerCircleRadius +  (_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2)-15);
 }
-void player::isMoveOn()
-{
-	//if (_isLeftTopCheck && _boolMoveDirection != BOOLMOVEDIRECTION::LEFT_TOP && _boolMoveDirection == BOOLMOVEDIRECTION::NONE)
-	//{
-	//	_isLeftTopCheck = false;
-	//}
-	//if (_isRightTopCheck && _boolMoveDirection != BOOLMOVEDIRECTION::RIGHT_TOP && _boolMoveDirection == BOOLMOVEDIRECTION::NONE)
-	//{
-	//	_isRightTopCheck = false;
-	//}
-	//if (_boolMoveDirection == BOOLMOVEDIRECTION::NONE)
-	//{
-	//	_isLeftTopCheck = false;
-	//	_isRightTopCheck = false;
-	//}
-}
 void player::isMoveOff()
 {
 }
 
-void player::vecZero(vvMap& vvMapLink)
+void player::vecZero()
 {
 	if (_isLeftTopCheck)
 	{
 		if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
 		{
-			if (!vvMapLink[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
+			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
 				_vec.x = -_tileCollVec[0].x;
 
-			if (!vvMapLink[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
+			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
 				_vec.y = -_tileCollVec[0].y;
 		}
 		if (_moveDirection == MOVEDIRECTION::LEFT)
@@ -481,11 +525,11 @@ void player::vecZero(vvMap& vvMapLink)
 	{
 		if ( _moveDirection == MOVEDIRECTION::RIGHT_TOP)
 		{
-			if (!vvMapLink[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove())
+			if (!(*_vvMap)[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove())
 			{
 				_vec.x = -_tileCollVec[1].x;
 			}
-			if (!vvMapLink[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove())
+			if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove())
 			{
 				_vec.y = -_tileCollVec[1].y;
 			}
@@ -503,11 +547,11 @@ void player::vecZero(vvMap& vvMapLink)
 	{
 		if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
 		{
-			if (!vvMapLink[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove())
+			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove())
 			{
 				_vec.x = -_tileCollVec[2].x;
 			}
-			if (!vvMapLink[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
+			if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
 			{
 				_vec.y = -_tileCollVec[2].y;
 			}
@@ -525,11 +569,11 @@ void player::vecZero(vvMap& vvMapLink)
 	{
 		if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
 		{
-			if (!vvMapLink[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove())
+			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove())
 			{
 				_vec.x = -_tileCollVec[3].x;
 			}
-			if (!vvMapLink[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove())
+			if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove())
 			{
 				_vec.y = -_tileCollVec[3].y;
 			}
@@ -557,7 +601,7 @@ void player::playerIdle(void * obj)
 	Player->startAni();           
 }
 
-void player::tileCheckFunc(vvMap& vvMapLink)
+void player::tileCheckFunc()
 {
 
 	_tileCheckIndex[0].x = (_tileCheckRc.left + _vec.x) / 32;
@@ -572,51 +616,51 @@ void player::tileCheckFunc(vvMap& vvMapLink)
 	_tileCheckIndex[3].x = (_tileCheckRc.right + _vec.x) / 32;
 	_tileCheckIndex[3].y = (_tileCheckRc.bottom + _vec.y) / 32;
 
-	if (!vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
 	{
-		_tileCollVec[0].x = _tileCheckRc.left - vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().right;
-		_tileCollVec[0].y = _tileCheckRc.top - vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().bottom;
+		_tileCollVec[0].x = _tileCheckRc.left - (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().right;
+		_tileCollVec[0].y = _tileCheckRc.top - (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().bottom;
 		_isLeftTopCheck = true;
 	}
-	else if (vvMapLink[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
 	{
 		_isLeftTopCheck = false;
 	}
 
-	if (!vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
 	{
-		_tileCollVec[1].x = _tileCheckRc.right - vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().left+1;
-		_tileCollVec[1].y = _tileCheckRc.top - vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().bottom;
+		_tileCollVec[1].x = _tileCheckRc.right - (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().left+1;
+		_tileCollVec[1].y = _tileCheckRc.top - (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().bottom;
 		_isRightTopCheck = true;
 	}
-	else if (vvMapLink[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
 	{
 		_isRightTopCheck = false;
 	}
 
-	if (!vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
 	{
-		_tileCollVec[2].x =  _tileCheckRc.left - vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().right;
-		_tileCollVec[2].y =  _tileCheckRc.bottom - vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().top+1;
+		_tileCollVec[2].x =  _tileCheckRc.left - (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().right;
+		_tileCollVec[2].y =  _tileCheckRc.bottom - (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().top+1;
 		_isLeftBottomCheck = true;
 	}
-	else if (vvMapLink[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
 	{
 		_isLeftBottomCheck = false;
 	}
 
-	if (!vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
 	{
-		_tileCollVec[3].x = _tileCheckRc.right - vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().left+1;
-		_tileCollVec[3].y = _tileCheckRc.bottom - vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().top+1;
+		_tileCollVec[3].x = _tileCheckRc.right - (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().left+1;
+		_tileCollVec[3].y = _tileCheckRc.bottom - (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().top+1;
 		_isRightBottomCheck = true;
 	}
-	else if (vvMapLink[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
 	{
 		_isRightBottomCheck = false;
 	}
 
-	vecZero(vvMapLink);
+	vecZero();
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
 }

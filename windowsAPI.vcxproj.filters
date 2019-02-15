@@ -333,6 +333,9 @@
     <ClInclude Include="chainLightning.h">
       <Filter>PlayGround\skills</Filter>
     </ClInclude>
+    <ClInclude Include="skillManager.h">
+      <Filter>PlayGround\skills</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -576,6 +579,9 @@
       <Filter>PlayGround\skills</Filter>
     </ClCompile>
     <ClCompile Include="stoneShot.cpp">
+      <Filter>PlayGround\skills</Filter>
+    </ClCompile>
+    <ClCompile Include="skillManager.cpp">
       <Filter>PlayGround\skills</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,7 +16,7 @@ HRESULT testStage::init()
 	IMAGEMANAGER->addFrameImage("tileCastle", "images/map/CastleBaseTileSet.bmp", 704, 384, 22, 12, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
 	_player = new player;
-	_player->init();
+	_player->init(_vvMap);
 
 	_tileNumX = 0;
 	_tileNumY = 0;
@@ -48,7 +48,7 @@ void testStage::release()
 void testStage::update()
 {
 	_player->update();
-	_player->tileCheckFunc(_vvMap);
+	_player->tileCheckFunc();
 	_em->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{

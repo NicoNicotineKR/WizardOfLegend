@@ -1,12 +1,20 @@
 #include "stdafx.h"
 #include "skills.h"
 
+HRESULT skills::init(player * Player)
+{
 
-skills::skills()
+	return S_OK;
+}
+
+void skills::release(player * Player)
 {
 }
 
+void skills::update(player * Player)
+{
+}
 
-skills::~skills()
+void skills::render(player * Player)
 {
 }

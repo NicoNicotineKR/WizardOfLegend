@@ -213,6 +213,7 @@
     <ClInclude Include="skillbookUI.h" />
     <ClInclude Include="skillCooldownUI.h" />
     <ClInclude Include="skillIconList.h" />
+    <ClInclude Include="skillManager.h" />
     <ClInclude Include="skills.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1_1.h" />
@@ -298,6 +299,7 @@
     <ClCompile Include="skillbookUI.cpp" />
     <ClCompile Include="skillCooldownUI.cpp" />
     <ClCompile Include="skillIconList.cpp" />
+    <ClCompile Include="skillManager.cpp" />
     <ClCompile Include="skills.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1_1.cpp" />

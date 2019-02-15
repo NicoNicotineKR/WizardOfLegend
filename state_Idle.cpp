@@ -88,6 +88,38 @@ void state_Idle::onButtonLB(player* Player)
 
 void state_Idle::onButtonRB(player* Player)
 {
+	if (Player->getPlayerAngle()* (180 / PI) <= 45 && Player->getPlayerAngle() * (180 / PI) >= 0 &&
+		Player->getPlayerAngle()*(180 / PI) <= 360 && Player->getPlayerAngle() * (180 / PI) >= 315)
+	{
+		Player->setState(STATE::SKILL_TWO);
+		Player->currentPlayerState();
+		Player->setAniDirection(ANIDIRECTION::RIGHT);
+		Player->startAni();
+	}
+	if ((Player->getPlayerAngle()* (180 / PI) > 135 &&
+		Player->getPlayerAngle() * (180 / PI) < 225))
+	{
+		Player->setState(STATE::SKILL_TWO);
+		Player->currentPlayerState();
+		Player->setAniDirection(ANIDIRECTION::LEFT);
+		Player->startAni();
+	}
+	if (Player->getPlayerAngle()* (180 / PI) > 45 &&
+		Player->getPlayerAngle() * (180 / PI) <= 135)
+	{
+		Player->setState(STATE::SKILL_TWO);
+		Player->currentPlayerState();
+		Player->setAniDirection(ANIDIRECTION::BACK);
+		Player->startAni();
+	}
+	if (Player->getPlayerAngle()* (180 / PI) >= 225 &&
+		Player->getPlayerAngle() * (180 / PI) < 315)
+	{
+		Player->setState(STATE::SKILL_TWO);
+		Player->currentPlayerState();
+		Player->setAniDirection(ANIDIRECTION::FRONT);
+		Player->startAni();
+	}
 }
 
 void state_Idle::update(player* Player)
