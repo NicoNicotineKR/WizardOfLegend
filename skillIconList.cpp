@@ -52,11 +52,11 @@ void skillIconList::InitSkillList()
 	AddSkillList("FlameStrike", 0, 0);
 	AddSkillList("stoneShot", 0, 2);
 	AddSkillList("searingRush", 0, 6);
-	AddSkillList("shatteringStrike", 0, 20);
+	AddSkillList("shatteringStrike", 0, 20);	
 	AddSkillList("shockNova", 0, 21);
 	AddSkillList("frostFan", 0, 22);
 	AddSkillList("reboundingIcicles", 1, 22);
-	AddSkillList("thunderingChain", 5, 6);
+	AddSkillList("thunderingChain", 0, 15);
 
 
 }
