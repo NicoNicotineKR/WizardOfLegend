@@ -19,14 +19,14 @@ void
 fire
 wind
 earth
-electro
+electro = thunderingChain
 ice
 void
 
 [시그니처가능스킬]
 fire
 wind
-earth = shatteringStrike
+earth = 	
 electro = shockNova
 ice = frostFan, reboundingIcicles
 void
