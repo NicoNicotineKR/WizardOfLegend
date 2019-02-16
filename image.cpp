@@ -85,8 +85,8 @@ HRESULT image::init(const DWORD resID, int width, int height, BOOL trans, COLORR
 
 	_fileName = NULL;
 
-	_trans = FALSE;
-	_transColor = RGB(0, 0, 0);
+	_trans = trans;
+	_transColor = transColor;
 
 	//알파블렌드 설정함.
 	//진형 + 치영이는 집중해서 봐라

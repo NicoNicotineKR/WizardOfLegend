@@ -339,6 +339,9 @@
     <ClInclude Include="dialogueMaker.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="rotateImgMaker.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="dialogueMaker.cpp">
       <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="rotateImgMaker.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
