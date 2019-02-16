@@ -28,6 +28,7 @@ HRESULT gameNode::init(bool managerInit)
 	{
 		SetTimer(_hWnd, 1, 10, NULL);
 		OPTIONMANAGER->LinkDC(_backBuffer);
+		//SKILLDATABASE->linkDC(_backBuffer);
 		KEYMANAGER->init();
 		IMAGEMANAGER->init();
 		TXTDATA->init();
@@ -38,6 +39,7 @@ HRESULT gameNode::init(bool managerInit)
 		KEYANIMANAGER->init();
 		INIDATA->init();
 		OPTIONMANAGER->init();
+		SKILLDATABASE->init();
 		
 	}
 
@@ -77,7 +79,12 @@ void gameNode::release()
 
 		OPTIONMANAGER->release();
 		OPTIONMANAGER->releaseSingleton();
+
+		SKILLDATABASE->release();
+		SKILLDATABASE->releaseSingleton();
+
 	}
+
 
 	ReleaseDC(_hWnd, _hdc);
 }
