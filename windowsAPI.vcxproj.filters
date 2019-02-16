@@ -67,6 +67,9 @@
     <Filter Include="PlayGround\UIs">
       <UniqueIdentifier>{095866d4-7631-4732-a75e-8495ad8a3d17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\data">
+      <UniqueIdentifier>{c7c7046c-270d-4c81-b81e-91970779c7ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -264,9 +267,6 @@
     <ClInclude Include="enemy_State_Hit.h">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClInclude>
-    <ClInclude Include="skillIconList.h">
-      <Filter>PlayGround\skills</Filter>
-    </ClInclude>
     <ClInclude Include="dmgNumUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
@@ -341,6 +341,15 @@
     </ClInclude>
     <ClInclude Include="rotateImgMaker.h">
       <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="skillDatabase.h">
+      <Filter>PlayGround\data</Filter>
+    </ClInclude>
+    <ClInclude Include="skillNode.h">
+      <Filter>PlayGround\data</Filter>
+    </ClInclude>
+    <ClInclude Include="skillIconList.h">
+      <Filter>PlayGround\data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -518,9 +527,6 @@
     <ClCompile Include="enemy_State_Hit.cpp">
       <Filter>PlayGround\units\enemyState</Filter>
     </ClCompile>
-    <ClCompile Include="skillIconList.cpp">
-      <Filter>PlayGround\skills</Filter>
-    </ClCompile>
     <ClCompile Include="dmgNumUI.cpp">
       <Filter>PlayGround\UIs</Filter>
     </ClCompile>
@@ -595,6 +601,12 @@
     </ClCompile>
     <ClCompile Include="rotateImgMaker.cpp">
       <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="skillDatabase.cpp">
+      <Filter>PlayGround\data</Filter>
+    </ClCompile>
+    <ClCompile Include="skillIconList.cpp">
+      <Filter>PlayGround\data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
