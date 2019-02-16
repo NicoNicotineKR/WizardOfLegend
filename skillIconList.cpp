@@ -54,8 +54,9 @@ void skillIconList::InitSkillList()
 	AddSkillList("searingRush", 0, 6);
 	AddSkillList("shatteringStrike", 0, 20);
 	AddSkillList("shockNova", 0, 21);
-	AddSkillList("frostFan, ", 0, 22);
-	AddSkillList("reboundingIcicles, ", 1, 22);
+	AddSkillList("frostFan", 0, 22);
+	AddSkillList("reboundingIcicles", 1, 22);
+	AddSkillList("thunderingChain", 5, 6);
 
 
 }
