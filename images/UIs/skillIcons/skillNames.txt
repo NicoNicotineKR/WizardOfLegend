@@ -19,7 +19,7 @@ void
 fire
 wind
 earth
-electro = thunderingChain
+electro = thunderingChain,[lightningAspect],[arcSphere],[magSphere],[thunderDrop], [shockAssault]
 ice
 void
 

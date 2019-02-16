@@ -19,6 +19,7 @@ public:
 	void update();
 	
 	void frameRender(int centerX, int centerY, int idxX, int idxY);
+	void frameRender(int centerX, int centerY, string skillName);
 	void alphaFrameRender(int centerX, int centerY, int idxX, int idxY, int alpha);
 
 	void	InitSkillList();

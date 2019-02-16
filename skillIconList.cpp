@@ -38,6 +38,12 @@ void skillIconList::frameRender(int centerX, int centerY, int idxX, int idxY)
 	_skillsImg->frameRender(getMemDC(), centerX - _frameWid / 2, centerY - _frameHei / 2, idxX, idxY);
 }
 
+void skillIconList::frameRender(int centerX, int centerY, string skillName)
+{
+	POINT framePt = this->FindSkillIdx(skillName);
+	_skillsImg->frameRender(getMemDC(), centerX - _frameWid / 2, centerY - _frameHei / 2, framePt.x, framePt.y);
+}
+
 void skillIconList::alphaFrameRender(int centerX, int centerY, int idxX, int idxY, int alpha)
 {
 	_skillsImg->alphaFrameRenderFixed(getMemDC(), 
@@ -57,6 +63,12 @@ void skillIconList::InitSkillList()
 	AddSkillList("frostFan", 0, 22);
 	AddSkillList("reboundingIcicles", 1, 22);
 	AddSkillList("thunderingChain", 0, 15);
+
+	AddSkillList("lightningAspect", 1, 15);
+	AddSkillList("arcSphere", 2, 15);
+	AddSkillList("magSphere", 3, 15);
+	AddSkillList("thunderDrop", 4, 15);
+	AddSkillList("shockAssault", 5, 15);
 
 
 }
