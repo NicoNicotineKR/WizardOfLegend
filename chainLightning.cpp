@@ -12,16 +12,16 @@ chainLightning::~chainLightning()
 
 HRESULT chainLightning::init(player* Player)
 {
-	_name = "chainLightgning";
+	_name = "thunderingChain";
 	_vvMap = Player->getVVMapMemoryAddress();
 	_img = IMAGEMANAGER->findImage("lightningChain");
-	_angle = Player->getPlayerAngle();
-	_pos.x = cosf(_angle) *  100 + (Player->getTileCheckRcPos().x+14);
-	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y+14);
+	_totalCoolTime = 5.0f;
+	_maxReLoad = 1;
 	_imgCount = 0;
 	_attackCount = 0;
 	_img->SetFrameX(0);
 	_img->SetFrameY(0);
+	_isSkill = false;
 	return S_OK;
 }
 
@@ -31,49 +31,69 @@ void chainLightning::release(player* Player)
 
 void chainLightning::update(player* Player)
 {
-	if ((*_vvMap)[_pos.y / 32][_pos.x / 32]->getIsAvailMove())
+	_curCoolTime += TIMEMANAGER->getElapsedTime();
+	_imgCount += TIMEMANAGER->getElapsedTime();
+	if (_curCoolTime < _totalCoolTime)
 	{
-		_imgCount += TIMEMANAGER->getElapsedTime();
-		if (_imgCount > 0.05f)
-		{
-			_imgCount = 0;
-			if (_img->getMaxFrameX() == _img->getFrameX())
-			{
-				if (_attackCount > 4)
-				{
-					Player->setIsUsingSkill(false);
-				}
-				_img->SetFrameX(0);
-				if (_img->getFrameY() == 0)
-				{
-					_img->SetFrameY(1);
-				}
-				else
-				{
-					_img->SetFrameY(0);
-				}
-				_pos.x = cosf(_angle) * 30 + _pos.x;
-				_pos.y = -sinf(_angle) * 30 + _pos.y;
-				_attackCount++;
 
+		if (10 > _attackCount)
+		{
+			if ((*_vvMap)[_pos.y / 32][_pos.x / 32]->getIsAvailMove())
+			{
+			
+				if (_imgCount > 0.05f)
+				{
+					_imgCount = 0;
+					if (_img->getMaxFrameX() == _img->getFrameX())
+					{
+						_img->SetFrameX(0);
+						if (_img->getFrameY() == 0)
+						{
+							_img->SetFrameY(1);
+						}
+						else
+						{
+							_img->SetFrameY(0);
+						}
+						_pos.x = cosf(_angle) * 30 + _pos.x;
+						_pos.y = -sinf(_angle) * 30 + _pos.y;
+						_attackCount++;
+
+					}
+					_img->SetFrameX(_img->getFrameX() + 1);
+				}
 			}
-			_img->SetFrameX(_img->getFrameX() + 1);
+			else
+			{
+				_attackCount = 10;
+			}
 		}
 	}
-	else
+	else if (_isSkill)
 	{
-		Player->setIsUsingSkill(false);
+		_isSkill = false;
 	}
+	
+
 }
 
 void chainLightning::render(player* Player)
 {
-	if ((*_vvMap)[_pos.y / 32][_pos.x / 32]->getIsAvailMove())
+	if (10 > _attackCount)
 	{
-		_img->frameRender(Player->getPlayerMemDC(), _pos.x - 135 / 2, _pos.y - 900);
-
+		if ((*_vvMap)[_pos.y / 32][_pos.x / 32]->getIsAvailMove())
+		{
+			_img->frameRender(Player->getPlayerMemDC(), _pos.x - 135 / 2, _pos.y - 900);
+		}
 	}
-	char str[128];
-	sprintf_s(str, "%lf , _angle", _angle * (180 / PI), strlen(str));
-	TextOut(Player->getPlayerMemDC(), 100, 100, str, strlen(str));
+}
+
+void chainLightning::skillPosSet(player* Player)
+{
+	_angle = Player->getPlayerAngle();
+	_pos.x = cosf(_angle) * 100 + (Player->getTileCheckRcPos().x + 14);
+	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y + 14);
+	_reLoadCount = 0;
+	_curCoolTime = 0;
+	_attackCount = 0;
 }

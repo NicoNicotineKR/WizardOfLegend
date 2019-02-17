@@ -61,6 +61,33 @@ void state_Skill_One::onButtonSpace(player* Player)
 
 void state_Skill_One::onButtonLB(player* Player)
 {
+
+
+	if ((Player->getPlayerAngle()* (180 / PI) <= 45 && Player->getPlayerAngle() * (180 / PI) >= 0) ||
+		(Player->getPlayerAngle()*(180 / PI) <= 360 && Player->getPlayerAngle() * (180 / PI) >= 315))
+	{
+		Player->setAniDirection(ANIDIRECTION::RIGHT);
+		Player->startAni();
+	}
+	if ((Player->getPlayerAngle()* (180 / PI) > 135 &&
+		Player->getPlayerAngle() * (180 / PI) < 225))
+	{
+		Player->setAniDirection(ANIDIRECTION::LEFT);
+		Player->startAni();
+	}
+	if (Player->getPlayerAngle()* (180 / PI) > 45 &&
+		Player->getPlayerAngle() * (180 / PI) <= 135)
+	{
+		Player->setAniDirection(ANIDIRECTION::BACK);
+		Player->startAni();
+	}
+	if (Player->getPlayerAngle()* (180 / PI) >= 225 &&
+		Player->getPlayerAngle() * (180 / PI) < 315)
+	{
+		Player->setAniDirection(ANIDIRECTION::FRONT);
+		Player->startAni();
+	}
+	Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
 }
 
 void state_Skill_One::onButtonRB(player* Player)

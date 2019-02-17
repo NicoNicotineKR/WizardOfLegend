@@ -54,9 +54,16 @@ enum class BOOLMOVEDIRECTION
 	LEFT_BOTTOM,
 	RIGHT_BOTTOM
 };
-enum class SKILL
+enum class CURRENTSKILL
 {
-	CHAiNLIGHTNING,
+	FLAMESTRIKE,
+	CHAINLIGHTNING,
+	FROSTFAN,
+	REBOUNDINGCICLES,
+	SEARINGRUSH,
+	SHATTERINGSTRIKE,
+	SHOCKNOVA,
+	STONESHOT,
 	MAX
 };
 /*
@@ -97,8 +104,9 @@ private:
 
 	playerState* _playerState;
 	playerState* _arrState[static_cast<const int>(STATE::MAX)];
-	skills*		 _arrSkills[5];
-	bool		 _isUsingSkill;
+
+	skills*		_curSkills[5];
+	skills*		_arrSkills[static_cast<const int>(CURRENTSKILL::MAX)];
 
 	image*			_playerCircleImg;
 	image*			_playerCircleDirectionImg;
@@ -117,11 +125,8 @@ private:
 	playerStatusUI* _playerStatusUI;
 
 	skillCooldownUI* _skillUI;
-
-	int _curSkill[5];
+	string			 _usingSkillName;
 	int _count;
-
-	float _chainPos;
 public:
 	player();
 	~player();
@@ -195,10 +200,13 @@ public:
 	inline HDC getPlayerMemDC() { return getMemDC(); }
 
 	//스킬 사용여부 getset
-	inline bool getIsUsingSkill() { return _isUsingSkill; }
-	inline void setIsUsingSkill(bool isUsingSkill) { _isUsingSkill = isUsingSkill; }
-
-	inline skills* getArrSkills() { return _arrSkills[2]; }
+	//inline bool getIsUsingSkill() { return _isUsingSkill; }
+	//inline void setIsUsingSkill(bool isUsingSkill) { _isUsingSkill = isUsingSkill; }
+	inline skills* getCurSkills1() { return _curSkills[0]; }
+	inline skills* getCurSkills2() { return _curSkills[1]; }
 	inline vvMap* getVVMapMemoryAddress() { return _vvMap; }
+	inline skillCooldownUI* getSkillUI() {return _skillUI;}
+
+	inline void setUsingSkillName(string name) { _usingSkillName = name; }
 };
 

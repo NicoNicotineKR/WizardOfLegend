@@ -120,13 +120,11 @@ public:
 	void setCurTime(int idx, float curTime)				{ *(_skills[idx].curTime) = curTime; }
 	void setIsStart(int idx, bool value)				{ _skills[idx].isStart = value; }
 
+	bool getIsStart(int idx) { return _skills[idx].isStart; }
+
 	void setAddressTotalReload(int idx, int* totalReloadAddr) { _skills[idx].totalReloadNum = totalReloadAddr; }
 	void setAddressCurReload(int idx, int* curReloadAddr) { _skills[idx].curReloadNum = curReloadAddr; }
 	void setAddressCoolDownTime(int idx, float* cooldownTimeAddr) { _skills[idx].coolDownTime = cooldownTimeAddr; }
 	void setAddressCurtime(int idx, float* curTimeAddr) { _skills[idx].curTime = curTimeAddr; }
-
-	
-	
-
 };
 

@@ -69,9 +69,5 @@ void state_Skill_Two::onButtonRB(player* Player)
 
 void state_Skill_Two::update(player* Player)
 {
-	if (!Player->getIsUsingSkill())
-	{
-		Player->setIsUsingSkill(true);
-		Player->getArrSkills()->init(Player);
-	}
+
 }

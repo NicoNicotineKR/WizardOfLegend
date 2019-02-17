@@ -12,6 +12,8 @@
 #include "state_Fall.h"
 #include "state_Dead.h"
 #include "chainLightning.h"
+#include "flameStrike.h"
+
 player::player()
 {
 }
@@ -23,6 +25,9 @@ player::~player()
 
 HRESULT player::init(vvMap& vvMapLink)
 {
+	_skillUI = new skillCooldownUI;
+	_skillUI->init();
+
 	_vvMap = &vvMapLink;
 	playerKeyAnimationInit();
 	arrStateInit();
@@ -83,9 +88,8 @@ HRESULT player::init(vvMap& vvMapLink)
 
 	IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
 
-	_skillUI = new skillCooldownUI;
-	_skillUI->init();
-	_isUsingSkill = false;
+	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 100, 150);
+
 	return S_OK;
 }
 
@@ -95,6 +99,7 @@ void player::release()
 
 void player::update()
 {
+	_skillUI->update();
 	_vec.x = 0;
 	_vec.y = 0;
 
@@ -102,7 +107,7 @@ void player::update()
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
-	_skillUI->update();
+
 
 	_count++;
 	if (_count > 3)
@@ -125,41 +130,42 @@ void player::update()
 	_tileCheckRcPos.y = _playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - 15;
 	_tileCheckRc = RectMake(_tileCheckRcPos.x, _tileCheckRcPos.y, 28, 28);
 
-	if (_isUsingSkill)
-	{
-		_arrSkills[2]->update(this);
-	}
+	_curSkills[0]->update(this);
+	_curSkills[1]->update(this);
 
+	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
 }
 
 void player::render(HDC hdc)
 {
+
 	_playerStatusUI->render();
 	_skillUI->render();
 	//IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
 	//	IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
 	//	, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
-	if (_isUsingSkill)
-	{
-		_arrSkills[2]->render(this);
-	}
+
+	_curSkills[0]->render(this);
+	_curSkills[1]->render(this);
+	Rectangle(getMemDC(), _collisionRc);
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
 	Rectangle(getMemDC(), _tileCheckRc);
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 
 	char str[128];
-	sprintf_s(str, "%lf : state", _playerCircleDirectionAngle * (180/PI), strlen(str));
+	sprintf_s(str, "%d : state", _skillUI->getIsStart(1), strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 2550, 10, 15, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 3060, 10, 18, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("lightningChain", "images/player/lightningChain.bmp", 540, 1800, 4, 2, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("flameStrike", "images/player/flameStrike.bmp", 2560, 256, 10, 1, true, RGB(255, 0, 255));
 
 	//idle
 	int frontIdle[] = { 0 };
@@ -229,13 +235,45 @@ void player::playerKeyAnimationInit()
 	int backLightningChain[] = { 110,111,112,113,114,115,116,117,118,119 };
 	KEYANIMANAGER->addArrayFrameAnimation("backLightningChain", "player", backLightningChain, 10, 30, false, playerIdle, this);
 
-	int rightLightningChain[] = { 120,121,122,123,124,125 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightLightningChain", "player", rightLightningChain, 6, 20, false, playerIdle, this);
+	int rightLightningChain[] = { 120,121,122,123,124,125,126,127 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightLightningChain", "player", rightLightningChain, 8, 20, false, playerIdle, this);
 
-	int leftLightningChain[] = { 135,134,133,132,131,130 };
-	KEYANIMANAGER->addArrayFrameAnimation("leftLightningChain", "player", leftLightningChain, 6, 20, false, playerIdle, this);
+	int leftLightningChain[] = { 137,136,135,134,133,132,131,130 };
+	KEYANIMANAGER->addArrayFrameAnimation("leftLightningChain", "player", leftLightningChain, 8, 20, false, playerIdle, this);
+
+	//flameStrike
+	int frontFlameStrikeStart[] = { 50,51,52,53,54,55,56,57 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontFlameStrikeStart", "player", frontFlameStrikeStart, 8, 20, false);
+
+	int frontFlameStrikeSecond[] = { 60,61,62,63,64,65,66,67 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontFlameStrikeSecond", "player", frontFlameStrikeSecond, 8, 20, false);
+
+	int frontFlameStrikeEnd[] = { 50,51,52,53,54,55,56,57 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontFlameStrikeEnd", "player", frontFlameStrikeEnd, 8, 20, false,playerIdle,this);
+
+	int backFlameStrikeStartEnd[] = { 110,111,112,113,114,115,116,117,118,119 };
+	KEYANIMANAGER->addArrayFrameAnimation("backFlameStrikeStart", "player", backFlameStrikeStartEnd, 10, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("backFlameStrikeEnd", "player", backFlameStrikeStartEnd, 10, 20, false,playerIdle,this);
+
+	int backFlameStrikeSecond[] = { 140,141,142,143,144,145,146,147,148,149 };
+	KEYANIMANAGER->addArrayFrameAnimation("backFlameStrikeSecond", "player", backFlameStrikeSecond, 10, 20, false);
+
+	int rightFlameStrikeStartEnd[] = { 120,121,122,123,124,125,126,127 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightFlameStrikeStart", "player", rightFlameStrikeStartEnd, 8, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("rightFlameStrikeEnd", "player", rightFlameStrikeStartEnd, 8, 20, false,playerIdle,this);
+
+	int rightFlameStrikeSecond[] = { 150,151,152,153,154,155,156,157,158,159 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightFlameStrikeSecond", "player", rightFlameStrikeSecond, 10, 20, false);
+
+	int leftFlameStrikeStartEnd[] = { 137,136,135,134,133,132,131,130 };
+	KEYANIMANAGER->addArrayFrameAnimation("leftFlameStrikeStart", "player", leftFlameStrikeStartEnd, 8, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("leftFlameStrikeEnd", "player", leftFlameStrikeStartEnd, 8, 20, false,playerIdle,this);
+
+	int leftFlameStrikeSecond[] = { 169,168,167,166,165,164,163,162,161,160 };
+	KEYANIMANAGER->addArrayFrameAnimation("leftFlameStrikeSecond", "player", leftFlameStrikeSecond, 10, 20, false);
 
 
+	
 }
 
 void player::inPutKey()
@@ -273,7 +311,10 @@ void player::inPutKey()
 	{
 		_playerState->offButtonA(this);
 	}
-
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		_playerState->onButtonLB(this);
+	}
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
 		_playerState->onButtonRB(this);
@@ -408,25 +449,124 @@ void player::startAni()
 		_ani->start();
 	}
 	
+	//번개 선더
 	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_TWO)
 	{
-		_ani = KEYANIMANAGER->findAnimation("frontLightningChain");
-		_ani->start();
+		if (_usingSkillName == "thunderingChain")
+		{
+			_ani = KEYANIMANAGER->findAnimation("frontLightningChain");
+			_ani->start();
+		}
 	}
 	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_TWO)
 	{
-		_ani = KEYANIMANAGER->findAnimation("backLightningChain");
-		_ani->start();
+		if (_usingSkillName == "thunderingChain")
+		{
+			_ani = KEYANIMANAGER->findAnimation("backLightningChain");
+			_ani->start();
+		}
 	}
 	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_TWO)
 	{
-		_ani = KEYANIMANAGER->findAnimation("rightLightningChain");
-		_ani->start();
+		if (_usingSkillName == "thunderingChain")
+		{
+			_ani = KEYANIMANAGER->findAnimation("rightLightningChain");
+			_ani->start();
+		}
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_TWO)
 	{
-		_ani = KEYANIMANAGER->findAnimation("leftLightningChain");
-		_ani->start();
+		if (_usingSkillName == "thunderingChain")
+		{
+			_ani = KEYANIMANAGER->findAnimation("leftLightningChain");
+			_ani->start();
+		}
+	}
+
+	//플레임 화염
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_ONE)
+	{
+		if (_usingSkillName == "FlameStrike")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeStart");
+				_ani->start();
+			}
+			else if(_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeEnd");
+				_ani->start();
+			}
+		}
+	}
+	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_ONE)
+	{
+		if (_usingSkillName == "FlameStrike")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeEnd");
+				_ani->start();
+			}
+		}
+	}
+	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_ONE)
+	{
+		if (_usingSkillName == "FlameStrike")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeEnd");
+				_ani->start();
+			}
+		}
+	}
+	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_ONE)
+	{
+		if (_usingSkillName == "FlameStrike")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeEnd");
+				_ani->start();
+			}
+		}
 	}
 }
 
@@ -443,9 +583,36 @@ void player::arrStateInit()
 	_arrState[static_cast<const int>(STATE::HIT)] = new state_Hit();
 	_arrState[static_cast<const int>(STATE::FALL)] = new state_Fall();
 	_arrState[static_cast<const int>(STATE::DEAD)] = new state_Dead();
+	
+	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)] = new chainLightning;
+	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)] = new flameStrike;
+	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->init(this);
 
 	
-	_arrSkills[2] = new chainLightning;
+	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)];
+	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
+	
+	string tmpName = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName();
+	int* tmpMaxReload = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress();
+	int* tmpReloadCount = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress();
+	float* tmpTotalCoolTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress();
+	float* tmpCurTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress();
+	
+	_skillUI->ChangeSkill(0, tmpName, tmpMaxReload, tmpReloadCount, tmpTotalCoolTime, tmpCurTime);
+
+	//_skillUI->ChangeSkill(3, _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName(),
+	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress(),
+	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress(),
+	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress(),
+	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress());
+	
+	
+	_skillUI->ChangeSkill(1, _curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getName(),
+		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getMaxReLoadAddress(),
+		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getReLoadCountAddress(),
+		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getTotalCoolTimeAddress(),
+		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getCurCoolTimeAddress());
 
 	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
 

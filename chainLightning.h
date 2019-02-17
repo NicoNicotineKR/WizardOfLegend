@@ -14,6 +14,7 @@ public:
 	void update(player* Player)  override;
 	void render(player* Player)  override;
 
+	void skillPosSet(player* Player) override;
 
 };
 

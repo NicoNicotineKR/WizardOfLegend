@@ -180,14 +180,17 @@ void skillCooldownUI::render()
 
 		//	스킬 이미지가 있다면(스킬이 탑재됐으면)
 		if (_skills[i].iconImg != nullptr) {
-			_skills[i].iconImg->frameRender(getMemDC(), _skills[i].iconRc.left, _skills[i].iconRc.top,
-				_skills[i].iconImg->getFrameX(), _skills[i].iconImg->getFrameY());
+			_iconList->frameRender(_skills[i].pos.x, _skills[i].pos.y, _skills[i].name);
+			//_skills[i].iconImg->frameRender(getMemDC(), _skills[i].iconRc.left, _skills[i].iconRc.top,
+			//	_skills[i].iconImg->getFrameX(), _skills[i].iconImg->getFrameY());
 
 			//	마스크
-			_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.left, _skills[i].borderRc.top,
-				0, 0, _skills[i].borderImg->getFrameWidth(), _skills[i].borderImg->getFrameHeight(),
-				_skills[i].maskAlpha);
-
+			if (_skills[i].curReloadNum != _skills[i].totalReloadNum)
+			{
+				_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.left, _skills[i].borderRc.top,
+					0, 0, _skills[i].borderImg->getFrameWidth(), _skills[i].borderImg->getFrameHeight(),
+					_skills[i].maskAlpha);
+			}
 
 			//	마스크 출력 & 쿨다운 남은시간 숫자 출력
 			if (*(_skills[i].curReloadNum) <= 0) {
@@ -249,6 +252,7 @@ void skillCooldownUI::render()
 
 void skillCooldownUI::ChangeSkill(int idx, string name, int* totalReloadedNum, int* curReloadNum, float* coolDownTime, float* curTimer)
 {
+	//string tmpName = name;
 	_skills[idx].name = name;
 	_skills[idx].iconImg = _iconList->getIconsImg();
 
@@ -279,7 +283,6 @@ void skillCooldownUI::DropSkill(int idx)
 
 float skillCooldownUI::CalLastingTime(int idx)
 {
-	
 	return *(_skills[idx].coolDownTime) - *(_skills[idx].curTime);
 }
 
