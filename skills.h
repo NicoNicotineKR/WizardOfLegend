@@ -57,6 +57,6 @@ public:
 	inline int		  getMaxReLoad() { return _maxReLoad; }
 
 	inline void		  setReLoadCount(int reLoadCount) { _reLoadCount = reLoadCount; }
-
+	inline RECT		  getCollisionRc() { return _collisionRc; }
 };
 

@@ -208,5 +208,7 @@ public:
 	inline skillCooldownUI* getSkillUI() {return _skillUI;}
 
 	inline void setUsingSkillName(string name) { _usingSkillName = name; }
+
+	inline RECT getCollisionRc() { return _collisionRc; }
 };
 
