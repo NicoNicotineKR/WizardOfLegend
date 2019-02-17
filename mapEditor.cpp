@@ -3910,7 +3910,7 @@ void mapEditor::LoadView()
 		}
 	}
 
-	_roadViewRc = RectMakeCenter(WINSIZEX / 2 + 288, WINSIZEY / 2 + 100, 120, 60);
+	_roadViewRc = RectMakeCenter(WINSIZEX / 2 + 288, WINSIZEY - 65, 120, 60);
 	_roadViewImg->frameRender(getMemDC(), _roadViewRc.left, _roadViewRc.top, 0, _roadViewFrameY);
 }
 
