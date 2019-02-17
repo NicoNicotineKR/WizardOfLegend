@@ -115,6 +115,31 @@ private:
 		FIREOBJ_KINDS_END,
 	};
 
+	//추가 - 유형우
+	enum E_COMMONEILE_KINDS {	//	_curTileSampleIdx
+		COMMONTILE1 = 0,
+		COMMONTILE2,
+		COMMONTILE3,
+		COMMONTILE4,
+		COMMONTILE5,
+		COMMONTILE6,
+		COMMONTILE7,
+		COMMONTILE8,
+		COMMONTILE_KINDS_END,
+	};
+
+	enum E_COMMONOBJ_KINDS {	//	_curTileSampleIdx
+		COMMONOBJ1 = 0,
+		COMMONOBJ2,
+		COMMONOBJ3,
+		COMMONOBJ4,
+		COMMONOBJ5,
+		COMMONOBJ6,
+		COMMONOBJ7,
+		COMMONOBJ8,
+		COMMONOBJ_KINDS_END,
+	};
+
 	enum E_TILE_KINDS	//_curTileKind
 	{
 		CASTLE_TILE = 0,
@@ -177,9 +202,9 @@ private:
 
 	//	======= 샘플들 시작~! ==========
 
-	tile* _totalSamples[3][5][14][56];	//[타일/오브젝트/유닛] [castle/earth...] [y][x];
+	tile* _totalSamples[3][5][14][112];	//[타일/오브젝트/유닛] [castle/earth...] [y][x];
 	//		[_curSampleKind][_curTileKind/_curObjKind/_curUnitKind][][]
-	POINT _totalFrameIdx[3][5][2][5];
+	POINT _totalFrameIdx[3][5][2][8];
 	//[타일/오브젝트/유닛] [castle/earth...] [시작/끝][프레임 수];
 	//		[_curSampleKind][_curTileKind/_curObjKind/_curUnitKind][0/1][_curTileSampleIdx]
 
@@ -287,9 +312,12 @@ public:
 	//추가 - 유형우
 	void InitSampleIceTile();
 	void InitSampleIceObj();
-
 	void InitSampleFireTile();
 	void InitSampleFireObj();
+
+	//추가 - 유형우
+	void InitSampleCommonTile();
+	void InitSampleCommonObj();
 
 
 	void OverlayClickFunc();
