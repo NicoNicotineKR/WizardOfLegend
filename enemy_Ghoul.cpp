@@ -65,13 +65,20 @@ HRESULT enemy_Ghoul::init()
 
 	_rotateMaker = new rotateImgMaker;
 
-	IMAGEMANAGER->addImage("atk", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xfff00ff);
+	IMAGEMANAGER->addImage("atk1", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xff00ff);
+	IMAGEMANAGER->addImage("atk2", "images/enemy/effect/smallSlash2.bmp", 82, 82, true, 0xff00ff);
+	IMAGEMANAGER->addImage("atk3", "images/enemy/effect/smallSlash3.bmp", 82, 82, true, 0xff00ff);
 
-	_rotateImg[0] = IMAGEMANAGER->findImage("atk");
+	_effectImg[0][0] = IMAGEMANAGER->findImage("atk1");
+	_effectImg[1][0] = IMAGEMANAGER->findImage("atk2");
+	_effectImg[2][0] = IMAGEMANAGER->findImage("atk3");
 
-	for (int i = 1; i < 36; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		_rotateImg[i] = _rotateMaker->MakeRotateImg(_rotateImg[0], 0, 0, 82, 82, (PI2 / 36) * i, true, 0xff00ff);
+		for (int j = 1; j < 36; j++)
+		{
+			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 82, 82, (PI2 / 36) * j, true, 0xff00ff);
+		}
 	}
 
 	SAFE_DELETE(_rotateMaker);
@@ -120,15 +127,20 @@ void enemy_Ghoul::render()
 
 	//에너미 이미지 출력
 	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2), _imgPos.y - (_img->getFrameHeight() / 2), _ani);
-
+	Rectangle(getMemDC(), _atkRc);
 	//공격상태일때만 공격이미지 출력
 	if (_enemyState == _arrState[static_cast<const int>(E_STATE::ATTACK)])
 	{
-		//	Rectangle(getMemDC(), _atkRc);
+	
 			//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
-		_rotateImg[_atkIdx]->render(getMemDC(), _atkRc.left, _atkRc.top);
+	//	_rotateImg[_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+		if (_countIdY < 8)
+		{
+			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 100);
+		}
 		char str[128];
-		sprintf_s(str, "idx : %d", _atkIdx);
+		sprintf_s(str, "idx : %d", _atkIdX);
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
 
 	}
@@ -285,5 +297,5 @@ void enemy_Ghoul::ghoul_Move(void * obj)
 	ghoul->currentEnemyState();
 	ghoul->setIsAniOnce(true);
 	ghoul->startAni();
-	ghoul->setAtkRc();
+	ghoul->defaultAtkRc();
 }

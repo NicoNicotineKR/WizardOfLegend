@@ -18,6 +18,8 @@ void enemy_State_Charge::direction_Left(enemy * enemy)
 
 	if (enemy->getCurCharge() > enemy->getMaxCharge())
 	{
+		enemy->setCountIdY(0);
+		enemy->setAtkRc(enemy->getAtkPos());
 		enemy->setCurCharge(0.f);
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
 		enemy->setState(E_STATE::ATTACK);
@@ -34,6 +36,8 @@ void enemy_State_Charge::direction_right(enemy * enemy)
 
 	if (enemy->getCurCharge() > enemy->getMaxCharge())
 	{
+		enemy->setCountIdY(0);
+		enemy->setAtkRc(enemy->getAtkPos());
 		enemy->setCurCharge(0.f);
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
 		enemy->setState(E_STATE::ATTACK);

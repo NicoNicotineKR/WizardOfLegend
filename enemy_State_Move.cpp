@@ -24,13 +24,12 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
 		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
 		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
-		enemy->setAtkRc(enemy->getAtkPos());
 
 		float angle = enemy->getAngle() + (PI2 / 72);
 		int frame = (int)(angle / (PI2 / 36));
 
 		//enemy->getAtkImg()->SetFrameX(frame);
-		enemy->setAtkIdx(frame);
+		enemy->setAtkIdX(frame);
 	}
 }
 
@@ -54,7 +53,7 @@ void enemy_State_Move::direction_right(enemy * enemy)
 
 		//	360 -> 10 36 2pi
 		//enemy->getAtkImg()->SetFrameX(frame);
-		enemy->setAtkIdx(frame);
+		enemy->setAtkIdX(frame);
 	}
 }
 

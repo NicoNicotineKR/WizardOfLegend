@@ -75,15 +75,13 @@ protected:
 	// 원본 == 0
 	// 1부터 10도씩 총 36개
 	rotateImgMaker* _rotateMaker;
-	image* _rotateImg[36];
-
-	image* _destImg[3];
+	image* _effectImg[3][36];
 	RECT _atkRc;
 	POINTFLOAT _atkPos;
-	int _atkIdx;
-
+	int _atkIdX;
+	int _atkIdY;
+	int _countIdY;
 	image* _weaponImg[36];
-	image* _effectImg[3][36];
 
 public:
 	enemy();
@@ -151,7 +149,10 @@ public:
 
 	//image* getAtkImg() { return _atkImg; }
 
-	void setAtkIdx(int idx) { _atkIdx = idx; }
+	void setAtkIdX(int idx) { _atkIdX = idx; }
+	void setAtkIdY(int idy) { _atkIdY = idy; }
+	int getCountIdY() { return _countIdY; }
+	void setCountIdY(int count) { _countIdY = count; }
 
 	POINTFLOAT getAtkPos() { return _atkPos; }
 	void setAtkPos(POINTFLOAT atkPos) { _atkPos = atkPos; }
@@ -159,8 +160,8 @@ public:
 	void setAtkPosY(float y) { _atkPos.y = y; }
 
 	RECT getAtkRc() { return _atkRc; }
-	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _rotateImg[0]->GetWidth(), _rotateImg[0]->GetHeight()); }
-	void setAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
+	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _effectImg[0][0]->GetWidth(), _effectImg[0][0]->GetHeight()); }
+	void defaultAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
 
 	virtual int getAtkRange() abstract;
 	virtual int getWeaponRange() abstract;

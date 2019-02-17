@@ -64,11 +64,20 @@ HRESULT enemy_Knight::init()
 
 	_rotateMaker = new rotateImgMaker;
 
-	_rotateImg[0] = IMAGEMANAGER->addImage("atk", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xfff00ff);
+	IMAGEMANAGER->addImage("atk1", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xff00ff);
+	IMAGEMANAGER->addImage("atk2", "images/enemy/effect/largeSlash2.bmp", 164, 164, true, 0xff00ff);
+	IMAGEMANAGER->addImage("atk3", "images/enemy/effect/largeSlash3.bmp", 164, 164, true, 0xff00ff);
 
-	for (int i = 1; i < 36; i++)
+	_effectImg[0][0] = IMAGEMANAGER->findImage("atk1");
+	_effectImg[1][0] = IMAGEMANAGER->findImage("atk2");
+	_effectImg[2][0] = IMAGEMANAGER->findImage("atk3");
+
+	for (int i = 0; i < 3; i++)
 	{
-		_rotateImg[i] = _rotateMaker->MakeRotateImg(_rotateImg[0], 0, 0, 164, 164, (PI2 / 36) * i, true, 0xff00ff);
+		for (int j = 1; j < 36; j++)
+		{
+			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 164, 164, (PI2 / 36) * j, true, 0xff00ff);
+		}
 	}
 
 	SAFE_DELETE(_rotateMaker);
@@ -122,9 +131,14 @@ void enemy_Knight::render()
 	{
 	//	Rectangle(getMemDC(), _atkRc);
 		//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
-		_rotateImg[_atkIdx]->render(getMemDC(),_atkRc.left,_atkRc.top);
+		if (_countIdY < 8)
+		{
+		//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 100);
+
+		}
 		char str[128];
-		sprintf_s(str, "idx : %d", _atkIdx);
+		sprintf_s(str, "idx : %d", _atkIdX);
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
 
 	}
@@ -282,7 +296,7 @@ void enemy_Knight::knight_Move(void * obj)
 	knight->currentEnemyState();
 	knight->setIsAniOnce(true);
 	knight->startAni();
-	knight->setAtkRc();
+	knight->defaultAtkRc();
 }
 
 //void enemy_Knight::knight_rightAttack(void * obj)

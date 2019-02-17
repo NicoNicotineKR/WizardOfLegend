@@ -25,4 +25,19 @@ void enemy_State_Attack::update(enemy * enemy)
 	{
 		enemy->getPath()->clear();
 	}
+
+	enemy->setCountIdY(enemy->getCountIdY() + 1);
+
+	if (enemy->getCountIdY() % 10 == 1)
+	{
+		enemy->setAtkIdY(0);
+	}
+	if (enemy->getCountIdY() % 10 == 2)
+	{
+		enemy->setAtkIdY(1);
+	}
+	if (enemy->getCountIdY() % 10 == 3)
+	{
+		enemy->setAtkIdY(2);
+	}
 }
