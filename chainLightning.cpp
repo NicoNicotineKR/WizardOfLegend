@@ -31,6 +31,7 @@ void chainLightning::release(player* Player)
 
 void chainLightning::update(player* Player)
 {
+
 	_curCoolTime += TIMEMANAGER->getElapsedTime();
 	_imgCount += TIMEMANAGER->getElapsedTime();
 	if (_curCoolTime < _totalCoolTime)
@@ -57,6 +58,9 @@ void chainLightning::update(player* Player)
 						}
 						_pos.x = cosf(_angle) * 30 + _pos.x;
 						_pos.y = -sinf(_angle) * 30 + _pos.y;
+						//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2,
+						//	_pos.y + _img->getFrameHeight() - 25, 150, 50);
+
 						_attackCount++;
 
 					}
@@ -73,7 +77,7 @@ void chainLightning::update(player* Player)
 	{
 		_isSkill = false;
 	}
-	
+
 
 }
 
@@ -83,7 +87,8 @@ void chainLightning::render(player* Player)
 	{
 		if ((*_vvMap)[_pos.y / 32][_pos.x / 32]->getIsAvailMove())
 		{
-			_img->frameRender(Player->getPlayerMemDC(), _pos.x - 135 / 2, _pos.y - 900);
+			_img->frameRender(Player->getPlayerMemDC(), _pos.x , _pos.y);
+			//Rectangle(getMemDC(), _collisionRc);
 		}
 	}
 }
@@ -91,8 +96,9 @@ void chainLightning::render(player* Player)
 void chainLightning::skillPosSet(player* Player)
 {
 	_angle = Player->getPlayerAngle();
-	_pos.x = cosf(_angle) * 100 + (Player->getTileCheckRcPos().x + 14);
-	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y + 14);
+	_pos.x = cosf(_angle) * 100 + (Player->getTileCheckRcPos().x + 14) - (135 / 2);
+	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y + 14) - 900;
+	//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth()/2, _pos.y + _img->getFrameHeight() - 25, 150, 50);
 	_reLoadCount = 0;
 	_curCoolTime = 0;
 	_attackCount = 0;

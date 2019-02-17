@@ -13,6 +13,7 @@
 #include "state_Dead.h"
 #include "chainLightning.h"
 #include "flameStrike.h"
+#include "enemyMgr.h"
 
 player::player()
 {
@@ -134,6 +135,20 @@ void player::update()
 	_curSkills[1]->update(this);
 
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	RECT temp;
+	for (int i = 0; i < _em->getVEnemy().size(); i++)
+	{
+		if (IntersectRect(&temp, &_collisionRc, &_em->getVEnemy()[i]->getAtkRc()))
+		{
+			enemyAngleCal(_em->getVEnemy()[i]->getAngle());
+			_curHp -= 1;
+			_playerStatusUI->setCurHp(_curHp);
+		}
+
+	}
+
 }
 
 void player::render(HDC hdc)
@@ -147,7 +162,7 @@ void player::render(HDC hdc)
 
 	_curSkills[0]->render(this);
 	_curSkills[1]->render(this);
-	Rectangle(getMemDC(), _collisionRc);
+//	Rectangle(getMemDC(), _collisionRc);
 	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
 	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
 	Rectangle(getMemDC(), _tileCheckRc);
@@ -755,6 +770,36 @@ void player::vecZero()
 		}
 	}
 
+}
+
+void player::enemyAngleCal(float angle)
+{
+	 //±èµµÇü°³»õ³¢
+
+	if ((angle* (180 / PI) <= 45 && angle * (180 / PI) >= 0) ||
+		(angle * (180 / PI) <= 360 && angle * (180 / PI) >= 315))
+	{
+		setAniDirection(ANIDIRECTION::RIGHT);
+		startAni();
+	}
+	if ((angle* (180 / PI) > 135 &&
+		angle * (180 / PI) < 225))
+	{
+		setAniDirection(ANIDIRECTION::LEFT);
+		startAni();
+	}
+	if (angle* (180 / PI) > 45 &&
+		angle * (180 / PI) <= 135)
+	{
+		setAniDirection(ANIDIRECTION::BACK);
+		startAni();
+	}
+	if (angle* (180 / PI) >= 225 &&
+		angle * (180 / PI) < 315)
+	{
+		setAniDirection(ANIDIRECTION::FRONT);
+		startAni();
+	}
 }
 
 

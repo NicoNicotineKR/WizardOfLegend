@@ -81,10 +81,7 @@ void flameStrike::update(player * Player)
 			}
 		}
 	}
-	else
-	{
-		_collisionRc = RectMakeCenter(-400, -400, 200, 200);
-	}
+
 	if (_isSkill)
 	{
 		_attackCount += TIMEMANAGER->getElapsedTime();
@@ -131,7 +128,13 @@ void flameStrike::update(player * Player)
 		{
 			_isSkill = false;
 			_reLoadCount = 0;
+
+
 		}
+	}
+	else
+	{
+		_collisionRc = RectMakeCenter(-400, -400, 200, 200);
 	}
 }
 

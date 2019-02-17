@@ -127,7 +127,7 @@ void enemy_Ghoul::render()
 
 	//에너미 이미지 출력
 	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2), _imgPos.y - (_img->getFrameHeight() / 2), _ani);
-	Rectangle(getMemDC(), _atkRc);
+//	Rectangle(getMemDC(), _atkRc);
 	//공격상태일때만 공격이미지 출력
 	if (_enemyState == _arrState[static_cast<const int>(E_STATE::ATTACK)])
 	{
@@ -136,14 +136,17 @@ void enemy_Ghoul::render()
 	//	_rotateImg[_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
 		if (_countIdY < 8)
 		{
-			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 100);
+			_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			//_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 100);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);
+
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
 
 	}
+
+	//Rectangle(getMemDC(), _collisionRc);
 	//플레이어 기준좌표 출력
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
 	//

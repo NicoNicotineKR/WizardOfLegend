@@ -133,8 +133,8 @@ void enemy_Knight::render()
 		//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
 		if (_countIdY < 8)
 		{
-		//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 100);
+			_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			//_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 100);
 
 		}
 		char str[128];

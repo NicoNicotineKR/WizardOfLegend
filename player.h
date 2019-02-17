@@ -6,6 +6,7 @@
 #include "skillCooldownUI.h"
 #include "skills.h"
 
+class enemyMgr;
 class skills;
 class playerState;
 
@@ -79,6 +80,7 @@ private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
 	vvMap* _vvMap;
+	enemyMgr* _em;
 
 	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
@@ -136,6 +138,8 @@ public:
 	void update();
 	void render(HDC hdc);
 
+	inline void enemyLink(enemyMgr* em) { _em = em; }
+
 	void playerKeyAnimationInit();
 	void inPutKey();
 	void startAni();
@@ -145,7 +149,7 @@ public:
 	void playerCirclePosition();
 	void isMoveOff();
 	void vecZero();
-
+	void enemyAngleCal(float angle);
 	//타일 충돌 예외처리
 	void tileCheckFunc();
 

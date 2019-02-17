@@ -33,6 +33,7 @@ HRESULT testStage::init()
 	_myWay.clear();
 
 	_em = new enemyMgr;
+	_player->enemyLink(_em);
 	_em->setPlayerAdress(_player);
 	_em->setMapAdress(_vvMap);
 	_em->init();
@@ -60,12 +61,14 @@ void testStage::update()
 
 		int p_posX = _em->getVEnemy()[0]->getPlayerPos().x / TOP_TILESIZE;
 		int p_posY = _em->getVEnemy()[0]->getPlayerPos().y / TOP_TILESIZE;
-
-		_aStar->pathFinder(PointMake(e_posX, e_posY), PointMake(p_posX, p_posY), PointMake(e_posX, e_posY), *(_em->getVEnemy()[0]->getPath()));
-		for (list<POINT>::iterator iter = _em->getVEnemy()[0]->getPath()->begin();
-			iter != _em->getVEnemy()[0]->getPath()->end(); ++iter)
+		for (int i = 0; i < _em->getVEnemy().size(); i++)
 		{
-			_myWay.push_front(*iter);
+			_aStar->pathFinder(PointMake(e_posX, e_posY), PointMake(p_posX, p_posY), PointMake(e_posX, e_posY), *(_em->getVEnemy()[i]->getPath()));
+			for (list<POINT>::iterator iter = _em->getVEnemy()[i]->getPath()->begin();
+				iter != _em->getVEnemy()[i]->getPath()->end(); ++iter)
+			{
+				_myWay.push_front(*iter);
+			}
 		}
 
 	}
@@ -116,12 +119,14 @@ void testStage::render()
 	//}
 	Rectangle(getMemDC(), _test);
 
-	int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;
-	int e_posY = _em->getVEnemy()[0]->getPos().y / TOP_TILESIZE;
+	for (int i = 0; i < _em->getVEnemy().size(); i++)
+	{
+		int e_posX = _em->getVEnemy()[i]->getPos().x / TOP_TILESIZE;
+		int e_posY = _em->getVEnemy()[i]->getPos().y / TOP_TILESIZE;
 
-	int p_posX = _em->getVEnemy()[0]->getPlayerPos().x / TOP_TILESIZE;
-	int p_posY = _em->getVEnemy()[0]->getPlayerPos().y / TOP_TILESIZE;
-
+		int p_posX = _em->getVEnemy()[i]->getPlayerPos().x / TOP_TILESIZE;
+		int p_posY = _em->getVEnemy()[i]->getPlayerPos().y / TOP_TILESIZE;
+	}
 	//에너미 좌표 인덱스 구역 출력
 	//Rectangle(getMemDC(), _vvMap[e_posY][e_posX]->getTopTileRc().left, _vvMap[e_posY][e_posX]->getTopTileRc().top
 	//, _vvMap[e_posY][e_posX]->getTopTileRc().right, _vvMap[e_posY][e_posX]->getTopTileRc().bottom);

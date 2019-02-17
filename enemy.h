@@ -165,6 +165,10 @@ public:
 
 	virtual int getAtkRange() abstract;
 	virtual int getWeaponRange() abstract;
+
+	inline RECT getCollision() { return _collisionRc; }
+	int getCurHP() { return _curHp; }
+	void setCurHP(int curHp) { _curHp = curHp; }
 	
 };
 
