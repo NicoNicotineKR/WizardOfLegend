@@ -84,15 +84,24 @@ enum E_OBJ_ATR {
 	OBJ_TRAP8,
 	OBJ_TRAP9,
 	OBJ_TRAP10,
-
-
-
-
-
-
-
+	
 
 	OBJ_BREAKABLE,
 	OBJ_UNBREAKABLE,
 	OBJ_CANDLE,
+
+
+	OBJ_PLAYER_START,
+
+	//=======================À¯´Öµé
+	UNIT_GHOUL,
+	UNIT_KNIGHT,
+	UNIT_LANCER,
+	UNIT_ARCHER,
+
+	UNIT_BOSS_FIRE,
+	UNIT_BOSS_ICE,
+	UNIT_BOSS_EARTH,
+
+
 };
