@@ -297,9 +297,6 @@
     <ClInclude Include="enemy_Ghoul.h">
       <Filter>PlayGround\units\enemyType</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_Blob.h">
-      <Filter>PlayGround\units\enemyType</Filter>
-    </ClInclude>
     <ClInclude Include="playerInfoBox.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
@@ -558,9 +555,6 @@
       <Filter>PlayGround\units\enemyType</Filter>
     </ClCompile>
     <ClCompile Include="enemy_Ghoul.cpp">
-      <Filter>PlayGround\units\enemyType</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy_Blob.cpp">
       <Filter>PlayGround\units\enemyType</Filter>
     </ClCompile>
     <ClCompile Include="playerInfoBox.cpp">

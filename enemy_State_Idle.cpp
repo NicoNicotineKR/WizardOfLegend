@@ -59,4 +59,5 @@ void enemy_State_Idle::update(enemy * enemy)
 	{
 		enemy->getPath()->clear();
 	}
+	enemy->defaultAtkRc();
 }

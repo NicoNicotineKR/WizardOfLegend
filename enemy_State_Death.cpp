@@ -25,4 +25,5 @@ void enemy_State_Death::update(enemy * enemy)
 	{
 		enemy->getPath()->clear();
 	}
+	enemy->defaultAtkRc();
 }

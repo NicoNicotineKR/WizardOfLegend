@@ -66,7 +66,7 @@ void enemy_State_Move::update(enemy * enemy)
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
 	}
-
+	enemy->defaultAtkRc();
 
 	// 에이스타를 활용해 플레이어를 쫓아가즈아
 	if (enemy->getPath()->size() > 0)
@@ -90,6 +90,11 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecX(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
+			//갈곳이 구멍이면 벡터가 0
+			if (enemy->getMap()[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			{
+				enemy->setVecX(0);
+			}
 			//enemy->setVecX(3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
@@ -107,6 +112,11 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecX(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 
+			//갈곳이 구멍이면 벡터가 0
+			if (enemy->getMap()[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			{
+				enemy->setVecX(0);
+			}
 		//	enemy->setVecX(-3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
@@ -126,6 +136,12 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecY(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
+			//갈곳이 구멍이면 벡터가 0
+			if (enemy->getMap()[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			{
+				enemy->setVecY(0);
+			}
+
 		//	enemy->setVecY(3);
 
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
@@ -143,6 +159,12 @@ void enemy_State_Move::update(enemy * enemy)
 		{
 			enemy->setVecY(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 			
+			//갈곳이 구멍이면 벡터가 0
+			if (enemy->getMap()[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			{
+				enemy->setVecY(0);
+			}
+
 		//	enemy->setVecY(-3);
 
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))

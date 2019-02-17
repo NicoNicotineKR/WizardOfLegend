@@ -10,6 +10,7 @@ private:
 
 	const int ATTACK_RANGE = 100 * 100;
 	const int WEAPON_RANGE = 60;
+
 public:
 	enemy_Ghoul();
 	~enemy_Ghoul();

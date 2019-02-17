@@ -165,7 +165,6 @@
     <ClInclude Include="enemyMgr.h" />
     <ClInclude Include="enemyState.h" />
     <ClInclude Include="enemy_Archer.h" />
-    <ClInclude Include="enemy_Blob.h" />
     <ClInclude Include="enemy_Ghoul.h" />
     <ClInclude Include="enemy_Golem.h" />
     <ClInclude Include="enemy_Knight.h" />
@@ -260,7 +259,6 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyMgr.cpp" />
     <ClCompile Include="enemy_Archer.cpp" />
-    <ClCompile Include="enemy_Blob.cpp" />
     <ClCompile Include="enemy_Ghoul.cpp" />
     <ClCompile Include="enemy_Golem.cpp" />
     <ClCompile Include="enemy_Knight.cpp" />

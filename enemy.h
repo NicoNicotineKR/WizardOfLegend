@@ -37,6 +37,7 @@ protected:
 										
 	float			_speed;				//에너미 스피드
 	float			_angle;				//에너미 각도
+	float			_hitAngle;			//맞을때 튕겨나갈 각도
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	POINTFLOAT		_pos;				//중심 좌표 얘가 모든것의 중심좌표임 얘변하면 나머지 다변함
@@ -83,6 +84,13 @@ protected:
 	int _countIdY;
 	image* _weaponImg[36];
 
+	//맞은상태니?
+	bool _isHit;
+	//죽었니?
+	bool _isDead;
+
+	// 적들마다 이펙트효과의 지속시간 
+	int _effectTime;
 public:
 	enemy();
 	~enemy();
@@ -136,6 +144,9 @@ public:
 	float getAngle() { return _angle; }
 	void setAngle(float angle) { _angle = angle; }
 
+	float getHitAngle() { return _hitAngle; }
+	void setHitAngle(float hitAngle) { _hitAngle = hitAngle; }
+
 	void setCurCharge(float curCharge) { _curCharge = curCharge; }
 	float getCurCharge() { return _curCharge; }
 
@@ -153,6 +164,7 @@ public:
 	void setAtkIdY(int idy) { _atkIdY = idy; }
 	int getCountIdY() { return _countIdY; }
 	void setCountIdY(int count) { _countIdY = count; }
+	int getEffectTime() { return _effectTime; }
 
 	POINTFLOAT getAtkPos() { return _atkPos; }
 	void setAtkPos(POINTFLOAT atkPos) { _atkPos = atkPos; }
@@ -169,6 +181,11 @@ public:
 	inline RECT getCollision() { return _collisionRc; }
 	int getCurHP() { return _curHp; }
 	void setCurHP(int curHp) { _curHp = curHp; }
+
+	void setIsHit(bool isHit) { _isHit = isHit; }
+	bool getIsHit() { return _isHit; }
+	void setIsDead(bool isDead) { _isDead = isDead; }
+	bool getIsDead() { return _isDead; }
 	
 };
 

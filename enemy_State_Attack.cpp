@@ -28,16 +28,21 @@ void enemy_State_Attack::update(enemy * enemy)
 
 	enemy->setCountIdY(enemy->getCountIdY() + 1);
 
-	if (enemy->getCountIdY() % 10 == 1)
+	if (enemy->getCountIdY() / (enemy->getEffectTime() / 3) == 0)
 	{
 		enemy->setAtkIdY(0);
 	}
-	if (enemy->getCountIdY() % 10 == 2)
+	if (enemy->getCountIdY() / (enemy->getEffectTime() / 3) == 1)
 	{
 		enemy->setAtkIdY(1);
 	}
-	if (enemy->getCountIdY() % 10 == 3)
+	if (enemy->getCountIdY() / (enemy->getEffectTime() / 3) == 2)
 	{
 		enemy->setAtkIdY(2);
+	}
+
+	if (enemy->getCountIdY() == enemy->getEffectTime())
+	{
+		enemy->defaultAtkRc();
 	}
 }
