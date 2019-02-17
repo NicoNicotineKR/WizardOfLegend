@@ -1,6 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "tile.h"
+#include "rotateImgMaker.h"
 
 
 class enemyState;
@@ -70,9 +71,19 @@ protected:
 
 	vector<vector<tile*>> _vvMap;
 
-	image* _atkImg;
-	POINTFLOAT _atkPos;
+	//무기 이미지(없는애도있고 있는애도있음 없는애는 nullptr넣을것임)
+	// 원본 == 0
+	// 1부터 10도씩 총 36개
+	rotateImgMaker* _rotateMaker;
+	image* _rotateImg[36];
+
+	image* _destImg[3];
 	RECT _atkRc;
+	POINTFLOAT _atkPos;
+	int _atkIdx;
+
+	image* _weaponImg[36];
+	image* _effectImg[3][36];
 
 public:
 	enemy();
@@ -138,7 +149,9 @@ public:
 
 	vector<vector<tile*>> getMap() { return _vvMap; }
 
-	image* getAtkImg() { return _atkImg; }
+	//image* getAtkImg() { return _atkImg; }
+
+	void setAtkIdx(int idx) { _atkIdx = idx; }
 
 	POINTFLOAT getAtkPos() { return _atkPos; }
 	void setAtkPos(POINTFLOAT atkPos) { _atkPos = atkPos; }
@@ -146,7 +159,7 @@ public:
 	void setAtkPosY(float y) { _atkPos.y = y; }
 
 	RECT getAtkRc() { return _atkRc; }
-	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _atkImg->getFrameWidth(), _atkImg->getFrameHeight()); }
+	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _rotateImg[0]->GetWidth(), _rotateImg[0]->GetHeight()); }
 	void setAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
 
 	virtual int getAtkRange() abstract;

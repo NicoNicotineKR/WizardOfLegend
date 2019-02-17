@@ -58,9 +58,21 @@ HRESULT enemy_Knight::init()
 	_curCharge = 0.f;
 	_maxCharge = 0.5f;
 
-	_atkImg = IMAGEMANAGER->addFrameImage("slash", "images/enemy/slash.bmp", 5904, 164, 36, 1, true, 0xff00ff);
-	_atkImg->SetFrameX(0);
-	_atkImg->SetFrameY(0);
+//	_atkImg = IMAGEMANAGER->addFrameImage("slash", "images/enemy/slash.bmp", 5904, 164, 36, 1, true, 0xff00ff);
+//	_atkImg->SetFrameX(0);
+//	_atkImg->SetFrameY(0);
+
+	_rotateMaker = new rotateImgMaker;
+
+	_rotateImg[0] = IMAGEMANAGER->addImage("atk", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xfff00ff);
+
+	for (int i = 1; i < 36; i++)
+	{
+		_rotateImg[i] = _rotateMaker->MakeRotateImg(_rotateImg[0], 0, 0, 164, 164, (PI2 / 36) * i, true, 0xff00ff);
+	}
+
+	SAFE_DELETE(_rotateMaker);
+	_rotateMaker = nullptr;
 
 	return S_OK;
 }
@@ -109,10 +121,12 @@ void enemy_Knight::render()
 	if (_enemyState == _arrState[static_cast<const int>(E_STATE::ATTACK)])
 	{
 	//	Rectangle(getMemDC(), _atkRc);
-		_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+		//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+		_rotateImg[_atkIdx]->render(getMemDC(),_atkRc.left,_atkRc.top);
 		char str[128];
-		sprintf_s(str, "frameX : %d", _atkImg->getFrameX());
+		sprintf_s(str, "idx : %d", _atkIdx);
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
+
 	}
 	//플레이어 기준좌표 출력
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);

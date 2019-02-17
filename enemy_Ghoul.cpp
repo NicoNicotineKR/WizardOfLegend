@@ -59,11 +59,23 @@ HRESULT enemy_Ghoul::init()
 	_curCharge = 0.f;
 	_maxCharge = 0.3f;
 
-	_atkImg = IMAGEMANAGER->addFrameImage("slash2", "images/enemy/slash2.bmp", 2952, 82, 36, 1, true, 0xff00ff);
-	_atkImg->SetFrameX(0);
-	_atkImg->SetFrameY(0);
+//	_atkImg = IMAGEMANAGER->addFrameImage("slash2", "images/enemy/slash2.bmp", 2952, 82, 36, 1, true, 0xff00ff);
+//	_atkImg->SetFrameX(0);
+//	_atkImg->SetFrameY(0);
 
+	_rotateMaker = new rotateImgMaker;
 
+	IMAGEMANAGER->addImage("atk", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xfff00ff);
+
+	_rotateImg[0] = IMAGEMANAGER->findImage("atk");
+
+	for (int i = 1; i < 36; i++)
+	{
+		_rotateImg[i] = _rotateMaker->MakeRotateImg(_rotateImg[0], 0, 0, 82, 82, (PI2 / 36) * i, true, 0xff00ff);
+	}
+
+	SAFE_DELETE(_rotateMaker);
+	_rotateMaker = nullptr;
 
 
 	return S_OK;
@@ -113,10 +125,12 @@ void enemy_Ghoul::render()
 	if (_enemyState == _arrState[static_cast<const int>(E_STATE::ATTACK)])
 	{
 		//	Rectangle(getMemDC(), _atkRc);
-		_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+			//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+		_rotateImg[_atkIdx]->render(getMemDC(), _atkRc.left, _atkRc.top);
 		char str[128];
-		sprintf_s(str, "frameX : %d", _atkImg->getFrameX());
+		sprintf_s(str, "idx : %d", _atkIdx);
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
+
 	}
 	//플레이어 기준좌표 출력
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);

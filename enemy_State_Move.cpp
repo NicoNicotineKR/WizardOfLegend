@@ -29,7 +29,8 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 		float angle = enemy->getAngle() + (PI2 / 72);
 		int frame = (int)(angle / (PI2 / 36));
 
-		enemy->getAtkImg()->SetFrameX(frame);
+		//enemy->getAtkImg()->SetFrameX(frame);
+		enemy->setAtkIdx(frame);
 	}
 }
 
@@ -52,7 +53,8 @@ void enemy_State_Move::direction_right(enemy * enemy)
 		int frame = (int)(angle / (PI2 / 36));
 
 		//	360 -> 10 36 2pi
-		enemy->getAtkImg()->SetFrameX(frame);
+		//enemy->getAtkImg()->SetFrameX(frame);
+		enemy->setAtkIdx(frame);
 	}
 }
 
