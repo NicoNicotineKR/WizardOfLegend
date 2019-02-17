@@ -69,5 +69,4 @@ void state_Dead::onButtonRB(player * Player)
 
 void state_Dead::update(player * Player)
 {
-	
 }

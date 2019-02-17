@@ -73,14 +73,14 @@ void state_Dash::update(player* Player)
 		switch (Player->getMoveDirection())
 		{
 		case MOVEDIRECTION::TOP:
-			vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f);
+			vec.y = -(Player->getSpeed() * TIMEMANAGER->getElapsedTime() *  2.0f);
 			vec.x = 0;
 			Player->setVecX(vec.x);
 			Player->setVecY(vec.y);
 			break;
 		case MOVEDIRECTION::BOTTOM:
 			vec.x = 0;
-			vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 1.5f;
+			vec.y = Player->getSpeed() * TIMEMANAGER->getElapsedTime() * 2.0f;
 			Player->setVecX(vec.x);
 			Player->setVecY(vec.y);
 			break;

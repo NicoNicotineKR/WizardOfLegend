@@ -135,7 +135,7 @@ void player::update()
 	_curSkills[1]->update(this);
 
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
-
+	
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	RECT temp;
 	for (int i = 0; i < _em->getVEnemy().size(); i++)
@@ -146,7 +146,7 @@ void player::update()
 			_curHp -= 1;
 			_playerStatusUI->setCurHp(_curHp);
 		}
-
+	
 	}
 
 }
@@ -175,7 +175,7 @@ void player::render(HDC hdc)
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 3060, 10, 18, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 3230, 10, 19, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
@@ -207,17 +207,17 @@ void player::playerKeyAnimationInit()
 	int leftMove[] = { 49,48,47,46,45,44,43,42,41,40 };
 	KEYANIMANAGER->addArrayFrameAnimation("leftMove", "player", leftMove, 10, 10, true);
 	//dash
-	int frontDash[] = { 10,11,12,13,14,15 };
-	KEYANIMANAGER->addArrayFrameAnimation("frontDash", "player", frontDash, 5, 15, false, playerIdle,this);
+	int frontDash[] = { 183,184,185 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontDash", "player", frontDash, 3, 10, false, playerIdle,this);
 
-	int backDash[] = { 20,21,22,23,24,25 };
-	KEYANIMANAGER->addArrayFrameAnimation("backDash", "player", backDash, 5, 15, false, playerIdle, this);
+	int backDash[] = { 180,181,182 };
+	KEYANIMANAGER->addArrayFrameAnimation("backDash", "player", backDash, 3, 10, false, playerIdle, this);
 
-	int rightDash[] = { 70,71,72,73,74,75,76,77 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 8, 15, false, playerIdle, this);
+	int rightDash[] = { 70,71,72,73,74,75 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 6, 15, false, playerIdle, this);
 
-	int leftDash[] = { 87,86,85,84,83,82,81,80 };
-	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 8, 15, false, playerIdle, this);
+	int leftDash[] = { 87,86,85,84,83,82};
+	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 6, 15, false, playerIdle, this);
 	//hit
 	int frontHit[] = { 4 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontHit", "player", frontHit, 1, 20, false, playerIdle, this);
@@ -774,7 +774,6 @@ void player::vecZero()
 
 void player::enemyAngleCal(float angle)
 {
-	 //±èµµÇü°³»õ³¢
 
 	if ((angle* (180 / PI) <= 45 && angle * (180 / PI) >= 0) ||
 		(angle * (180 / PI) <= 360 && angle * (180 / PI) >= 315))
