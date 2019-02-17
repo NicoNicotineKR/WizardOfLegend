@@ -5303,8 +5303,8 @@ void mapEditor::LoadFunc()
 
 		}	// for j ³¡
 		_vvMap.push_back(vLineX);
-
 	}
+	_currentCursorTileInfo = _vvMap[0][0];
 
 }
 
