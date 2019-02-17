@@ -56,6 +56,7 @@ private:
 		POINT polygonPos[3];	//	중점, 이전앵글 좌표, 현재앵글 끝좌표
 
 		int maskAlpha;
+		bool _isBasicAtk;
 
 	};
 

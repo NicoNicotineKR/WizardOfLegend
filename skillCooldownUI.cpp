@@ -62,6 +62,7 @@ HRESULT skillCooldownUI::init()
 		_skills[i].isPrepareBlt = false;
 		
 		_skills[i].maskAlpha = 0;
+		_skills[i]._isBasicAtk = false;
 	}
 
 	//쿼터마스크 이닛
@@ -195,7 +196,7 @@ void skillCooldownUI::render()
 			//	_skills[i].iconImg->getFrameX(), _skills[i].iconImg->getFrameY());
 
 			//	마스크
-			if (_skills[i].curReloadNum != _skills[i].totalReloadNum)
+			if (_skills[i].curReloadNum != _skills[i].totalReloadNum && _skills[i]._isBasicAtk == false)
 			{
 				_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.left, _skills[i].borderRc.top,
 					0, 0, _skills[i].borderImg->getFrameWidth(), _skills[i].borderImg->getFrameHeight(),
@@ -203,39 +204,38 @@ void skillCooldownUI::render()
 			}
 
 			//	마스크 출력 & 쿨다운 남은시간 숫자 출력
-			if (*(_skills[i].curReloadNum) <= 0) {
-				//	마스크
+			if (_skills[i]._isBasicAtk == false) {
+				if (*(_skills[i].curReloadNum) <= 0) {
+					//	마스크
 
-				//	예전꺼
-				//_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.right - _skills[i].curMaskWid, _skills[i].borderRc.top,
-				//	0, 0, _skills[i].curMaskWid, 60, MASK_ALPHA);
-				//_skills[i].maskImg->setTransColor(true, 0xFF00FF);
+					//	예전꺼
+					//_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.right - _skills[i].curMaskWid, _skills[i].borderRc.top,
+					//	0, 0, _skills[i].curMaskWid, 60, MASK_ALPHA);
+					//_skills[i].maskImg->setTransColor(true, 0xFF00FF);
 
-				//	마스크
-				//_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.left, _skills[i].borderRc.top,
-				//	0, 0, _skills[i].borderImg->getFrameWidth(), _skills[i].borderImg->getFrameHeight(), 
-				//	_skills[i].maskAlpha);
+					//	마스크
+					//_skills[i].maskImg->alphaRenderFixed(getMemDC(), _skills[i].borderRc.left, _skills[i].borderRc.top,
+					//	0, 0, _skills[i].borderImg->getFrameWidth(), _skills[i].borderImg->getFrameHeight(), 
+					//	_skills[i].maskAlpha);
 
-				
-				//	쿨타임 남은시간 숫자
-				_printNum->renderNum((int)_skills[i].lastingTime % 10, _skills[i].borderRc.left + 15, _skills[i].borderRc.top + BORDER_SIZE / 2);		//	1의자리
-				_printNum->renderNum(11, _skills[i].borderRc.left + BORDER_SIZE / 2, _skills[i].borderRc.top + BORDER_SIZE / 2);						//	.
-				_printNum->renderNum((int)(_skills[i].lastingTime * 10) % 10, _skills[i].borderRc.right - 15, _skills[i].borderRc.top + BORDER_SIZE / 2);	//소수점.1
-				
+
+					//	쿨타임 남은시간 숫자
+					_printNum->renderNum((int)_skills[i].lastingTime % 10, _skills[i].borderRc.left + 15, _skills[i].borderRc.top + BORDER_SIZE / 2);		//	1의자리
+					_printNum->renderNum(11, _skills[i].borderRc.left + BORDER_SIZE / 2, _skills[i].borderRc.top + BORDER_SIZE / 2);						//	.
+					_printNum->renderNum((int)(_skills[i].lastingTime * 10) % 10, _skills[i].borderRc.right - 15, _skills[i].borderRc.top + BORDER_SIZE / 2);	//소수점.1
+
+				}
+
+				//	남은 스킬수 출력
+				//	장전갯수가 1이상라면,
+				if (*(_skills[i].totalReloadNum) > 1 && *(_skills[i].curReloadNum) >= 1) {
+					_printNum->renderNum(*(_skills[i].curReloadNum), _skills[i].pos.x, _skills[i].pos.y);
+				}
 			}
-
-			//	남은 스킬수 출력
-			//	장전갯수가 1이상라면,
-			if (*(_skills[i].totalReloadNum) > 1 && *(_skills[i].curReloadNum) >= 1) {
-				_printNum->renderNum(*(_skills[i].curReloadNum), _skills[i].pos.x, _skills[i].pos.y);
-			}
-
-		}
-
-		
-		if (_skills[i].iconImg != nullptr) {
 			
+
 		}
+
 		
 	}
 
@@ -279,6 +279,12 @@ void skillCooldownUI::ChangeSkill(int idx, string name, int* totalReloadedNum, i
 	_skills[idx].maskAlpha = MASK_ALPHA;
 
 	_skills[idx].saveReloadNum = *curReloadNum;
+
+	//	기본스킬 미적용하는거 추가
+	if (SKILLDATABASE->getSkillInfo(name).kinds == BASIC) {
+		_skills[idx]._isBasicAtk = true;
+	}
+
 }
 
 void skillCooldownUI::DropSkill(int idx)
