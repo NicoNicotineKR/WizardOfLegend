@@ -68,6 +68,24 @@ void mainmenu::release()
 
 void mainmenu::update()
 {
+	//½ºÅµ±â´É
+	if (_mainMenuState < MAIN_MENU)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_RETURN))
+		{
+			_mainMenuState = MAIN_MENU;
+			_titleAlpha = 255;
+			_titleLogoAlpha = 255;
+			_titleLogoIdxY = TITLELOGO_POS_Y;
+			for (int i = 0; i < 5; i++)
+			{
+				_button[i].imgAlpha = 255;
+			}
+			_selectMenu = SINGLE_PLAYER;
+			_button[_selectMenu].idxX = 1;
+		}
+	}
+
 	RunWizard();
 
 	TitleAlphaUp();
