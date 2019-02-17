@@ -118,6 +118,7 @@ void skillCooldownUI::update()
 		//	스킬없는애는 끄지세여
 		
 		if (_skills[i].iconImg == nullptr) continue;
+		if (_skills[i]._isBasicAtk) continue;
 
 		if (!_skills[i].isPrepareBlt) {
 			float gapEndReload;	//	1발 장전이 끝나기까지 남은시간
