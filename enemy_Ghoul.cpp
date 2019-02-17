@@ -68,13 +68,13 @@ HRESULT enemy_Ghoul::init()
 
 	_rotateMaker = new rotateImgMaker;
 
-	IMAGEMANAGER->addImage("atk1", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xff00ff);
-	IMAGEMANAGER->addImage("atk2", "images/enemy/effect/smallSlash2.bmp", 82, 82, true, 0xff00ff);
-	IMAGEMANAGER->addImage("atk3", "images/enemy/effect/smallSlash3.bmp", 82, 82, true, 0xff00ff);
+	IMAGEMANAGER->addImage("smallSlash1", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xff00ff);
+	IMAGEMANAGER->addImage("smallSlash2", "images/enemy/effect/smallSlash2.bmp", 82, 82, true, 0xff00ff);
+	IMAGEMANAGER->addImage("smallSlash3", "images/enemy/effect/smallSlash3.bmp", 82, 82, true, 0xff00ff);
 
-	_effectImg[0][0] = IMAGEMANAGER->findImage("atk1");
-	_effectImg[1][0] = IMAGEMANAGER->findImage("atk2");
-	_effectImg[2][0] = IMAGEMANAGER->findImage("atk3");
+	_effectImg[0][0] = IMAGEMANAGER->findImage("smallSlash1");
+	_effectImg[1][0] = IMAGEMANAGER->findImage("smallSlash2");
+	_effectImg[2][0] = IMAGEMANAGER->findImage("smallSlash3");
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -88,6 +88,7 @@ HRESULT enemy_Ghoul::init()
 	_rotateMaker = nullptr;
 
 	_effectTime = 15;
+	_effect_Shave_PosY = POS_Y_HIT_SHAVE;
 
 	return S_OK;
 }
@@ -141,12 +142,13 @@ void enemy_Ghoul::render()
 	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2), _imgPos.y - (_img->getFrameHeight() / 2), _ani);
 //	Rectangle(getMemDC(), _atkRc);
 	//공격상태일때만 공격이미지 출력
+
 	if(_state == E_STATE::ATTACK)
 	{
 		if (_countIdY < _effectTime)
 		{
-			_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			//_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
+		//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);

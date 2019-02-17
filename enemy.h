@@ -89,8 +89,9 @@ protected:
 	//죽었니?
 	bool _isDead;
 
-	// 적들마다 이펙트효과의 지속시간 
+	// 이펙트용 변수
 	int _effectTime;
+	int _effect_Shave_PosY;
 public:
 	enemy();
 	~enemy();
@@ -165,6 +166,7 @@ public:
 	int getCountIdY() { return _countIdY; }
 	void setCountIdY(int count) { _countIdY = count; }
 	int getEffectTime() { return _effectTime; }
+	int getEffectShavePosY() { return _effect_Shave_PosY; }
 
 	POINTFLOAT getAtkPos() { return _atkPos; }
 	void setAtkPos(POINTFLOAT atkPos) { _atkPos = atkPos; }

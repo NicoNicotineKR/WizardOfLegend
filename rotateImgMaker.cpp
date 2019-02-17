@@ -21,7 +21,7 @@ image * rotateImgMaker::MakeRotateImg(image* sourImg, int sourX, int sourY, int 
 	destImg->init((DWORD)0, sourWid, sourHei, trans, transColor);
 
 	//	destImg에 sourImg를 복사하고,
-	BitBlt(destImg->getMemDC(), 0, 0, sourWid, sourHei, sourImg->getMemDC(), 0, 0, BLACKNESS);		//	남은부분에 검정색칠함?
+	//BitBlt(destImg->getMemDC(), 0, 0, sourWid, sourHei, sourImg->getMemDC(), 0, 0, BLACKNESS);		//	남은부분에 검정색칠함?
 
 	//	destImg에 마젠ㄴ타 쳐박
 	HBRUSH hBrush = CreateSolidBrush(transColor);

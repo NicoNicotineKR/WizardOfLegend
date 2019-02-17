@@ -23,11 +23,17 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
 		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
-		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
+		enemy->setAtkPosY((enemy->getPos().y - enemy->getEffectShavePosY()) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
 
 		float angle = enemy->getAngle() + (PI2 / 72);
 		int frame = (int)(angle / (PI2 / 36));
 
+		//찾았다... 내 3시간짜리 도둑..
+		if (frame == 36)
+		{
+			frame = 0;
+		}
+		//어휴 미친럼
 		//enemy->getAtkImg()->SetFrameX(frame);
 		enemy->setAtkIdX(frame);
 	}
@@ -45,12 +51,16 @@ void enemy_State_Move::direction_right(enemy * enemy)
 
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
 		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
-		enemy->setAtkPosY((enemy->getPos().y - 70) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
+		enemy->setAtkPosY((enemy->getPos().y - enemy->getEffectShavePosY()) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
 		enemy->setAtkRc(enemy->getAtkPos());
 
-		float angle = enemy->getAngle() + (PI2 / 72);
-		int frame = (int)(angle / (PI2 / 36));
+		float angle = enemy->getAngle() + (PI / 36);
+		int frame = (int)(angle / (PI / 18));
 
+		if (frame == 36)
+		{
+			frame = 0;
+		}
 		//	360 -> 10 36 2pi
 		//enemy->getAtkImg()->SetFrameX(frame);
 		enemy->setAtkIdX(frame);

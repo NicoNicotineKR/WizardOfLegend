@@ -53,25 +53,30 @@ void testStage::update()
 	_em->update();
 	if (KEYMANAGER->isOnceKeyDown(VK_F5))
 	{
-		_em->getVEnemy()[0]->getPath()->clear();
-		_myWay.clear();
-
-		int e_posX = _em->getVEnemy()[0]->getPos().x / TOP_TILESIZE;
-		int e_posY = _em->getVEnemy()[0]->getPos().y / TOP_TILESIZE;
-
-		int p_posX = _em->getVEnemy()[0]->getPlayerPos().x / TOP_TILESIZE;
-		int p_posY = _em->getVEnemy()[0]->getPlayerPos().y / TOP_TILESIZE;
 		for (int i = 0; i < _em->getVEnemy().size(); i++)
 		{
+			_em->getVEnemy()[i]->getPath()->clear();
+			_myWay.clear();
+
+			int e_posX = _em->getVEnemy()[i]->getPos().x / TOP_TILESIZE;
+			int e_posY = _em->getVEnemy()[i]->getPos().y / TOP_TILESIZE;
+
+			int p_posX = _em->getVEnemy()[i]->getPlayerPos().x / TOP_TILESIZE;
+			int p_posY = _em->getVEnemy()[i]->getPlayerPos().y / TOP_TILESIZE;
+
 			_aStar->pathFinder(PointMake(e_posX, e_posY), PointMake(p_posX, p_posY), PointMake(e_posX, e_posY), *(_em->getVEnemy()[i]->getPath()));
-			for (list<POINT>::iterator iter = _em->getVEnemy()[i]->getPath()->begin();
-				iter != _em->getVEnemy()[i]->getPath()->end(); ++iter)
+			list<POINT>::iterator iter = _em->getVEnemy()[i]->getPath()->begin();
+
+			for (iter = _em->getVEnemy()[i]->getPath()->begin(); 
+				iter != _em->getVEnemy()[i]->getPath()->end(); 
+				++iter)
 			{
 				_myWay.push_front(*iter);
 			}
 		}
 
 	}
+	//에이스타 일정 시간마다 적용시키는거
 //if (_em->getVEnemy()[0]->getState() == E_STATE::MOVE)
 //{
 //   aStarCount += TIMEMANAGER->getElapsedTime();
@@ -105,6 +110,7 @@ void testStage::render()
 	RenderMap();
 	_player->render(getMemDC());
 	_em->render();
+	//에이스타 출력용
 	//if (_myWay.size() != 0)
 	//{
 	//	for (_imyWay = _myWay.begin(); _imyWay != _myWay.end(); _imyWay++)

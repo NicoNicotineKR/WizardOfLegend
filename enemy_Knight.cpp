@@ -67,17 +67,17 @@ HRESULT enemy_Knight::init()
 
 	_rotateMaker = new rotateImgMaker;
 
-	IMAGEMANAGER->addImage("atk1", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xff00ff);
-	IMAGEMANAGER->addImage("atk2", "images/enemy/effect/largeSlash2.bmp", 164, 164, true, 0xff00ff);
-	IMAGEMANAGER->addImage("atk3", "images/enemy/effect/largeSlash3.bmp", 164, 164, true, 0xff00ff);
+	IMAGEMANAGER->addImage("largeSlash1", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xff00ff);
+	IMAGEMANAGER->addImage("largeSlash2", "images/enemy/effect/largeSlash2.bmp", 164, 164, true, 0xff00ff);
+	IMAGEMANAGER->addImage("largeSlash3", "images/enemy/effect/largeSlash3.bmp", 164, 164, true, 0xff00ff);
 
-	_effectImg[0][0] = IMAGEMANAGER->findImage("atk1");
-	_effectImg[1][0] = IMAGEMANAGER->findImage("atk2");
-	_effectImg[2][0] = IMAGEMANAGER->findImage("atk3");
+	_effectImg[0][0] = IMAGEMANAGER->findImage("largeSlash1");
+	_effectImg[1][0] = IMAGEMANAGER->findImage("largeSlash2");
+	_effectImg[2][0] = IMAGEMANAGER->findImage("largeSlash3");
 
 	for (int i = 0; i < 3; i++)
 	{
-		for (int j = 1; j < 36; j++)
+		for (int j = 0; j < 36; j++)
 		{
 			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 164, 164, (PI2 / 36) * j, true, 0xff00ff);
 		}
@@ -87,6 +87,10 @@ HRESULT enemy_Knight::init()
 	_rotateMaker = nullptr;
 
 	_effectTime = 30;
+	_effect_Shave_PosY = POS_Y_HIT_SHAVE;
+
+	_atkIdY = 1;
+	_atkIdX = 1;
 
 	return S_OK;
 }
@@ -141,13 +145,12 @@ void enemy_Knight::render()
 	//공격상태일때만 공격이미지 출력
 	if (_state == E_STATE::ATTACK)
 	{
-	//	Rectangle(getMemDC(), _atkRc);
+		//Rectangle(getMemDC(), _atkRc);
 		//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
 		if (_countIdY < _effectTime)
 		{
 			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
 			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 150);
-
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);
