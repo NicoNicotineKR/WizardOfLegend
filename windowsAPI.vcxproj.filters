@@ -351,6 +351,9 @@
     <ClInclude Include="skillIconList.h">
       <Filter>PlayGround\data</Filter>
     </ClInclude>
+    <ClInclude Include="bossHpProgressBarUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -607,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="skillIconList.cpp">
       <Filter>PlayGround\data</Filter>
+    </ClCompile>
+    <ClCompile Include="bossHpProgressBarUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
