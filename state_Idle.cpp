@@ -170,6 +170,7 @@ void state_Idle::onButtonRB(player* Player)
 
 		Player->getCurSkills2()->skillPosSet(Player);
 		Player->getSkillUI()->UseIdxSkill(1);
+		Player->getCurSkills2()->setReLoadCount(0);
 		Player->getCurSkills2()->setIsSkill(true);
 	}
 }

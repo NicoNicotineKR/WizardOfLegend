@@ -68,9 +68,20 @@ void state_Hit::onButtonRB(player* Player)
 
 void state_Hit::update(player* Player)
 {
-	if (Player->getIsPlayerAniOnce())
+	if (Player->getAniDirection() == ANIDIRECTION::LEFT)
 	{
-		Player->setIsPlayerAniOnce(false);
-		Player->startAni();
+		Player->setVecX(1);
+	}
+	else if (Player->getAniDirection() == ANIDIRECTION::RIGHT)
+	{
+		Player->setVecX(-1);
+	}
+	else if (Player->getAniDirection() == ANIDIRECTION::FRONT)
+	{
+		Player->setVecY(-1);
+	}
+	else if (Player->getAniDirection() == ANIDIRECTION::BACK)
+	{
+		Player->setVecY(1);
 	}
 }

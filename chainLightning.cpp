@@ -16,6 +16,7 @@ HRESULT chainLightning::init(player* Player)
 	_vvMap = Player->getVVMapMemoryAddress();
 	_img = IMAGEMANAGER->findImage("lightningChain");
 	_totalCoolTime = 5.0f;
+	_reLoadCount = _maxReLoad;
 	_maxReLoad = 1;
 	_imgCount = 0;
 	_attackCount = 0;
@@ -32,10 +33,11 @@ void chainLightning::release(player* Player)
 void chainLightning::update(player* Player)
 {
 
-	_curCoolTime += TIMEMANAGER->getElapsedTime();
-	_imgCount += TIMEMANAGER->getElapsedTime();
+
 	if (_curCoolTime < _totalCoolTime)
 	{
+		_curCoolTime += TIMEMANAGER->getElapsedTime();
+		_imgCount += TIMEMANAGER->getElapsedTime();
 		if (10 > _attackCount)
 		{
 			//if ((*_vvMap).size() - 1 >= _pos.y / 32 && _pos.y / 32 >= 0) return;
@@ -77,6 +79,7 @@ void chainLightning::update(player* Player)
 	else if (_isSkill)
 	{
 		_isSkill = false;
+		_reLoadCount = _maxReLoad;
 	}
 
 
@@ -100,7 +103,6 @@ void chainLightning::skillPosSet(player* Player)
 	_pos.x = cosf(_angle) * 100 + (Player->getTileCheckRcPos().x + 14);
 	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y + 14);
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth()/2 - 135 / 2, _pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
-	_reLoadCount = 0;
 	_curCoolTime = 0;
 	_attackCount = 0;
 }

@@ -145,8 +145,8 @@ void enemy_Ghoul::render()
 	{
 		if (_countIdY < _effectTime)
 		{
-			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
+			_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			//_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);

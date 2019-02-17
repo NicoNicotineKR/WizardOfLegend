@@ -128,7 +128,8 @@ private:
 
 	skillCooldownUI* _skillUI;
 	string			 _usingSkillName;
-	int _count;
+	float _hitCount;
+	bool _isHit;
 public:
 	player();
 	~player();
@@ -214,5 +215,7 @@ public:
 	inline void setUsingSkillName(string name) { _usingSkillName = name; }
 
 	inline RECT getCollisionRc() { return _collisionRc; }
+	inline bool getIsHit() { return _isHit; }
+	inline void setIsHit(bool isHit) { _isHit = isHit; }
 };
 

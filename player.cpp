@@ -44,7 +44,7 @@ HRESULT player::init(vvMap& vvMapLink)
 
 	_speed = 300.0f;					
 	//_angle = ;					
-	_pos.x = WINSIZEX/2;
+	_pos.x = 200;
 	_pos.y = WINSIZEY / 2;
 
 	_vec.x = 0;
@@ -90,7 +90,8 @@ HRESULT player::init(vvMap& vvMapLink)
 	IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
 
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 100, 150);
-
+	_isHit = false;
+	_hitCount = 0;
 	return S_OK;
 }
 
@@ -109,17 +110,25 @@ void player::update()
 	inPutKey();
 	_playerStatusUI->update();
 
-
-	_count++;
-	if (_count > 3)
+	if (_isHit)
 	{
-		_count = 0;
-		IMAGEMANAGER->findImage("thunder")->SetFrameX(IMAGEMANAGER->findImage("thunder")->getFrameX() + 1);
-		if (IMAGEMANAGER->findImage("thunder")->getMaxFrameX() == IMAGEMANAGER->findImage("thunder")->getFrameX())
+		_hitCount += TIMEMANAGER->getElapsedTime();
+		if (_hitCount > 1.0f)
 		{
-			IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
+			_hitCount = 0;
+			_isHit = false;
 		}
 	}
+	//
+	//if (_count > 3)
+	//{
+	//	_count = 0;
+	//	IMAGEMANAGER->findImage("thunder")->SetFrameX(IMAGEMANAGER->findImage("thunder")->getFrameX() + 1);
+	//	if (IMAGEMANAGER->findImage("thunder")->getMaxFrameX() == IMAGEMANAGER->findImage("thunder")->getFrameX())
+	//	{
+	//		IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
+	//	}
+	//}
 	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
 	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
 	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x + (_playerCircleImg->GetWidth() / 2),
@@ -142,9 +151,16 @@ void player::update()
 	{
 		if (IntersectRect(&temp, &_collisionRc, &_em->getVEnemy()[i]->getAtkRc()))
 		{
-			enemyAngleCal(_em->getVEnemy()[i]->getAngle());
-			_curHp -= 1;
-			_playerStatusUI->setCurHp(_curHp);
+			if (!_isHit)
+			{
+				_isHit = true;
+				_curHp -= 1;
+				_playerStatusUI->setCurHp(_curHp);
+				_state = STATE::HIT;
+				currentPlayerState();
+				enemyAngleCal(_em->getVEnemy()[i]->getAngle());
+				_vec.x = _vec.y = 0;
+			}
 		}
 	
 	}
@@ -169,7 +185,7 @@ void player::render(HDC hdc)
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
 
 	char str[128];
-	sprintf_s(str, "%d : state", _skillUI->getIsStart(1), strlen(str));
+	sprintf_s(str, "%lf : state", _hitCount, strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
@@ -213,35 +229,35 @@ void player::playerKeyAnimationInit()
 	int backDash[] = { 180,181,182 };
 	KEYANIMANAGER->addArrayFrameAnimation("backDash", "player", backDash, 3, 10, false, playerIdle, this);
 
-	int rightDash[] = { 70,71,72,73,74,75 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 6, 15, false, playerIdle, this);
+	int rightDash[] = { 72,73,75 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightDash", "player", rightDash, 3, 10, false, playerIdle, this);
 
-	int leftDash[] = { 87,86,85,84,83,82};
-	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 6, 15, false, playerIdle, this);
+	int leftDash[] = {85,84,82};
+	KEYANIMANAGER->addArrayFrameAnimation("leftDash", "player", leftDash, 3, 10, false, playerIdle, this);
 	//hit
 	int frontHit[] = { 4 };
-	KEYANIMANAGER->addArrayFrameAnimation("frontHit", "player", frontHit, 1, 20, false, playerIdle, this);
+	KEYANIMANAGER->addArrayFrameAnimation("frontHit", "player", frontHit, 1, 2, false, playerIdle, this);
 
-	int BackHit[] = { 5 };
-	KEYANIMANAGER->addArrayFrameAnimation("BackHit", "player", frontHit, 1, 20, false, playerIdle, this);
+	int backHit[] = { 5};
+	KEYANIMANAGER->addArrayFrameAnimation("backHit", "player", backHit, 1, 2, false, playerIdle, this);
 
-	int LeftHit[] = { 6 };
-	KEYANIMANAGER->addArrayFrameAnimation("LeftHit", "player", LeftHit, 1, 20, false, playerIdle, this);
+	int leftHit[] = { 6};
+	KEYANIMANAGER->addArrayFrameAnimation("leftHit", "player", leftHit, 1, 2, false, playerIdle, this);
 
 	int rightHit[] = { 7 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightHit", "player", rightHit, 1, 20, false, playerIdle, this);
+	KEYANIMANAGER->addArrayFrameAnimation("rightHit", "player", rightHit, 1, 2, false, playerIdle, this);
 	//fall
 	int frontFall[] = { 4 };
-	KEYANIMANAGER->addArrayFrameAnimation("frontFall", "player", frontFall, 1, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("frontFall", "player", frontFall, 1, 1, false);
 
 	int BackFall[] = { 5 };
-	KEYANIMANAGER->addArrayFrameAnimation("BackFall", "player", BackFall, 1, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("BackFall", "player", BackFall, 1, 1, false);
 
 	int LeftFall[] = { 6 };
-	KEYANIMANAGER->addArrayFrameAnimation("LeftFall", "player", LeftFall, 1, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("LeftFall", "player", LeftFall, 1, 1, false);
 
 	int rightFall[] = { 7 };
-	KEYANIMANAGER->addArrayFrameAnimation("rightFall", "player", rightFall, 1, 20, false);
+	KEYANIMANAGER->addArrayFrameAnimation("rightFall", "player", rightFall, 1, 1, false);
 
 	//LightningChain
 	int frontLightningChain[] = { 50,51,52,53,54,55 };
@@ -286,7 +302,6 @@ void player::playerKeyAnimationInit()
 
 	int leftFlameStrikeSecond[] = { 169,168,167,166,165,164,163,162,161,160 };
 	KEYANIMANAGER->addArrayFrameAnimation("leftFlameStrikeSecond", "player", leftFlameStrikeSecond, 10, 20, false);
-
 
 	
 }
@@ -432,7 +447,7 @@ void player::startAni()
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::HIT)
 	{
-		_ani = KEYANIMANAGER->findAnimation("LeftHit");
+		_ani = KEYANIMANAGER->findAnimation("leftHit");
 		_ani->start();
 	}
 
@@ -685,7 +700,7 @@ void player::vecZero()
 {
 	if (_isLeftTopCheck)
 	{
-		if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
+		if (_state == STATE::HIT)
 		{
 			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
 				_vec.x = -_tileCollVec[0].x;
@@ -693,19 +708,36 @@ void player::vecZero()
 			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
 				_vec.y = -_tileCollVec[0].y;
 		}
-		if (_moveDirection == MOVEDIRECTION::LEFT)
+		else if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
+		{
+			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
+				_vec.x = -_tileCollVec[0].x;
+
+			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
+				_vec.y = -_tileCollVec[0].y;
+		}
+		else if (_moveDirection == MOVEDIRECTION::LEFT)
 		{
 			_vec.x = -_tileCollVec[0].x;
 		}
-		if (_moveDirection == MOVEDIRECTION::TOP)
+		else if (_moveDirection == MOVEDIRECTION::TOP)
 		{
 			_vec.y = -_tileCollVec[0].y;
 		}
+
 	}
 
 	if (_isRightTopCheck)
 	{
-		if ( _moveDirection == MOVEDIRECTION::RIGHT_TOP)
+		if (_state == STATE::HIT)
+		{
+			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getIsAvailMove())
+				_vec.x = -_tileCollVec[1].x;
+
+			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
+				_vec.y = -_tileCollVec[1].y;
+		}
+		else if ( _moveDirection == MOVEDIRECTION::RIGHT_TOP)
 		{
 			if (!(*_vvMap)[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove())
 			{
@@ -716,18 +748,27 @@ void player::vecZero()
 				_vec.y = -_tileCollVec[1].y;
 			}
 		}
-		if (_moveDirection == MOVEDIRECTION::RIGHT)
+		else if (_moveDirection == MOVEDIRECTION::RIGHT)
 		{
 			_vec.x = -_tileCollVec[1].x;
 		}
-		if (_moveDirection == MOVEDIRECTION::TOP)
+		else if (_moveDirection == MOVEDIRECTION::TOP)
 		{
 			_vec.y = -_tileCollVec[1].y;
 		}
+
 	}
 	if (_isLeftBottomCheck)
 	{
-		if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
+		if (_state == STATE::HIT)
+		{
+			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[2].x]->getIsAvailMove())
+				_vec.x = -_tileCollVec[2].x;
+
+			if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
+				_vec.y = -_tileCollVec[2].y;
+		}
+		else if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
 		{
 			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove())
 			{
@@ -738,18 +779,27 @@ void player::vecZero()
 				_vec.y = -_tileCollVec[2].y;
 			}
 		}
-		if (_moveDirection == MOVEDIRECTION::LEFT )
+		else if (_moveDirection == MOVEDIRECTION::LEFT )
 		{
 			_vec.x = -_tileCollVec[2].x;
 		}
-		if (_moveDirection == MOVEDIRECTION::BOTTOM)
+		else if (_moveDirection == MOVEDIRECTION::BOTTOM)
 		{
 			_vec.y = -_tileCollVec[2].y;
 		}
+
 	}
 	if (_isRightBottomCheck)
 	{
-		if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
+		if (_state == STATE::HIT)
+		{
+			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[3].x]->getIsAvailMove())
+				_vec.x = -_tileCollVec[3].x;
+
+			if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.left / 32]->getIsAvailMove())
+				_vec.y = -_tileCollVec[3].y;
+		}
+		else if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
 		{
 			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove())
 			{
@@ -760,14 +810,15 @@ void player::vecZero()
 				_vec.y = -_tileCollVec[3].y;
 			}
 		}
-		if (_moveDirection == MOVEDIRECTION::RIGHT)
+		else if (_moveDirection == MOVEDIRECTION::RIGHT)
 		{
 			_vec.x = -_tileCollVec[3].x;
 		}
-		if (_moveDirection == MOVEDIRECTION::BOTTOM )
+		else if (_moveDirection == MOVEDIRECTION::BOTTOM )
 		{
 			_vec.y = -_tileCollVec[3].y;
 		}
+
 	}
 
 }
@@ -778,25 +829,25 @@ void player::enemyAngleCal(float angle)
 	if ((angle* (180 / PI) <= 45 && angle * (180 / PI) >= 0) ||
 		(angle * (180 / PI) <= 360 && angle * (180 / PI) >= 315))
 	{
-		setAniDirection(ANIDIRECTION::RIGHT);
+		setAniDirection(ANIDIRECTION::LEFT);
 		startAni();
 	}
 	if ((angle* (180 / PI) > 135 &&
 		angle * (180 / PI) < 225))
 	{
-		setAniDirection(ANIDIRECTION::LEFT);
+		setAniDirection(ANIDIRECTION::RIGHT);
 		startAni();
 	}
 	if (angle* (180 / PI) > 45 &&
 		angle * (180 / PI) <= 135)
 	{
-		setAniDirection(ANIDIRECTION::BACK);
+		setAniDirection(ANIDIRECTION::FRONT);
 		startAni();
 	}
 	if (angle* (180 / PI) >= 225 &&
 		angle * (180 / PI) < 315)
 	{
-		setAniDirection(ANIDIRECTION::FRONT);
+		setAniDirection(ANIDIRECTION::BACK);
 		startAni();
 	}
 }
