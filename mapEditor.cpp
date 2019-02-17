@@ -54,6 +54,7 @@ HRESULT mapEditor::init()
 		IMAGEMANAGER->addFrameImage("btn_fire", "images/mapEditor/btn_fire.bmp", 45, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_earth", "images/mapEditor/btn_earth.bmp", 67, 44, 1, 2, false, 0x000000);
 		IMAGEMANAGER->addFrameImage("btn_common", "images/mapEditor/btn_common.bmp", 113, 30, 1, 2, false, 0x000000);
+		IMAGEMANAGER->addFrameImage("btn_roadView", "images/mapEditor/btn_roadView.bmp", 121, 42, 1, 2,true, 0xFF00FF);
 	}
 
 	//	기본 크기
@@ -123,6 +124,9 @@ HRESULT mapEditor::init()
 	_camLeftTop = { 0,0 };
 
 	_mapResizeCount = 0;
+	_roadViewImg = IMAGEMANAGER->findImage("btn_roadView");
+	_roadViewFrameY = 1;
+	_roadViewOn = false;
 
 	return S_OK;
 }
@@ -3870,20 +3874,43 @@ bool mapEditor::IsRdyToResize()
 
 void mapEditor::LoadView()
 {
-	for (int i = 0; i < _tileNumY; i++)
+	if (PtInRect(&_roadViewRc, _ptMouse))
 	{
-		for (int j = 0; j < _tileNumX; j++)
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			if (_vvMap[i][j]->getIsAvailMove() == true)
+			if (_roadViewOn == true)
 			{
-				char str[128];
-				sprintf_s(str, "[길]");
-				TextOut(getMemDC(),
-					_vvMap[i][j]->getTopTileRc().left - _camLeftTop.x,
-					_vvMap[i][j]->getTopTileRc().bottom - _camLeftTop.y - 20,
-					str, strlen(str));
+				_roadViewOn = false;
+				_roadViewFrameY = 1;
+			}
+			else if (_roadViewOn == false)
+			{
+				_roadViewOn = true;
+				_roadViewFrameY = 0;
 			}
 		}
 	}
+
+	if (_roadViewOn == true)
+	{
+		for (int i = 0; i < _tileNumY; i++)
+		{
+			for (int j = 0; j < _tileNumX; j++)
+			{
+				if (_vvMap[i][j]->getIsAvailMove() == true)
+				{
+					char str[128];
+					sprintf_s(str, "[길]");
+					TextOut(getMemDC(),
+						_vvMap[i][j]->getTopTileRc().left - _camLeftTop.x,
+						_vvMap[i][j]->getTopTileRc().bottom - _camLeftTop.y - 20,
+						str, strlen(str));
+				}
+			}
+		}
+	}
+
+	_roadViewRc = RectMakeCenter(WINSIZEX / 2 + 288, WINSIZEY / 2 + 100, 120, 60);
+	_roadViewImg->frameRender(getMemDC(), _roadViewRc.left, _roadViewRc.top, 0, _roadViewFrameY);
 }
 

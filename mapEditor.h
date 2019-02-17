@@ -245,6 +245,12 @@ private:
 
 	int _mapResizeCount;
 
+	//추가 - 버튼
+	image* _roadViewImg;
+	RECT _roadViewRc;
+	int _roadViewFrameY;
+	bool _roadViewOn;
+
 
 	const int ARROWBUTTON_GAP = 15;
 	const POINT SAMPLEZONE_CENTER = { 1375,225 };
