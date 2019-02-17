@@ -38,6 +38,7 @@ private:
 		float* coolDownTime;		//쿨다운시간 - 장전에 걸리는 총시간
 		float* curTime;				//장전시작부터 지금까지의 시간
 		float lastingTime;			//남은 시간 = 쿨다운시간 - 지금까지의 시간
+		int saveReloadNum;
 
 		bool isStart;
 		bool isPrepareBlt;
@@ -106,7 +107,7 @@ public:
 	void BitBltMask(int idx);
 	void BitBltQuarterMask(int idx, int quarter);
 	void ClockwiseMaskFunc(int idx);
-	void PartialClockwiseFunc(int idx);
+	//void PartialClockwiseFunc(int idx);
 
 	//	몇번째 스킬, 장전타이머의 주소, 현재 장전된 총알수(사용전)
 	void UseIdxSkill(int idx);

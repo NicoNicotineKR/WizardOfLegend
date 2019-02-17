@@ -121,22 +121,32 @@ void skillCooldownUI::update()
 		if (!_skills[i].isPrepareBlt) {
 			float gapEndReload;	//	1발 장전이 끝나기까지 남은시간
 			gapEndReload = ((*_skills[i].coolDownTime)*((*_skills[i].curReloadNum)+1)) - *(_skills[i].curTime);	//	(한발당시간*장전된 갯수+1) - 여태 장전해온 시간.
-			//	장전까지 0.1초 남았고, && 현충전수+1 이 최대충전수가 아니면, -> 장전직전이면
-			if (gapEndReload <= 0.05f && ((*_skills[i].curReloadNum) + 1) != *_skills[i].totalReloadNum) {
-				_skills[i].isPrepareBlt = true;
-				_skills[i].maskAlpha = MASK_ALPHA / (*_skills[i].totalReloadNum)*   ((*_skills[i].totalReloadNum) - ((*_skills[i].curReloadNum)));
-			}
+			
+			//if (_skills[i].saveReloadNum != *_skills[i].curReloadNum) {
+			//	_skills[i].isPrepareBlt = true;
+			//	_skills[i].maskAlpha = MASK_ALPHA / (*_skills[i].totalReloadNum)*   ((*_skills[i].totalReloadNum) - ((*_skills[i].curReloadNum)));
+			//	_skills[i].saveReloadNum = *_skills[i].curReloadNum;
+			//}
+
+																												
+																												
+																												
+																												//	장전까지 0.1초 남았고, && 현충전수+1 이 최대충전수가 아니면, -> 장전직전이면
+			//if (gapEndReload <= 0.05f && ((*_skills[i].curReloadNum) + 1) != *_skills[i].totalReloadNum) {
+			//	_skills[i].isPrepareBlt = true;
+			//	_skills[i].maskAlpha = MASK_ALPHA / (*_skills[i].totalReloadNum)*   ((*_skills[i].totalReloadNum) - ((*_skills[i].curReloadNum)));
+			//}
 		}
 		
 
 		//	장전안됐고, curTime이 0이라면, 즉 장전을 시작하는 단계라면,
-		if (_skills[i].isPrepareBlt) {
-			//	마스크검정원본 복사해와잉
-			_skills[i].isPrepareBlt = false;
-			BitBltMask(i);
-			//PartialClockwiseFunc(i);
-			
-		}
+		//if (_skills[i].isPrepareBlt) {
+		//	//	마스크검정원본 복사해와잉
+		//	_skills[i].isPrepareBlt = false;
+		//	BitBltMask(i);
+		//	//PartialClockwiseFunc(i);
+		//	
+		//}
 
 		//	다 채워졌으면,
 		if (*(_skills[i].curReloadNum) == *(_skills[i].totalReloadNum))
@@ -267,6 +277,8 @@ void skillCooldownUI::ChangeSkill(int idx, string name, int* totalReloadedNum, i
 	_skills[idx].curTime = curTimer;
 	_skills[idx].lastingTime = CalLastingTime(idx);
 	_skills[idx].maskAlpha = MASK_ALPHA;
+
+	_skills[idx].saveReloadNum = *curReloadNum;
 }
 
 void skillCooldownUI::DropSkill(int idx)
@@ -491,8 +503,9 @@ void skillCooldownUI::PartialClockwiseFunc(int idx)
 
 void skillCooldownUI::UseIdxSkill(int idx)
 {
-	if (!_skills[idx].isStart) {
-		BitBltMask(idx);
-	}
+	//if (!_skills[idx].isStart) {
+	//	BitBltMask(idx);
+	//}
+	BitBltMask(idx);
 	_skills[idx].isStart = true;
 }
