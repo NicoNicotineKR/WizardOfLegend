@@ -28,6 +28,9 @@ HRESULT mapEditor::init()
 	IMAGEMANAGER->addFrameImage("tileCommon", "images/map/CommonBaseTileSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 
+	//추가 - 에너미
+	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
+
 	IMAGEMANAGER->addImage("mapEditorFrame", "images/mapEditor/mapEditorFrame.bmp", 1600, 900, true, 0xFF00FF);
 	IMAGEMANAGER->addImage("sampleMask", "images/mapEditor/sampleMask.bmp", 32, 32, false, 0x000000);
 
@@ -90,7 +93,7 @@ HRESULT mapEditor::init()
 	_buttons[TILES].frameY = 1;
 	_curTileKind = CASTLE_TILE;
 	_curObjKind = CASTLE_OBJ;
-	_curUnitKind = CASTLE_UNIT;
+	_curUnitKind = COMMON_UNIT;
 	_curTileSampleIdx = 0;
 
 	//	=== tileCastle 샘플 생성 ===
@@ -109,7 +112,7 @@ HRESULT mapEditor::init()
 	InitSampleCommonTile();
 	InitSampleCommonObj();
 
-
+	InitSampleCommonEnemy();
 
 
 
@@ -3828,6 +3831,40 @@ void mapEditor::InitSampleCommonObj()
 	}
 }
 
+void mapEditor::InitSampleCommonEnemy()
+{
+	for (int i = 0; i <= IMAGEMANAGER->findImage("enemyCommon")->getMaxFrameY(); i++)
+	{
+		for (int j = 0; j <= IMAGEMANAGER->findImage("enemyCommon")->getMaxFrameX(); j++)
+		{
+			_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j] = new tile;
+			SetNewSampleObj(_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j], j, i);
+			_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setTopObjImage(IMAGEMANAGER->findImage("enemyCommon"));
+			_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setTopObjImgKey("enemyCommon");
+
+			if (0 <= j && j <= 3) {
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setIsAvailMove(true);
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setTopObjAttr(UNIT_GHOUL);
+			}
+			else if (4 <= j && j <= 7) {
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setIsAvailMove(true);
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setTopObjAttr(UNIT_KNIGHT);
+
+			}
+			else if (8 <= j && j <= 11) {
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setIsAvailMove(true);
+				_totalSamples[SELECT_UNIT][COMMON_UNIT][i][j]->setTopObjAttr(UNIT_LANCER);
+			}
+		}
+	}
+
+	//common Enemy 시작/끗 프레임인덱스 이닛
+	{
+		_totalFrameIdx[SELECT_UNIT][COMMON_UNIT][0][COMMON_ENEMY1] = { 0,0 };
+		_totalFrameIdx[SELECT_UNIT][COMMON_UNIT][1][COMMON_ENEMY1] = { 11,4 };
+	}
+}
+
 void mapEditor::OverlayClickFunc()
 {
 	//버튼들 오버레이
@@ -3876,6 +3913,7 @@ void mapEditor::OverlayClickFunc()
 						else             _buttons[i].frameY = 0;
 
 						break;
+						//	안씀. UNIT하고 오브젝하고 혼종이되었음
 						//case ERASE_UNIT:
 						//	_isEraseUnit = !_isEraseUnit;
 						//	if (_isEraseUnit) _buttons[i].frameY = 1;
@@ -4000,11 +4038,11 @@ void mapEditor::OverlayClickFunc()
 						_buttons[OBJECTS].frameY = 0;
 						_buttons[UNITS].frameY = 1;
 
-						if (j == BTN_CASTLE) { _curObjKind = CASTLE_UNIT; }
-						else if (j == BTN_ICE) { _curObjKind = ICE_UNIT; }
-						else if (j == BTN_FIRE) { _curObjKind = FIRE_UNIT; }
-						else if (j == BTN_EARTH) { _curObjKind = EARTH_UNIT; }
-						else if (j == BTN_COMMON) { _curObjKind = COMMON_UNIT; }
+						if (j == BTN_CASTLE) { _curUnitKind = CASTLE_UNIT; }
+						else if (j == BTN_ICE) { _curUnitKind = ICE_UNIT; }
+						else if (j == BTN_FIRE) { _curUnitKind = FIRE_UNIT; }
+						else if (j == BTN_EARTH) { _curUnitKind = EARTH_UNIT; }
+						else if (j == BTN_COMMON) { _curUnitKind = COMMON_UNIT; }
 						break;
 
 					}
@@ -4140,36 +4178,54 @@ void mapEditor::ArrowClickFunc()
 								if (_curSampleKind == SELECT_TILE) {
 									_curTileSampleIdx--;
 									//최대수제한(루프)
-									//캐슬타일중일경우,
-
-									if (_curTileKind == CASTLE_TILE) {
-										if (_curTileSampleIdx < 0) {
+									if (_curTileSampleIdx < 0) {
+										//캐슬타일중일경우,
+										if (_curTileKind == CASTLE_TILE) {
 											_curTileSampleIdx = CASTLETILE_KINDS_END - 1;
 										}
-									}
-									//어스타일일 경우
-									else if (_curTileKind == EARTH_TILE) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curTileKind == EARTH_TILE) {
 											_curTileSampleIdx = EARTHTILE_KINDS_END - 1;
 										}
-									}
-									//추가 - 유형우
-									else if (_curTileKind == ICE_TILE) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curTileKind == ICE_TILE) {
 											_curTileSampleIdx = ICETILE_KINDS_END - 1;
 										}
-									}
-									else if (_curTileKind == FIRE_TILE) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curTileKind == FIRE_TILE) {
 											_curTileSampleIdx = FIRETILE_KINDS_END - 1;
 										}
-									}
-									else if (_curTileKind == COMMON_TILE) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curTileKind == COMMON_TILE) {
 											_curTileSampleIdx = COMMONTILE_KINDS_END - 1;
 										}
 									}
-									//	다른 종류 타일 추가시 여기에 추가
+									
+									//	==== if잘못걸려있어서 위와같이 수정함 ====
+									//if (_curTileKind == CASTLE_TILE) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = CASTLETILE_KINDS_END - 1;
+									//	}
+									//}
+									////어스타일일 경우
+									//else if (_curTileKind == EARTH_TILE) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = EARTHTILE_KINDS_END - 1;
+									//	}
+									//}
+									////추가 - 유형우
+									//else if (_curTileKind == ICE_TILE) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = ICETILE_KINDS_END - 1;
+									//	}
+									//}
+									//else if (_curTileKind == FIRE_TILE) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = FIRETILE_KINDS_END - 1;
+									//	}
+									//}
+									//else if (_curTileKind == COMMON_TILE) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = COMMONTILE_KINDS_END - 1;
+									//	}
+									//}
+									////	다른 종류 타일 추가시 여기에 추가
 										//else if () {
 										//
 										//}
@@ -4182,34 +4238,54 @@ void mapEditor::ArrowClickFunc()
 								//	현재 선택된거랑 일치할경우만 적용!
 								if (_curSampleKind == SELECT_OBJ) {
 									_curTileSampleIdx--;
-									//캐슬오브제일경우
-									if (_curObjKind == CASTLE_OBJ) {
-										if (_curTileSampleIdx < 0) {
+									//최대수제한(루프)
+									if (_curTileSampleIdx < 0) {
+										if (_curObjKind == CASTLE_OBJ) {
 											_curTileSampleIdx = CASTLEOBJ_KINDS_END - 1;
 										}
-									}
-									else if (_curObjKind == EARTH_OBJ) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curObjKind == EARTH_OBJ) {
 											_curTileSampleIdx = EARTHOBJ_KINDS_END - 1;
 										}
-									}
-									//추가 - 유형우
-									else if (_curObjKind == ICE_OBJ) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curObjKind == ICE_OBJ) {
 											_curTileSampleIdx = ICEOBJ_KINDS_END - 1;
 										}
-									}
-									else if (_curObjKind == FIRE_OBJ) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curObjKind == FIRE_OBJ) {
 											_curTileSampleIdx = FIREOBJ_KINDS_END - 1;
 										}
-									}
-									else if (_curObjKind == COMMON_OBJ) {
-										if (_curTileSampleIdx < 0) {
+										else if (_curObjKind == COMMON_OBJ) {
 											_curTileSampleIdx = COMMONOBJ_KINDS_END - 1;
 										}
+
 									}
-									//어스오브제일경우
+
+									//캐슬오브제일경우
+									//if (_curObjKind == CASTLE_OBJ) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = CASTLEOBJ_KINDS_END - 1;
+									//	}
+									//}
+									//else if (_curObjKind == EARTH_OBJ) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = EARTHOBJ_KINDS_END - 1;
+									//	}
+									//}
+									////추가 - 유형우
+									//else if (_curObjKind == ICE_OBJ) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = ICEOBJ_KINDS_END - 1;
+									//	}
+									//}
+									//else if (_curObjKind == FIRE_OBJ) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = FIREOBJ_KINDS_END - 1;
+									//	}
+									//}
+									//else if (_curObjKind == COMMON_OBJ) {
+									//	if (_curTileSampleIdx < 0) {
+									//		_curTileSampleIdx = COMMONOBJ_KINDS_END - 1;
+									//	}
+									//}
+									////어스오브제일경우
 
 									//	다른 종류 타일 추가시 여기에 추가
 								}
@@ -4218,9 +4294,16 @@ void mapEditor::ArrowClickFunc()
 							case ARROW_UNITS:
 								//	현재 선택된거랑 일치할경우만 적용!
 								if (_curSampleKind == SELECT_UNIT) {
-									_curUnitKind--;
-									if (_curUnitKind < 0)
-										_curUnitKind = UNIT_KINDS_END - 1;
+									_curTileSampleIdx--;
+									if (_curTileSampleIdx < 0) {
+										if (_curObjKind == COMMON_UNIT) {
+											_curTileSampleIdx = COMMON_ENEMY_KINDS_END - 1;
+										}
+										//else if (_curObjKind == COMMON_UNIT) {
+										//	_curTileSampleIdx = COMMON_ENEMY_KINDS_END - 1;
+										//}
+									}
+										
 								}
 								break;
 							}
@@ -4339,9 +4422,12 @@ void mapEditor::ArrowClickFunc()
 							case ARROW_UNITS:
 								//	현재 선택된거랑 일치할경우만 적용!
 								if (_curSampleKind == SELECT_UNIT) {
-									_curUnitKind++;
-									if (_curUnitKind == UNIT_KINDS_END)
-										_curUnitKind = 0;
+									_curTileSampleIdx++;
+									if (_curUnitKind == COMMON_UNIT) {
+										if (_curTileSampleIdx >= COMMON_ENEMY_KINDS_END) {
+											_curTileSampleIdx = 0;
+										}
+									}
 								}
 								break;
 							}
@@ -4487,6 +4573,20 @@ void mapEditor::SampleRender()
 
 	case SELECT_UNIT:
 
+		xStartIdx = _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x;
+		yStartIdx = _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y;
+		xEndIdx = _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].x;
+		yEndIdx = _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].y;
+
+		for (int i = yStartIdx; i <= yEndIdx; i++) {
+			for (int j = xStartIdx; j <= xEndIdx; j++) {
+				//_castleTileSampleImg->frameRender(getMemDC(), _sampleRc[0][0].left + (j-xStartIdx) * TOP_TILESIZE, _sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE, j, i);	//일단 죽여봄
+				_totalSamples[_curSampleKind][_curUnitKind][i][j]->getTopObjImg()->frameRender(getMemDC(),
+					_sampleRc[0][0].left + (j - xStartIdx) * TOP_TILESIZE,
+					_sampleRc[0][0].top + (i - yStartIdx) * TOP_TILESIZE,
+					j, i);
+			}
+		}
 
 		break;
 
@@ -4720,11 +4820,22 @@ void mapEditor::PreviewSampleRender()
 				//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
 				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curTileKind][0][_curTileSampleIdx].y;
 				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curTileKind][0][_curTileSampleIdx].x;
+
+				//조절된 실제 이미지의 프레임계산값이, 해당페이지의 시작/끝 프레임수에서 벗어난다면, 예외처리.
+				if (adjustIdxY < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y
+					|| adjustIdxY > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].y)	continue;
+				if (adjustIdxX < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x
+					|| adjustIdxX > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].x)	continue;
+
 				//	뿌려줄 좌표 위치계산
 				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
 							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
 				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
+				
+				//	터지는거 방지용
+				if (_totalSamples[_curSampleKind][_curTileKind][adjustIdxY][adjustIdxX]->getTopTileImg() == nullptr) continue;
+
 				_totalSamples[_curSampleKind][_curTileKind][adjustIdxY][adjustIdxX]->AlphaFrameRender(pos.x, pos.y, PREVIEW_ALPHA);
 
 
@@ -4734,15 +4845,54 @@ void mapEditor::PreviewSampleRender()
 				//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
 				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curObjKind][0][_curTileSampleIdx].y;
 				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curObjKind][0][_curTileSampleIdx].x;
+
+				//조절된 실제 이미지의 프레임계산값이, 해당페이지의 시작/끝 프레임수에서 벗어난다면, 예외처리.
+				if (adjustIdxY < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y
+					|| adjustIdxY > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].y)	continue;
+				if (adjustIdxX < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x
+					|| adjustIdxX > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].x)	continue;
+
+
 				//	뿌려줄 좌표 위치계산
 				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
 							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
 				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
+
+				//	터지는거 방지용
+				if (_totalSamples[_curSampleKind][_curObjKind][adjustIdxY][adjustIdxX]->getTopObjImg() == nullptr) continue;
+
 				_totalSamples[_curSampleKind][_curObjKind][adjustIdxY][adjustIdxX]->AlphaFrameRender(pos.x, pos.y, PREVIEW_ALPHA);
 
 
 			}
+			else if (_curSampleKind == SELECT_UNIT) {
+
+				//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
+				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y;
+				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x;
+
+				//조절된 실제 이미지의 프레임계산값이, 해당페이지의 시작/끝 프레임수에서 벗어난다면, 예외처리.
+				if (adjustIdxY < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y
+					|| adjustIdxY > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].y)	continue;
+				if (adjustIdxX < _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x
+					|| adjustIdxX > _totalFrameIdx[_curSampleKind][_curUnitKind][1][_curTileSampleIdx].x)	continue;
+
+				//	뿌려줄 좌표 위치계산
+				POINT pos = { (_cursorMapIdx.x + (j - jStart)) * TOP_TILESIZE - _camLeftTop.x,
+							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
+				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
+				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
+
+				//	터지는거 방지용
+				if (_totalSamples[_curSampleKind][_curUnitKind][adjustIdxY][adjustIdxX]->getTopObjImg() == nullptr) continue;
+
+				_totalSamples[_curSampleKind][_curUnitKind][adjustIdxY][adjustIdxX]->AlphaFrameRender(pos.x, pos.y, PREVIEW_ALPHA);
+
+
+			}
+
+
 		}
 	}
 
@@ -4891,6 +5041,16 @@ void mapEditor::CursorAdjustOnMap()
 				//	
 				//}
 				//elseif(다른타일)		//다른 타일이면, === 타일 추가시 여기에 추가 ===
+			}
+			else if (_curSampleKind == SELECT_UNIT) {
+
+				//	드래그 + 실제맵스프라이트의 인덱스(프레임) 적용
+				int adjustIdxY = i + _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].y;
+				int adjustIdxX = j + _totalFrameIdx[_curSampleKind][_curUnitKind][0][_curTileSampleIdx].x;
+				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
+				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
+				TransObjSampleToMap(_totalSamples[_curSampleKind][_curUnitKind][adjustIdxY][adjustIdxX], _vvMap[mapIdxY + (i - iStart)][mapIdxX + (j - jStart)]);	//	오브제를 전송하는건지, 타일전송하는건지 구분!
+
 			}
 
 		}

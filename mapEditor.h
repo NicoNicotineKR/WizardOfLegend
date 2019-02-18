@@ -139,6 +139,14 @@ private:
 		COMMONOBJ8,
 		COMMONOBJ_KINDS_END,
 	};
+	//	페이지종류
+	enum E_COMMON_ENEMY_KINDS {
+		COMMON_ENEMY1 =0,
+
+
+		COMMON_ENEMY_KINDS_END,
+	};
+	
 
 	enum E_TILE_KINDS	//_curTileKind
 	{
@@ -323,6 +331,8 @@ public:
 	void InitSampleCommonTile();
 	void InitSampleCommonObj();
 
+	//추가 - 에너미
+	void InitSampleCommonEnemy();
 
 	void OverlayClickFunc();
 	void ArrowClickFunc();			//--- 타일/오브제 추가할때마다 수정필요 ---
