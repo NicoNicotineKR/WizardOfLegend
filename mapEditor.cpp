@@ -134,6 +134,9 @@ HRESULT mapEditor::init()
 	_roadViewFrameY = 1;
 	_roadViewOn = false;
 
+	//로드뷰 - [길]
+	_roadViewRc = RectMakeCenter(WINSIZEX / 2 + 288, WINSIZEY - 65, 120, 60);
+
 	return S_OK;
 }
 
@@ -158,20 +161,34 @@ void mapEditor::update()
 	{
 		SCENEMANAGER->changeScene("mainmenu");
 	}
+
+	// 로드뷰 - [길]
+	{
+		_cameraIdxX = _camLeftTop.x / 32;
+		_cameraIdxY = _camLeftTop.y / 32;
+		LoadView();
+	}
+
 }
 
 void mapEditor::render()
 {
 
-	//타일 출력
-	for (int i = 0; i < _tileNumY; i++) {
-		for (int j = 0; j < _tileNumX; j++) {
-			//_vvMap[i][j]->render();
-			_vvMap[i][j]->CamRender(_camLeftTop.x, _camLeftTop.y);
+	//타일 출력 - (시퀀스 렌더링)
+	for (int i = _cameraIdxY - 2; i < _cameraIdxY + 25; i++)
+	{
+		for (int j = _cameraIdxX - 2; j < _cameraIdxX + 34; j++)
+		{
+			if (j < 0)continue;
+			if (i < 0)continue;
+			if (j >= _tileNumX)continue;
+			if (i >= _tileNumY)continue;
 
+			_vvMap[i][j]->CamRender(_camLeftTop.x, _camLeftTop.y);
 		}
 	}
 
+	//타일 출력 - (시퀀스 렌더링)
 	//	areaIdx
 	if (_isAreaMode) {
 
@@ -238,17 +255,32 @@ void mapEditor::render()
 	}
 
 
-
-
-
 	//	테스트용
 	char str[128];
 	sprintf_s(str, "_curTileSampleIdx : %d", _curTileSampleIdx);
 	TextOut(getMemDC(), 30, 30, str, strlen(str));
 
 
-	//길보여짐
-	LoadView();
+	//로드뷰 - [길]
+	if (_roadViewOn == true)
+	{
+		for (int i = 0; i < _tileNumY; i++)
+		{
+			for (int j = 0; j < _tileNumX; j++)
+			{
+				if (_vvMap[i][j]->getIsAvailMove() == true)
+				{
+					char str[128];
+					sprintf_s(str, "[길]");
+					TextOut(getMemDC(),
+						_vvMap[i][j]->getTopTileRc().left - _camLeftTop.x,
+						_vvMap[i][j]->getTopTileRc().bottom - _camLeftTop.y - 20,
+						str, strlen(str));
+				}
+			}
+		}
+	}
+	_roadViewImg->frameRender(getMemDC(), _roadViewRc.left, _roadViewRc.top, 0, _roadViewFrameY);
 }
 
 void mapEditor::SetNewMap(int tilenumX, int tileNumY)
@@ -4601,8 +4633,16 @@ void mapEditor::TileInfoRender()
 void mapEditor::AreaIdxRender()
 {
 
-	for (int i = 0; i < _tileNumY; i++) {
-		for (int j = 0; j < _tileNumX; j++) {
+
+
+	for (int i = _cameraIdxY - 2; i < _cameraIdxY + 25; i++)
+	{
+		for (int j = _cameraIdxX - 2; j < _cameraIdxX + 34; j++)
+		{
+			if (j < 0)continue;
+			if (i < 0)continue;
+			if (j >= _tileNumX)continue;
+			if (i >= _tileNumY)continue;
 
 			char str[128];
 			sprintf_s(str, "[%d]", _vvMap[i][j]->getAreaIdx());
@@ -5377,27 +5417,5 @@ void mapEditor::LoadView()
 			}
 		}
 	}
-
-	if (_roadViewOn == true)
-	{
-		for (int i = 0; i < _tileNumY; i++)
-		{
-			for (int j = 0; j < _tileNumX; j++)
-			{
-				if (_vvMap[i][j]->getIsAvailMove() == true)
-				{
-					char str[128];
-					sprintf_s(str, "[길]");
-					TextOut(getMemDC(),
-						_vvMap[i][j]->getTopTileRc().left - _camLeftTop.x,
-						_vvMap[i][j]->getTopTileRc().bottom - _camLeftTop.y - 20,
-						str, strlen(str));
-				}
-			}
-		}
-	}
-
-	_roadViewRc = RectMakeCenter(WINSIZEX / 2 + 288, WINSIZEY - 65, 120, 60);
-	_roadViewImg->frameRender(getMemDC(), _roadViewRc.left, _roadViewRc.top, 0, _roadViewFrameY);
 }
 

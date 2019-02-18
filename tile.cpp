@@ -26,7 +26,7 @@ void tile::update()
 
 void tile::render()
 {
-	Rectangle(getMemDC(), _topTile.rc);
+	//Rectangle(getMemDC(), _topTile.rc);
 	if (_topTile.img != nullptr)
 	{
 		_topTile.img->frameRender(getMemDC(), _topTile.rc.left, _topTile.rc.top, _topTile.frameX, _topTile.frameY);

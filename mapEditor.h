@@ -276,6 +276,10 @@ private:
 	int _roadViewFrameY;
 	bool _roadViewOn;
 
+	//타일 출력 - (부분출력)
+	int _cameraIdxX;
+	int _cameraIdxY;
+
 
 	const int ARROWBUTTON_GAP = 15;
 	const POINT SAMPLEZONE_CENTER = { 1375,225 };
@@ -355,7 +359,7 @@ public:
 	void MapResizeCountDelayFunc();
 	bool IsRdyToResize();
 
-	//길 보여짐
+	//로드뷰 - [길]
 	void LoadView();
 };
 
