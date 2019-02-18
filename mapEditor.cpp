@@ -264,10 +264,15 @@ void mapEditor::render()
 	//로드뷰 - [길]
 	if (_roadViewOn == true)
 	{
-		for (int i = 0; i < _tileNumY; i++)
+		for (int i = _cameraIdxY - 2; i < _cameraIdxY + 25; i++)
 		{
-			for (int j = 0; j < _tileNumX; j++)
+			for (int j = _cameraIdxX - 2; j < _cameraIdxX + 34; j++)
 			{
+				if (j < 0)continue;
+				if (i < 0)continue;
+				if (j >= _tileNumX)continue;
+				if (i >= _tileNumY)continue;
+
 				if (_vvMap[i][j]->getIsAvailMove() == true)
 				{
 					char str[128];
@@ -4391,9 +4396,31 @@ void mapEditor::AddMapY()
 void mapEditor::CursorGetTileInfoFunc()
 {
 	//	맵쪽
+	//if (PtInRect(&_mapZoneRc, _ptMouse)) {
+	//	for (int i = 0; i < _tileNumY; i++) {
+	//		for (int j = 0; j < _tileNumX; j++) {
+	//			RECT camAdjustRc = _vvMap[i][j]->getTopTileRc();
+	//			camAdjustRc.left -= _camLeftTop.x;
+	//			camAdjustRc.right -= _camLeftTop.x;
+	//			camAdjustRc.top -= _camLeftTop.y;
+	//			camAdjustRc.bottom -= _camLeftTop.y;
+	//			if (PtInRect(&camAdjustRc, _ptMouse)) {
+	//				_currentCursorTileInfo = _vvMap[i][j];
+	//			}
+	//		}
+	//	}
+	//}
+
 	if (PtInRect(&_mapZoneRc, _ptMouse)) {
-		for (int i = 0; i < _tileNumY; i++) {
-			for (int j = 0; j < _tileNumX; j++) {
+		for (int i = _cameraIdxY - 2; i < _cameraIdxY + 25; i++)
+		{
+			for (int j = _cameraIdxX - 2; j < _cameraIdxX + 34; j++)
+			{
+				if (j < 0)continue;
+				if (i < 0)continue;
+				if (j >= _tileNumX)continue;
+				if (i >= _tileNumY)continue;
+
 				RECT camAdjustRc = _vvMap[i][j]->getTopTileRc();
 				camAdjustRc.left -= _camLeftTop.x;
 				camAdjustRc.right -= _camLeftTop.x;
@@ -5025,8 +5052,8 @@ void mapEditor::SaveFunc()
 	// tilenumX] tilenumY]
 	//	인덱스
 	// tile - pos, rc, framex/y, attr, imgKey
-	char save[500000] = {};
-	char token[10000] = {};
+	char save[5000000] = {};
+	char token[100000] = {};
 	char tmp[1000] = {};
 
 
@@ -5201,7 +5228,7 @@ void mapEditor::LoadFunc()
 	// tilenumX] tilenumY]
 	// 인덱스
 	// tile - pos, rc, framex/y, attr, imgKey
-	char load[500000] = {};
+	char load[5000000] = {};
 	char* token;			//1번 잘려진 문자열의 주소
 	char* context;			//2번 잘려진 문자열의
 	char tmp[10] = {};
