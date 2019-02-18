@@ -40,8 +40,8 @@ protected:
 	float			_hitAngle;			//맞을때 튕겨나갈 각도
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-	POINTFLOAT		_pos;				//중심 좌표 얘가 모든것의 중심좌표임 얘변하면 나머지 다변함
-	RECT			_rc;				//중심 렉트(타일크기)
+	POINTFLOAT		_pos;				//중심 좌표
+	RECT			_rc;				//중심 렉트(타일크기 , 타일충돌에쓰임)
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	POINTFLOAT		_vec;				//에너미 벡터 값
@@ -54,8 +54,8 @@ protected:
 	enemyState*		_enemyState;
 	enemyState*		_arrState[static_cast<const int>(E_STATE::MAX)];
 
-	RECT			_collisionRc;		//충돌판정용 렉트
-	POINTFLOAT		_collisionPos;		//충돌판정 좌표
+	RECT			_collisionRc;		//맞는 판정 렉트
+	POINTFLOAT		_collisionPos;		//맞는 판정 좌표
 
 	// 순수혈통(에너미에게 필요해서 존재하는것들)이 아닌것
 
@@ -105,7 +105,7 @@ public:
 	//주소 연결
 	void setPlayerAdress(player* player) { _player = player; }
 	POINTFLOAT getPlayerPos() { return _playerPos; }
-	void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
+	void setMapAdress(vector<vector<tile*>>* vvMap) { _vvMap = *vvMap; }
 
 
 	virtual void enemyKeyAnimationInit();

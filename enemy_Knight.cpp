@@ -56,7 +56,10 @@ HRESULT enemy_Knight::init()
 	_state = E_STATE::IDLE;
 
 	_isAniOnce = false;
-	_isClose = true;
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	_isClose = true;								// 아이들상태에서 move상태로 가는 불변수임 중요
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	_curCharge = 0.f;
 	_maxCharge = 0.5f;
@@ -162,13 +165,13 @@ void enemy_Knight::render()
 //	sprintf_s(str, "idx : %d", _countIdY);
 //
 //	TextOut(getMemDC(), 50, 200, str, strlen(str));
-	Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
+	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
 	Rectangle(getMemDC(), _pos.x, _pos.y, _pos.x + 10, _pos.y + 10);
 	//플레이어 기준좌표 출력
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y, _playerPos.x + 10, _playerPos.y + 10);
 	//
 	////에너미 기준 좌표 출력(타일충돌)
-	//Rectangle(getMemDC(), _rc);
+	//Rectangle(getMemDC(), _collisionRc);
 	//
 	//Rectangle(getMemDC(), _pos.x, _pos.y - 70, _pos.x + 10, _pos.y - 60);
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y - 50, _playerPos.x + 10, _playerPos.y - 40);

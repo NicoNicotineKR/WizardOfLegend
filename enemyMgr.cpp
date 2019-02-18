@@ -22,7 +22,7 @@ HRESULT enemyMgr::init()
 	{
 		_vEnemy[i]->init();
 		_vEnemy[i]->setPlayerAdress(_player);
-		_vEnemy[i]->setMapAdress(_vvMap);
+		_vEnemy[i]->setMapAdress(&_vvMap);
 	}
 
 	return S_OK;
@@ -80,5 +80,38 @@ void enemyMgr::render()
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
 			_vEnemy[i]->render();
+	}
+}
+
+void enemyMgr::makeEnemy(int makeNum, POINTFLOAT enemyPos_LT)
+{
+	enemy* enemy;
+	switch (makeNum)
+	{
+		case UNIT_GHOUL:
+			enemy = new enemy_Ghoul;
+			enemy->init();
+			enemy->setPlayerAdress(_player);
+			enemy->setMapAdress(&_vvMap);
+			enemy->setPos(enemyPos_LT);
+			_vEnemy.push_back(enemy);
+		break;
+		case UNIT_KNIGHT:
+			enemy = new enemy_Knight;
+			enemy->init();
+			enemy->setPlayerAdress(_player);
+			enemy->setMapAdress(&_vvMap);
+			//knight->setPosX()
+			_vEnemy.push_back(enemy);
+		break;
+		case UNIT_LANCER:
+			
+			//추가시 수정
+		break;
+		case UNIT_ARCHER:
+
+			//추가시 수정
+		break;
+
 	}
 }

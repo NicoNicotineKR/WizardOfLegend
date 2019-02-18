@@ -57,7 +57,10 @@ HRESULT enemy_Ghoul::init()
 	_state = E_STATE::IDLE;
 
 	_isAniOnce = false;
-	_isClose = true;
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	_isClose = true;								// 아이들상태에서 move상태로 가는 불변수임 중요
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	_curCharge = 0.f;
 	_maxCharge = 0.3f;
