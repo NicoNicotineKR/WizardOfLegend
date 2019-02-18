@@ -3786,6 +3786,13 @@ void mapEditor::InitSampleCommonObj()
 				}
 			}
 
+			//시작지점
+			if (4 <= i && i <= 7) {
+				if (107 <= j && j <= 111) {
+					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setIsAvailMove(true);
+					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setTopObjAttr(OBJ_STARTPOINT);
+				}
+			}
 
 
 
