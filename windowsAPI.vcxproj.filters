@@ -402,6 +402,12 @@
     <ClInclude Include="stageMapLoader.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
+    <ClInclude Include="objectInfo.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="objectMgr.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -702,6 +708,12 @@
       <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
     <ClCompile Include="stageMapLoader.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="objectInfo.cpp">
+      <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="objectMgr.cpp">
       <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>

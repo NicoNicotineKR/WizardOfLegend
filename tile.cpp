@@ -43,7 +43,7 @@ void tile::render()
 void tile::CamRender(int camLeft, int camTop)
 {
 //	Rectangle(getMemDC(), _topTile.rc);
-	Rectangle(getMemDC(), _topTile.rc.left - camLeft, _topTile.rc.top - camTop,
+	Rectangle(getMemDC(), _topTile.rc.left - camLeft, _topTile.rc.top - camTop,		//	맵에디터만 키고 사용할 것!
 		_topTile.rc.right - camLeft, _topTile.rc.bottom - camTop);
 	if (_topTile.img != nullptr)
 	{
@@ -52,6 +52,14 @@ void tile::CamRender(int camLeft, int camTop)
 	if (_topObj.img != nullptr)
 	{
 		_topObj.img->frameRender(getMemDC(), _topObj.rc.left - camLeft, _topObj.rc.top - camTop, _topObj.frameX, _topObj.frameY);
+	}
+}
+
+void tile::CamTileRender(int camLeft, int camTop)
+{
+	if (_topTile.img != nullptr)
+	{
+		_topTile.img->frameRender(getMemDC(), _topTile.rc.left - camLeft, _topTile.rc.top - camTop, _topTile.frameX, _topTile.frameY);
 	}
 }
 

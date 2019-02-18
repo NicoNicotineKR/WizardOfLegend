@@ -36,6 +36,7 @@ public:
 	void update();
 	void render();
 	void CamRender(int camLeft, int camTop);
+	void CamTileRender(int camLeft, int camTop);
 	void AlphaFrameRender(int destX, int destY, BYTE alpha);
 	
 	//	============ 타일관련 겟셋 ==========
