@@ -70,6 +70,9 @@
     <Filter Include="PlayGround\data">
       <UniqueIdentifier>{c7c7046c-270d-4c81-b81e-91970779c7ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\bossState">
+      <UniqueIdentifier>{23f727a5-314b-499a-9b30-a27c733fe44c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -357,6 +360,45 @@
     <ClInclude Include="boss.h">
       <Filter>PlayGround\units</Filter>
     </ClInclude>
+    <ClInclude Include="bossState.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Idle.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Spawn.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Casting.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Mock.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Stun.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Death.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_SKILL_Two.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_SKILL_Three.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_SKILL_One.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_SKILL_Four.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_SKILL_Five.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
+    <ClInclude Include="boss_State_Death_Start.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -619,6 +661,42 @@
     </ClCompile>
     <ClCompile Include="boss.cpp">
       <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Spawn.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Idle.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Casting.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Mock.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Stun.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Death.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Death_Start.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_SKILL_Five.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_SKILL_Four.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_SKILL_One.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_SKILL_Three.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_SKILL_Two.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

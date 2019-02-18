@@ -1,8 +1,8 @@
 #pragma once
-#include "gameNode.h"
+//#include "gameNode.h"
 #include "enemy.h"
 
-class enemy;
+//class enemy;
 
 class enemyState abstract
 {

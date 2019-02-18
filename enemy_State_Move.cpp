@@ -13,7 +13,8 @@ enemy_State_Move::~enemy_State_Move()
 
 void enemy_State_Move::direction_Left(enemy * enemy)
 {
-	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
+	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50) 
+		&& (!enemy->getIsHit() && !enemy->getIsDead()))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::LEFT);
 		enemy->setState(E_STATE::CHARGE);
@@ -40,7 +41,8 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 
 void enemy_State_Move::direction_right(enemy * enemy)
 {
-	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50))
+	if (enemy->getAtkRange() > getDistance(enemy->getPos().x, enemy->getPos().y - 70, enemy->getPlayerPos().x, enemy->getPlayerPos().y - 50) 
+		&& (!enemy->getIsHit() && !enemy->getIsDead()))
 	{
 		enemy->setAniDirection(E_ANIDIRECTION::RIGHT);
 		enemy->setState(E_STATE::CHARGE);
@@ -51,7 +53,6 @@ void enemy_State_Move::direction_right(enemy * enemy)
 		enemy->setAngle(getAngle(enemy->getPos().x, enemy->getPos().y, enemy->getPlayerPos().x, enemy->getPlayerPos().y));
 		enemy->setAtkPosX(enemy->getPos().x + cosf(enemy->getAngle()) * enemy->getWeaponRange());
 		enemy->setAtkPosY((enemy->getPos().y - enemy->getEffectShavePosY()) + -sinf(enemy->getAngle()) * enemy->getWeaponRange());
-		enemy->setAtkRc(enemy->getAtkPos());
 
 		float angle = enemy->getAngle() + (PI / 36);
 		int frame = (int)(angle / (PI / 18));
