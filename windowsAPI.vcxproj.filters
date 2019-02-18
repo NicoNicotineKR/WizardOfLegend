@@ -399,6 +399,9 @@
     <ClInclude Include="boss_State_Death_Start.h">
       <Filter>PlayGround\units\bossState</Filter>
     </ClInclude>
+    <ClInclude Include="stageMapLoader.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -697,6 +700,9 @@
     </ClCompile>
     <ClCompile Include="boss_State_SKILL_Two.cpp">
       <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="stageMapLoader.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -237,6 +237,7 @@
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1_1.h" />
     <ClInclude Include="stageBoss1.h" />
+    <ClInclude Include="stageMapLoader.h" />
     <ClInclude Include="state_Dash.h" />
     <ClInclude Include="state_Dead.h" />
     <ClInclude Include="state_Fall.h" />
@@ -340,6 +341,7 @@
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1_1.cpp" />
     <ClCompile Include="stageBoss1.cpp" />
+    <ClCompile Include="stageMapLoader.cpp" />
     <ClCompile Include="state_Dash.cpp" />
     <ClCompile Include="state_Dead.cpp" />
     <ClCompile Include="state_Fall.cpp" />
