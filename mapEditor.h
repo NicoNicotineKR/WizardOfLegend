@@ -280,7 +280,7 @@ private:
 	const int ARROWBUTTON_GAP = 15;
 	const POINT SAMPLEZONE_CENTER = { 1375,225 };
 	const int SAMPLE_MASK_ALPHA = 120;
-	const int CAM_MOVESPD = 10;
+	const int CAM_MOVESPD = 4;
 	const int RESIZE_COUNTFRAME = 5;		//	맵크기 리사이즈 할때 카운트할 프레임
 	const int PREVIEW_ALPHA = 200;			//	미리보기 알파값
 
