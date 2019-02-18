@@ -354,6 +354,9 @@
     <ClInclude Include="minimapUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="boss.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -613,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="minimapUI.cpp">
       <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.cpp">
+      <Filter>PlayGround\units</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

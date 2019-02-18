@@ -34,7 +34,6 @@ void enemy_State_Move::direction_Left(enemy * enemy)
 			frame = 0;
 		}
 		//어휴 미친럼
-		//enemy->getAtkImg()->SetFrameX(frame);
 		enemy->setAtkIdX(frame);
 	}
 }
@@ -62,7 +61,6 @@ void enemy_State_Move::direction_right(enemy * enemy)
 			frame = 0;
 		}
 		//	360 -> 10 36 2pi
-		//enemy->getAtkImg()->SetFrameX(frame);
 		enemy->setAtkIdX(frame);
 	}
 }
@@ -70,7 +68,14 @@ void enemy_State_Move::direction_right(enemy * enemy)
 void enemy_State_Move::update(enemy * enemy)
 {
 	E_ANIDIRECTION save = enemy->getAniDirection();
-	enemy->fixDirection();
+	if (enemy->getPath()->size() != 0)
+	{
+		enemy->moveDirection();
+	}
+	else if (enemy->getPath()->size() == 0)
+	{
+		enemy->fixDirection();
+	}
 	if (save != enemy->getAniDirection())
 	{
 		enemy->setIsAniOnce(true);
@@ -81,20 +86,21 @@ void enemy_State_Move::update(enemy * enemy)
 	// 에이스타를 활용해 플레이어를 쫓아가즈아
 	if (enemy->getPath()->size() > 0)
 	{
-		//int x = (enemy->getPos().x * TILE_SIZE) + (TILE_SIZE / 2);
-		//int y = (enemy->getPos().y * TILE_SIZE) + (TILE_SIZE / 2);
+
 
 		int x = enemy->getPos().x / TILE_SIZE;
 		int y = enemy->getPos().y / TILE_SIZE;
+		//int x = (enemy->getPos().x * TILE_SIZE) + (TILE_SIZE / 2);
+		//int y = (enemy->getPos().y * TILE_SIZE) + (TILE_SIZE / 2);
 		
 		int posX = enemy->getPos().x;
 		int posY = enemy->getPos().y;
 
+		int tileX = enemy->getPath()->begin()->x;
+		int tileY = enemy->getPath()->begin()->y;
 	//	float tileX = (enemy->getPath()->begin()->x * TILE_SIZE);
 	//	float tileY = (enemy->getPath()->begin()->y * TILE_SIZE);
 
-		int tileX = enemy->getPath()->begin()->x;
-		int tileY = enemy->getPath()->begin()->y;
 		//x 
 		if (tileX > x)
 		{
@@ -105,7 +111,6 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecX(0);
 			}
-			//enemy->setVecX(3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
 		//	{
@@ -127,7 +132,6 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecX(0);
 			}
-		//	enemy->setVecX(-3);
 
 		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
 		//	{
@@ -152,8 +156,6 @@ void enemy_State_Move::update(enemy * enemy)
 				enemy->setVecY(0);
 			}
 
-		//	enemy->setVecY(3);
-
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
 			//{
 			//	enemy->setVecY(0);
@@ -174,8 +176,6 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecY(0);
 			}
-
-		//	enemy->setVecY(-3);
 
 			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
 			//{

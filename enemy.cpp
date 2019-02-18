@@ -59,6 +59,18 @@ void enemy::fixDirection()
 	}
 }
 
+void enemy::moveDirection()
+{
+	if (_pos.x < _listPath.front().x)
+	{
+		_aniDirection = E_ANIDIRECTION::RIGHT;
+	}
+	if (_pos.x >= _listPath.front().x)
+	{
+		_aniDirection = E_ANIDIRECTION::LEFT;
+	}
+}
+
 void enemy::currentEnemyState()
 {
 	switch (_state)

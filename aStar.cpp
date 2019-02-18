@@ -100,6 +100,43 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			if (curIdxX + i < 0 || curIdxX + i > (_vTotalList[0]).size() - 1
 				|| curIdxY + j < 0 || curIdxY + j > _vTotalList.size() - 1)	continue;
 
+			//11시방향 타일일때
+			if (i == -1 && j == -1)
+			{
+				//9시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
+				if (!_vTotalList[curIdxY][curIdxX - 1]->getIsAvailMove() || !_vTotalList[curIdxY - 1][curIdxX]->getIsAvailMove())
+				{
+					continue;
+				}
+			}
+			//1시방향 타일일때
+			else if (i == -1 && j == 1)
+			{
+				//3시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
+				if (!_vTotalList[curIdxY][curIdxX + 1]->getIsAvailMove() || !_vTotalList[curIdxY - 1][curIdxX]->getIsAvailMove())
+				{
+					continue;
+				}
+			}
+			//7시방향 타일일때
+			else if (i == 1 && j == -1)
+			{
+				//9시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
+				if (!_vTotalList[curIdxY][curIdxX - 1]->getIsAvailMove() || !_vTotalList[curIdxY + 1][curIdxX]->getIsAvailMove())
+				{
+					continue;
+				}
+			}
+			//5시방향 타일일때
+			else if (i == 1 && j == 1)
+			{
+				//3시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
+				if (!_vTotalList[curIdxY][curIdxX + 1]->getIsAvailMove() || !_vTotalList[curIdxY + 1][curIdxX]->getIsAvailMove())
+				{
+					continue;
+				}
+			}
+
 			//일단 타일 만들어놓고
 			tile* openTile = _vTotalList[curIdxY + i][curIdxX + j];
 

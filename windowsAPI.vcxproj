@@ -154,6 +154,7 @@
     <ClInclude Include="action.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStar.h" />
+    <ClInclude Include="boss.h" />
     <ClInclude Include="bossHpProgressBarUI.h" />
     <ClInclude Include="camera2D.h" />
     <ClInclude Include="chainLightning.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="action.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStar.cpp" />
+    <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossHpProgressBarUI.cpp" />
     <ClCompile Include="camera2D.cpp" />
     <ClCompile Include="chainLightning.cpp" />

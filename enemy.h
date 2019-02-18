@@ -114,6 +114,7 @@ public:
 
 	//x축만 가지고 플레이어 쪽으로 방향을 바꿔주는 함수(접근자,설정자 아님)
 	void fixDirection();
+	void moveDirection();
 	void currentEnemyState();
 	virtual void move();
 
