@@ -351,6 +351,9 @@
     <ClInclude Include="bossHpProgressBarUI.h">
       <Filter>PlayGround\UIs</Filter>
     </ClInclude>
+    <ClInclude Include="minimapUI.h">
+      <Filter>PlayGround\UIs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -606,6 +609,9 @@
       <Filter>PlayGround\data</Filter>
     </ClCompile>
     <ClCompile Include="bossHpProgressBarUI.cpp">
+      <Filter>PlayGround\UIs</Filter>
+    </ClCompile>
+    <ClCompile Include="minimapUI.cpp">
       <Filter>PlayGround\UIs</Filter>
     </ClCompile>
   </ItemGroup>

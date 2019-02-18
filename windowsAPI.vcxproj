@@ -192,6 +192,7 @@
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="mainmenu.h" />
     <ClInclude Include="mapEditor.h" />
+    <ClInclude Include="minimapUI.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="optionManager.h" />
     <ClInclude Include="options.h" />
@@ -286,6 +287,7 @@
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="mainmenu.cpp" />
     <ClCompile Include="mapEditor.cpp" />
+    <ClCompile Include="minimapUI.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="optionManager.cpp" />
     <ClCompile Include="options.cpp" />
