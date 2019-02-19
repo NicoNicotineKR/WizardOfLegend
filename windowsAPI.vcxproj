@@ -213,6 +213,7 @@
     <ClInclude Include="mapEditor.h" />
     <ClInclude Include="minimapUI.h" />
     <ClInclude Include="npc.h" />
+    <ClInclude Include="npcMgr.h" />
     <ClInclude Include="npc_broomStick.h" />
     <ClInclude Include="npc_mimi.h" />
     <ClInclude Include="npc_SpellBook.h" />
@@ -338,6 +339,7 @@
     <ClCompile Include="mapEditor.cpp" />
     <ClCompile Include="minimapUI.cpp" />
     <ClCompile Include="npc.cpp" />
+    <ClCompile Include="npcMgr.cpp" />
     <ClCompile Include="npc_broomStick.cpp" />
     <ClCompile Include="npc_mimi.cpp" />
     <ClCompile Include="npc_SpellBook.cpp" />

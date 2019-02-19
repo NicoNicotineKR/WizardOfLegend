@@ -456,6 +456,9 @@
     <ClInclude Include="npc_warp.h">
       <Filter>PlayGround\units\npcType</Filter>
     </ClInclude>
+    <ClInclude Include="npcMgr.h">
+      <Filter>PlayGround\units</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -805,6 +808,9 @@
     </ClCompile>
     <ClCompile Include="npc_warp.cpp">
       <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npcMgr.cpp">
+      <Filter>PlayGround\units</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
