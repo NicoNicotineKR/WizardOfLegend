@@ -36,8 +36,8 @@ HRESULT enemy_Ghoul::init()
 
 	_speed = 200.f;
 	//기본 베이스 좌표(타일충돌)
-	_pos.x = WINSIZEX / 2;// _img->getFrameWidth();
-	_pos.y = WINSIZEY / 2;//_img->getFrameHeight();
+	//_pos.x = WINSIZEX / 2;// _img->getFrameWidth();
+	//_pos.y = WINSIZEY / 2;//_img->getFrameHeight();
 	_rc = RectMakeCenter(_pos.x, _pos.y, 32, 32);
 
 	//이미지 출력 좌표

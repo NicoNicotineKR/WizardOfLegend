@@ -95,6 +95,7 @@ private:
 
 private:
 //콘스트 변수 넣을공간
+	const int BOSS_HP = 1000;
 public:
 	boss();
 	~boss();
@@ -107,14 +108,23 @@ public:
 	void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
 	void setPlayerAdress(player* player) { _player = player; }
 
-	//키 애니메이션 초기화
-	virtual void bossKeyAnimationInit();
-	//상태 배열 초기화
-	virtual void bossArrStateInit();
+	//보스 키 애니메이션 초기화
+	void bossKeyAnimationInit();
+	//보스 상태 배열 초기화
+	void bossArrStateInit();
+
+	//날개 키 애니메이션 초기화
+	void wingKeyAnimationInit();
+	
+	//크리스탈 키 애니메이션초기화
+	void crystalKeyAnimationInit();
+
+
+
 	//현재 적용된 상태에따라 보스상태 변경해주는 함수
 	void bossCurrentState();
 	//상태와 방향에따라 애니메이션 시작해주는 함수
-	virtual void startAni();
+	void startAni();
 
 	//필요할거같으면 쓰자
 	//void fixDirection();

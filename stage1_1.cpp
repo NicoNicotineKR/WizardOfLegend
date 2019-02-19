@@ -36,7 +36,6 @@ HRESULT stage1_1::init()
 	_player->enemyLink(_enemyMgr);
 
 	_enemyMgr->setPlayerAdress(_player);
-	_enemyMgr->setMapAdress(_vvMap);
 
 
 	_aStar->init();
@@ -45,6 +44,7 @@ HRESULT stage1_1::init()
 	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 12);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
+	_enemyMgr->setMapAdress(_vvMap);
 	_enemyMgr->init();
 	//_stageMapLoader->release();
 	delete _stageMapLoader;
@@ -52,6 +52,7 @@ HRESULT stage1_1::init()
 
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
 	//_camera2D->setPos(_player->getPos());
+
 
 	return S_OK;
 }

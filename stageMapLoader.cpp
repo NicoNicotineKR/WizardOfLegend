@@ -326,6 +326,8 @@ void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddre
 				int objAttr = (*vvMapAddress)[i][j]->getTopObjAttr();
 				//	±Χ³πΐΜ ΈχΐΜΎξµϋ
 				if (UNIT_GHOUL <= objAttr && objAttr <= UNIT_ARCHER) {
+					if (objAttr == UNIT_LANCER)continue;
+
 
 					POINTFLOAT generatePos;
 					generatePos.x = j * TOP_TILESIZE;

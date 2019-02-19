@@ -108,7 +108,7 @@ void enemy_State_Move::update(enemy * enemy)
 			enemy->setVecX(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
 			//°¥°÷ÀÌ ±¸¸ÛÀÌ¸é º¤ÅÍ°¡ 0
-			if (enemy->getMap()[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			if ((*enemy->getMap())[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
 			{
 				enemy->setVecX(0);
 			}
@@ -129,7 +129,7 @@ void enemy_State_Move::update(enemy * enemy)
 			enemy->setVecX(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 
 			//°¥°÷ÀÌ ±¸¸ÛÀÌ¸é º¤ÅÍ°¡ 0
-			if (enemy->getMap()[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			if ((*enemy->getMap())[(tileX + enemy->getVec().x) / TOP_TILESIZE][tileY / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
 			{
 				enemy->setVecX(0);
 			}
@@ -152,7 +152,7 @@ void enemy_State_Move::update(enemy * enemy)
 			enemy->setVecY(enemy->getSpeed() * TIMEMANAGER->getElapsedTime());
 
 			//°¥°÷ÀÌ ±¸¸ÛÀÌ¸é º¤ÅÍ°¡ 0
-			if (enemy->getMap()[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			if ((*enemy->getMap())[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
 			{
 				enemy->setVecY(0);
 			}
@@ -173,7 +173,7 @@ void enemy_State_Move::update(enemy * enemy)
 			enemy->setVecY(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
 			
 			//°¥°÷ÀÌ ±¸¸ÛÀÌ¸é º¤ÅÍ°¡ 0
-			if (enemy->getMap()[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
+			if ((*enemy->getMap())[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
 			{
 				enemy->setVecY(0);
 			}

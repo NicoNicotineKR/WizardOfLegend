@@ -15,8 +15,9 @@ enemyMgr::~enemyMgr()
 HRESULT enemyMgr::init()
 {
 	//일단 기사 한마리만 밀어놓고
-	enemy* knight = new enemy_Knight;
-	_vEnemy.push_back(knight);
+//	enemy* knight = new enemy_Knight;
+//	_vEnemy.push_back(knight);
+
 
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
@@ -25,6 +26,8 @@ HRESULT enemyMgr::init()
 		_vEnemy[i]->setMapAdress(&_vvMap);
 	}
 
+
+	_vvMap.size();
 	return S_OK;
 }
 
@@ -40,7 +43,7 @@ void enemyMgr::release()
 void enemyMgr::update()
 {
 	RECT temp;
-	for (int i = 0; i < _vEnemy.size();)
+	for (int i = 0; i < _vEnemy.size();i++)
 	{
 		// 적 갯수만큼업데이트를 돌린다
 		_vEnemy[i]->update();
@@ -61,15 +64,13 @@ void enemyMgr::update()
 			_vEnemy[i]->currentEnemyState();
 			_vEnemy[i]->setIsAniOnce(true);
 			_vEnemy[i]->setIsDead(true);
-			
 		}
 		//상태가 죽음이고 애니메이션 재생이 끝나면
 		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
 		{
 			_vEnemy.erase(_vEnemy.begin() + i);
+			break;
 		}
-		else i++;
-
 		//나중에 절차적 문제가 생길수도 있음.
 	}
 }
@@ -101,15 +102,13 @@ void enemyMgr::makeEnemy(int makeNum, POINTFLOAT enemyPos_LT)
 			enemy->init();
 			enemy->setPlayerAdress(_player);
 			enemy->setMapAdress(&_vvMap);
-			//knight->setPosX()
+			enemy->setPos(enemyPos_LT);
 			_vEnemy.push_back(enemy);
 		break;
 		case UNIT_LANCER:
-			
 			//추가시 수정
 		break;
 		case UNIT_ARCHER:
-
 			//추가시 수정
 		break;
 

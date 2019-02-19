@@ -29,10 +29,18 @@ HRESULT boss::init()
 {
 	bossKeyAnimationInit();
 	bossArrStateInit();
+	wingKeyAnimationInit();
+	crystalKeyAnimationInit();
 
 	_img = IMAGEMANAGER->findImage("boss");
 	_ani = KEYANIMANAGER->findAnimation("bossSpawn");
+	_wingImg = IMAGEMANAGER->findImage("bossWing");
+	_wingAni = KEYANIMANAGER->findAnimation("wingDecrease");
+	_crystalImg = IMAGEMANAGER->findImage("bossCrystal");
+	_crystalAni = KEYANIMANAGER->findAnimation("crystal");
 
+	_maxHp = BOSS_HP;
+	_curHp = BOSS_HP;
 
 	return S_OK;
 }
@@ -71,7 +79,7 @@ void boss::bossKeyAnimationInit()
 
 	//casting
 	int casting[] = { 52,53 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false, skillUse,this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false, skillUse, this);
 
 	//mock
 	int mock[] = { 78,79,80,79,80,79,80,79,80 };
@@ -80,14 +88,22 @@ void boss::bossKeyAnimationInit()
 	//조롱 끝나면 캐스팅 ㄱ
 
 	//stun
-	int stun[] = {66,67,68,67,68,67,68};
+	int stun[] = { 66,67,68,67,68,67,68 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false, skillUse, this);
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
+
+	//대쉬
+	int rightDash[] = { 1 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossRightDash", "boss", rightDash, 1, 1, true);
+
+	int leftDash[] = { 0 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossLeftDash", "boss", leftDash, 1, 1, true);
+	//대쉬는 플레이어가 있던 좌표를 저장해놓고 겟앵글해서 그좌표로 이동하고 도착하면 skill4실행
 
 	//skill1 - 물방울 회전 던지기
 	int skill1[] = { 22,23,
 					24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,
-					33,34,35,36,37,38,39,40,41,42,42};
+					33,34,35,36,37,38,39,40,41,42,42 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 31, 31, false, skillUse, this);
 
 	//skill2 - 눈송이 회전 많이 던지기
@@ -97,16 +113,53 @@ void boss::bossKeyAnimationInit()
 	KEYANIMANAGER->addArrayFrameAnimation("bossSkill2", "boss", skill2, 58, 58, false, skillUse, this);
 
 	//skill3 - 창 3개 날리기
+	int skill3[] = { 14,15,16,17 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill3", "boss", skill3, 4, 4, false, skillUse, this);
 
 	//skill4 - 얼음대거 돌리기
-	//int dash
+	int rightSkill4[] = { 55, // 딜레이 필요
+		56, 57, 58, 59, 60, 61 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossRightSkill4", "boss", rightSkill4, 7, 7, false, skillUse, this);
+
+	int leftSkill4[] = { 99,
+		100, 101, 102, 103, 104, 105 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossLeftSkill4", "boss", leftSkill4, 7, 7, false, skillUse, this);
 
 	//skill5 - 고드름비 내리기
+	int skill5[] = { 48,48,48,48,48,		//딜레이 주는거 필요
+					49,49,49,49,49, };		//얘도
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill5", "boss", skill5, 10, 10, false, skillUse, this);
+	//death_start 69
+	int deathStart[] = { 69 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossDeathStart", "boss", deathStart, 1, 1, true);
 
-	//death_start
+	//death 87
+	int death[] = { 87 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossDeath", "boss",death, 1, 1, true);
 
-	//death
+}
 
+void boss::wingKeyAnimationInit()
+{
+	IMAGEMANAGER->addFrameImage("bossWing", "images/boss/IceWings.bmp", 933, 400, 7, 4, true, 0xff00ff);
+
+	//날개 펼치고 제자리 부양
+	int idle[] = { 0,1,2,3,4,5,6 };
+	KEYANIMANAGER->addArrayFrameAnimation("wingIdle", "bossWing", idle, 7, 7, true);
+
+	int decrease[] = { 7,8,9,10,11,12,13 };
+	KEYANIMANAGER->addArrayFrameAnimation("wingDecrease", "bossWing", decrease, 7, 7, false);
+
+	int increase[] = { 14,15,16,17,18,19,20 };
+	KEYANIMANAGER->addArrayFrameAnimation("wingIncrease", "bossWing", increase, 7, 7, false);
+}
+
+void boss::crystalKeyAnimationInit()
+{
+	IMAGEMANAGER->addFrameImage("bossCrystal", "images/boss/IceCrystal.bmp", 550, 300, 5, 2, true, 0xff00ff);
+
+	int crystal[] = { 0,1,2,3,4,5,6,7,8 };
+	KEYANIMANAGER->addArrayFrameAnimation("crystal", "bosssCrystal", crystal, 9, 9, false);
 }
 
 void boss::bossArrStateInit()
@@ -145,6 +198,7 @@ void boss::bossArrStateInit()
 	// 데스 애니메이션 출력(얼음 되고 깨지는거)
 	// -> 끗
 }
+
 
 void boss::bossCurrentState()
 {

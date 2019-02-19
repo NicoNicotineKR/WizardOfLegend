@@ -70,7 +70,7 @@ protected:
 	float _curCharge;
 	float _maxCharge;
 
-	vector<vector<tile*>> _vvMap;
+	vector<vector<tile*>>* _vvMap;
 
 	//무기 이미지(없는애도있고 있는애도있음 없는애는 nullptr넣을것임)
 	// 원본 == 0
@@ -106,7 +106,7 @@ public:
 	//주소 연결
 	void setPlayerAdress(player* player) { _player = player; }
 	POINTFLOAT getPlayerPos() { return _playerPos; }
-	void setMapAdress(vector<vector<tile*>>* vvMap) { _vvMap = *vvMap; }
+	void setMapAdress(vector<vector<tile*>>* vvMap) { _vvMap = vvMap; }
 
 
 	virtual void enemyKeyAnimationInit();
@@ -159,7 +159,7 @@ public:
 	list<POINT>* getPath() { return &_listPath; }
 	list<POINT>::iterator* getIPath() { return &_listIPath; }
 
-	vector<vector<tile*>> getMap() { return _vvMap; }
+	vector<vector<tile*>>* getMap() { return _vvMap; }
 
 	//image* getAtkImg() { return _atkImg; }
 
