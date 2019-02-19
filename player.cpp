@@ -226,7 +226,6 @@ void player::CamRender(HDC hdc)
 	_curSkills[3]->render(this);
 
 	//Rectangle(getMemDC(), _tileCheckRc);
-	_img->aniRender(hdc, _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
 	if (_state == STATE::FALL)
 	{
 		for (int i = 0; i < 25; ++i)
@@ -241,6 +240,8 @@ void player::CamRender(HDC hdc)
 		_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x - CAMERA2D->getCamPosX(), _playerCirclePos.y - CAMERA2D->getCamPosY(), 125);
 		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
 	}
+	_img->aniRender(hdc, _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
+
 }
 
 void player::playerKeyAnimationInit()
