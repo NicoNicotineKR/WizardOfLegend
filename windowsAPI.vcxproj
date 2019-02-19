@@ -212,6 +212,12 @@
     <ClInclude Include="mainmenu.h" />
     <ClInclude Include="mapEditor.h" />
     <ClInclude Include="minimapUI.h" />
+    <ClInclude Include="npc.h" />
+    <ClInclude Include="npc_broomStick.h" />
+    <ClInclude Include="npc_mimi.h" />
+    <ClInclude Include="npc_SpellBook.h" />
+    <ClInclude Include="npc_wardrobe.h" />
+    <ClInclude Include="npc_warp.h" />
     <ClInclude Include="objectInfo.h" />
     <ClInclude Include="objectMgr.h" />
     <ClInclude Include="objects.h" />
@@ -331,6 +337,12 @@
     <ClCompile Include="mainmenu.cpp" />
     <ClCompile Include="mapEditor.cpp" />
     <ClCompile Include="minimapUI.cpp" />
+    <ClCompile Include="npc.cpp" />
+    <ClCompile Include="npc_broomStick.cpp" />
+    <ClCompile Include="npc_mimi.cpp" />
+    <ClCompile Include="npc_SpellBook.cpp" />
+    <ClCompile Include="npc_wardrobe.cpp" />
+    <ClCompile Include="npc_warp.cpp" />
     <ClCompile Include="objectInfo.cpp" />
     <ClCompile Include="objectMgr.cpp" />
     <ClCompile Include="objects.cpp" />

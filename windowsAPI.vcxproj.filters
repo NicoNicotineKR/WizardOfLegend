@@ -76,6 +76,9 @@
     <Filter Include="PlayGround\skills\bossSkill">
       <UniqueIdentifier>{36f89e8e-f17c-438e-8e38-d937566fc948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\units\npcType">
+      <UniqueIdentifier>{759f4db6-853c-47a1-8e7c-2defcb302c6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -435,6 +438,24 @@
     <ClInclude Include="boss_State_Dash.h">
       <Filter>PlayGround\units\bossState</Filter>
     </ClInclude>
+    <ClInclude Include="npc.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
+    <ClInclude Include="npc_broomStick.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
+    <ClInclude Include="npc_mimi.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
+    <ClInclude Include="npc_SpellBook.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
+    <ClInclude Include="npc_wardrobe.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
+    <ClInclude Include="npc_warp.h">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -766,6 +787,24 @@
     </ClCompile>
     <ClCompile Include="boss_State_Dash.cpp">
       <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="npc.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npc_broomStick.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npc_mimi.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npc_SpellBook.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npc_wardrobe.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
+    </ClCompile>
+    <ClCompile Include="npc_warp.cpp">
+      <Filter>PlayGround\units\npcType</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
