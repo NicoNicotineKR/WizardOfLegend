@@ -2,10 +2,17 @@
 #include "gameNode.h"
 #include "tile.h"
 #include "printNumber.h"
+#include "enemyMgr.h"
 //#include "tileNode.h"
 
 //	캐릭터의 인식거리 : 50/28
 //	미니맵 출력거리 : 100/56 좌우 +1, 상하 +1
+
+//	======== 사용법 ==========
+
+//	이닛을한다.(맵, 플레이어, 에너미벡터 주소필요)
+//	업데이트/렌더 걸어준다.
+//	그럼알아서한다.
 
 
 class minimapUI : public gameNode
@@ -52,14 +59,15 @@ private:
 	int _totalTileNum;
 	int _exploreTileNum;
 	int _totalEnemyNum;
-	int* _curEnemyNum;
+	int _curEnemyNum;
 	int _excutedEnemyNum;
 
 	float _exploreRatio;
 	float _excuteEnemyRatio;
 
 
-
+	vector<enemy*>* _vEnemy;
+	
 
 
 	const int MINIMAP_MASK_ALPHA = 30;
@@ -69,7 +77,7 @@ public:
 	minimapUI();
 	~minimapUI();
 
-	HRESULT init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, int* curEnemyNum);
+	HRESULT init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, vector<enemy*>* vEnemy);
 	void release();
 	void update();
 	void render();
@@ -82,6 +90,8 @@ public:
 
 	void RenderMinimap();
 	void RenderProgressRate();
+
+	void SetLinktoVEnemy(vector<enemy*>* vEnemy) { _vEnemy = vEnemy; }
 
 };
 

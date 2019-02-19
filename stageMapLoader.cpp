@@ -313,7 +313,7 @@ void stageMapLoader::LoadMap(vvMap * vvMapAddress, int * tileNumX, int * tileNum
 
 }
 
-void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddress)
+void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddress, enemyMgr* enemyMgr)
 {
 	//	여까지 vvMap에 로드 완료.
 	//	이 데이터를 기반으로, Obj 를 생성하고, vvMap에 잔류 데이터 제거.
@@ -323,81 +323,130 @@ void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddre
 
 			//	뒤져봤는데 오브젝트 이미지가 있다면!!!
 			if ((*vvMapAddress)[i][j]->getTopObjImg() != nullptr) {
-				//	임시 오브젝트 하나 새로 맹글고
-				tmpObj = new objectInfo;
-				tmpObj->ClearNewObj();
+				int objAttr = (*vvMapAddress)[i][j]->getTopObjAttr();
+				//	그놈이 몹이어따
+				if (UNIT_GHOUL <= objAttr && objAttr <= UNIT_ARCHER) {
 
-				//인덱스설정
-				tmpObj->setIdx((*vvMapAddress)[i][j]->getTopIdx());
-				//이미지 설정
-				tmpObj->setImg((*vvMapAddress)[i][j]->getTopObjImg());
-				//이미지 키네임 설정
-				tmpObj->setImgKeyName((*vvMapAddress)[i][j]->getTopObjImgKey());
-				//	(pos와 rc는 밑에서 한번에)
+					POINTFLOAT generatePos;
+					generatePos.x = j * TOP_TILESIZE;
+					generatePos.x = i * TOP_TILESIZE;
+					//	몹생성!
+					_enemyMgr->makeEnemy(objAttr, generatePos);
 
-				//	속성 attr
-				int tmpAttr = (*vvMapAddress)[i][j]->getTopObjAttr();
-				tmpObj->setAttr(tmpAttr);
+					//	내가 읽은 몹데이터 싹 지움
+					POINT tmpSize = { 1,1 };
+					while (1) {
+						//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
+						if (j + tmpSize.x > (_tileNumX)-1)	break;		//	인덱스 아웃 예외처리
+						if ((*vvMapAddress)[i][j + tmpSize.x]->getTopObjAttr() != objAttr)		break;	//	다르면 끝내라
 
-				//	시작프레임넘버 설정
-				POINT tmpStartFrame;
-				tmpStartFrame.x = (*vvMapAddress)[i][j]->getTopObjFrameX();
-				tmpStartFrame.y = (*vvMapAddress)[i][j]->getTopObjFrameY();
-				tmpObj->setStartFrame(tmpStartFrame);
-
-				//	사이즈 하나씩 증가시켜가면서, tmpAttr과 같은애들 찾으면서 지워준다.
-				POINT tmpSize = { 1,1 };
-				POINT tmpEndFrame = tmpStartFrame;
-
-				//	맵에서, X축으로 하나씩 증가시키면서 찾아보니, 그놈이 속성이 같더라.	(tmpSize.x 는 1부터 시작함)
-				while (1) {
-					//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
-
-					if (j + tmpSize.x > (_tileNumX) - 1)	break;		//	인덱스 아웃 예외처리
-					if ((*vvMapAddress)[i][j + tmpSize.x]->getTopObjAttr() != tmpAttr)		break;	//	다르면 끝내라
-					//	여기까지왔다는건, Attr이 같은것이라는거.
-					tmpEndFrame.x = (*vvMapAddress)[i][j + tmpSize.x]->getTopObjFrameX();		//	얘의 FrameX를 EndFrame.x로 갱신한다.
-					(*vvMapAddress)[i][j + tmpSize.x]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
-					(*vvMapAddress)[i][j + tmpSize.x]->setTopObjImage(nullptr);					//	이놈 이미지는 nullptr;
-
-					tmpSize.x++;																//	마지막에 쁠쁠
-				}
-
-				//	맵에서, Y축으로 하나씩 증가시키면서 찾아보니, 그놈이 속성이 같더라.	(tmpSize.y 는 1부터 시작함)
-				while (1) {
-					//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
-
-					if (i + tmpSize.y > (_tileNumY) - 1)	break;		//	인덱스 아웃 예외처리
-					if ((*vvMapAddress)[i + tmpSize.y][j]->getTopObjAttr() != tmpAttr)		break;	//	다르면 끝내라
-					//	여기까지왔다는건, Attr이 같은것이라는거.
-					tmpEndFrame.y = (*vvMapAddress)[i + tmpSize.y][j]->getTopObjFrameY();		//	얘의 FrameX를 EndFrame.x로 갱신한다.
-					(*vvMapAddress)[i + tmpSize.y][j]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
-					(*vvMapAddress)[i + tmpSize.y][j]->setTopObjImage(nullptr);					//이놈 이미지는 nullptr;
-
-					tmpSize.y++;																//	마지막에 쁠쁠
-				}
-
-				//	여까지왔으면, tmpSize로, 이녀석의 크기를 유추가능. 시작인덱스는 [i][j]
-				//	크기만큼 이 오브젝트 속성을 0으로 초기화
-				for (int idY = i; idY < i + tmpSize.y; idY++) {
-					for (int idX = j; idX < j + tmpSize.x; idX++) {
-						(*vvMapAddress)[idY][idX]->setTopObjAttr(0);
-						(*vvMapAddress)[idY][idX]->setTopObjImage(nullptr);
+						//	여기까지왔다는건, Attr이 같은것이라는거.
+						(*vvMapAddress)[i][j + tmpSize.x]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
+						(*vvMapAddress)[i][j + tmpSize.x]->setTopObjImage(nullptr);					//	이놈 이미지는 nullptr;
+						tmpSize.x++;																//	마지막에 쁠쁠
 					}
+					//	맵에서, Y축으로 하나씩 증가시키면서 찾아보니, 그놈이 속성이 같더라.	(tmpSize.y 는 1부터 시작함)
+					while (1) {
+						//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
+
+						if (i + tmpSize.y > (_tileNumY)-1)	break;		//	인덱스 아웃 예외처리
+						if ((*vvMapAddress)[i + tmpSize.y][j]->getTopObjAttr() != objAttr)		break;	//	다르면 끝내라
+						//	여기까지왔다는건, Attr이 같은것이라는거.
+						
+						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
+						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjImage(nullptr);					//이놈 이미지는 nullptr;
+
+						tmpSize.y++;																//	마지막에 쁠쁠
+					}
+
+					//	여까지왔으면, tmpSize로, 이녀석의 크기를 유추가능. 시작인덱스는 [i][j]
+					//	크기만큼 이 오브젝트 속성을 0으로 초기화
+					for (int idY = i; idY < i + tmpSize.y; idY++) {
+						for (int idX = j; idX < j + tmpSize.x; idX++) {
+							(*vvMapAddress)[idY][idX]->setTopObjAttr(0);
+							(*vvMapAddress)[idY][idX]->setTopObjImage(nullptr);
+						}
+					}
+
+//=================================================================================
+
 				}
+				//	걍 오브젝이어따
+				else {
+					//	임시 오브젝트 하나 새로 맹글고
+					tmpObj = new objectInfo;
+					tmpObj->ClearNewObj();
 
-				//	사이즈, endFrame, 알아냈고, 맵데이터에 오브제 속성 초기화 완료.================
+					//인덱스설정
+					tmpObj->setIdx((*vvMapAddress)[i][j]->getTopIdx());
+					//이미지 설정
+					tmpObj->setImg((*vvMapAddress)[i][j]->getTopObjImg());
+					//이미지 키네임 설정
+					tmpObj->setImgKeyName((*vvMapAddress)[i][j]->getTopObjImgKey());
+					//	(pos와 rc는 밑에서 한번에)
 
-				tmpObj->setSize(tmpSize);
-				tmpObj->setEndFrame(tmpEndFrame);
+					//	속성 attr
+					int tmpAttr = (*vvMapAddress)[i][j]->getTopObjAttr();
+					tmpObj->setAttr(tmpAttr);
 
-				tmpObj->setPosLT({ j*TOP_TILESIZE, i*TOP_TILESIZE });			//	1픽셀 오류날 수 있음@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-				tmpObj->setRc(RectMake(j*TOP_TILESIZE, i*TOP_TILESIZE, tmpSize.x*TOP_TILESIZE, tmpSize.y*TOP_TILESIZE));
+					//	시작프레임넘버 설정
+					POINT tmpStartFrame;
+					tmpStartFrame.x = (*vvMapAddress)[i][j]->getTopObjFrameX();
+					tmpStartFrame.y = (*vvMapAddress)[i][j]->getTopObjFrameY();
+					tmpObj->setStartFrame(tmpStartFrame);
 
-				//	여기까지하면, tmpObj 셋팅 완료.
-				vectorObjAddress->push_back(tmpObj);
+					//	사이즈 하나씩 증가시켜가면서, tmpAttr과 같은애들 찾으면서 지워준다.
+					POINT tmpSize = { 1,1 };
+					POINT tmpEndFrame = tmpStartFrame;
 
+					//	맵에서, X축으로 하나씩 증가시키면서 찾아보니, 그놈이 속성이 같더라.	(tmpSize.x 는 1부터 시작함)
+					while (1) {
+						//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
 
+						if (j + tmpSize.x > (_tileNumX)-1)	break;		//	인덱스 아웃 예외처리
+						if ((*vvMapAddress)[i][j + tmpSize.x]->getTopObjAttr() != tmpAttr)		break;	//	다르면 끝내라
+						//	여기까지왔다는건, Attr이 같은것이라는거.
+						tmpEndFrame.x = (*vvMapAddress)[i][j + tmpSize.x]->getTopObjFrameX();		//	얘의 FrameX를 EndFrame.x로 갱신한다.
+						(*vvMapAddress)[i][j + tmpSize.x]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
+						(*vvMapAddress)[i][j + tmpSize.x]->setTopObjImage(nullptr);					//	이놈 이미지는 nullptr;
+
+						tmpSize.x++;																//	마지막에 쁠쁠
+					}
+
+					//	맵에서, Y축으로 하나씩 증가시키면서 찾아보니, 그놈이 속성이 같더라.	(tmpSize.y 는 1부터 시작함)
+					while (1) {
+						//	처음들어오면, x축으로 한칸 움직인 타일의 오브제
+
+						if (i + tmpSize.y > (_tileNumY)-1)	break;		//	인덱스 아웃 예외처리
+						if ((*vvMapAddress)[i + tmpSize.y][j]->getTopObjAttr() != tmpAttr)		break;	//	다르면 끝내라
+						//	여기까지왔다는건, Attr이 같은것이라는거.
+						tmpEndFrame.y = (*vvMapAddress)[i + tmpSize.y][j]->getTopObjFrameY();		//	얘의 FrameX를 EndFrame.x로 갱신한다.
+						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
+						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjImage(nullptr);					//이놈 이미지는 nullptr;
+
+						tmpSize.y++;																//	마지막에 쁠쁠
+					}
+
+					//	여까지왔으면, tmpSize로, 이녀석의 크기를 유추가능. 시작인덱스는 [i][j]
+					//	크기만큼 이 오브젝트 속성을 0으로 초기화
+					for (int idY = i; idY < i + tmpSize.y; idY++) {
+						for (int idX = j; idX < j + tmpSize.x; idX++) {
+							(*vvMapAddress)[idY][idX]->setTopObjAttr(0);
+							(*vvMapAddress)[idY][idX]->setTopObjImage(nullptr);
+						}
+					}
+
+					//	사이즈, endFrame, 알아냈고, 맵데이터에 오브제 속성 초기화 완료.================
+
+					tmpObj->setSize(tmpSize);
+					tmpObj->setEndFrame(tmpEndFrame);
+
+					tmpObj->setPosLT({ j*TOP_TILESIZE, i*TOP_TILESIZE });			//	1픽셀 오류날 수 있음@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+					tmpObj->setRc(RectMake(j*TOP_TILESIZE, i*TOP_TILESIZE, tmpSize.x*TOP_TILESIZE, tmpSize.y*TOP_TILESIZE));
+
+					//	여기까지하면, tmpObj 셋팅 완료.
+					vectorObjAddress->push_back(tmpObj);
+				}
 			}	//	오브젝 발견 if 끝
 		}
 	}

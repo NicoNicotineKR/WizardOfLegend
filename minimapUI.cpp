@@ -11,7 +11,7 @@ minimapUI::~minimapUI()
 {
 }
 
-HRESULT minimapUI::init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, int* curEnemyNum)
+HRESULT minimapUI::init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, vector<enemy*>* vEnemy)
 {
 	IMAGEMANAGER->addImage("minimapMask", "images/UIs/minimap/minimapMask.bmp", 300, 270, true, 0xFF00FF);
 	IMAGEMANAGER->addImage("minimapPlayerMark", "images/UIs/minimap/minimapPlayer.bmp", 34, 35, true, 0xFF00FF);
@@ -28,6 +28,7 @@ HRESULT minimapUI::init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, int* 
 	_printNum->init();
 	_vvMap = vvMapAddress;
 	_playerPos = playerPosAddress;
+	_vEnemy = vEnemy;
 
 	_tileNumX = (*_vvMap)[1].size();
 	_tileNumY = (*_vvMap).size();
@@ -80,9 +81,9 @@ HRESULT minimapUI::init(vvMap* vvMapAddress, POINTFLOAT* playerPosAddress, int* 
 	//totalTileNum 은 맵읽어들이면서, 안그린 타일을 -- 해주고있음.
 	//_totalTileNum = _tileNumX * _tileNumY;
 	_exploreTileNum = 0;
-	_totalEnemyNum = *curEnemyNum;
-	_curEnemyNum = curEnemyNum;
-	_excutedEnemyNum = _totalEnemyNum - (*_curEnemyNum);
+	_totalEnemyNum = _vEnemy->size();
+	_curEnemyNum = _vEnemy->size();
+	_excutedEnemyNum = _totalEnemyNum - _curEnemyNum;
 
 
 
@@ -95,6 +96,7 @@ void minimapUI::release()
 
 void minimapUI::update()
 {
+	_curEnemyNum = _vEnemy->size();
 	UpdatePlayerPosIdx();
 	ChkExploreFunc();
 	ProgressRatioFunc();
@@ -215,7 +217,7 @@ void minimapUI::ChkExploreFunc()
 
 inline void minimapUI::ProgressRatioFunc()
 {
-	_excutedEnemyNum = _totalEnemyNum - (*_curEnemyNum);
+	_excutedEnemyNum = _totalEnemyNum - _curEnemyNum;
 	_excuteEnemyRatio = (float)(_excutedEnemyNum) / (float)(_totalEnemyNum);
 
 	_exploreRatio = (float)(_exploreTileNum) / (float)(_totalTileNum);
@@ -258,7 +260,7 @@ void minimapUI::RenderMinimap()
 
 
 }
-
+//_printNum.
 void minimapUI::RenderProgressRate()
 {
 	int num[3] = { 0,0,0 };
@@ -272,6 +274,7 @@ void minimapUI::RenderProgressRate()
 		if (i == 1 && num[0] == 0 && num[1] == 0)continue;
 		_printNum->renderNum(num[i], _txtProgress.rc.right + 35 + 18 * i, _txtProgress.rc.top + 5);
 	}
+	//	적 처치 프로그레스
 	num[0] = (int)(_excuteEnemyRatio);
 	num[1] = (int)(_excuteEnemyRatio * 10) % 10;
 	num[2] = (int)(_excuteEnemyRatio * 100) % 10;
@@ -281,7 +284,7 @@ void minimapUI::RenderProgressRate()
 		if (i == 1 && num[0] == 0 && num[1] == 0)continue;
 		_printNum->renderNum(num[i], _txtEnemies.rc.right + 35 + 18 * i, _txtEnemies.rc.top + 5);
 	}
-	//_printNum.
+	
 
 
 }
