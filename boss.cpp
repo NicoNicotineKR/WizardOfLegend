@@ -7,6 +7,7 @@
 #include "boss_State_Casting.h"
 #include "boss_State_Mock.h"
 #include "boss_State_Stun.h"
+#include "boss_State_Dash.h"
 #include "boss_State_SKILL_One.h"
 #include "boss_State_SKILL_Two.h"
 #include "boss_State_SKILL_Three.h"
@@ -70,28 +71,35 @@ void boss::bossKeyAnimationInit()
 
 	//casting
 	int casting[] = { 52,53 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false, skillUse,this);
 
 	//mock
 	int mock[] = { 78,79,80,79,80,79,80,79,80 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossMock", "boss", mock, 9, 9, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bossMock", "boss", mock, 9, 9, false, skillUse, this);
 	//조롱이 너무 길다거나 너무 짧으면 배열이랑 배열길이 수정하면됨.
 	//조롱 끝나면 캐스팅 ㄱ
 
 	//stun
 	int stun[] = {66,67,68,67,68,67,68};
-	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false, skillUse, this);
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
 
 	//skill1 - 물방울 회전 던지기
-	int skill1[] = { 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 21, 21, false);
+	int skill1[] = { 22,23,
+					24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,
+					33,34,35,36,37,38,39,40,41,42,42};
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 31, 31, false, skillUse, this);
 
 	//skill2 - 눈송이 회전 많이 던지기
+	int skill2[] = { 22,23,
+					24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,
+					33,34,35,36,37,38,39,40,41,42,42 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill2", "boss", skill2, 58, 58, false, skillUse, this);
 
 	//skill3 - 창 3개 날리기
 
-	//skill4 - 돌진 얼음대거 돌리기
+	//skill4 - 얼음대거 돌리기
+	//int dash
 
 	//skill5 - 고드름비 내리기
 
@@ -110,6 +118,7 @@ void boss::bossArrStateInit()
 	_arrState[static_cast<const int>(B_STATE::CASTING)] = new boss_State_Casting;
 	_arrState[static_cast<const int>(B_STATE::MOCK)] = new boss_State_Mock;
 	_arrState[static_cast<const int>(B_STATE::STUN)] = new boss_State_Stun;
+	_arrState[static_cast<const int>(B_STATE::DASH)] = new boss_State_Dash;
 	_arrState[static_cast<const int>(B_STATE::SKILL_ONE)] = new boss_State_SKILL_One;
 	_arrState[static_cast<const int>(B_STATE::SKILL_TWO)] = new boss_State_SKILL_Two;
 	_arrState[static_cast<const int>(B_STATE::SKILL_THREE)] = new boss_State_SKILL_Three;
@@ -141,6 +150,7 @@ void boss::bossCurrentState()
 {
 	switch (_state)
 	{
+		_bossState->update(this);
 		case B_STATE::SLEEP:
 			_bossState = _arrState[static_cast<const int>(B_STATE::SLEEP)];
 		break;
@@ -158,6 +168,9 @@ void boss::bossCurrentState()
 		break;
 		case B_STATE::STUN:
 			_bossState = _arrState[static_cast<const int>(B_STATE::STUN)];
+		break;
+		case B_STATE::DASH:
+			_bossState = _arrState[static_cast<const int>(B_STATE::DASH)];
 		break;
 		case B_STATE::SKILL_ONE:
 			_bossState = _arrState[static_cast<const int>(B_STATE::SKILL_ONE)];
@@ -191,6 +204,10 @@ void boss::skillUse(void * obj)
 {
 	boss* _boss = (boss*)obj;
 
+	_boss->useSkill();
+	_boss->bossCurrentState();
+	_boss->setIsAniOnce(true);
+	_boss->startAni();
 }
 
 void boss::skillShuffle()
@@ -219,7 +236,38 @@ void boss::skillShuffle()
 
 void boss::useSkill()
 {
-	//_skillNum[_skill_Usage_Count] 에 맞는 스킬 사용하자
+	if (_skill_Usage_Count <= 2)
+	{
+		switch (_skillNum[_skill_Usage_Count])
+		{
+		case 0: //물방울 회전 회오리
+			_state = B_STATE::SKILL_ONE;
+			break;
+		case 1:	//눈송이 회전 회오리
+			_state = B_STATE::SKILL_TWO;
+			break;
+		case 2: //창 3개 날리기
+			_state = B_STATE::SKILL_THREE;
+			break;
+		case 3: //돌진(도착하면 얼음칼돌림)
+			_state = B_STATE::DASH;
+			break;
+		case 4: //고드름 비오기
+			_state = B_STATE::SKILL_FIVE;
+			break;
+		}
 
-	_skill_Usage_Count += 1;
+		_skill_Usage_Count += 1;
+	}
+	else if (_skill_Usage_Count >= 3)
+	{
+		//스킬 다쓰면 조롱
+		_state = B_STATE::MOCK;
+		_skill_Usage_Count = 0;
+		skillShuffle();
+	}
+	//_skillNum[_skill_Usage_Count] 에 맞는 스킬 사용하자
+	
+
+
 }

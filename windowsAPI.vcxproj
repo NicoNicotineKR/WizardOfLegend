@@ -160,6 +160,7 @@
     <ClInclude Include="bossHpProgressBarUI.h" />
     <ClInclude Include="bossState.h" />
     <ClInclude Include="boss_State_Casting.h" />
+    <ClInclude Include="boss_State_Dash.h" />
     <ClInclude Include="boss_State_Death.h" />
     <ClInclude Include="boss_State_Death_Start.h" />
     <ClInclude Include="boss_State_Idle.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossHpProgressBarUI.cpp" />
     <ClCompile Include="boss_State_Casting.cpp" />
+    <ClCompile Include="boss_State_Dash.cpp" />
     <ClCompile Include="boss_State_Death.cpp" />
     <ClCompile Include="boss_State_Death_Start.cpp" />
     <ClCompile Include="boss_State_Idle.cpp" />

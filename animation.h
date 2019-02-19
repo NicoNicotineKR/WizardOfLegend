@@ -59,7 +59,7 @@ public:
 
 
 	//애니메이션 프레임 재생속도 셋팅
-	void setFPS(int framePerSec);
+	void setFPS(float framePerSec);
 
 	//렌더링
 	void frameUpdate(float elapsedTime);

@@ -615,7 +615,7 @@ void animation::setPlayFrame(int start, int end, BOOL reverse, BOOL loop, CALLBA
 	}
 }
 
-void animation::setFPS(int framePerSec)
+void animation::setFPS(float framePerSec)
 {
 	_frameUpdateSec = 1.0f / framePerSec;
 }

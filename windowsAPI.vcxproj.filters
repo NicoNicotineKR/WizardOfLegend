@@ -432,6 +432,9 @@
     <ClInclude Include="boseSkills.h">
       <Filter>PlayGround\skills\bossSkill</Filter>
     </ClInclude>
+    <ClInclude Include="boss_State_Dash.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -760,6 +763,9 @@
     </ClCompile>
     <ClCompile Include="boseSkills.cpp">
       <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Dash.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

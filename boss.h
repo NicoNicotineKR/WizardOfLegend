@@ -21,6 +21,7 @@ enum class B_STATE
 	CASTING,		// 조롱 or 스턴후 보스턴되기전에 손휘두름
 	MOCK,			// 스킬 다쓰고 조롱하는거 이떄 맞으면 스턴됨 (hit 없음)
 	STUN,			// 조롱하다가 1대라도 맞으면 스턴상태들어감
+	DASH,			// 스킬 4 사용 전 대쉬
 	SKILL_ONE,		// 물방울 회전!!!! 회오리!!!!!
 	SKILL_TWO,		// 눈송이 회전!! 회오리!!!!
 	SKILL_THREE,	// 창 3개 날리기

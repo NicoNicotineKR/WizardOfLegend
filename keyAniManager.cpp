@@ -78,7 +78,7 @@ void keyAniManager::addDefaultFrameAnimation(string animationKeyName, const char
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
 }
 
-void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, int fps, bool loop)
+void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, float fps, bool loop)
 {
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
 
@@ -91,7 +91,7 @@ void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char *
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
 }
 
-void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, int fps, bool loop, void * cbFunction)
+void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, float fps, bool loop, void * cbFunction)
 {
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
 
@@ -104,7 +104,7 @@ void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char *
 	_mTotalAnimation.insert(pair<string, animation*>(animationKeyName, ani));
 }
 
-void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, int fps, bool loop, void * cbFunction, void * obj)
+void keyAniManager::addArrayFrameAnimation(string animationKeyName, const char * imageKeyName, int * arr, int arrLen, float fps, bool loop, void * cbFunction, void * obj)
 {
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
 
