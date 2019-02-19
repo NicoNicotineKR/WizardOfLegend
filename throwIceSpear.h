@@ -1,6 +1,15 @@
 #pragma once
 #include "gameNode.h"
 #include "rotateImgMaker.h"
+
+//	쏘는동안 업데이트 걸어줄 것.
+//	UseSkill(POINTFLOAT* bossPos, POINTFLOAT* playerPos, int spearNum); 은 한번만 쓰세여. 시작해주는거
+//					보스좌표 주소, 플레이어좌표 주소, 쏠 스피어 갯수
+//	init은 맨첨에 한번 걸어주고, update, render는 계속걸어주고,
+//	END_SKILLTIME이 되면(현재10초) 몽땅 초기화되고 더이상 작동안함(update도, 렌더도)
+//	END_SKILLTIME 되기전에 스킬 또 못씀요.
+
+
 class throwIceSpear :public gameNode
 {
 private:
@@ -18,7 +27,10 @@ private:
 		//	POINTFLOAT atkDestPos;		//	쏠때 한번만 set		//안씀
 		float angle;				//	쏘기전, 실시간 set
 		int alpha;					//	쏘기전, 실시간 set
-
+		
+		//bool isOnceSetSpearPrepareValue;	//	쏘기전, 한번만 초기화해주는거 체크
+		bool isOnceSetSpearShotValue;		//	쏠때, 한번만 초기화해주는거 체크
+		//bool isShotPrepareEnd;
 		
 	};
 	vector<tagIceSpear*> _iceSpear;
@@ -31,27 +43,23 @@ private:
 	float _totalSkillElapsedTime;
 
 
-	bool _isOnceSetSpearPrepareValue;	//	쏘기전, 한번만 초기화해주는거 체크
-	bool _isOnceSetSpearShotValue;		//	쏠때, 한번만 초기화해주는거 체크
-	bool _isShotPrepareEnd;
-
+	float _augAlpha;
+	
 
 	bool _isStart;
+	bool _isRdyToShot;
 
 
-	const int SPEAR_NUM = 3;
-	const float SPEAR_SPD = 5;
-	const float SPEAR_TIP_LENGTH = 17.0f;
-	const float PREPARE_SHOTTIME = 3.0f;
-	const int JUDGERC_WID = 17;
-	const int AUG_ALPHA = 10;
+	const int SPEAR_MAXNUM = 20;			//	최대로 쏠 수 있는 창의 갯수
+	const float SPEAR_SPD = 10;				//	창이 날라가는 스피드
+	const float SPEAR_TIP_LENGTH = 17.0f;	//	창날의 길이(판정렉트 생성에 사용)
+	const double PREPARE_SHOTTIME = 3.0;	//	쏘기전까지 대기시간
+	const int JUDGERC_WID = 17;				//	판정렉트 한변 길이
+	
 
-	const float END_SKILLTIME = 10.0f;
+	const float END_SKILLTIME = 10.0f;		//	최대 지속시간 및, 시간다되면 초기화
 	
 	//	보스 wid 150 / hei 200.
-
-
-
 
 	rotateImgMaker* _imgMaker;
 	
@@ -67,8 +75,7 @@ public:
 	void render();
 
 	void UseSkill(POINTFLOAT* bossPos, POINTFLOAT* playerPos, int spearNum);
-	void SetSpearPrepareValueOnce(int idx, POINTFLOAT bossPos);
-	void SetSpearPrepareValue(int idx, POINTFLOAT playerPos);
+	void SetSpearPrepareValue(int idx, POINTFLOAT playerPos, POINTFLOAT bossPos);
 	void SetSpearShotValueOnce(int idx);
 	void SetSpearShotValue(int idx);
 	void ResetAll();
