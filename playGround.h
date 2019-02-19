@@ -3,6 +3,7 @@
 #include "introScene.h"
 #include "testStage.h"
 #include "mainmenu.h"
+#include "stage1_1.h"
 
 
 
@@ -12,6 +13,7 @@ private:
     introScene* _introScene;
 	mainmenu* _mainmenu;
 	testStage* _testStage;
+	stage1_1* _stage1_1;
 
 
 

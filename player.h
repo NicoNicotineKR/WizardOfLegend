@@ -138,6 +138,7 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+	void CamRender(HDC hdc);
 
 	inline void enemyLink(enemyMgr* em) { _em = em; }
 

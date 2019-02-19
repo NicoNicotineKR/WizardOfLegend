@@ -11,11 +11,8 @@ camera2D::~camera2D()
 {
 }
 
-HRESULT camera2D::init(int mapSizeX, int mapSizeY)
+HRESULT camera2D::init()
 {
-	_mapSizeX = mapSizeX;
-	_mapSizeY = mapSizeY;
-
 	_camPosX = 0;
 	_camPosY = 0;
 
@@ -37,7 +34,7 @@ void camera2D::update()
 
 }
 
-void camera2D::setPos(POINT playerPos)
+void camera2D::setPos(POINTFLOAT playerPos)
 {
 	if (playerPos.x > WINSIZEX / 2 && playerPos.x < _mapSizeX - WINSIZEX / 2)
 	{
@@ -48,5 +45,11 @@ void camera2D::setPos(POINT playerPos)
 	{
 		_playerPos.y = playerPos.y - WINSIZEY / 2;
 	}
+}
+
+void camera2D::getMapSize(int mapSizeX, int mapSizeY)
+{
+	_mapSizeX = mapSizeX;
+	_mapSizeY = mapSizeY;
 }
 

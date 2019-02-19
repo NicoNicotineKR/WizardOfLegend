@@ -14,7 +14,7 @@ stageMapLoader::~stageMapLoader()
 
 void stageMapLoader::LoadMap(vvMap * vvMapAddress, int * tileNumX, int * tileNumY, int mapNum)
 {
-	
+
 	vvMapAddress->clear();
 	//vObjMgrAddress->clear();
 
@@ -33,7 +33,7 @@ void stageMapLoader::LoadMap(vvMap * vvMapAddress, int * tileNumX, int * tileNum
 	// tilenumX] tilenumY]
 	// 인덱스
 	// tile - pos, rc, framex/y, attr, imgKey
-	char load[500000] = {};
+	char load[5000000] = {};
 	char* token;			//1번 잘려진 문자열의 주소
 	char* context;			//2번 잘려진 문자열의
 	char tmp[10] = {};
@@ -200,7 +200,7 @@ void stageMapLoader::LoadMap(vvMap * vvMapAddress, int * tileNumX, int * tileNum
 					tmpTile->setTopObjImage(IMAGEMANAGER->findImage(token));
 				}
 			}
-			
+
 
 			//	isAvailMove
 			token = strtok_s(NULL, "/", &context);
@@ -221,12 +221,12 @@ void stageMapLoader::LoadMap(vvMap * vvMapAddress, int * tileNumX, int * tileNum
 		}	// for j 끝
 		(*vvMapAddress).push_back(vLineX);
 	}
-	
+
 
 	//	여까지 vvMap에 로드 완료.
 	//	이 데이터를 기반으로, Obj 를 생성하고, vvMap에 잔류 데이터 제거.
 	/*
-	
+
 	for (int i = 0; i < *tileNumY; i++) {
 		for (int j = 0; j < *tileNumX; j++) {
 			//	뒤져봤는데 오브젝트 이미지가 있다면!!!
@@ -329,9 +329,9 @@ void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddre
 
 					POINTFLOAT generatePos;
 					generatePos.x = j * TOP_TILESIZE;
-					generatePos.x = i * TOP_TILESIZE;
+					generatePos.y = i * TOP_TILESIZE;
 					//	몹생성!
-					_enemyMgr->makeEnemy(objAttr, generatePos);
+					enemyMgr->makeEnemy(objAttr, generatePos);
 
 					//	내가 읽은 몹데이터 싹 지움
 					POINT tmpSize = { 1,1 };
@@ -352,7 +352,7 @@ void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddre
 						if (i + tmpSize.y > (_tileNumY)-1)	break;		//	인덱스 아웃 예외처리
 						if ((*vvMapAddress)[i + tmpSize.y][j]->getTopObjAttr() != objAttr)		break;	//	다르면 끝내라
 						//	여기까지왔다는건, Attr이 같은것이라는거.
-						
+
 						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjAttr(0);						//	이놈 속성은 0으로 초기화한다.
 						(*vvMapAddress)[i + tmpSize.y][j]->setTopObjImage(nullptr);					//이놈 이미지는 nullptr;
 
@@ -368,7 +368,7 @@ void stageMapLoader::MakeObjects(vvMap * vvMapAddress, vObjects * vectorObjAddre
 						}
 					}
 
-//=================================================================================
+					//=================================================================================
 
 				}
 				//	걍 오브젝이어따

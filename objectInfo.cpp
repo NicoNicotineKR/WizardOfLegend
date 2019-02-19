@@ -22,7 +22,7 @@ HRESULT objectInfo::ClearNewObj()
 	_size = { 0,0 };
 	_attribute = 0;
 	_imgKeyName.clear();
-	
+
 	return S_OK;
 }
 
@@ -43,10 +43,9 @@ void objectInfo::CamRender(int camLeft, int camTop)
 	if (_img == nullptr)	return;
 	for (int i = 0; i < _size.y; i++) {
 		for (int j = 0; j < _size.x; j++) {
-			_img->frameRender(getMemDC(), _rc.left + j * TOP_TILESIZE - camLeft, _rc.top + i * TOP_TILESIZE - camTop,_startFrame.x+j, _startFrame.y+i);
+			_img->frameRender(getMemDC(), _rc.left + j * TOP_TILESIZE - camLeft, _rc.top + i * TOP_TILESIZE - camTop, _startFrame.x + j, _startFrame.y + i);
 		}
 	}
-
-	Rectangle(getMemDC(), _rc);
+	//Rectangle(getMemDC(), _rc);
 
 }

@@ -13,7 +13,7 @@ private:
 	POINT	_size;				//	가로세로 타일 갯수
 	int		_attribute;
 	string	_imgKeyName;
-	
+
 
 public:
 	objectInfo();
@@ -40,7 +40,7 @@ public:
 
 	POINT getStartFrame() { return _startFrame; }
 	void setStartFrame(POINT startFrame) { _startFrame = startFrame; }
-	
+
 	POINT getEndFrame() { return _endFrame; }
 	void setEndFrame(POINT endFrame) { _endFrame = endFrame; }
 

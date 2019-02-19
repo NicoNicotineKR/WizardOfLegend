@@ -189,6 +189,27 @@ void player::render(HDC hdc)
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
+void player::CamRender(HDC hdc)
+{
+	_playerStatusUI->render();
+	_skillUI->render();
+	//IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
+	//	IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
+	//	, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
+
+	_curSkills[0]->render(this);
+	_curSkills[1]->render(this);
+	//	Rectangle(getMemDC(), _collisionRc);
+	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x - CAMERA2D->getCamPosX(), _playerCirclePos.y - CAMERA2D->getCamPosY(), 125);
+	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
+	Rectangle(getMemDC(), _tileCheckRc);
+	_img->aniRender(hdc, _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
+
+	char str[128];
+	sprintf_s(str, "%lf : state", _hitCount, strlen(str));
+	TextOut(hdc, 50, 50, str, strlen(str));
+}
+
 void player::playerKeyAnimationInit()
 {
 	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 3230, 10, 19, true, RGB(255, 0, 255));

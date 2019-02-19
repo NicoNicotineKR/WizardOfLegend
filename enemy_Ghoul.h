@@ -19,6 +19,7 @@ public:
 	void release();
 	void update();
 	void render();
+	void CamRender();
 
 	void enemyKeyAnimationInit();
 	void enemyArrStateInit();

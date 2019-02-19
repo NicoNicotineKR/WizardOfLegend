@@ -177,6 +177,27 @@ void enemy_Knight::render()
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y - 50, _playerPos.x + 10, _playerPos.y - 40);
 }
 
+void enemy_Knight::CamRender()
+{
+	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2) - CAMERA2D->getCamPosX(), _imgPos.y - (_img->getFrameHeight() / 2) - CAMERA2D->getCamPosY(), _ani);
+
+	//공격상태일때만 공격이미지 출력
+	if (_state == E_STATE::ATTACK)
+	{
+		//Rectangle(getMemDC(), _atkRc);
+		//_atkImg->frameRender(getMemDC(), _atkRc.left, _atkRc.top);
+		if (_countIdY < _effectTime)
+		{
+			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 164, 164, 150);
+		}
+		char str[128];
+		sprintf_s(str, "idx : %d", _atkIdX);
+		TextOut(getMemDC(), 50, 200, str, strlen(str));
+
+	}
+}
+
 void enemy_Knight::enemyKeyAnimationInit()
 {
 	IMAGEMANAGER->addFrameImage("knight", "images/enemy/knight.bmp", 1032, 2016, 6, 8, true, 0xff00ff);

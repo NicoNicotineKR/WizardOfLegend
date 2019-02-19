@@ -40,6 +40,7 @@ HRESULT gameNode::init(bool managerInit)
 		INIDATA->init();
 		OPTIONMANAGER->init();
 		SKILLDATABASE->init();
+		CAMERA2D->init();
 		
 	}
 
@@ -83,6 +84,8 @@ void gameNode::release()
 		SKILLDATABASE->release();
 		SKILLDATABASE->releaseSingleton();
 
+		CAMERA2D->release();
+		CAMERA2D->releaseSingleton();
 	}
 
 
@@ -93,6 +96,7 @@ void gameNode::update()
 {
 	
 	SOUNDMANAGER->update();
+	CAMERA2D->update();
 }
 
 void gameNode::render()

@@ -178,6 +178,28 @@ void enemy_Ghoul::render()
 	//Rectangle(getMemDC(), _playerPos.x, _playerPos.y - 50, _playerPos.x + 10, _playerPos.y - 40);
 }
 
+void enemy_Ghoul::CamRender()
+{
+	//에너미 이미지 출력
+	_img->aniRender(getMemDC(), _imgPos.x - (_img->getFrameWidth() / 2) - CAMERA2D->getCamPosX(), _imgPos.y - (_img->getFrameHeight() / 2) - CAMERA2D->getCamPosY(), _ani);
+	//	Rectangle(getMemDC(), _atkRc);
+		//공격상태일때만 공격이미지 출력
+
+	if (_state == E_STATE::ATTACK)
+	{
+		if (_countIdY < _effectTime)
+		{
+			//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
+			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 82, 82, 150);
+		}
+		char str[128];
+		sprintf_s(str, "idx : %d", _atkIdX);
+
+		TextOut(getMemDC(), 50, 200, str, strlen(str));
+
+	}
+}
+
 void enemy_Ghoul::enemyKeyAnimationInit()
 {
 	IMAGEMANAGER->addFrameImage("ghoul", "images/enemy/ghoul.bmp", 1152, 1344, 6, 7, true, 0xff00ff);

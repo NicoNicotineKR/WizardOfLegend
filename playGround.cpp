@@ -26,13 +26,17 @@ HRESULT playGround::init()
 	//	======	재만 테스트용 ======
 	//_mapEditor = new mapEditor;
 	_testStage = new testStage;
+	_stage1_1 = new stage1_1;
 
 	//	======	공유 테스트용 ======
 	SCENEMANAGER->addScene("introScene",_introScene);
 	SCENEMANAGER->addScene("mainmenu", _mainmenu);
 	//SCENEMANAGER->addScene("mapEditor", _mapEditor);		//	테스트해볼 씬 추가하고
 	SCENEMANAGER->addScene("testStage", _testStage);
-	SCENEMANAGER->changeScene("introScene");					//	체인지 해준다.
+	SCENEMANAGER->addScene("stage1_1", _stage1_1);
+
+	SCENEMANAGER->changeScene("introScene");	
+	//	체인지 해준다.
 
 	return S_OK;
 }

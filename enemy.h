@@ -100,6 +100,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
+	virtual void CamRender();
 
 
 	//주소 연결

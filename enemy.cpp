@@ -35,6 +35,10 @@ void enemy::render()
 {
 }
 
+void enemy::CamRender()
+{
+}
+
 void enemy::enemyKeyAnimationInit()
 {
 }

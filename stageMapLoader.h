@@ -23,7 +23,7 @@ private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
 	typedef vector<objectInfo*> vObjects;
-	
+
 
 	int _tileNumX;
 	int _tileNumY;

@@ -1,6 +1,7 @@
 #pragma once
-#include "gameNode.h"
-class camera2D : public gameNode
+#include "singletonBase.h"
+
+class camera2D : public singletonBase<camera2D>
 {
 private:
 	int _mapSizeX;
@@ -9,20 +10,21 @@ private:
 	int _camPosX;
 	int _camPosY;
 
-	POINT _playerPos;
+	POINTFLOAT _playerPos;
 
 
 public:
 	camera2D();
 	~camera2D();
 
-	HRESULT init(int mapSizeX, int mapSizeY);
+	HRESULT init();
 	void release();
 	void update();
 
 	int getCamPosX() { return _camPosX; }
 	int getCamPosY() { return _camPosY; }
 
-	void setPos(POINT playerPos);
+	void setPos(POINTFLOAT playerPos);
+	void getMapSize(int mapSizeX, int mapSizeY);
 };
 
