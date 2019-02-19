@@ -65,7 +65,7 @@ void dialogueMaker::update()
 				if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || KEYMANAGER->isOnceKeyDown('F'))
 				{
 					_isStart = false;
-					this->setDialogue(_npcName, _text, _printSpeed);
+					//this->setDialogue(_npcName, _text, _printSpeed);
 				}
 			}
 		}
@@ -91,15 +91,16 @@ void dialogueMaker::render()
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(font);
 	}
+
+	char str[128];
+	sprintf_s(str, "%d", _printLen);
+	TextOut(getMemDC(), WINSIZEX / 2, 100, str, strlen(str));
 }
 
-void dialogueMaker::setDialogue(string npcName, string text, float talkSpeed)
+void dialogueMaker::setDialogue(image* npcPicture, string text, float talkSpeed)
 {
-	_npcName = npcName;
-	_npcPicture = IMAGEMANAGER->findImage(_npcName.c_str());
-
+	_npcPicture = npcPicture;
 	_text = text;
 	_printSpeed = talkSpeed;
-	//_printLen = 0;
-	_isStart = false;	//	false∞Ì¡§
+	_isStart = false;
 }

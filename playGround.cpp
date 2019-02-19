@@ -22,6 +22,7 @@ HRESULT playGround::init()
 	// ====== 형우 테스트용 =====
 	_introScene = new introScene;
 	_mainmenu = new mainmenu;
+	_home = new home;
 
 	//	======	재만 테스트용 ======
 	//_mapEditor = new mapEditor;
@@ -34,6 +35,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->addScene("mapEditor", _mapEditor);		//	테스트해볼 씬 추가하고
 	SCENEMANAGER->addScene("testStage", _testStage);
 	SCENEMANAGER->addScene("stage1_1", _stage1_1);
+	SCENEMANAGER->addScene("home", _home);
 
 	SCENEMANAGER->changeScene("introScene");	
 	//	체인지 해준다.

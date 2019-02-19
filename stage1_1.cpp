@@ -96,11 +96,16 @@ void stage1_1::render()
 
 void stage1_1::TileMapRender()
 {
-	for (int i = 0; i < _tileNumY; i++)
+	for (int i = _player->getLeftBottomIndex().x - 52; i < _player->getLeftBottomIndex().x + 52; i++)
 	{
-		for (int j = 0; j < _tileNumX; j++)
+		for (int j = _player->getLeftBottomIndex().y - 30; j < _player->getLeftBottomIndex().y + 30; j++)
 		{
-			_vvMap[i][j]->CamTileRender(CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
+			if (j < 0)continue;
+			if (i < 0)continue;
+			if (j >= _tileNumY)continue;
+			if (i >= _tileNumX)continue;
+
+			_vvMap[j][i]->CamTileRender(CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
 		}
 	}
 }
@@ -109,6 +114,11 @@ void stage1_1::VObjectRender()
 {
 	for (int i = 0; i < _vObjects.size(); i++)
 	{
+		if (_vObjects[i]->getIdx().x < _player->getLeftBottomIndex().x - 52)continue;
+		if (_vObjects[i]->getIdx().x > _player->getLeftBottomIndex().x + 52)continue;
+		if (_vObjects[i]->getIdx().y < _player->getLeftBottomIndex().y - 35)continue;
+		if (_vObjects[i]->getIdx().y > _player->getLeftBottomIndex().y + 35)continue;
+
 		_vObjects[i]->CamRender(CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
 	}
 }

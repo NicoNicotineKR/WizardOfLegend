@@ -4,6 +4,7 @@
 #include "testStage.h"
 #include "mainmenu.h"
 #include "stage1_1.h"
+#include "home.h"
 
 
 
@@ -14,6 +15,7 @@ private:
 	mainmenu* _mainmenu;
 	testStage* _testStage;
 	stage1_1* _stage1_1;
+	home* _home;
 
 
 

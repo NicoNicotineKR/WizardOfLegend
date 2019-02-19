@@ -5,18 +5,14 @@ class dialogueMaker : public gameNode
 private:
 	//채팅이미지
 	image* _chatBoxImg;
-
 	//받아올 Npc 이미지(이미지매니저에 추가되잇어야됨)
 	image* _npcPicture;
-	//받아올 Npc 키값
-	string _npcName;
-
-
 	//가져올 대사
 	string _text;
 
 	//시작할시
 	bool _isStart;
+
 
 
 	//TimeManger사용을 위한 변수들
@@ -46,7 +42,11 @@ public:
 
 	void setIsStart(bool isStart) { _isStart = isStart; }
 	//텍스트,폰트별속도,채팅시작
-	void setDialogue(string npcName, string text, float talkSpeed);
+	void setDialogue(image* npcPicture, string text, float talkSpeed);
 	bool getisStart() { return _isStart; }
+	int getPrintLen() { return _printLen; }
+	string getText() { return _text; }
+
+	void setPrintLen(int printLen) { _printLen = printLen; }
 };
 
