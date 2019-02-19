@@ -188,7 +188,7 @@ HRESULT skillbookUI::init()
 	_curSelectSkillKind = 0;
 
 
-	this->LinkSkillBookUIMode(&_isSkillBookUIMode);
+	
 	_isOpenBook = false;
 	_isBookAniEnd = false;
 	_isSkillSelectAniEnd = false;
@@ -201,16 +201,23 @@ HRESULT skillbookUI::init()
 		_isCardRender[i] = false;
 	}
 
-	playerSkill[0] = "FlameStrike";
-	playerSkill[1] = "stoneShot";
-	playerSkill[2] = "thunderingChain";
-	playerSkill[3] = "shockNova";
+
+	_curSkillName[0] = (_player->getCurSkills1()->getName());
+	_curSkillName[1] = (_player->getCurSkills2()->getName());
+	_curSkillName[2] = (_player->getCurSkills3()->getName());
+	_curSkillName[3] = (_player->getCurSkills4()->getName());
+
+
+	//playerSkill[0] = "FlameStrike";
+	//playerSkill[1] = "stoneShot";
+	//playerSkill[2] = "thunderingChain";
+	//playerSkill[3] = "shockNova";
 
 	//	테스트용 코드
-	_curSkillName[0] = &(playerSkill[0]);
-	_curSkillName[1] = &(playerSkill[1]);
-	_curSkillName[2] = &(playerSkill[2]);
-	_curSkillName[3] = &(playerSkill[3]);
+	//_curSkillName[0] = &(playerSkill[0]);
+	//_curSkillName[1] = &(playerSkill[1]);
+	//_curSkillName[2] = &(playerSkill[2]);
+	//_curSkillName[3] = &(playerSkill[3]);
 
 	return S_OK;
 }
@@ -221,10 +228,10 @@ void skillbookUI::release()
 
 void skillbookUI::update()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
-	{
-		_isSkillBookUIMode = true;
-	}
+	//if (KEYMANAGER->isOnceKeyDown(VK_NUMPAD1))
+	//{
+	//	_isSkillBookUIMode = true;
+	//}
 
 
 	if (*_isStart) {
@@ -280,13 +287,17 @@ void skillbookUI::update()
 					if (SKILLDATABASE->getvSkillInfo(_curSelectSkillKind, _curSelectSkillAttr).size() != 0) {
 						_isOpenBook = false;
 						//	@@@@@@@@@@@@@@@@@@@@@괄호 어케쳐야대지......돼지....
-						*(_curSkillName)[_curSelectSkillKind] = SKILLDATABASE->getvSkillInfo(_curSelectSkillKind, _curSelectSkillAttr)[_curSelectSKillIdx].name;
+						(_curSkillName)[_curSelectSkillKind] = SKILLDATABASE->getvSkillInfo(_curSelectSkillKind, _curSelectSkillAttr)[_curSelectSKillIdx].name;
+						//	(_curSkillName)[_curSelectSkillKind] -> 내가 바꾼 스킬의 이름이 들어이따
+						//	이놈을 가지고, 내가 원하는 스킬을 직접 찾아서 쳐먹여주면된다 이말이야.
+						FindSkillAndAdjustToPlayer((_curSkillName)[_curSelectSkillKind], _curSelectSkillKind);
+
 					}
 					
 				}
 						
 				//	탭은 임시용 코드
-				if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE) || KEYMANAGER->isOnceKeyDown(VK_TAB)) {
+				if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE)) {
 					_isOpenBook = false;
 					InitBookFunc();
 				}
@@ -323,7 +334,7 @@ void skillbookUI::render()
 					_skillKindsTxtDot[i].img->frameRender(getMemDC(), _skillKindsTxtDot[i].rc.left, _skillKindsTxtDot[i].rc.top + _skillSelectAdjustY,
 						_skillKindsTxtDot[i].frameX, _skillKindsTxtDot[i].frameY);
 					//	스킬 아이콘 이미지
-					_skillIconList->frameRender(_curSkillCard[i].pos.x, _curSkillCard[i].pos.y + _skillSelectAdjustY, *(_curSkillName[i]));
+					_skillIconList->frameRender(_curSkillCard[i].pos.x, _curSkillCard[i].pos.y + _skillSelectAdjustY, (_curSkillName[i]));
 				}
 			}
 			
@@ -502,6 +513,37 @@ void skillbookUI::BookOpenAniFunc()
 
 }
 
+void skillbookUI::FindSkillAndAdjustToPlayer(string skillName, int idx)
+{
+	//"FlameStrike";
+	//"stoneShot";
+	//"thunderingChain";
+	//"shockNova";
+	//"searingRush";
+	skills* tmpSkill;
+	if (skillName == "FlameStrike") {
+		tmpSkill = _player->getSkillsInfo(FLAMESTRIKE);
+	}
+	else if (skillName == "stoneShot") {
+		tmpSkill = _player->getSkillsInfo(STONESHOT);
+	}
+	else if (skillName == "thunderingChain") {
+		tmpSkill = _player->getSkillsInfo(CHAINLIGHTNING);
+	}
+	else if (skillName == "shockNova") {
+		tmpSkill = _player->getSkillsInfo(SHOCKNOVA);
+	}
+	else if (skillName == "searingRush") {
+		tmpSkill = _player->getSkillsInfo(SEARINGRUSH);
+	}
+	else {
+		tmpSkill = nullptr;
+	}
+
+	_player->setPlayerSkill(idx, tmpSkill);
+
+}
+
 
 void skillbookUI::InitSkillSelectFunc()
 {
@@ -511,7 +553,7 @@ void skillbookUI::InitSkillSelectFunc()
 
 void skillbookUI::setWhereBookOpen()
 {
-	string selectSkillName = *(_curSkillName[_curSelectSkillKind]);
+	string selectSkillName = (_curSkillName[_curSelectSkillKind]);
 	_curSelectSkillAttr = SKILLDATABASE->getAttr(selectSkillName);
 
 }
@@ -624,5 +666,5 @@ void skillbookUI::ArrowAniFunc()
 
 void skillbookUI::setCurSkillName(int idx, string* skillName)
 {
-	_curSkillName[idx] = skillName;
+	_curSkillName[idx] = *skillName;
 }

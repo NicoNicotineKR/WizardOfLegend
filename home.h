@@ -5,6 +5,7 @@
 
 #include "dialogueMaker.h"
 #include "npcMgr.h"
+#include "skillbookUI.h"
 
 
 class home : public gameNode
@@ -22,6 +23,7 @@ private:
 	enemyMgr* _enemyMgr;
 	dialogueMaker* _dialogueMaker;
 	npcMgr* _nm;
+	skillbookUI* _skillbookUI;
 
 
 	int _tileNumX;
@@ -30,6 +32,7 @@ private:
 	bool _allStop;
 
 	bool _isTalk;
+	bool _isSkillbookMode;
 
 public:
 	home();

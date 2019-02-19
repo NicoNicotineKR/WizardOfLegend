@@ -50,7 +50,9 @@ HRESULT stage1_1::init()
 	_stageMapLoader = nullptr;
 
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
-	//_camera2D->setPos(_player->getPos());
+	
+
+
 
 
 	return S_OK;

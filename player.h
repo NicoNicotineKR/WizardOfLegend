@@ -109,7 +109,7 @@ private:
 	playerState* _playerState;
 	playerState* _arrState[static_cast<const int>(STATE::MAX)];
 
-	skills*		_curSkills[5];
+	skills*		_curSkills[4];
 	skills*		_arrSkills[static_cast<const int>(CURRENTSKILL::MAX)];
 
 	image*			_playerCircleImg;
@@ -254,5 +254,10 @@ public:
 	inline POINTFLOAT getDashLastPos() { return _dashLastPos; }
 
 	inline int getCurHp() { return _curHp; }
+
+
+	//	재만추가
+	inline skills* getSkillsInfo(int skillEnum) { return _arrSkills[skillEnum]; }
+	inline void setPlayerSkill(int idx, skills* skill) {_curSkills[idx] = skill; }
 };
 

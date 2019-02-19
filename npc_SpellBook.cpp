@@ -171,6 +171,8 @@ void npc_SpellBook::update()
 	//{
 	//}
 
+	//==========================================================
+
 	//UI1Сп
 	if (_state == stateNpc::UI1_ING)
 	{
@@ -185,6 +187,8 @@ void npc_SpellBook::update()
 			_state = stateNpc::UI2_ING;
 			isOnceAniPlay(_state);
 		}
+
+
 	}
 
 	//UI2Сп
@@ -196,6 +200,12 @@ void npc_SpellBook::update()
 			isOnceAniPlay(_state);
 		}
 	}
+
+	//==========================================================
+
+
+
+
 }
 
 void npc_SpellBook::render()

@@ -2,6 +2,13 @@
 #include "gameNode.h"
 #include "skillIconList.h"
 #include "skillNode.h"
+#include "skills.h"
+#include "shockNova.h"
+#include "stoneShot.h"
+#include "chainLightning.h"
+#include "flameStrike.h"
+#include "searingRush.h"
+#include "player.h"
 
 //	==	ui이닛 후, 플레이어는 UI모드인지, 아닌지 체크하는 bool 값 변수 하나를 링크걸어주세여.
 //	LinkSkillBookUIMode() 사용!
@@ -13,7 +20,18 @@
 class skillbookUI : public gameNode
 {
 private:
-	
+	enum CURRENTSKILL
+	{
+		FLAMESTRIKE,
+		CHAINLIGHTNING,
+		FROSTFAN,
+		REBOUNDINGCICLES,
+		SEARINGRUSH,
+		SHATTERINGSTRIKE,
+		SHOCKNOVA,
+		STONESHOT,
+		MAX
+	};
 	skillIconList* _skillIconList;
 
 	struct tagImgSet {
@@ -25,7 +43,7 @@ private:
 		bool isAct;
 	};
 
-	string* _curSkillName[4];		//플레이어가 가지고 있는 스킬을 직접 주소로 받아옴
+	string _curSkillName[4];		//플레이어가 가지고 있는 스킬을 직접 주소로 받아옴
 	
 
 	tagImgSet _arrowBig[2];		//	left , right
@@ -59,6 +77,10 @@ private:
 	bool _isCardRender[5];			//	책 카드 5장에 카드 렌더할지?
 	string _cardSkillName[5];		//	책 카드 5장의 카드 이름들
 
+	player* _player;
+
+
+
 	const int CARD_WID = 106;
 	const int CARD_HEI = 163;
 	const int UPPERMASK_ALPHA = 150;
@@ -72,9 +94,10 @@ private:
 	const int SKILLSELECTANI_ADJUSTY_MOVESPD = 100;
 
 
+
 	//	테스트용 변수
-	string playerSkill[4];
-	bool _isSkillBookUIMode = false;
+	//string playerSkill[4];
+	//bool _isSkillBookUIMode = false;
 
 
 public:
@@ -105,7 +128,8 @@ public:
 
 	void BookOpenAniFunc();
 
-
+	//	==	스킬찾아줘서 그걸 쳐먹여주는 함수 ==
+	void FindSkillAndAdjustToPlayer(string skillName, int idx);
 
 	//	==게세키
 	//	UI시작할떄, 플레이어의 스킬을 연결시켜주세여
@@ -113,5 +137,6 @@ public:
 	//	플레이어 이닛에서, UI on/off 할 bool 값 하나 연결
 	void LinkSkillBookUIMode(bool* isBookMode) { _isStart = isBookMode; }
 
+	void LinkToPlayer(player* player) {_player = player;}
 };
 

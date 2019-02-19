@@ -47,11 +47,18 @@ HRESULT home::init()
 	_nm = new npcMgr;
 	_nm->init();
 
+	_skillbookUI = new skillbookUI;
+	_skillbookUI->LinkToPlayer(_player);
+	_skillbookUI->init();
+
+
 	//시작지점
 	_player->setPosX(1000);
 	_player->setPosY(1000);
 
 	_isTalk = false;
+	_isSkillbookMode = false;
+	_skillbookUI->LinkSkillBookUIMode(&_isSkillbookMode);
 
 	return S_OK;
 }
@@ -64,7 +71,7 @@ void home::update()
 {
 	if (_allStop == false)
 	{
-		if (_dialogueMaker->getisStart() == false)
+		if (_dialogueMaker->getisStart() == false && !_isSkillbookMode)
 		{
 			_player->update();
 		}
@@ -97,9 +104,22 @@ void home::update()
 					_dialogueMaker->setPrintLen(0);
 					_nm->getvNpce()[i]->setNpcState(stateNpc::UI1_ING);
 					_nm->getvNpce()[i]->isOnceAniPlay(stateNpc::UI1_ING);
+
+					if (i == 0) {
+						_isSkillbookMode = true;
+					}
+
 				}
 			}
 		}
+
+
+
+
+
+
+
+
 
 		if (_nm->getvNpce()[4]->getState() == stateNpc::UI1_ING)
 		{
@@ -108,7 +128,7 @@ void home::update()
 		}
 	}
 
-	if (_allStop == false)
+	if (_allStop == false && !_isSkillbookMode)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 		{
@@ -126,6 +146,16 @@ void home::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
+
+	//==================================================================
+
+	//if (_nm->getvNpce()[0]->getState() == stateNpc::UI1_ING)
+	//{
+	//
+	//}
+
+	_skillbookUI->update();
+
 }
 
 void home::render()
@@ -137,6 +167,7 @@ void home::render()
 	_enemyMgr->render();
 	_nm->render();
 	_dialogueMaker->render();
+	_skillbookUI->render();
 
 	char str[128];
 	sprintf_s(str, "%d,%d", CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
