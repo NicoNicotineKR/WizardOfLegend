@@ -408,6 +408,9 @@
     <ClInclude Include="objectMgr.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
+    <ClInclude Include="boss_State_Sleep.h">
+      <Filter>PlayGround\units\bossState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -715,6 +718,9 @@
     </ClCompile>
     <ClCompile Include="objectMgr.cpp">
       <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="boss_State_Sleep.cpp">
+      <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

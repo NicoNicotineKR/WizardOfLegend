@@ -167,6 +167,7 @@
     <ClInclude Include="boss_State_SKILL_One.h" />
     <ClInclude Include="boss_State_SKILL_Three.h" />
     <ClInclude Include="boss_State_SKILL_Two.h" />
+    <ClInclude Include="boss_State_Sleep.h" />
     <ClInclude Include="boss_State_Spawn.h" />
     <ClInclude Include="boss_State_Stun.h" />
     <ClInclude Include="camera2D.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="boss_State_SKILL_One.cpp" />
     <ClCompile Include="boss_State_SKILL_Three.cpp" />
     <ClCompile Include="boss_State_SKILL_Two.cpp" />
+    <ClCompile Include="boss_State_Sleep.cpp" />
     <ClCompile Include="boss_State_Spawn.cpp" />
     <ClCompile Include="boss_State_Stun.cpp" />
     <ClCompile Include="camera2D.cpp" />
