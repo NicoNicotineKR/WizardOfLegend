@@ -14,6 +14,7 @@ enum class B_ANIDIRECTION
 
 enum class B_STATE
 {
+	SLEEP,			// 보스 발견하기전 
 	IDLE,			// 아이들...인데 있나?
 	SPAWN,			// 최초 다이얼로그 나오기전 스폰하는거
 	CASTING,		// 조롱 or 스턴후 보스턴되기전에 손휘두름

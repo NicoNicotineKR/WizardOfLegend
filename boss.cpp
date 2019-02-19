@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "boss.h"
 #include "player.h"
+#include "boss_State_Sleep.h"
 #include "boss_State_Idle.h"
 #include "boss_State_Spawn.h"
 #include "boss_State_Casting.h"
@@ -83,6 +84,8 @@ void boss::bossKeyAnimationInit()
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
 
 	//skill1 - 물방울 회전 던지기
+	int skill1[] = { 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 21, 21, false);
 
 	//skill2 - 눈송이 회전 많이 던지기
 
@@ -101,6 +104,7 @@ void boss::bossKeyAnimationInit()
 void boss::bossArrStateInit()
 {
 	//슬립 추가하자
+	_arrState[static_cast<const int>(B_STATE::SLEEP)] = new boss_State_Sleep;
 	_arrState[static_cast<const int>(B_STATE::IDLE)] = new boss_State_Idle;
 	_arrState[static_cast<const int>(B_STATE::SPAWN)] = new boss_State_Spawn;
 	_arrState[static_cast<const int>(B_STATE::CASTING)] = new boss_State_Casting;
@@ -137,6 +141,9 @@ void boss::bossCurrentState()
 {
 	switch (_state)
 	{
+		case B_STATE::SLEEP:
+			_bossState = _arrState[static_cast<const int>(B_STATE::SLEEP)];
+		break;
 		case B_STATE::IDLE:
 			_bossState = _arrState[static_cast<const int>(B_STATE::IDLE)];
 		break;
