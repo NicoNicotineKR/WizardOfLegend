@@ -75,7 +75,7 @@ skills _curSkill[0] = FlameStrike;
 
 
 */
-class player : gameNode
+class player : public gameNode
 {
 private:
 	typedef vector<tile*> vLine;
