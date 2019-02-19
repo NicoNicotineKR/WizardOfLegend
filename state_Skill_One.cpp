@@ -61,7 +61,17 @@ void state_Skill_One::onButtonSpace(player* Player)
 
 void state_Skill_One::onButtonLB(player* Player)
 {
-
+	if (Player->getCurSkills1()->getName() == "stoneShot")
+	{
+		if (Player->getCurSkills1()->getReLoadCount() < 2)
+		{
+			Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+		}
+		else
+		{
+			return;
+		}
+	}
 
 	if ((Player->getPlayerAngle()* (180 / PI) <= 45 && Player->getPlayerAngle() * (180 / PI) >= 0) ||
 		(Player->getPlayerAngle()*(180 / PI) <= 360 && Player->getPlayerAngle() * (180 / PI) >= 315))
@@ -87,7 +97,11 @@ void state_Skill_One::onButtonLB(player* Player)
 		Player->setAniDirection(ANIDIRECTION::FRONT);
 		Player->startAni();
 	}
-	Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+	if (Player->getCurSkills1()->getName() == "FlameStrike")
+	{
+		if (Player->getCurSkills1()->getReLoadCount() < 3)
+			Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+	}
 }
 
 void state_Skill_One::onButtonRB(player* Player)

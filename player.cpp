@@ -13,8 +13,10 @@
 #include "state_Dead.h"
 #include "chainLightning.h"
 #include "flameStrike.h"
+#include "searingRush.h"
 #include "enemyMgr.h"
-
+#include "shockNova.h"
+#include "stoneShot.h"
 player::player()
 {
 }
@@ -87,11 +89,19 @@ HRESULT player::init(vvMap& vvMapLink)
 	_tileCollVec[2].x = _tileCollVec[2].y = 0;
 	_tileCollVec[3].x = _tileCollVec[3].y = 0;
 
-	IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
+	//IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
 
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 100, 150);
 	_isHit = false;
+	_isAlive = true;
 	_hitCount = 0;
+	_dashLastPos.x = _dashLastPos.y = 0;
+	for (int i = 0; i < 25; ++i)
+	{
+		_tileBlanket[i] = nullptr;
+		_tileBlanketIndex[i].x = NULL;
+		_tileBlanketIndex[i].y = NULL;
+	}
 	return S_OK;
 }
 
@@ -119,20 +129,10 @@ void player::update()
 			_isHit = false;
 		}
 	}
-	//
-	//if (_count > 3)
-	//{
-	//	_count = 0;
-	//	IMAGEMANAGER->findImage("thunder")->SetFrameX(IMAGEMANAGER->findImage("thunder")->getFrameX() + 1);
-	//	if (IMAGEMANAGER->findImage("thunder")->getMaxFrameX() == IMAGEMANAGER->findImage("thunder")->getFrameX())
-	//	{
-	//		IMAGEMANAGER->findImage("thunder")->SetFrameX(0);
-	//	}
-	//}
 	_playerCirclePos.x = _pos.x + (_img->getFrameWidth() / 2) - (_playerCircleImg->GetWidth() / 2);
 	_playerCirclePos.y = _pos.y + _img->getFrameHeight() - (_playerCircleImg->GetHeight() - 20);
-	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x + (_playerCircleImg->GetWidth() / 2),
-		_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2),
+	_playerCircleDirectionAngle = getAngle(_playerCirclePos.x  + (_playerCircleImg->GetWidth() / 2) - CAMERA2D->getCamPosX(),
+		_playerCirclePos.y + (_playerCircleImg->GetHeight() / 2) - CAMERA2D->getCamPosY(),
 		_ptMouse.x, 
 		_ptMouse.y);
 	playerCirclePosition();
@@ -142,9 +142,10 @@ void player::update()
 
 	_curSkills[0]->update(this);
 	_curSkills[1]->update(this);
-
+	_curSkills[2]->update(this);
+	_curSkills[3]->update(this);
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
-	
+
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	RECT temp;
 	for (int i = 0; i < _em->getVEnemy().size(); i++)
@@ -154,12 +155,21 @@ void player::update()
 			if (!_isHit)
 			{
 				_isHit = true;
-				_curHp -= 1;
+				_curHp -= 100;
 				_playerStatusUI->setCurHp(_curHp);
-				_state = STATE::HIT;
-				currentPlayerState();
-				enemyAngleCal(_em->getVEnemy()[i]->getAngle());
-				_vec.x = _vec.y = 0;
+				if(_curHp<=0)
+				{
+					_state = STATE::DEAD;
+					currentPlayerState();
+				}
+				else
+				{
+					_state = STATE::HIT;
+					currentPlayerState();
+					enemyAngleCal(_em->getVEnemy()[i]->getAngle());
+					_vec.x = _vec.y = 0;
+				}
+
 			}
 		}
 	
@@ -178,14 +188,30 @@ void player::render(HDC hdc)
 
 	_curSkills[0]->render(this);
 	_curSkills[1]->render(this);
+	_curSkills[2]->render(this);
+	_curSkills[3]->render(this);
+
+
 //	Rectangle(getMemDC(), _collisionRc);
-	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x,_playerCirclePos.y,125);
-	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y,200);
+
 	Rectangle(getMemDC(), _tileCheckRc);
 	_img->aniRender(hdc, _pos.x, _pos.y, _ani);
+	if (_state == STATE::FALL)
+	{
+		for (int i = 0; i < 25; ++i)
+		{
+			if (_tileBlanket[i] == nullptr) continue;
+			_tileBlanket[i]->frameRender(getMemDC(), _tileBlanketPos[i].x, _tileBlanketPos[i].y, _tileBlanketIndex[i].x, _tileBlanketIndex[i].y);
+		}
+	}
+	else
+	{
+		_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x, _playerCirclePos.y, 125);
+		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y, 200);
+	}
 
 	char str[128];
-	sprintf_s(str, "%lf : state", _hitCount, strlen(str));
+	sprintf_s(str, "%d : state", _curSkills[0]->getReLoadCount(), strlen(str));
 	TextOut(hdc, 50, 50, str, strlen(str));
 }
 
@@ -193,31 +219,40 @@ void player::CamRender(HDC hdc)
 {
 	_playerStatusUI->render();
 	_skillUI->render();
-	//IMAGEMANAGER->findImage("thunder")->frameRender(getMemDC(), _tileCheckRc.left - 
-	//	IMAGEMANAGER->findImage("thunder")->getFrameWidth()/2
-	//	, _tileCheckRc.top - IMAGEMANAGER->findImage("thunder")->getFrameHeight() / 2);
 
 	_curSkills[0]->render(this);
 	_curSkills[1]->render(this);
-	//	Rectangle(getMemDC(), _collisionRc);
-	_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x - CAMERA2D->getCamPosX(), _playerCirclePos.y - CAMERA2D->getCamPosY(), 125);
-	_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
-	Rectangle(getMemDC(), _tileCheckRc);
-	_img->aniRender(hdc, _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
+	_curSkills[2]->render(this);
+	_curSkills[3]->render(this);
 
-	char str[128];
-	sprintf_s(str, "%lf : state", _hitCount, strlen(str));
-	TextOut(hdc, 50, 50, str, strlen(str));
+	//Rectangle(getMemDC(), _tileCheckRc);
+	_img->aniRender(hdc, _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
+	if (_state == STATE::FALL)
+	{
+		for (int i = 0; i < 25; ++i)
+		{
+			if (_tileBlanket[i] == nullptr) continue;
+			_tileBlanket[i]->frameRender(getMemDC(), _tileBlanketPos[i].x - CAMERA2D->getCamPosX(), _tileBlanketPos[i].y - CAMERA2D->getCamPosY(),
+				_tileBlanketIndex[i].x, _tileBlanketIndex[i].y);
+		}
+	}
+	else
+	{
+		_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x - CAMERA2D->getCamPosX(), _playerCirclePos.y - CAMERA2D->getCamPosY(), 125);
+		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
+	}
 }
 
 void player::playerKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 3230, 10, 19, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/player/player.bmp", 1700, 4080, 10, 24, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircle", "images/player/player_circle.bmp", 100, 100, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("playerCircleDirection", "images/player/player_circleDirection.bmp", 30, 30, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("thunder", "images/player/thunder.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("shockNova", "images/player/shockNova.bmp", 2100, 700, 3, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("lightningChain", "images/player/lightningChain.bmp", 540, 1800, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("flameStrike", "images/player/flameStrike.bmp", 2560, 256, 10, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("thunderFloor", "images/player/thunderFloor.bmp",540, 124, 3, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("searingRush1", "images/player/searingRush.bmp", 2048, 64, 32, 1, true, RGB(255, 0, 255));
 
 	//idle
 	int frontIdle[] = { 0 };
@@ -271,11 +306,11 @@ void player::playerKeyAnimationInit()
 	int frontFall[] = { 4 };
 	KEYANIMANAGER->addArrayFrameAnimation("frontFall", "player", frontFall, 1, 1, false);
 
-	int BackFall[] = { 5 };
-	KEYANIMANAGER->addArrayFrameAnimation("BackFall", "player", BackFall, 1, 1, false);
+	int backFall[] = { 5 };
+	KEYANIMANAGER->addArrayFrameAnimation("backFall", "player", backFall, 1, 1, false);
 
-	int LeftFall[] = { 6 };
-	KEYANIMANAGER->addArrayFrameAnimation("LeftFall", "player", LeftFall, 1, 1, false);
+	int leftFall[] = { 6 };
+	KEYANIMANAGER->addArrayFrameAnimation("leftFall", "player", leftFall, 1, 1, false);
 
 	int rightFall[] = { 7 };
 	KEYANIMANAGER->addArrayFrameAnimation("rightFall", "player", rightFall, 1, 1, false);
@@ -324,7 +359,29 @@ void player::playerKeyAnimationInit()
 	int leftFlameStrikeSecond[] = { 169,168,167,166,165,164,163,162,161,160 };
 	KEYANIMANAGER->addArrayFrameAnimation("leftFlameStrikeSecond", "player", leftFlameStrikeSecond, 10, 20, false);
 
-	
+	int dead[] = { 90,91,92,93,94,95,96,97,98,99 };
+	KEYANIMANAGER->addArrayFrameAnimation("dead", "player", dead, 10, 5, false);
+
+	int frontShockNova[] = { 100,101,102,103,104,105,106,107,108,109 };
+	KEYANIMANAGER->addArrayFrameAnimation("frontShockNova", "player", frontShockNova, 10, 20, false,playerIdle,this);
+
+	int backShockNova[] = { 190,191,192,193,194,195,196,197,198,199 };
+	KEYANIMANAGER->addArrayFrameAnimation("backShockNova", "player", backShockNova, 10, 20, false, playerIdle, this);
+
+	int frontStoneShotEnd[] = {210,211,212,213,214,215,216,217};
+	KEYANIMANAGER->addArrayFrameAnimation("frontStoneShotEnd", "player", frontStoneShotEnd, 8, 20, false, playerIdle, this);
+
+	int backStoneShotEnd[] = { 200,201,202,203,204,205,206,207 };
+	KEYANIMANAGER->addArrayFrameAnimation("backStoneShotEnd", "player", backStoneShotEnd, 8, 20, false, playerIdle, this);
+
+	int rightStoneShotEnd[] = { 220,221,222,223,224,225,226,227 };
+	KEYANIMANAGER->addArrayFrameAnimation("rightStoneShotEnd","player", rightStoneShotEnd, 8, 20, false, playerIdle, this);
+
+	int leftStoneShotEnd[] = { 230,231,232,233,234,235,236,237, };
+	KEYANIMANAGER->addArrayFrameAnimation("leftStoneShotEnd", "player", leftStoneShotEnd, 8, 20, false, playerIdle, this);
+
+
+
 }
 
 void player::inPutKey()
@@ -362,6 +419,10 @@ void player::inPutKey()
 	{
 		_playerState->offButtonA(this);
 	}
+	if (KEYMANAGER->isOnceKeyDown('Q'))
+	{
+		_playerState->onButtonQ(this);
+	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		_playerState->onButtonLB(this);
@@ -384,6 +445,11 @@ void player::inPutKey()
 
 void player::startAni()
 {
+	if (_state == STATE::DEAD)
+	{
+		_ani = KEYANIMANAGER->findAnimation("dead");
+		_ani->start();
+	}
 	//MOVE 애니메이션
 	if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::MOVE)
 	{
@@ -490,7 +556,7 @@ void player::startAni()
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::FALL)
 	{
-		_ani = KEYANIMANAGER->findAnimation("LeftFall");
+		_ani = KEYANIMANAGER->findAnimation("leftFall");
 		_ani->start();
 	}
 
@@ -555,6 +621,24 @@ void player::startAni()
 				_ani->start();
 			}
 		}
+		if (_usingSkillName == "stoneShot")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("frontStoneShotEnd");
+				_ani->start();
+			}
+		}
 	}
 	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_ONE)
 	{
@@ -573,6 +657,24 @@ void player::startAni()
 			else if (_curSkills[0]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeEnd");
+				_ani->start();
+			}
+		}
+		if (_usingSkillName == "stoneShot")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("backStoneShotEnd");
 				_ani->start();
 			}
 		}
@@ -597,6 +699,24 @@ void player::startAni()
 				_ani->start();
 			}
 		}
+		if (_usingSkillName == "stoneShot")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("rightStoneShotEnd");
+				_ani->start();
+			}
+		}
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_ONE)
 	{
@@ -618,7 +738,44 @@ void player::startAni()
 				_ani->start();
 			}
 		}
+		if (_usingSkillName == "stoneShot")
+		{
+			if (_curSkills[0]->getReLoadCount() == 0)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeStart");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 1)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeSecond");
+				_ani->start();
+			}
+			else if (_curSkills[0]->getReLoadCount() == 2)
+			{
+				_ani = KEYANIMANAGER->findAnimation("leftStoneShotEnd");
+				_ani->start();
+			}
+		}
 	}
+
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_FOUR)
+	{
+		if (_usingSkillName == "shockNova")
+		{
+			_ani = KEYANIMANAGER->findAnimation("frontShockNova");
+			_ani->start();
+		}
+	}
+	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_FOUR)
+	{
+		if (_usingSkillName == "shockNova")
+		{
+			_ani = KEYANIMANAGER->findAnimation("backShockNova");
+			_ani->start();
+		}
+	}
+
+	
 }
 
 void player::arrStateInit()
@@ -637,33 +794,55 @@ void player::arrStateInit()
 	
 	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)] = new chainLightning;
 	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->init(this);
+
 	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)] = new flameStrike;
 	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->init(this);
 
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)] = new searingRush;
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)]->init(this);
 	
-	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)];
-	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
-	
-	string tmpName = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName();
-	int* tmpMaxReload = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress();
-	int* tmpReloadCount = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress();
-	float* tmpTotalCoolTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress();
-	float* tmpCurTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress();
-	
-	_skillUI->ChangeSkill(0, tmpName, tmpMaxReload, tmpReloadCount, tmpTotalCoolTime, tmpCurTime);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)] = new shockNova;
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)]->init(this);
 
-	//_skillUI->ChangeSkill(3, _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName(),
-	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress(),
-	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress(),
-	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress(),
-	//	_curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress());
+	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)] = new stoneShot;
+	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)]->init(this);
+
+	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)];
+	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
+	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
+	_curSkills[3] = _arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)];
+
+	//string tmpName = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName();
+	//int* tmpMaxReload = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress();
+	//int* tmpReloadCount = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress();
+	//float* tmpTotalCoolTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress();
+	//float* tmpCurTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress();
+	//
+	//_skillUI->ChangeSkill(0, tmpName, tmpMaxReload, tmpReloadCount, tmpTotalCoolTime, tmpCurTime);
+
+	_skillUI->ChangeSkill(0, _curSkills[0]->getName(),
+		_curSkills[0]->getMaxReLoadAddress(),
+		_curSkills[0]->getReLoadCountAddress(),
+		_curSkills[0]->getTotalCoolTimeAddress(),
+		_curSkills[0]->getCurCoolTimeAddress());	
 	
-	
-	_skillUI->ChangeSkill(1, _curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getName(),
-		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getMaxReLoadAddress(),
-		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getReLoadCountAddress(),
-		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getTotalCoolTimeAddress(),
-		_curSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->getCurCoolTimeAddress());
+	_skillUI->ChangeSkill(1, _curSkills[1]->getName(),
+		_curSkills[1]->getMaxReLoadAddress(),
+		_curSkills[1]->getReLoadCountAddress(),
+		_curSkills[1]->getTotalCoolTimeAddress(),
+		_curSkills[1]->getCurCoolTimeAddress());
+
+	_skillUI->ChangeSkill(2, _curSkills[2]->getName(),
+		_curSkills[2]->getMaxReLoadAddress(),
+		_curSkills[2]->getReLoadCountAddress(),
+		_curSkills[2]->getTotalCoolTimeAddress(),
+		_curSkills[2]->getCurCoolTimeAddress());
+
+	_skillUI->ChangeSkill(3, _curSkills[3]->getName(),
+		_curSkills[3]->getMaxReLoadAddress(),
+		_curSkills[3]->getReLoadCountAddress(),
+		_curSkills[3]->getTotalCoolTimeAddress(),
+		_curSkills[3]->getCurCoolTimeAddress());
 
 	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
 
@@ -681,6 +860,8 @@ void player::currentPlayerState()
 		break;
 	case STATE::DASH:
 		_playerState = _arrState[static_cast<const int>(STATE::DASH)];
+		_dashLastPos.x = _pos.x;
+		_dashLastPos.y = _pos.y;
 		break;
 	case STATE::SKILL_ONE:
 		_playerState = _arrState[static_cast<const int>(STATE::SKILL_ONE)];
@@ -703,6 +884,11 @@ void player::currentPlayerState()
 	case STATE::DEAD:
 		_playerState = _arrState[static_cast<const int>(STATE::DEAD)];
 		break;
+	case STATE::FALL:
+		_playerState = _arrState[static_cast<const int>(STATE::FALL)];
+		_curHp -= 25;
+		_playerStatusUI->setCurHp(_curHp);
+		break;
 
 
 	}
@@ -719,129 +905,174 @@ void player::isMoveOff()
 
 void player::vecZero()
 {
-	if (_isLeftTopCheck)
+	if (_state != STATE::FALL && _state != STATE::HIT)
 	{
-		if (_state == STATE::HIT)
+		if (_isLeftTopCheck)
 		{
-			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
-				_vec.x = -_tileCollVec[0].x;
+			if (_state == STATE::HIT)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove() || (*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.x = -_tileCollVec[0].x;
 
-			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
-				_vec.y = -_tileCollVec[0].y;
-		}
-		else if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
-		{
-			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove())
-				_vec.x = -_tileCollVec[0].x;
+				if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove() || (*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.y = -_tileCollVec[0].y;
+			}
+			else if (_moveDirection == MOVEDIRECTION::LEFT_TOP)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+					_vec.x = -_tileCollVec[0].x;
 
-			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
-				_vec.y = -_tileCollVec[0].y;
-		}
-		else if (_moveDirection == MOVEDIRECTION::LEFT)
-		{
-			_vec.x = -_tileCollVec[0].x;
-		}
-		else if (_moveDirection == MOVEDIRECTION::TOP)
-		{
-			_vec.y = -_tileCollVec[0].y;
+				if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+					_vec.y = -_tileCollVec[0].y;
+			}
+			else if (_moveDirection == MOVEDIRECTION::LEFT)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[0].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+					_vec.x = -_tileCollVec[0].x;
+			}
+			else if (_moveDirection == MOVEDIRECTION::TOP)
+			{
+
+				if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+					_vec.y = -_tileCollVec[0].y;
+			}
+
 		}
 
+		if (_isRightTopCheck)
+		{
+			if (_state == STATE::HIT)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getIsAvailMove() || 
+					(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.x = -_tileCollVec[1].x;
+
+				if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.left / 32]->getIsAvailMove() || 
+					(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.y = -_tileCollVec[1].y;
+			}
+			else if (_moveDirection == MOVEDIRECTION::RIGHT_TOP)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[1].x;
+				}
+				if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[1].y;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::RIGHT)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[1].x;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::TOP)
+			{
+				if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE&& _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[1].y;
+				}
+			}
+
+		}
+		if (_isLeftBottomCheck)
+		{
+			if (_state == STATE::HIT)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[2].x]->getIsAvailMove() ||
+					(*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.x = -_tileCollVec[2].x;
+
+				if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					(*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.y = -_tileCollVec[2].y;
+			}
+			else if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.bottom / 32][_tileCheckIndex[2].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[2].x;
+				}
+				if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[2].y;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::LEFT)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.bottom / 32][_tileCheckIndex[2].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[2].x;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::BOTTOM)
+			{
+				if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[2].y;
+				}
+			}
+
+		}
+		if (_isRightBottomCheck)
+		{
+			if (_state == STATE::HIT)
+			{
+				if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[3].x]->getIsAvailMove() ||
+					(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[3].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.x = -_tileCollVec[3].x;
+
+				if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.left / 32]->getIsAvailMove() ||
+					(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+					_vec.y = -_tileCollVec[3].y;
+			}
+			else if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.bottom / 32][_tileCheckIndex[3].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[3].x;
+				}
+				if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[3].y;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::RIGHT)
+			{
+				if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckRc.bottom / 32][_tileCheckIndex[3].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.x = -_tileCollVec[3].x;
+				}
+			}
+			else if (_moveDirection == MOVEDIRECTION::BOTTOM)
+			{
+				if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove() ||
+					((*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE && _state != STATE::DASH))
+				{
+					_vec.y = -_tileCollVec[3].y;
+				}
+			}
+
+		}
 	}
-
-	if (_isRightTopCheck)
-	{
-		if (_state == STATE::HIT)
-		{
-			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[1].x]->getIsAvailMove())
-				_vec.x = -_tileCollVec[1].x;
-
-			if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckRc.left / 32]->getIsAvailMove())
-				_vec.y = -_tileCollVec[1].y;
-		}
-		else if ( _moveDirection == MOVEDIRECTION::RIGHT_TOP)
-		{
-			if (!(*_vvMap)[(_tileCheckRc.top) / 32][_tileCheckIndex[1].x]->getIsAvailMove())
-			{
-				_vec.x = -_tileCollVec[1].x;
-			}
-			if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckRc.right / 32]->getIsAvailMove())
-			{
-				_vec.y = -_tileCollVec[1].y;
-			}
-		}
-		else if (_moveDirection == MOVEDIRECTION::RIGHT)
-		{
-			_vec.x = -_tileCollVec[1].x;
-		}
-		else if (_moveDirection == MOVEDIRECTION::TOP)
-		{
-			_vec.y = -_tileCollVec[1].y;
-		}
-
-	}
-	if (_isLeftBottomCheck)
-	{
-		if (_state == STATE::HIT)
-		{
-			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[2].x]->getIsAvailMove())
-				_vec.x = -_tileCollVec[2].x;
-
-			if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
-				_vec.y = -_tileCollVec[2].y;
-		}
-		else if (_moveDirection == MOVEDIRECTION::LEFT_BOTTOM)
-		{
-			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[2].x]->getIsAvailMove())
-			{
-				_vec.x = -_tileCollVec[2].x;
-			}
-			if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckRc.left / 32]->getIsAvailMove())
-			{
-				_vec.y = -_tileCollVec[2].y;
-			}
-		}
-		else if (_moveDirection == MOVEDIRECTION::LEFT )
-		{
-			_vec.x = -_tileCollVec[2].x;
-		}
-		else if (_moveDirection == MOVEDIRECTION::BOTTOM)
-		{
-			_vec.y = -_tileCollVec[2].y;
-		}
-
-	}
-	if (_isRightBottomCheck)
-	{
-		if (_state == STATE::HIT)
-		{
-			if (!(*_vvMap)[_tileCheckRc.top / 32][_tileCheckIndex[3].x]->getIsAvailMove())
-				_vec.x = -_tileCollVec[3].x;
-
-			if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.left / 32]->getIsAvailMove())
-				_vec.y = -_tileCollVec[3].y;
-		}
-		else if (_moveDirection == MOVEDIRECTION::RIGHT_BOTTOM)
-		{
-			if (!(*_vvMap)[(_tileCheckRc.bottom) / 32][_tileCheckIndex[3].x]->getIsAvailMove())
-			{
-				_vec.x = -_tileCollVec[3].x;
-			}
-			if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckRc.right / 32]->getIsAvailMove())
-			{
-				_vec.y = -_tileCollVec[3].y;
-			}
-		}
-		else if (_moveDirection == MOVEDIRECTION::RIGHT)
-		{
-			_vec.x = -_tileCollVec[3].x;
-		}
-		else if (_moveDirection == MOVEDIRECTION::BOTTOM )
-		{
-			_vec.y = -_tileCollVec[3].y;
-		}
-
-	}
-
 }
 
 void player::enemyAngleCal(float angle)
@@ -882,6 +1113,29 @@ void player::playerIdle(void * obj)
 	Player->setState(STATE::IDLE);
 	Player->currentPlayerState();
 	Player->startAni();           
+	if ((*Player->_vvMap)[Player->getPlayerTileCheckRc().bottom / 32][Player->getPlayerTileCheckRc().left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE ||
+		(*Player->_vvMap)[Player->getPlayerTileCheckRc().bottom / 32][Player->getPlayerTileCheckRc().right / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE ||
+		(*Player->_vvMap)[Player->getPlayerTileCheckRc().top / 32][Player->getPlayerTileCheckRc().left / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE ||
+		(*Player->_vvMap)[Player->getPlayerTileCheckRc().top / 32][Player->getPlayerTileCheckRc().right / 32]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
+	{
+		if (Player->getState() != STATE::FALL)
+		{
+			Player->setState(STATE::FALL);
+			Player->currentPlayerState();
+			Player->setIsHit(true);
+			Player->_isFall = true;
+			Player->_fallVecY = 0;
+		}
+	}
+}
+
+void player::playerFall(void * obj)
+{
+	player* Player = (player*)obj;
+
+	Player->setState(STATE::IDLE);
+	Player->currentPlayerState();
+	Player->startAni();
 }
 
 void player::tileCheckFunc()
@@ -899,46 +1153,46 @@ void player::tileCheckFunc()
 	_tileCheckIndex[3].x = (_tileCheckRc.right + _vec.x) / 32;
 	_tileCheckIndex[3].y = (_tileCheckRc.bottom + _vec.y) / 32;
 
-	if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove() || (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
 	{
 		_tileCollVec[0].x = _tileCheckRc.left - (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().right;
 		_tileCollVec[0].y = _tileCheckRc.top - (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileRc().bottom;
 		_isLeftTopCheck = true;
 	}
-	else if ((*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getIsAvailMove() && (*_vvMap)[_tileCheckIndex[0].y][_tileCheckIndex[0].x]->getTopTileAttr() != E_TILE_ATR::TILE_HOLE)
 	{
 		_isLeftTopCheck = false;
 	}
 
-	if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove() || (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
 	{
 		_tileCollVec[1].x = _tileCheckRc.right - (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().left+1;
 		_tileCollVec[1].y = _tileCheckRc.top - (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileRc().bottom;
 		_isRightTopCheck = true;
 	}
-	else if ((*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getIsAvailMove() && (*_vvMap)[_tileCheckIndex[1].y][_tileCheckIndex[1].x]->getTopTileAttr() != E_TILE_ATR::TILE_HOLE)
 	{
 		_isRightTopCheck = false;
 	}
 
-	if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove() || (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
 	{
 		_tileCollVec[2].x =  _tileCheckRc.left - (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().right;
 		_tileCollVec[2].y =  _tileCheckRc.bottom - (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileRc().top+1;
 		_isLeftBottomCheck = true;
 	}
-	else if ((*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getIsAvailMove() && (*_vvMap)[_tileCheckIndex[2].y][_tileCheckIndex[2].x]->getTopTileAttr() != E_TILE_ATR::TILE_HOLE)
 	{
 		_isLeftBottomCheck = false;
 	}
 
-	if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	if (!(*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove() || (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileAttr() == E_TILE_ATR::TILE_HOLE)
 	{
 		_tileCollVec[3].x = _tileCheckRc.right - (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().left+1;
 		_tileCollVec[3].y = _tileCheckRc.bottom - (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileRc().top+1;
 		_isRightBottomCheck = true;
 	}
-	else if ((*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove())
+	else if ((*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getIsAvailMove() && (*_vvMap)[_tileCheckIndex[3].y][_tileCheckIndex[3].x]->getTopTileAttr() != E_TILE_ATR::TILE_HOLE)
 	{
 		_isRightBottomCheck = false;
 	}

@@ -65,18 +65,57 @@ void state_Idle::offButtonD(player * Player)
 
 void state_Idle::onButtonQ(player* Player)
 {
+	if (!Player->getCurSkills4()->getIsSkill())
+	{
+		Player->getCurSkills4()->setIsSkill(true);
+		Player->getCurSkills4()->skillPosSet(Player);
+		Player->getCurSkills4()->setReLoadCount(0);
+		Player->getSkillUI()->UseIdxSkill(3);
+		Player->setUsingSkillName(Player->getCurSkills4()->getName());
+		if (Player->getPlayerAngle() * (180 / PI) > 45 &&
+			Player->getPlayerAngle() * (180 / PI) < 135)
+		{
+			Player->setState(STATE::SKILL_FOUR);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::BACK);
+			Player->startAni();
+		}
+		else
+		{
+			Player->setState(STATE::SKILL_FOUR);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::FRONT);
+			Player->startAni();
+		}
+
+
+		//Player->setState(STATE::SKILL_FOUR);
+		//Player->currentPlayerState();
+		//
+		//Player->startAni();
+	}
+
 }
 
 void state_Idle::onButtonE(player* Player)
 {
+
 }
 
 void state_Idle::onButtonR(player* Player)
 {
+
 }
 
 void state_Idle::onButtonSpace(player* Player)
 {
+	if (!Player->getCurSkills3()->getIsSkill())
+	{
+		Player->getCurSkills3()->setIsSkill(true);
+		Player->getCurSkills3()->skillPosSet(Player);
+		Player->getCurSkills3()->setReLoadCount(0);
+		Player->getSkillUI()->UseIdxSkill(2);
+	}
 	Player->setState(STATE::DASH);
 	Player->currentPlayerState();
 	Player->startAni();
@@ -88,7 +127,6 @@ void state_Idle::onButtonLB(player* Player)
 	{
 
 		Player->setUsingSkillName(Player->getCurSkills1()->getName());
-
 		Player->getCurSkills1()->skillPosSet(Player);
 		Player->getSkillUI()->UseIdxSkill(0);
 		Player->getCurSkills1()->setIsSkill(true);
@@ -125,7 +163,10 @@ void state_Idle::onButtonLB(player* Player)
 			Player->setAniDirection(ANIDIRECTION::FRONT);
 			Player->startAni();
 		}
-		Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+		if (Player->getCurSkills1()->getName() == "FlameStrike")
+		{
+			Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+		}
 	}
 }
 

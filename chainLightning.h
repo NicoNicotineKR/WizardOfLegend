@@ -5,7 +5,7 @@
 class chainLightning : public skills
 {
 private:
-	int _attackCount;
+	image* _thunderFloorImg;
 public:
 	chainLightning();
 	~chainLightning();
@@ -15,6 +15,6 @@ public:
 	void render(player* Player)  override;
 
 	void skillPosSet(player* Player) override;
-
+	virtual void destroySkill(int i) override;
 };
 

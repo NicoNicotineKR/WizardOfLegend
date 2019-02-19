@@ -220,17 +220,110 @@ void state_Move::onButtonR(player* Player)
 
 void state_Move::onButtonSpace(player* Player)
 {
+	if (!Player->getCurSkills3()->getIsSkill())
+	{
+		Player->getCurSkills3()->setIsSkill(true);
+		Player->getCurSkills3()->skillPosSet(Player);
+		Player->getCurSkills3()->setReLoadCount(0);
+		Player->getSkillUI()->UseIdxSkill(2);
+	}
 	Player->setState(STATE::DASH);
 	Player->currentPlayerState();
 	Player->startAni();
 }
 
+
 void state_Move::onButtonLB(player* Player)
 {
+	if (!Player->getCurSkills1()->getIsSkill())
+	{
+
+		Player->setUsingSkillName(Player->getCurSkills1()->getName());
+
+		Player->getCurSkills1()->skillPosSet(Player);
+		Player->getSkillUI()->UseIdxSkill(0);
+		Player->getCurSkills1()->setIsSkill(true);
+
+		if ((Player->getPlayerAngle()* (180 / PI) <= 45 && Player->getPlayerAngle() * (180 / PI) >= 0) ||
+			(Player->getPlayerAngle()*(180 / PI) <= 360 && Player->getPlayerAngle() * (180 / PI) >= 315))
+		{
+			Player->setState(STATE::SKILL_ONE);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+			Player->startAni();
+		}
+		if ((Player->getPlayerAngle()* (180 / PI) > 135 &&
+			Player->getPlayerAngle() * (180 / PI) < 225))
+		{
+			Player->setState(STATE::SKILL_ONE);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+			Player->startAni();
+		}
+		if (Player->getPlayerAngle()* (180 / PI) > 45 &&
+			Player->getPlayerAngle() * (180 / PI) <= 135)
+		{
+			Player->setState(STATE::SKILL_ONE);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::BACK);
+			Player->startAni();
+		}
+		if (Player->getPlayerAngle()* (180 / PI) >= 225 &&
+			Player->getPlayerAngle() * (180 / PI) < 315)
+		{
+			Player->setState(STATE::SKILL_ONE);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::FRONT);
+			Player->startAni();
+		}
+		Player->getCurSkills1()->setReLoadCount(Player->getCurSkills1()->getReLoadCount() + 1);
+	}
 }
 
 void state_Move::onButtonRB(player* Player)
 {
+	if (!Player->getCurSkills2()->getIsSkill())
+	{
+
+		Player->setUsingSkillName(Player->getCurSkills2()->getName());
+		if ((Player->getPlayerAngle()* (180 / PI) <= 45 && Player->getPlayerAngle() * (180 / PI) >= 0) ||
+			(Player->getPlayerAngle()*(180 / PI) <= 360 && Player->getPlayerAngle() * (180 / PI) >= 315))
+		{
+			Player->setState(STATE::SKILL_TWO);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::RIGHT);
+			Player->startAni();
+		}
+		if ((Player->getPlayerAngle()* (180 / PI) > 135 &&
+			Player->getPlayerAngle() * (180 / PI) < 225))
+		{
+			Player->setState(STATE::SKILL_TWO);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::LEFT);
+			Player->startAni();
+		}
+		if (Player->getPlayerAngle()* (180 / PI) > 45 &&
+			Player->getPlayerAngle() * (180 / PI) <= 135)
+		{
+			Player->setState(STATE::SKILL_TWO);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::BACK);
+			Player->startAni();
+		}
+		if (Player->getPlayerAngle()* (180 / PI) >= 225 &&
+			Player->getPlayerAngle() * (180 / PI) < 315)
+		{
+			Player->setState(STATE::SKILL_TWO);
+			Player->currentPlayerState();
+			Player->setAniDirection(ANIDIRECTION::FRONT);
+			Player->startAni();
+		}
+
+		Player->getCurSkills2()->skillPosSet(Player);
+		Player->getSkillUI()->UseIdxSkill(1);
+		Player->getCurSkills2()->setReLoadCount(0);
+		Player->getCurSkills2()->setIsSkill(true);
+	}
 }
 
 void state_Move::update(player* Player)

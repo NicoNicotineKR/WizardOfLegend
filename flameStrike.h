@@ -5,7 +5,7 @@
 class flameStrike : public skills
 {
 private:
-	float _attackCount;
+
 	bool _isSkillImgRender;
 	image* _img2;
 	image* _img3;
@@ -18,6 +18,6 @@ public:
 	virtual void update(player* Player)			override;
 	virtual void render(player* Player)			override;
 	virtual void skillPosSet(player* Player)	override;
-
+	virtual void destroySkill(int i)			 override;
 };
 

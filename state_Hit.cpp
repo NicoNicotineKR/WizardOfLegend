@@ -70,18 +70,18 @@ void state_Hit::update(player* Player)
 {
 	if (Player->getAniDirection() == ANIDIRECTION::LEFT)
 	{
-		Player->setVecX(1);
+		Player->setVecX(0.7);
 	}
 	else if (Player->getAniDirection() == ANIDIRECTION::RIGHT)
 	{
-		Player->setVecX(-1);
+		Player->setVecX(-0.7);
 	}
 	else if (Player->getAniDirection() == ANIDIRECTION::FRONT)
 	{
-		Player->setVecY(-1);
+		Player->setVecY(-0.7);
 	}
 	else if (Player->getAniDirection() == ANIDIRECTION::BACK)
 	{
-		Player->setVecY(1);
+		Player->setVecY(0.7);
 	}
 }

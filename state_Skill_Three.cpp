@@ -49,6 +49,7 @@ void state_Skill_Three::onButtonQ(player* Player)
 
 void state_Skill_Three::onButtonE(player* Player)
 {
+
 }
 
 void state_Skill_Three::onButtonR(player* Player)

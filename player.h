@@ -6,6 +6,7 @@
 #include "skillCooldownUI.h"
 #include "skills.h"
 
+
 class enemyMgr;
 class skills;
 class playerState;
@@ -79,6 +80,7 @@ class player : gameNode
 private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
+
 	vvMap* _vvMap;
 	enemyMgr* _em;
 
@@ -130,6 +132,13 @@ private:
 	string			 _usingSkillName;
 	float _hitCount;
 	bool _isHit;
+	bool _isAlive;
+	bool _isFall;
+	float _fallVecY;
+	POINTFLOAT _dashLastPos;
+	image* _tileBlanket[25];
+	POINTFLOAT  _tileBlanketPos[25];
+	POINT		_tileBlanketIndex[25];
 public:
 	player();
 	~player();
@@ -157,6 +166,7 @@ public:
 
 	//애니메이션 콜백함수
 	static void playerIdle(void* obj);
+	static void playerFall(void* obj);
 
 	//애니메이션 방향 getset
 	inline ANIDIRECTION getAniDirection() { return _aniDirection; }
@@ -210,6 +220,9 @@ public:
 	//inline void setIsUsingSkill(bool isUsingSkill) { _isUsingSkill = isUsingSkill; }
 	inline skills* getCurSkills1() { return _curSkills[0]; }
 	inline skills* getCurSkills2() { return _curSkills[1]; }
+	inline skills* getCurSkills3() { return _curSkills[2]; }
+	inline skills* getCurSkills4() { return _curSkills[3]; }
+
 	inline vvMap* getVVMapMemoryAddress() { return _vvMap; }
 	inline skillCooldownUI* getSkillUI() {return _skillUI;}
 
@@ -218,5 +231,28 @@ public:
 	inline RECT getCollisionRc() { return _collisionRc; }
 	inline bool getIsHit() { return _isHit; }
 	inline void setIsHit(bool isHit) { _isHit = isHit; }
+
+	inline bool getIsAlive() { return _isAlive; }
+	inline void setIsAlive(bool isAlive) { _isAlive = isAlive; }
+
+	inline POINTFLOAT* getPosAddress() { return &_pos; }
+	inline vvMap* getVVMap() { return _vvMap; }
+
+	inline void setTileBlanket(image* img,int i) { _tileBlanket[i] = img; }
+	inline image* getTileBlanket(int i) { return _tileBlanket[i]; }
+
+	inline void setTileBlanketPos(POINTFLOAT pos, int i) { _tileBlanketPos[i] = pos; }
+	inline POINTFLOAT getTileBlanketPos(int i) { return _tileBlanketPos[i]; }
+
+	inline void setTileBlanketIndex(POINT index, int i) { _tileBlanketIndex[i] = index; }
+	inline POINT getTileBlanketIndex(int i) { return _tileBlanketIndex[i]; }
+
+	inline void setFallVecY(float vecY) { _fallVecY = vecY; }
+	inline float getFallVecY() { return _fallVecY; }
+
+	inline void setDashLastPos(POINTFLOAT pos) { _dashLastPos = pos; }
+	inline POINTFLOAT getDashLastPos() { return _dashLastPos; }
+
+	inline int getCurHp() { return _curHp; }
 };
 

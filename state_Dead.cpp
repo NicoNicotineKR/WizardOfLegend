@@ -69,4 +69,9 @@ void state_Dead::onButtonRB(player * Player)
 
 void state_Dead::update(player * Player)
 {
+	if (Player->getIsAlive())
+	{
+		Player->setIsAlive(false);
+		Player->startAni();
+	}
 }

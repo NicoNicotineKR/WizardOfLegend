@@ -30,8 +30,10 @@ protected:
 	float		_imgCount;
 	
 	bool		_isSkill;
+	float       _attackCount;
 
-
+	RECT	_flameRc[5];
+	RECT	_stoneShotRc[3];
 
 public:
 
@@ -40,7 +42,7 @@ public:
 	virtual void update(player* Player)			abstract;
 	virtual void render(player* Player)			abstract;
 	virtual void skillPosSet(player* Player)	abstract;
-
+	virtual void destroySkill(int i)		    abstract;
 	inline POINTFLOAT getPos() { return _pos;}
 	inline string	  getName() { return _name; }
 
@@ -58,5 +60,13 @@ public:
 
 	inline void		  setReLoadCount(int reLoadCount) { _reLoadCount = reLoadCount; }
 	inline RECT		  getCollisionRc() { return _collisionRc; }
+
+	//배열크기 5짜리 렉트 i에 인덱스 번호 집어넣으셈.
+	inline RECT		  getSearingRushRc(int i) { return _flameRc[i]; }
+
+	//배열크기 3짜리 렉트 i에 인덱스 번호 집어 넣으셈.
+	inline RECT		  getStoneShotRc(int i) { return _stoneShotRc[i]; }
+
+
 };
 

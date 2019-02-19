@@ -142,27 +142,21 @@ void flameStrike::render(player * Player)
 {
 	if (_isSkillImgRender)
 	{
-		Rectangle(getMemDC(), _collisionRc);
 		if (_isRender[0])
 		{
-			_img->frameRender(Player->getPlayerMemDC(), _pos.x, _pos.y);
+			_img->frameRender(Player->getPlayerMemDC(), _pos.x -CAMERA2D->getCamPosX(), _pos.y- CAMERA2D->getCamPosY());
 
 		}
 
 		if (_isRender[1])
 		{
-			//if (Player->getAniDirection() != ANIDIRECTION::FRONT)
-			//{
-				_img2->frameRender(Player->getPlayerMemDC(), _pos.x, _pos.y);
-			//}
-			//else
-			//{
-			//	_img2->frameRender(Player->getPlayerMemDC(), _pos.x - 128, _pos.y - 128);
-			//}
+
+				_img2->frameRender(Player->getPlayerMemDC(), _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY());
+
 		}
 		if (_isRender[2])
 		{
-			_img3->frameRender(Player->getPlayerMemDC(), _pos.x, _pos.y);
+			_img3->frameRender(Player->getPlayerMemDC(), _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY());
 
 		}
 	}
@@ -194,4 +188,8 @@ void flameStrike::skillPosSet(player * Player)
 	_img2->SetFrameX(0);
 	_img3->SetFrameX(0);
 	_isRender[0] = true;
+}
+
+void flameStrike::destroySkill(int i)
+{
 }
