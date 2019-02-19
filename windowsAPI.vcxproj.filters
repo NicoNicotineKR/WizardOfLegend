@@ -73,6 +73,9 @@
     <Filter Include="PlayGround\units\bossState">
       <UniqueIdentifier>{23f727a5-314b-499a-9b30-a27c733fe44c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayGround\skills\bossSkill">
+      <UniqueIdentifier>{36f89e8e-f17c-438e-8e38-d937566fc948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -411,12 +414,24 @@
     <ClInclude Include="boss_State_Sleep.h">
       <Filter>PlayGround\units\bossState</Filter>
     </ClInclude>
+    <ClInclude Include="waterdropRotate.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="snowflakeRotate.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="throwIceSpear.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="chargeIceSlash.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="blizzard.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="windowsAPI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="gameNode.cpp">
@@ -721,6 +736,24 @@
     </ClCompile>
     <ClCompile Include="boss_State_Sleep.cpp">
       <Filter>PlayGround\units\bossState</Filter>
+    </ClCompile>
+    <ClCompile Include="windowsAPI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="waterdropRotate.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="snowflakeRotate.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="throwIceSpear.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="chargeIceSlash.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="blizzard.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -154,6 +154,7 @@
     <ClInclude Include="action.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStar.h" />
+    <ClInclude Include="blizzard.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossHpProgressBarUI.h" />
     <ClInclude Include="bossState.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="boss_State_Stun.h" />
     <ClInclude Include="camera2D.h" />
     <ClInclude Include="chainLightning.h" />
+    <ClInclude Include="chargeIceSlash.h" />
     <ClInclude Include="dialogueMaker.h" />
     <ClInclude Include="dmgNumUI.h" />
     <ClInclude Include="effect.h" />
@@ -237,6 +239,7 @@
     <ClInclude Include="skillManager.h" />
     <ClInclude Include="skillNode.h" />
     <ClInclude Include="skills.h" />
+    <ClInclude Include="snowflakeRotate.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1_1.h" />
     <ClInclude Include="stageBoss1.h" />
@@ -257,17 +260,20 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="testStage.h" />
+    <ClInclude Include="throwIceSpear.h" />
     <ClInclude Include="tile.h" />
     <ClInclude Include="tileNode.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="waterdropRotate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStar.cpp" />
+    <ClCompile Include="blizzard.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossHpProgressBarUI.cpp" />
     <ClCompile Include="boss_State_Casting.cpp" />
@@ -285,6 +291,7 @@
     <ClCompile Include="boss_State_Stun.cpp" />
     <ClCompile Include="camera2D.cpp" />
     <ClCompile Include="chainLightning.cpp" />
+    <ClCompile Include="chargeIceSlash.cpp" />
     <ClCompile Include="dialogueMaker.cpp" />
     <ClCompile Include="dmgNumUI.cpp" />
     <ClCompile Include="effect.cpp" />
@@ -344,6 +351,7 @@
     <ClCompile Include="skillIconList.cpp" />
     <ClCompile Include="skillManager.cpp" />
     <ClCompile Include="skills.cpp" />
+    <ClCompile Include="snowflakeRotate.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1_1.cpp" />
     <ClCompile Include="stageBoss1.cpp" />
@@ -367,11 +375,13 @@
     </ClCompile>
     <ClCompile Include="stoneShot.cpp" />
     <ClCompile Include="testStage.cpp" />
+    <ClCompile Include="throwIceSpear.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="waterdropRotate.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

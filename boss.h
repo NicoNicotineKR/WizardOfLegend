@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "tile.h"
 #include "rotateImgMaker.h"
+#include "skills.h"
 
 class bossState;
 class player;
@@ -77,6 +78,11 @@ private:
 	player* _player;					//플레이어 주소 여따 넣을거임
 	POINTFLOAT _playerPos;				//플레이어 좌표 박을거임
 	vector<vector<tile*>> _vvMap;
+
+	//	재만 추가목록 ----------------------------
+	//	스킬
+	vector<skills*> _vSkills;
+
 
 	// 그떄 그때 추가하는 목록인데 더러울것임.
 	//---------------------------------------------------------------------------------------------------------------------------------------
