@@ -42,6 +42,9 @@ HRESULT boss::init()
 	_maxHp = BOSS_HP;
 	_curHp = BOSS_HP;
 
+	_speed = 400.f;
+	_angle = 0;
+
 	return S_OK;
 }
 

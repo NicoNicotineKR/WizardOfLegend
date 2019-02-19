@@ -45,6 +45,14 @@ void enemyMgr::update()
 	RECT temp;
 	for (int i = 0; i < _vEnemy.size();i++)
 	{
+		int mapPosX = _vEnemy[i]->getPos().x / 32;
+		int mapPosY = _vEnemy[i]->getPos().y / 32;
+
+		if (mapPosX < _player->getLeftBottomIndex().x - 10)continue;
+		if (mapPosX > _player->getLeftBottomIndex().x + 10)continue;
+		if (mapPosY < _player->getLeftBottomIndex().y - 10)continue;
+		if (mapPosY > _player->getLeftBottomIndex().y + 10)continue;
+
 		// 적 갯수만큼업데이트를 돌린다
 		_vEnemy[i]->update();
 
@@ -80,6 +88,14 @@ void enemyMgr::render()
 {
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
+		int mapPosX = _vEnemy[i]->getPos().x / 32;
+		int mapPosY = _vEnemy[i]->getPos().y / 32;
+
+		if (mapPosX < _player->getLeftBottomIndex().x - 10)continue;
+		if (mapPosX > _player->getLeftBottomIndex().x + 10)continue;
+		if (mapPosY < _player->getLeftBottomIndex().y - 10)continue;
+		if (mapPosY > _player->getLeftBottomIndex().y + 10)continue;
+
 		_vEnemy[i]->CamRender();
 	}
 }
