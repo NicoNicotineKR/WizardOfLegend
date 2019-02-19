@@ -48,10 +48,10 @@ void enemyMgr::update()
 		int mapPosX = _vEnemy[i]->getPos().x / 32;
 		int mapPosY = _vEnemy[i]->getPos().y / 32;
 
-		if (mapPosX < _player->getLeftBottomIndex().x - 10)continue;
-		if (mapPosX > _player->getLeftBottomIndex().x + 10)continue;
-		if (mapPosY < _player->getLeftBottomIndex().y - 10)continue;
-		if (mapPosY > _player->getLeftBottomIndex().y + 10)continue;
+		if (mapPosX < _player->getLeftBottomIndex().x - 52)continue;
+		if (mapPosX > _player->getLeftBottomIndex().x + 52)continue;
+		if (mapPosY < _player->getLeftBottomIndex().y - 35)continue;
+		if (mapPosY > _player->getLeftBottomIndex().y + 35)continue;
 
 		// 적 갯수만큼업데이트를 돌린다
 		_vEnemy[i]->update();
@@ -91,10 +91,10 @@ void enemyMgr::render()
 		int mapPosX = _vEnemy[i]->getPos().x / 32;
 		int mapPosY = _vEnemy[i]->getPos().y / 32;
 
-		if (mapPosX < _player->getLeftBottomIndex().x - 10)continue;
-		if (mapPosX > _player->getLeftBottomIndex().x + 10)continue;
-		if (mapPosY < _player->getLeftBottomIndex().y - 10)continue;
-		if (mapPosY > _player->getLeftBottomIndex().y + 10)continue;
+		if (mapPosX < _player->getLeftBottomIndex().x - 52)continue;
+		if (mapPosX > _player->getLeftBottomIndex().x + 52)continue;
+		if (mapPosY < _player->getLeftBottomIndex().y - 35)continue;
+		if (mapPosY > _player->getLeftBottomIndex().y + 35)continue;
 
 		_vEnemy[i]->CamRender();
 	}
