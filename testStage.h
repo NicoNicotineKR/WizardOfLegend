@@ -5,6 +5,7 @@
 #include "aStar.h"
 #include "player.h"
 #include "enemyMgr.h"
+#include "boss.h"
 
 class testStage : public gameNode
 {
@@ -17,8 +18,8 @@ class testStage : public gameNode
 
 	aStar* _aStar;
 
-	list<POINT> _myWay;
-	list<POINT>::iterator _imyWay;
+	//list<POINT> _myWay;
+//	list<POINT>::iterator _imyWay;
 
 	RECT _test;
 	player* _player;

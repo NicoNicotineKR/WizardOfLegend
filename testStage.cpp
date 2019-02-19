@@ -30,7 +30,7 @@ HRESULT testStage::init()
 
 	_test = RectMakeCenter(_vvMap[19][16]->getTopTilePos().x, _vvMap[19][16]->getTopTilePos().y, 32, 32);
 
-	_myWay.clear();
+	//_myWay.clear();
 
 	_em = new enemyMgr;
 	_player->enemyLink(_em);
@@ -56,7 +56,7 @@ void testStage::update()
 		for (int i = 0; i < _em->getVEnemy().size(); i++)
 		{
 			_em->getVEnemy()[i]->getPath()->clear();
-			_myWay.clear();
+			//_myWay.clear();
 
 			int e_posX = _em->getVEnemy()[i]->getPos().x / TOP_TILESIZE;
 			int e_posY = _em->getVEnemy()[i]->getPos().y / TOP_TILESIZE;
@@ -71,7 +71,7 @@ void testStage::update()
 				iter != _em->getVEnemy()[i]->getPath()->end(); 
 				++iter)
 			{
-				_myWay.push_front(*iter);
+				//_myWay.push_front(*iter);
 			}
 		}
 
