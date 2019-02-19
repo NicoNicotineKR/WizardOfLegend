@@ -23,12 +23,13 @@ HRESULT playGround::init()
 	_introScene = new introScene;
 	_mainmenu = new mainmenu;
 	_home = new home;
-
+	_player = new player;
+	_home->setPlayerLink(_player);
 	//	======	재만 테스트용 ======
 	//_mapEditor = new mapEditor;
 	_testStage = new testStage;
 	_stage1_1 = new stage1_1;
-
+	_stage1_1->setPlayerLink(_player);
 	//	======	공유 테스트용 ======
 	SCENEMANAGER->addScene("introScene",_introScene);
 	SCENEMANAGER->addScene("mainmenu", _mainmenu);

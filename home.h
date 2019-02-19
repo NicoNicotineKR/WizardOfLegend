@@ -41,5 +41,7 @@ public:
 	//ÇÔ¼öµé
 	void TileMapRender();
 	void VObjectRender();
+
+	void setPlayerLink(player* player) { _player = player; }
 };
 

@@ -5,7 +5,7 @@
 #include "mainmenu.h"
 #include "stage1_1.h"
 #include "home.h"
-
+#include "player.h"
 
 
 class playGround : public gameNode
@@ -16,7 +16,7 @@ private:
 	testStage* _testStage;
 	stage1_1* _stage1_1;
 	home* _home;
-
+	player* _player;
 
 
 	

@@ -22,7 +22,6 @@ HRESULT stage1_1::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
-	_player = new player;
 	_aStar = new aStar;
 
 	_vvMap.clear();

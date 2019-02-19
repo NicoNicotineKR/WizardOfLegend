@@ -19,7 +19,7 @@ HRESULT home::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
-	_player = new player;
+	//_player = new player;
 
 	_vvMap.clear();
 	_vObjects.clear();

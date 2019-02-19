@@ -127,7 +127,7 @@ void mainmenu::update()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
 			{
-				SCENEMANAGER->changeScene("stage1_1");
+				SCENEMANAGER->changeScene("home");
 			}
 		}
 	}

@@ -210,9 +210,7 @@ void player::render(HDC hdc)
 		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x, _playerCircleDirectionPos.y, 200);
 	}
 
-	char str[128];
-	sprintf_s(str, "%d : state", _curSkills[0]->getReLoadCount(), strlen(str));
-	TextOut(hdc, 50, 50, str, strlen(str));
+
 }
 
 void player::CamRender(HDC hdc)
@@ -240,8 +238,7 @@ void player::CamRender(HDC hdc)
 		_playerCircleImg->alphaRender(getMemDC(), _playerCirclePos.x - CAMERA2D->getCamPosX(), _playerCirclePos.y - CAMERA2D->getCamPosY(), 125);
 		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
 	}
-	_img->aniRender(hdc, _pos.x- CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
-
+	_img->aniRender(hdc, _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
 }
 
 void player::playerKeyAnimationInit()

@@ -57,5 +57,6 @@ public:
 	void TileMapRender();
 	void VObjectRender();
 
+	void setPlayerLink(player* player) { _player = player; }
 };
 
