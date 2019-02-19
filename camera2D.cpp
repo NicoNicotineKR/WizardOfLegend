@@ -40,10 +40,20 @@ void camera2D::setPos(POINTFLOAT playerPos)
 	{
 		_playerPos.x = playerPos.x - WINSIZEX / 2;
 	}
+	else if(playerPos.x <= WINSIZEX / 2)
+	{
+		_playerPos.x = 0;
+	}
+
+
 
 	if (playerPos.y > WINSIZEY / 2 && playerPos.y < _mapSizeY - WINSIZEY / 2)
 	{
 		_playerPos.y = playerPos.y - WINSIZEY / 2;
+	}
+	else if (playerPos.y <= WINSIZEY / 2)
+	{
+		_playerPos.y = 0;
 	}
 }
 
