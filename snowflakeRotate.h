@@ -1,7 +1,6 @@
 #pragma once
-#include "skills.h"
-class snowflakeRotate :
-	public skills
+#include "gameNode.h"
+class snowflakeRotate :	public gameNode
 {
 public:
 	snowflakeRotate();

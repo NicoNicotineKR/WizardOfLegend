@@ -1,7 +1,6 @@
 #pragma once
-#include "skills.h"
-class blizzard :
-	public skills
+#include "gameNode.h"
+class blizzard : public gameNode
 {
 public:
 	blizzard();

@@ -1,7 +1,6 @@
 #pragma once
-#include "skills.h"
-class waterdropRotate :
-	public skills
+#include "gameNode.h"
+class waterdropRotate :	public gameNode
 {
 public:
 	waterdropRotate();

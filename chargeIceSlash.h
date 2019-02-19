@@ -1,7 +1,6 @@
 #pragma once
-#include "skills.h"
-class chargeIceSlash :
-	public skills
+#include "gameNode.h"
+class chargeIceSlash : public gameNode
 {
 public:
 	chargeIceSlash();
