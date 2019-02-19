@@ -79,7 +79,7 @@ void enemyMgr::render()
 {
 	for (int i = 0; i < _vEnemy.size(); i++)
 	{
-			_vEnemy[i]->render();
+		_vEnemy[i]->CamRender();
 	}
 }
 
