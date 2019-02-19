@@ -64,14 +64,34 @@ void stage1_1::release()
 
 void stage1_1::update()
 {
+	if (_allStop == false)
+	{
+		_player->update();
+		_player->tileCheckFunc();
 
-	_player->update();
-	_player->tileCheckFunc();
+		_enemyMgr->update();
 
-	_enemyMgr->update();
+		CAMERA2D->setPos(_player->getPos());
+	}
 
-	CAMERA2D->setPos(_player->getPos());
+	if (_allStop == false)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		{
+			_allStop = true;
+			OPTIONMANAGER->setIsStartOption(true);
+		}
+	}
+	else if (_allStop == true)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		{
+			_allStop = false;
+			OPTIONMANAGER->setIsStartOption(false);
+		}
+	}
 
+	_allStop = OPTIONMANAGER->getIsStartOption();
 
 
 }

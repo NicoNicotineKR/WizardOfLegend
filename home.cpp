@@ -61,45 +61,66 @@ void home::release()
 
 void home::update()
 {
-
-	_player->update();
-	_player->tileCheckFunc();
-
-	_enemyMgr->update();
-
-	CAMERA2D->setPos(_player->getPos());
-
-	//========================================
-
-	_dialogueMaker->update();
-	_nm->update();
-	_nm->setPlayerPos(_player->getPos());
-
-	for (int i = 0; i < _nm->getvNpce().size(); i++)
+	if (_allStop == false)
 	{
-		//말하기 상태가되면
-		if (_nm->getvNpce()[i]->getState() == stateNpc::TALK)
+		_player->update();
+		_player->tileCheckFunc();
+
+		_enemyMgr->update();
+
+		CAMERA2D->setPos(_player->getPos());
+
+		//========================================
+
+		_dialogueMaker->update();
+		_nm->update();
+		_nm->setPlayerPos(_player->getPos());
+
+		for (int i = 0; i < _nm->getvNpce().size(); i++)
 		{
-			//길이 0 일때
-			if (_dialogueMaker->getPrintLen() == 0)
+			//말하기 상태가되면
+			if (_nm->getvNpce()[i]->getState() == stateNpc::TALK)
 			{
-				_dialogueMaker->setDialogue(_nm->getvNpce()[i]->getNpcFaceImg(), _nm->getvNpce()[i]->getNpcFaceText(), 0.1);
-				_dialogueMaker->setIsStart(true);
+				//길이 0 일때
+				if (_dialogueMaker->getPrintLen() == 0)
+				{
+					_dialogueMaker->setDialogue(_nm->getvNpce()[i]->getNpcFaceImg(), _nm->getvNpce()[i]->getNpcFaceText(), 0.1);
+					_dialogueMaker->setIsStart(true);
+				}
+				else if (_dialogueMaker->getisStart() == false)
+				{
+					_dialogueMaker->setPrintLen(0);
+					_nm->getvNpce()[i]->setNpcState(stateNpc::UI1_ING);
+					_nm->getvNpce()[i]->isOnceAniPlay(stateNpc::UI1_ING);
+				}
 			}
-			else if (_dialogueMaker->getisStart() == false)
-			{
-				_dialogueMaker->setPrintLen(0);
-				_nm->getvNpce()[i]->setNpcState(stateNpc::UI1_ING);
-				_nm->getvNpce()[i]->isOnceAniPlay(stateNpc::UI1_ING);
-			}
+		}
+
+		if (_nm->getvNpce()[4]->getState() == stateNpc::UI1_ING)
+		{
+			SCENEMANAGER->changeScene("stage1_1");
+			CAMERA2D->setPos({ 0,0 });
 		}
 	}
 
-	if (_nm->getvNpce()[4]->getState() == stateNpc::UI1_ING)
+	if (_allStop == false)
 	{
-		SCENEMANAGER->changeScene("stage1_1");
-		CAMERA2D->setPos({ 0,0 });
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		{
+			_allStop = true;
+			OPTIONMANAGER->setIsStartOption(true);
+		}
 	}
+	else if (_allStop == true)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		{
+			_allStop = false;
+			OPTIONMANAGER->setIsStartOption(false);
+		}
+	}
+
+	_allStop = OPTIONMANAGER->getIsStartOption();
 }
 
 void home::render()

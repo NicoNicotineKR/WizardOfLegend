@@ -27,6 +27,7 @@ private:
 	int _tileNumX;
 	int _tileNumY;
 
+	bool _allStop;
 
 public:
 	home();

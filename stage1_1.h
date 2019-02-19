@@ -42,6 +42,8 @@ private:
 	aStar* _aStar;
 	float _aStarCount;
 
+	bool _allStop;
+
 public:
 	stage1_1();
 	~stage1_1();
