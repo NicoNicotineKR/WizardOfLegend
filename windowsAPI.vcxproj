@@ -155,6 +155,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="aStar.h" />
     <ClInclude Include="blizzard.h" />
+    <ClInclude Include="boseSkills.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossHpProgressBarUI.h" />
     <ClInclude Include="bossState.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="aStar.cpp" />
     <ClCompile Include="blizzard.cpp" />
+    <ClCompile Include="boseSkills.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossHpProgressBarUI.cpp" />
     <ClCompile Include="boss_State_Casting.cpp" />

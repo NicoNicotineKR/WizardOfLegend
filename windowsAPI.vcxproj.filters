@@ -429,6 +429,9 @@
     <ClInclude Include="blizzard.h">
       <Filter>PlayGround\skills\bossSkill</Filter>
     </ClInclude>
+    <ClInclude Include="boseSkills.h">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -753,6 +756,9 @@
       <Filter>PlayGround\skills\bossSkill</Filter>
     </ClCompile>
     <ClCompile Include="blizzard.cpp">
+      <Filter>PlayGround\skills\bossSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="boseSkills.cpp">
       <Filter>PlayGround\skills\bossSkill</Filter>
     </ClCompile>
   </ItemGroup>
