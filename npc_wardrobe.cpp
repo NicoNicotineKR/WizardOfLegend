@@ -33,7 +33,7 @@ HRESULT npc_wardrobe::init()
 	KEYANIMANAGER->addArrayFrameAnimation("wardrobe_act2", "wardrobe", idle_Act2, 3, 10, false);
 
 	int idle_ui1_ing[] = { 7,8,9 };
-	KEYANIMANAGER->addArrayFrameAnimation("wardrobe_ui1_ing", "wardrobe", idle_ui1_ing, 3, 10, false);
+	KEYANIMANAGER->addArrayFrameAnimation("wardrobe_ui1_ing", "wardrobe", idle_ui1_ing, 3, 10, false, idle_ui1_esc1,this);
 
 	int idle_ui1_esc[] = { 9,8,7,0 };
 	KEYANIMANAGER->addArrayFrameAnimation("wardrobe_ui1_esc", "wardrobe", idle_ui1_esc, 4, 10, false, idle1, this);
@@ -155,5 +155,13 @@ void npc_wardrobe::idle1(void * obj)
 	npc_wardrobe* wardrobe = (npc_wardrobe*)obj;
 
 	wardrobe->_state = stateNpc::IDLE;
+	wardrobe->isOnceAniPlay(wardrobe->_state);
+}
+
+void npc_wardrobe::idle_ui1_esc1(void * obj)
+{
+	npc_wardrobe* wardrobe = (npc_wardrobe*)obj;
+
+	wardrobe->_state = stateNpc::UI1_ESC;
 	wardrobe->isOnceAniPlay(wardrobe->_state);
 }

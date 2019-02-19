@@ -29,6 +29,8 @@ private:
 
 	bool _allStop;
 
+	bool _isTalk;
+
 public:
 	home();
 	~home();

@@ -19,7 +19,6 @@ HRESULT home::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
-	//_player = new player;
 
 	_vvMap.clear();
 	_vObjects.clear();
@@ -52,6 +51,8 @@ HRESULT home::init()
 	_player->setPosX(1000);
 	_player->setPosY(1000);
 
+	_isTalk = false;
+
 	return S_OK;
 }
 
@@ -63,7 +64,11 @@ void home::update()
 {
 	if (_allStop == false)
 	{
-		_player->update();
+		if (_dialogueMaker->getisStart() == false)
+		{
+			_player->update();
+		}
+
 		_player->tileCheckFunc();
 
 		_enemyMgr->update();

@@ -18,5 +18,6 @@ public:
 	void isOnceAniPlay(stateNpc EnumNumber);
 
 	static void idle1(void* obj);
+	static void idle_ui1_esc1(void* obj);
 };
 
