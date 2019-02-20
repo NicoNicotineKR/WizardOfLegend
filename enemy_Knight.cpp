@@ -68,32 +68,34 @@ HRESULT enemy_Knight::init()
 //	_atkImg->SetFrameX(0);
 //	_atkImg->SetFrameY(0);
 
-	_rotateMaker = new rotateImgMaker;
-
-	IMAGEMANAGER->addImage("largeSlash1", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xff00ff);
-	IMAGEMANAGER->addImage("largeSlash2", "images/enemy/effect/largeSlash2.bmp", 164, 164, true, 0xff00ff);
-	IMAGEMANAGER->addImage("largeSlash3", "images/enemy/effect/largeSlash3.bmp", 164, 164, true, 0xff00ff);
-
-	_effectImg[0][0] = IMAGEMANAGER->findImage("largeSlash1");
-	_effectImg[1][0] = IMAGEMANAGER->findImage("largeSlash2");
-	_effectImg[2][0] = IMAGEMANAGER->findImage("largeSlash3");
-
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 36; j++)
-		{
-			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 164, 164, (PI2 / 36) * j, true, 0xff00ff);
-		}
-	}
-
-	SAFE_DELETE(_rotateMaker);
-	_rotateMaker = nullptr;
+//	_rotateMaker = new rotateImgMaker;
+//
+//	IMAGEMANAGER->addImage("largeSlash1", "images/enemy/effect/largeSlash1.bmp", 164, 164, true, 0xff00ff);
+//	IMAGEMANAGER->addImage("largeSlash2", "images/enemy/effect/largeSlash2.bmp", 164, 164, true, 0xff00ff);
+//	IMAGEMANAGER->addImage("largeSlash3", "images/enemy/effect/largeSlash3.bmp", 164, 164, true, 0xff00ff);
+//
+//	_effectImg[0][0] = IMAGEMANAGER->findImage("largeSlash1");
+//	_effectImg[1][0] = IMAGEMANAGER->findImage("largeSlash2");
+//	_effectImg[2][0] = IMAGEMANAGER->findImage("largeSlash3");
+//
+//	for (int i = 0; i < 3; i++)
+//	{
+//		for (int j = 0; j < 36; j++)
+//		{
+//			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 164, 164, (PI2 / 36) * j, true, 0xff00ff);
+//		}
+//	}
+//
+//	SAFE_DELETE(_rotateMaker);
+//	_rotateMaker = nullptr;
 
 	_effectTime = 30;
 	_effect_Shave_PosY = POS_Y_HIT_SHAVE;
 
 	_atkIdY = 1;
 	_atkIdX = 1;
+
+	_whoim = KNIGHT;
 
 	return S_OK;
 }
@@ -153,7 +155,7 @@ void enemy_Knight::render()
 		if (_countIdY < _effectTime)
 		{
 			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 150);
+			_atkImg->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 164, 164, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);
@@ -189,7 +191,7 @@ void enemy_Knight::CamRender()
 		if (_countIdY < _effectTime)
 		{
 			//_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 164, 164, 150);
+			_atkImg->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 164, 164, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);

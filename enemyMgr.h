@@ -2,6 +2,8 @@
 #include "gameNode.h"
 #include "enemy_Knight.h"
 #include "enemy_Ghoul.h"
+#include "rotateImgMaker.h"
+#include "aStar.h"
 
 class player;
 
@@ -14,6 +16,17 @@ private:
 	player* _player;					//플레이어 주소 여따 넣을거임
 
 	vector<vector<tile*>> _vvMap;
+
+	rotateImgMaker* _rotateMaker;
+
+	image* _ghoulEff[3][36];
+	image* _knightEff[3][36];
+
+	aStar* _aStar;
+	float _aStarTime;
+
+private:
+	const float ASTAR_MAX_TIME = 0.5;
 public:
 	enemyMgr();
 	~enemyMgr();
@@ -32,5 +45,6 @@ public:
 	vector<enemy*>* getVEnemyAdress() { return &_vEnemy; }
 	//ghoul == 114, Knight == 115, Lancer == 116, Archer == 117
 	void makeEnemy(int makeNum, POINTFLOAT enemyPos_LT);
+
 };
 

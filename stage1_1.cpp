@@ -22,14 +22,14 @@ HRESULT stage1_1::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
-	_aStar = new aStar;
+	//_aStar = new aStar;
 
 	_vvMap.clear();
 	_vObjects.clear();
 
 	_tileNumX = 0;
 	_tileNumY = 0;
-	_aStarCount = 0;
+	//_aStarCount = 0;
 
 	_player->init(_vvMap);
 	_player->enemyLink(_enemyMgr);
@@ -38,14 +38,14 @@ HRESULT stage1_1::init()
 	_enemyMgr->setPlayerAdress(_player);
 
 
-	_aStar->init();
-	_aStar->setMap(_vvMap);
 
 	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 12);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
 	_enemyMgr->setMapAdress(_vvMap);
 	_enemyMgr->init();
+	//_aStar->init();
+	//_aStar->setMap(&_vvMap);
 	//_stageMapLoader->release();
 	delete _stageMapLoader;
 	_stageMapLoader = nullptr;

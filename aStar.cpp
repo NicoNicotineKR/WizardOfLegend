@@ -33,19 +33,19 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 	//현재위치가 도착점이라면
 	if (currentPos.x == endPos.x && currentPos.y == endPos.y)
 	{
- 		POINT road = { _vTotalList[currentPos.y][currentPos.x]->getTopIdx().x,_vTotalList[currentPos.y][currentPos.x]->getTopIdx().y };
+ 		POINT road = { (*_vTotalList)[currentPos.y][currentPos.x]->getTopIdx().x,(*_vTotalList)[currentPos.y][currentPos.x]->getTopIdx().y };
 
 		lMyWay.clear();
 
 		while (1)
 		{
-			if (_vTotalList[road.y][road.x]->getParent() == nullptr)
+			if ((*_vTotalList)[road.y][road.x]->getParent() == nullptr)
 			{
 				break;
 			}
 			lMyWay.push_front(road);
 
-			road = { _vTotalList[road.y][road.x]->getParent()->getTopIdx().x, _vTotalList[road.y][road.x]->getParent()->getTopIdx().y };
+			road = { (*_vTotalList)[road.y][road.x]->getParent()->getTopIdx().x, (*_vTotalList)[road.y][road.x]->getParent()->getTopIdx().y };
 		}
 
 		//재귀 탈출전 기초정보 리셋
@@ -79,7 +79,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 	int curIdxY = currentPos.y;
 
 	//중심은 바로 클로즈리스트에 넣좌
-	_vCloseList.push_back(_vTotalList[curIdxY][curIdxX]);
+	_vCloseList.push_back((*_vTotalList)[curIdxY][curIdxX]);
 
 	//오픈목록에 내가 있는지 찾는다. 있으면 지워버림 -> 스타트 빼고 이걸 다함
 	for (int i = 0; i < _vOpenList.size(); i++)
@@ -98,13 +98,13 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 		{
 			//벡터 크기 넘어가는거 예외처리
 			if (curIdxX + i < 0 || curIdxX + i > (_vTotalList[0]).size() - 1
-				|| curIdxY + j < 0 || curIdxY + j > _vTotalList.size() - 1)	continue;
+				|| curIdxY + j < 0 || curIdxY + j >(*_vTotalList).size() - 1)	continue;
 
 			//11시방향 타일일때
 			if (i == -1 && j == -1)
 			{
 				//9시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
-				if (!_vTotalList[curIdxY][curIdxX - 1]->getIsAvailMove() || !_vTotalList[curIdxY - 1][curIdxX]->getIsAvailMove())
+				if (!(*_vTotalList)[curIdxY][curIdxX - 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY - 1][curIdxX]->getIsAvailMove())
 				{
 					continue;
 				}
@@ -113,7 +113,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			else if (i == -1 && j == 1)
 			{
 				//3시방향 or 12시방향 타일의 속성이 못가는속성이면 건너뛰어라
-				if (!_vTotalList[curIdxY][curIdxX + 1]->getIsAvailMove() || !_vTotalList[curIdxY - 1][curIdxX]->getIsAvailMove())
+				if (!(*_vTotalList)[curIdxY][curIdxX + 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY - 1][curIdxX]->getIsAvailMove())
 				{
 					continue;
 				}
@@ -122,7 +122,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			else if (i == 1 && j == -1)
 			{
 				//9시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
-				if (!_vTotalList[curIdxY][curIdxX - 1]->getIsAvailMove() || !_vTotalList[curIdxY + 1][curIdxX]->getIsAvailMove())
+				if (!(*_vTotalList)[curIdxY][curIdxX - 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY + 1][curIdxX]->getIsAvailMove())
 				{
 					continue;
 				}
@@ -131,14 +131,14 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			else if (i == 1 && j == 1)
 			{
 				//3시방향 or 6시방향 타일의 속성이 못가는속성이면 건너뛰어라
-				if (!_vTotalList[curIdxY][curIdxX + 1]->getIsAvailMove() || !_vTotalList[curIdxY + 1][curIdxX]->getIsAvailMove())
+				if (!(*_vTotalList)[curIdxY][curIdxX + 1]->getIsAvailMove() || !(*_vTotalList)[curIdxY + 1][curIdxX]->getIsAvailMove())
 				{
 					continue;
 				}
 			}
 
 			//일단 타일 만들어놓고
-			tile* openTile = _vTotalList[curIdxY + i][curIdxX + j];
+			tile* openTile = (*_vTotalList)[curIdxY + i][curIdxX + j];
 
 			// 갈수 있냐 없냐에 대한 불값이 트루여야만 갈수 있슴
 			if (!openTile->getIsAvailMove()) continue;
@@ -176,18 +176,18 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			// G , H 미리 구해놓자
 
 			//G 연산 -> 현재 내타일과 부모타일의 거리를 비교해서 대각선인지, 수평or수직에 있는건지 판별
-			int gScore = getDistance(_vTotalList[curIdxY][curIdxX]->getTopTilePos().x, _vTotalList[curIdxY][curIdxX]->getTopTilePos().y,
+			int gScore = getDistance((*_vTotalList)[curIdxY][curIdxX]->getTopTilePos().x, (*_vTotalList)[curIdxY][curIdxX]->getTopTilePos().y,
 				openTile->getTopTilePos().x, openTile->getTopTilePos().y) == TOP_TILESIZE ? 10 : 14;
 
 			//H 연산 -> 현재 내 타일과 도착타일의 인덱스를 비교
-			int hScore = (abs(_vTotalList[endPos.y][endPos.x]->getTopIdx().x - openTile->getTopIdx().x)
-				+ abs(_vTotalList[endPos.y][endPos.x]->getTopIdx().y - openTile->getTopIdx().y)) * 10;
+			int hScore = (abs((*_vTotalList)[endPos.y][endPos.x]->getTopIdx().x - openTile->getTopIdx().x)
+				+ abs((*_vTotalList)[endPos.y][endPos.x]->getTopIdx().y - openTile->getTopIdx().y)) * 10;
 
 
 			//열린목록에 지금 새로 등록되는거면 그냥 바로 추가
 			if (!isOpened)
 			{
-				openTile->setParent(_vTotalList[curIdxY][curIdxX]);
+				openTile->setParent((*_vTotalList)[curIdxY][curIdxX]);
 
 			//	openTile->setGScore(openTile->getParent()->getGScore() + gScore);
 
@@ -202,7 +202,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 			//열린목록에 이미 있는놈이면 과거부모와 현재부모의 G값을 비교함 - > 현재부모의 G값이 더저렴하다면 재설정해줌
 			if (isOpened)
 			{
-				if (openTile->getParent()->getGScore()  > _vTotalList[curIdxY][curIdxX]->getGScore())
+				if (openTile->getParent()->getGScore()  > (*_vTotalList)[curIdxY][curIdxX]->getGScore())
 				{
 					//더나은경우가 나왔으니 일단 오픈타일에서 제거하자 (더나은값을넣고 다시 오픈타일에 넣을거임)
 					for (int k = 0; k < _vOpenList.size(); k++)
@@ -219,7 +219,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 					}
 
 					// 부모를 바꿔주고
-					openTile->setParent(_vTotalList[curIdxY][curIdxX]);
+					openTile->setParent((*_vTotalList)[curIdxY][curIdxX]);
 
 					//G 연산
 					openTile->setGScore(openTile->getParent()->getGScore() + gScore);
@@ -237,7 +237,7 @@ void aStar::pathFinder(POINT startPos, POINT endPos, POINT currentPos, list<POIN
 	}
 
 	//길을 못찾았다면
-	if (_vOpenList.size() == 0 && _vCloseList.size() > 0)
+	if ((_vOpenList.size() == 0 && _vCloseList.size() > 0) || _vCloseList.size() > 100)
 	{
 		//시작위치뱉고
 		lMyWay.clear();

@@ -39,8 +39,8 @@ private:
 	int _tileNumX;
 	int _tileNumY;
 
-	aStar* _aStar;
-	float _aStarCount;
+	//aStar* _aStar;
+	//float _aStarCount;
 
 	bool _allStop;
 

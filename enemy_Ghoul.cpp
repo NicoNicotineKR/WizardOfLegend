@@ -69,31 +69,34 @@ HRESULT enemy_Ghoul::init()
 //	_atkImg->SetFrameX(0);
 //	_atkImg->SetFrameY(0);
 
-	_rotateMaker = new rotateImgMaker;
-
-	IMAGEMANAGER->addImage("smallSlash1", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xff00ff);
-	IMAGEMANAGER->addImage("smallSlash2", "images/enemy/effect/smallSlash2.bmp", 82, 82, true, 0xff00ff);
-	IMAGEMANAGER->addImage("smallSlash3", "images/enemy/effect/smallSlash3.bmp", 82, 82, true, 0xff00ff);
-
-	_effectImg[0][0] = IMAGEMANAGER->findImage("smallSlash1");
-	_effectImg[1][0] = IMAGEMANAGER->findImage("smallSlash2");
-	_effectImg[2][0] = IMAGEMANAGER->findImage("smallSlash3");
-
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 1; j < 36; j++)
-		{
-			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 82, 82, (PI2 / 36) * j, true, 0xff00ff);
-		}
-	}
-
-	SAFE_DELETE(_rotateMaker);
-	_rotateMaker = nullptr;
+//	_rotateMaker = new rotateImgMaker;
+//
+//	IMAGEMANAGER->addImage("smallSlash1", "images/enemy/effect/smallSlash1.bmp", 82, 82, true, 0xff00ff);
+//	IMAGEMANAGER->addImage("smallSlash2", "images/enemy/effect/smallSlash2.bmp", 82, 82, true, 0xff00ff);
+//	IMAGEMANAGER->addImage("smallSlash3", "images/enemy/effect/smallSlash3.bmp", 82, 82, true, 0xff00ff);
+//
+//	_effectImg[0][0] = IMAGEMANAGER->findImage("smallSlash1");
+//	_effectImg[1][0] = IMAGEMANAGER->findImage("smallSlash2");
+//	_effectImg[2][0] = IMAGEMANAGER->findImage("smallSlash3");
+//
+//	for (int i = 0; i < 3; i++)
+//	{
+//		for (int j = 1; j < 36; j++)
+//		{
+//			_effectImg[i][j] = _rotateMaker->MakeRotateImg(_effectImg[i][0], 0, 0, 82, 82, (PI2 / 36) * j, true, 0xff00ff);
+//		}
+//	}
+//
+//	SAFE_DELETE(_rotateMaker);
+//	_rotateMaker = nullptr;
 
 	_effectTime = 15;
 	_effect_Shave_PosY = POS_Y_HIT_SHAVE;
 
+	_atkIdY = 1;
+	_atkIdX = 1;
 
+	_whoim = GHOUL;
 
 	return S_OK;
 }
@@ -153,7 +156,7 @@ void enemy_Ghoul::render()
 		if (_countIdY < _effectTime)
 		{
 		//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
+			_atkImg->alphaRenderFixed(getMemDC(), _atkRc.left, _atkRc.top, 0, 0, 82, 82, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);
@@ -161,10 +164,6 @@ void enemy_Ghoul::render()
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
 
 	}
-	char str[128];
-	sprintf_s(str, "idx : %d",sizeof(_effectImg));
-
-	TextOut(getMemDC(), 100, 200, str, strlen(str));
 
 	//Rectangle(getMemDC(), _player->getPos().x, _player->getPos().y, _player->getPos().x + 10, _player->getPos().y + 10);
 
@@ -192,7 +191,7 @@ void enemy_Ghoul::CamRender()
 		if (_countIdY < _effectTime)
 		{
 			//	_effectImg[_atkIdY][_atkIdX]->render(getMemDC(), _atkRc.left, _atkRc.top);
-			_effectImg[_atkIdY][_atkIdX]->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 82, 82, 150);
+			_atkImg->alphaRenderFixed(getMemDC(), _atkRc.left - CAMERA2D->getCamPosX(), _atkRc.top - CAMERA2D->getCamPosY(), 0, 0, 82, 82, 150);
 		}
 		char str[128];
 		sprintf_s(str, "idx : %d", _atkIdX);

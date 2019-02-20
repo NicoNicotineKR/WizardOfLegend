@@ -13,7 +13,7 @@ class aStar : public gameNode
 {
 private:
 	//타일 전부를 넣을 벡터
-	vector<vector<tile*>> _vTotalList;
+	vector<vector<tile*>>* _vTotalList;
 
 	//열린목록
 	vector<tile*> _vOpenList;
@@ -32,6 +32,6 @@ public:
 
 	void pathFinder(POINT startPos, POINT endPos, POINT currentTile, list<POINT>& lMyWay);
 
-	void setMap(vector<vector<tile*>> map) { _vTotalList = map; }
+	void setMap(vector<vector<tile*>>* map) { _vTotalList = map; }
 };
 

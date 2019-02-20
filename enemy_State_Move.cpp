@@ -69,11 +69,12 @@ void enemy_State_Move::direction_right(enemy * enemy)
 void enemy_State_Move::update(enemy * enemy)
 {
 	E_ANIDIRECTION save = enemy->getAniDirection();
-	if (enemy->getPath()->size() != 0)
-	{
-		enemy->moveDirection();
-	}
-	else if (enemy->getPath()->size() == 0)
+	//if (enemy->getPath()->size() != 0)
+	//{
+	//	enemy->moveDirection();
+	//}
+	//else if (enemy->getPath()->size() == 0)
+	if (enemy->getPath()->size() == 0)
 	{
 		enemy->fixDirection();
 	}
@@ -91,16 +92,37 @@ void enemy_State_Move::update(enemy * enemy)
 
 		int x = enemy->getPos().x / TILE_SIZE;
 		int y = enemy->getPos().y / TILE_SIZE;
-		//int x = (enemy->getPos().x * TILE_SIZE) + (TILE_SIZE / 2);
-		//int y = (enemy->getPos().y * TILE_SIZE) + (TILE_SIZE / 2);
-		
+
 		int posX = enemy->getPos().x;
 		int posY = enemy->getPos().y;
 
+		int vecX = enemy->getVec().x;
+		int vecY = enemy->getVec().y;
+
 		int tileX = enemy->getPath()->begin()->x;
 		int tileY = enemy->getPath()->begin()->y;
-	//	float tileX = (enemy->getPath()->begin()->x * TILE_SIZE);
-	//	float tileY = (enemy->getPath()->begin()->y * TILE_SIZE);
+
+
+		//if (tileX + vecX / TOP_TILESIZE > (*enemy->getMap())[0].size() - 1)
+		//{
+		//	return;
+		//}
+		//
+		//if (tileX + vecX / TOP_TILESIZE < 0)
+		//{
+		//	return;
+		//}
+		//
+		//if (tileY + vecY / TOP_TILESIZE > (*enemy->getMap()).size() - 1)
+		//{
+		//	return;
+		//}
+		//
+		//if (tileY + vecY / TOP_TILESIZE < 0)
+		//{
+		//	return;
+		//}
+
 
 		//x 
 		if (tileX > x)
@@ -112,17 +134,6 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecX(0);
 			}
-
-		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
-		//	{
-		//		enemy->setVecX(0);
-		//	}
-
-			//더하고 바로 비교하게했음
-		//	if (tileX <= (posX + enemy->getVec().x) / TILE_SIZE)
-		//	{
-		//		enemy->setPosX(tileX);
-		//	}
 		}
 		else if (tileX < x)
 		{
@@ -133,17 +144,6 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecX(0);
 			}
-
-		//	if (!(enemy->getMap()[y][(posX + enemy->getVec().x) / TILE_SIZE]->getTopTileAttr()))
-		//	{
-		//		enemy->setVecX(0);
-		//	}
-
-			//더하고 바로 비교하게했음
-		//	if (tileX >= (posX + enemy->getVec().x) / TILE_SIZE)
-		//	{
-		//		enemy->setPosX(tileX);
-		//	}
 		}
 
 		//y
@@ -156,49 +156,17 @@ void enemy_State_Move::update(enemy * enemy)
 			{
 				enemy->setVecY(0);
 			}
-
-			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
-			//{
-			//	enemy->setVecY(0);
-			//}
-
-			//더하고 바로 비교하게했음
-		//	if (tileY < (y - SHAVE_NUM) + enemy->getVec().y)
-		//	{
-		//		enemy->setPosY(tileY);
-		//	}
 		}
 		else if (tileY < y)
 		{
 			enemy->setVecY(-(enemy->getSpeed() * TIMEMANAGER->getElapsedTime()));
-			
+
 			//갈곳이 구멍이면 벡터가 0
 			if ((*enemy->getMap())[tileX / TOP_TILESIZE][(tileY + enemy->getVec().y) / TOP_TILESIZE]->getTopTileAttr() == TILE_HOLE)
 			{
 				enemy->setVecY(0);
 			}
-
-			//if (!(enemy->getMap()[(posY + enemy->getVec().y) / TILE_SIZE][x]->getTopTileAttr()))
-			//{
-			//	enemy->setVecY(0);
-			//}
-
-			//더하고 바로 비교하게했음
-		//	if (tileY > (y + SHAVE_NUM) + enemy->getVec().y)
-		//	{
-		//		enemy->setPosY(tileY);
-		//	}
 		}
-
-	//	if (!(enemy->getMap()[y][(int)((posX + enemy->getVec().x) / TILE_SIZE)]->getIsAvailMove()))
-	//	{
-	//		enemy->setVecX(0);
-	//	}
-	//	if (!(enemy->getMap()[(int)((posY + enemy->getVec().y) / TILE_SIZE)][x]->getIsAvailMove()))
-	//	{
-	//		enemy->setVecY(0);
-	//	}
-
 		if (x == tileX && y == tileY)
 		{
 			enemy->getPath()->pop_front();

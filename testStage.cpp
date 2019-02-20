@@ -26,7 +26,7 @@ HRESULT testStage::init()
 
 	_aStar = new aStar;
 	_aStar->init();
-	_aStar->setMap(_vvMap);
+	_aStar->setMap(&_vvMap);
 
 	_test = RectMakeCenter(_vvMap[19][16]->getTopTilePos().x, _vvMap[19][16]->getTopTilePos().y, 32, 32);
 

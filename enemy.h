@@ -1,11 +1,20 @@
 #pragma once
 #include "gameNode.h"
 #include "tile.h"
-#include "rotateImgMaker.h"
 
 
 class enemyState;
 class player;
+
+enum ENEMY_TYPE
+{
+	GHOUL,
+	KNIGHT,
+	LANCER,
+	ARCHER,
+	MAGE,
+	SUMMONER
+};
 
 enum class E_ANIDIRECTION
 {
@@ -75,8 +84,9 @@ protected:
 	//무기 이미지(없는애도있고 있는애도있음 없는애는 nullptr넣을것임)
 	// 원본 == 0
 	// 1부터 10도씩 총 36개
-	rotateImgMaker* _rotateMaker;
-	image* _effectImg[3][36];
+	//rotateImgMaker* _rotateMaker;
+	//image* _effectImg[3][36];
+	image* _atkImg;
 	RECT _atkRc;
 	POINTFLOAT _atkPos;
 	int _atkIdX;
@@ -88,6 +98,8 @@ protected:
 	bool _isHit;
 	//죽었니?
 	bool _isDead;
+
+	int _whoim;
 
 	// 이펙트용 변수
 	int _effectTime;
@@ -115,7 +127,7 @@ public:
 
 	//x축만 가지고 플레이어 쪽으로 방향을 바꿔주는 함수(접근자,설정자 아님)
 	void fixDirection();
-	void moveDirection();
+	//void moveDirection();
 	void currentEnemyState();
 	virtual void move();
 
@@ -161,10 +173,13 @@ public:
 
 	vector<vector<tile*>>* getMap() { return _vvMap; }
 
-	//image* getAtkImg() { return _atkImg; }
+	image* getAtkImg() { return _atkImg; }
+	void setAtkImg(image* img) { _atkImg = img; }
 
 	void setAtkIdX(int idx) { _atkIdX = idx; }
+	int getAtkIdX() { return _atkIdX; }
 	void setAtkIdY(int idy) { _atkIdY = idy; }
+	int getAtkIdY() { return _atkIdY; }
 	int getCountIdY() { return _countIdY; }
 	void setCountIdY(int count) { _countIdY = count; }
 	int getEffectTime() { return _effectTime; }
@@ -176,7 +191,8 @@ public:
 	void setAtkPosY(float y) { _atkPos.y = y; }
 
 	RECT getAtkRc() { return _atkRc; }
-	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _effectImg[0][0]->GetWidth(), _effectImg[0][0]->GetHeight()); }
+//	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _effectImg[0][0]->GetWidth(), _effectImg[0][0]->GetHeight()); }
+	void setAtkRc(POINTFLOAT pos) { _atkRc = RectMakeCenter(pos.x, pos.y, _atkImg->GetWidth(), _atkImg->GetHeight()); }
 	void defaultAtkRc() { _atkRc = RectMakeCenter(-1000, -1000, 0, 0); }
 
 	virtual int getAtkRange() abstract;
@@ -191,5 +207,10 @@ public:
 	void setIsDead(bool isDead) { _isDead = isDead; }
 	bool getIsDead() { return _isDead; }
 	
+	void setWhoIM(int num) { _whoim = num; }
+	int getWhoIM() { return _whoim; }
+
+	void setIsClose(bool isClose) { _isClose = isClose; }
+	bool getIsClose() { return _isClose; }
 };
 
