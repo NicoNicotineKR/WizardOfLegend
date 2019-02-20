@@ -115,7 +115,7 @@ void player::update()
 	_vec.x = 0;
 	_vec.y = 0;
 
-	//KEYANIMANAGER->update();
+	KEYANIMANAGER->update();
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
@@ -814,8 +814,8 @@ void player::arrSkillInit()
 {
 
 	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)];
-	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
-	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
+	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
+	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
 	_curSkills[3] = _arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)];
 
 }
