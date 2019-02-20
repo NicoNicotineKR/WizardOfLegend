@@ -19,10 +19,10 @@ HRESULT stage1_1::init()
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
 
-
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
 	_miniMap = new minimapUI;
+	_boss = new boss;
 
 	_vvMap.clear();
 	_vObjects.clear();
@@ -36,16 +36,23 @@ HRESULT stage1_1::init()
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
-	_enemyMgr->setPlayerAdress(_player);
-
-
-
 	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 12);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
+
+	_enemyMgr->setPlayerAdress(_player);
 	_enemyMgr->setMapAdress(_vvMap);
 	_enemyMgr->init();
+
+	_boss->setPlayerAdress(_player);
+	_boss->init();
+	float bossPosX = _vvMap[13][16]->getTopTilePos().x;
+	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
+	POINTFLOAT bossPos = { bossPosX,bossPosY };
+	_boss->setPos(bossPos);
+	
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
+	
 	delete _stageMapLoader;
 	_stageMapLoader = nullptr;
 
@@ -73,6 +80,8 @@ void stage1_1::update()
 
 		_enemyMgr->update();
 		_miniMap->update();
+
+		_boss->update();
 
 		CAMERA2D->setPos(_player->getPos());
 	}
@@ -106,6 +115,7 @@ void stage1_1::render()
 	//기능2. 클리핑추가해야됨 ############################################
 	VObjectRender();
 
+	_boss->render();
 	//_player->render(getMemDC());
 	//_player->CamRender(getMemDC());
 	//_enemyMgr->render();

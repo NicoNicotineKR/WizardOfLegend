@@ -130,10 +130,11 @@ void mainmenu::update()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
 			{
-				SCENEMANAGER->changeScene("home");
+				SCENEMANAGER->changeScene("home"); 
 			}
 		}
 	}
+
 
 
 }

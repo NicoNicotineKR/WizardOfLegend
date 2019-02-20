@@ -44,7 +44,7 @@ HRESULT boss::init()
 	_vec.y = 0;
 	_pos.x = WINSIZEX /2 - 200;
 	_pos.y = WINSIZEY /2 - 200;
-	_rc = RectMakeCenter(_pos.x, _pos.y, 150, 200);
+	_rc = RectMakeCenter(_pos.x, _pos.y, COLLISION_WIDTH, COLLISION_HEIGHT);
 
 	_maxHp = BOSS_HP;
 	_curHp = BOSS_HP;
@@ -64,6 +64,10 @@ HRESULT boss::init()
 	_skill_Usage_Count = 0;
 	skillShuffle();
 
+	//스킬들
+	_skill3 = new throwIceSpear;
+	_skill3->init();
+
 	return S_OK;
 }
 
@@ -73,6 +77,11 @@ void boss::release()
 
 void boss::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	{
+		setBossSpawn();
+	}
+
 	//스테이지에서 플레이어가 보스방의 전투구역을 밟게되면 셋으로 isClose true만들어줌
 	if (_isArea)
 	{
@@ -81,10 +90,16 @@ void boss::update()
 
 		_bossState->update(this);
 
-		if (KEYMANAGER->isOnceKeyDown(VK_F1))
+		if (KEYMANAGER->isOnceKeyDown(VK_F2))
 		{
 			setBossStateCasting();
 		}
+
+		
+		//스킬들 업데이트
+		_skill3->update();
+		
+		
 
 
 
@@ -94,6 +109,8 @@ void boss::update()
 
 		_pos.x += _vec.x;
 		_pos.y += _vec.y;
+
+		_rc = RectMakeCenter(_pos.x, _pos.y, COLLISION_WIDTH, COLLISION_HEIGHT);
 	}
 }
 
@@ -101,14 +118,31 @@ void boss::render()
 {
 	if (_isArea)
 	{
+		char str[128];
+		sprintf_s(str, "보스상태 %d", _state);
+		TextOut(getMemDC(), 300, 300, str, strlen(str));
+
 		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
+		
+		//스킬 렌더-------------------------------------------------------------------------------------------------
+		
+		_skill3->render();
+
+		//-------------------------------------------------------------------------------------------------
+		
+		
+		_img->aniRender(getMemDC(), (_pos.x - IMG_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - IMG_SHAVE_Y) - CAMERA2D->getCamPosY(), _ani);
 		//크리스탈 이미지는 보스 스폰때랑 죽을때밖에 안나옴
 		if (_state == B_STATE::SPAWN || _state == B_STATE::DEATH)
 		{
 			_crystalImg->aniRender(getMemDC(), (_pos.x - CRYSTAL_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - CRYSTAL_SHAVE_Y) - CAMERA2D->getCamPosY(), _crystalAni);
 		}
-		_img->aniRender(getMemDC(), (_pos.x - IMG_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - IMG_SHAVE_Y) - CAMERA2D->getCamPosY(), _ani);
+		//_crystalImg->aniRender(getMemDC(), (_pos.x - CRYSTAL_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - CRYSTAL_SHAVE_Y) - CAMERA2D->getCamPosY(), _crystalAni);
 	}
+	//쳐맞는 판정 렉트
+	//Rectangle(getMemDC(), _rc);
+	//중심 좌표 테스트용 출력
+	//Rectangle(getMemDC(), _pos.x, _pos.y, _pos.x + 10, _pos.y + 10);
 }
 
 void boss::bossKeyAnimationInit()
@@ -119,8 +153,8 @@ void boss::bossKeyAnimationInit()
 	//이때는 그냥 상태만있고 이미지 없게하자. 즉 이미지 출력 안하면됨
 
 	//spawn
-	int spawn[] = { 62,63,64 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSpawn", "boss", spawn, 3, 3, false);
+	int spawn[] = { 85,85,85,85,85,85,85,62,63,64 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossSpawn", "boss", spawn, 10, 4, false);
 	//출력 다한후 idle로 가야함 ->
 	//맨첨에 크리스탈 이랑 날개 생김.
 	//크리스탈 완성되면 그뒤에 보스생김
@@ -133,7 +167,7 @@ void boss::bossKeyAnimationInit()
 
 	//casting
 	int casting[] = { 52,53 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false);
+	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 1, false);
 
 	//mock
 	int mock[] = { 78,79,80,79,80,79,80,79,80 };
@@ -147,11 +181,11 @@ void boss::bossKeyAnimationInit()
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
 
 	//대쉬
-	int rightDash[] = { 1 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossRightDash", "boss", rightDash, 1, 1, true);
+	int rightDash[] = { 1,1,1,1,1,1,1,1 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossRightDash", "boss", rightDash, 8, 1, true);
 
-	int leftDash[] = { 0 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossLeftDash", "boss", leftDash, 1, 1, true);
+	int leftDash[] = { 0,0,0,0,0,0,0,0 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossLeftDash", "boss", leftDash,81, 1, true);
 	//대쉬는 플레이어가 있던 좌표를 저장해놓고 겟앵글해서 그좌표로 이동하고 도착하면 skill4실행
 
 	//skill1 - 물방울 회전 던지기
@@ -215,7 +249,7 @@ void boss::crystalKeyAnimationInit()
 	IMAGEMANAGER->addFrameImage("bossCrystal", "images/boss/IceCrystals.bmp", 550, 300, 5, 2, true, 0xff00ff);
 
 	int crystal[] = { 0,1,2,3,4,5,6,7,8 };
-	KEYANIMANAGER->addArrayFrameAnimation("crystal", "bossCrystal", crystal, 9, 9, false);
+	KEYANIMANAGER->addArrayFrameAnimation("crystal", "bossCrystal", crystal, 9, 3, false);
 }
 
 void boss::bossArrStateInit()
@@ -253,7 +287,6 @@ void boss::bossArrStateInit()
 	// 데스 애니메이션 출력(얼음 되고 깨지는거)
 	// -> 끗
 }
-
 
 void boss::bossCurrentState()
 {
@@ -475,6 +508,7 @@ void boss::useSkill()
 			break;
 		case 2: //창 3개 날리기
 			_state = B_STATE::SKILL_THREE;
+			_skill3->UseSkill(&_pos, &_playerPos, 5);
 			break;
 		case 3: //돌진(도착하면 얼음칼돌림)
 			_state = B_STATE::DASH;
@@ -502,7 +536,7 @@ void boss::useSkill()
 void boss::setBossSpawn()
 {
 	_isArea = true;
-	_state = B_STATE::CASTING;
+	_state = B_STATE::SPAWN;
 	bossCurrentState();
 	_isAniOnce = true;
 	startAni();

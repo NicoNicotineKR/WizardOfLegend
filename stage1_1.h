@@ -4,6 +4,7 @@
 #include "player.h"
 #include "aStar.h"
 #include "minimapUI.h"
+#include "boss.h"
 
 class stage1_1 : public gameNode
 {
@@ -29,12 +30,10 @@ private:
 	player*	_player;
 	enemyMgr* _enemyMgr;
 	minimapUI* _miniMap;
+	boss* _boss;
 
 	int _tileNumX;
 	int _tileNumY;
-
-	//aStar* _aStar;
-	//float _aStarCount;
 
 	bool _allStop;
 
