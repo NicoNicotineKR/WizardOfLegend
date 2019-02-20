@@ -110,10 +110,6 @@ void stage1_1::render()
 	_enemyMgr->render();
 
 
-	char str[128];
-	sprintf_s(str, "%d,%d", CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
-	TextOut(getMemDC(), WINSIZEX / 2, 100, str, strlen(str));
-
 }
 
 void stage1_1::TileMapRender()

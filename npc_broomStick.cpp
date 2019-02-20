@@ -123,9 +123,6 @@ void npc_broomStick::render()
 
 	_img->aniRender(getMemDC(), _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
 
-	//char str[128];
-	//sprintf_s(str, "%d _idleCount : %f _distance : %d",_state, _idleCount, _distance);
-	//TextOut(getMemDC(), _pos.x , _pos.y + 50, str, strlen(str));
 }
 
 void npc_broomStick::isOnceAniPlay(stateNpc EnumNumber)

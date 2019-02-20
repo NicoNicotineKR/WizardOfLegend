@@ -166,46 +166,6 @@ void npc_SpellBook::update()
 		}
 	}
 
-	//대화중
-	//if (_state == stateNpc::TALK)
-	//{
-	//}
-
-	//==========================================================
-
-	//UI1중
-	//if (_state == stateNpc::UI1_ING)
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
-	//	{
-	//		_state = stateNpc::UI1_ESC;
-	//		isOnceAniPlay(_state);
-	//	}
-	//
-	//	if (KEYMANAGER->isOnceKeyDown('F'))
-	//	{
-	//		_state = stateNpc::UI2_ING;
-	//		isOnceAniPlay(_state);
-	//	}
-	//
-	//
-	//}
-	//
-	////UI2중
-	//if (_state == stateNpc::UI2_ING)
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
-	//	{
-	//		_state = stateNpc::UI2_ESC;
-	//		isOnceAniPlay(_state);
-	//	}
-	//}
-
-	//==========================================================
-
-
-
-
 }
 
 void npc_SpellBook::render()

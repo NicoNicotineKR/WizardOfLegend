@@ -180,12 +180,6 @@ void home::render()
 	_dialogueMaker->render();
 	_skillbookUI->render();
 
-	char str[128];
-	sprintf_s(str, "%d,%d", CAMERA2D->getCamPosX(), CAMERA2D->getCamPosY());
-	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
-
-	sprintf_s(str, "%d,%d", _player->getLeftBottomIndex().x, _player->getLeftBottomIndex().y);
-	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2 + 100, str, strlen(str));
 }
 
 void home::TileMapRender()

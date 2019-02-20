@@ -58,9 +58,6 @@ private:
 	const int CONTROLBAR_START_XPOS = 818;
 	const int CONTROLBAR_END_XPOS = 1054;
 	const int CONTROLBAR_LENGTH = 236;
-	
-	
-
 public:
 	optionManager();
 	~optionManager();
@@ -90,5 +87,8 @@ public:
 
 	void setIsStartOption(bool isStartOption) { _isStartOption = isStartOption; }
 	bool getIsStartOption(){return _isStartOption;}
+
+	float getSoundVolume() { return _longButton[0].ratio; }
+	float getSoundMusic() { return _longButton[1].ratio; }
 };
 

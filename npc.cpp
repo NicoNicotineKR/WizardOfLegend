@@ -63,13 +63,12 @@ void npc::update()
 
 void npc::render()
 {
-	//if (_state == stateNpc::IDLE_R || _state == stateNpc::IDLE_L || _state == stateNpc::IDLE_ACT1 || _state == stateNpc::IDLE_ACT2 || _state == stateNpc::IDLE_CHANGE_L || _state == stateNpc::IDLE_CHANGE_R)
-	//{
+	
 	if (_playerClose == true)
 	{
 		_fButton->aniRender(getMemDC(), _rc.left + (_img->getFrameWidth()) / 2 - 15 - CAMERA2D->getCamPosX(), _rc.top - 30 - CAMERA2D->getCamPosY(), _fButtonAni);
 	}
-	//}
+	
 }
 
 void npc::setPos(POINT pos)

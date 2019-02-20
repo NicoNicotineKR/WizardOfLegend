@@ -125,15 +125,17 @@ void optionManager::render()
 		{
 			_longButton[i].img->render(getMemDC(), _longButton[i].pos.x, _longButton[i].pos.y);
 			
-			//sprintf_s(str,"%f", _longButton[i].ratio);
-			//TextOut(getMemDC(),WINSIZEX/2,100+i*20,str,strlen(str));
+
 		}
 	}
 
-	//if ((0 < _ptMouse.x && _ptMouse.x < WINSIZEX) && (0 < _ptMouse.y && _ptMouse.y < WINSIZEY))
-	//{
-		_mouse->frameRender(getMemDC(), _ptMouse.x - _mouse->getFrameWidth() / 2, _ptMouse.y - _mouse->getFrameHeight() / 2, _smallButton[1].ratio, 0);
-	//}
+	sprintf_s(str, "À½Çâ : %f", _longButton[0].ratio);
+	TextOut(getMemDC(), WINSIZEX / 2, 100 + 20, str, strlen(str));
+	sprintf_s(str, "À½¾Ç : %f", _longButton[1].ratio);
+	TextOut(getMemDC(), WINSIZEX / 2, 100 + 40, str, strlen(str));
+
+	_mouse->frameRender(getMemDC(), _ptMouse.x - _mouse->getFrameWidth() / 2, _ptMouse.y - _mouse->getFrameHeight() / 2, _smallButton[1].ratio, 0);
+	
 }
 
 void optionManager::SelectOption()
