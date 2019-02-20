@@ -31,6 +31,7 @@ HRESULT shockNova::init(player * Player)
 
 	//	재만추가 -> enemyMgr 주소 넣어줌 : 몹에게 데미지 줌
 	_em = Player->getEnemyMgrAddress();
+	_isHit = false;
 	return S_OK;
 }
 
@@ -46,6 +47,10 @@ void shockNova::update(player * Player)
 		_imgCount += TIMEMANAGER->getElapsedTime();
 		if (6 > _attackCount)
 		{
+			//	재만추가
+			_em->DistanceBySkillFunc(_pos, ATK_RANGE, ATK_DMG, &_isHit);
+		
+
 
 			if (_imgCount > 0.05f)
 			{
@@ -54,6 +59,7 @@ void shockNova::update(player * Player)
 				{
 					_thunderSharftImg->SetFrameX(0);
 					_attackCount++;
+					_isHit = false;
 				}
 				if (_img->getMaxFrameX() == _img->getFrameX())
 				{
@@ -113,6 +119,7 @@ void shockNova::skillPosSet(player * Player)
 
 	_curCoolTime = 0;
 	_attackCount = 0;
+	_isHit = false;
 
 }
 

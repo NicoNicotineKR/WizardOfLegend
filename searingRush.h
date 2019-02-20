@@ -8,6 +8,9 @@ private:
 	image* _flameImg[5];
 	POINTFLOAT _flamePos[5];
 
+	bool _isHit[5];
+	const int ATK_DMG = 10;
+
 public:
 	searingRush();
 	~searingRush();

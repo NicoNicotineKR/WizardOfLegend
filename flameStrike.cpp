@@ -29,6 +29,7 @@ HRESULT flameStrike::init(player * Player)
 
 	//	재만추가 -> enemyMgr 주소 넣어줌 : 몹에게 데미지 줌
 	_em = Player->getEnemyMgrAddress();
+	_isHit = false;
 	return S_OK;
 }
 
@@ -107,6 +108,9 @@ void flameStrike::update(player * Player)
 			}
 			if (_index != _reLoadCount)
 			{
+				//	재만 추가
+				_isHit = false;
+
 				_angle = Player->getPlayerAngle();
 				if (Player->getAniDirection() != ANIDIRECTION::FRONT)
 				{
@@ -118,7 +122,14 @@ void flameStrike::update(player * Player)
 					_pos.x = cosf(_angle) * 50 + (Player->getTileCheckRcPos().x + 14) - 128;
 					_pos.y = -sinf(_angle) * 50 + (Player->getTileCheckRcPos().y + 14) - 128;
 				}
-				_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 200, 200);
+				//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 200, 200);
+				
+				//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
+				if (!_isHit) {
+					_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 200, 200);
+					_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+				}
+
 				_index = _reLoadCount;
 				_attackCount = 0;
 				if (_reLoadCount == 2)
@@ -183,6 +194,14 @@ void flameStrike::skillPosSet(player * Player)
 		_pos.y = -sinf(_angle) * 50 + (Player->getTileCheckRcPos().y + 14) - 128;
 	}
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth()/2, _pos.y + _img->getFrameHeight()/2, 200, 200);
+	
+	//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
+	//if (!_isHit) {
+	//	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 200, 200);
+	//	_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+	//}
+	_isHit = false;
+
 
 	_reLoadCount = 0;
 	_curCoolTime = 0;

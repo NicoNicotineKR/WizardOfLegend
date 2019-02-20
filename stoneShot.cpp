@@ -30,6 +30,7 @@ HRESULT stoneShot::init(player * Player)
 
 	//	재만추가 -> enemyMgr 주소 넣어줌 : 몹에게 데미지 줌
 	_em = Player->getEnemyMgrAddress();
+	_isHit = false;
 	return S_OK;
 }
 
@@ -68,6 +69,9 @@ void stoneShot::update(player * Player)
 			{
 				_index = _reLoadCount;
 				_attackCount = 0;
+				//	재만추가
+				_isHit = false;
+
 				//_angle = Player->getPlayerAngle();
 
 				_isRender[_reLoadCount] = true;
@@ -105,13 +109,24 @@ void stoneShot::update(player * Player)
 		if (!_isRender[i]) continue;
 		_stoneShotPos[i].x += cosf(_stoneShotAngle[i]) * (_speed + TIMEMANAGER->getElapsedTime());
 		_stoneShotPos[i].y += -sinf(_stoneShotAngle[i]) * (_speed + TIMEMANAGER->getElapsedTime());
-		_stoneShotRc[i] = RectMakeCenter(_stoneShotPos[i].x + _stoneShotImg[i]->getFrameWidth() / 2,
-			_stoneShotPos[i].y + _stoneShotImg[i]->getFrameHeight() / 2, _stoneShotImg[i]->getFrameWidth(), _stoneShotImg[i]->getFrameHeight());
+		//_stoneShotRc[i] = RectMakeCenter(_stoneShotPos[i].x + _stoneShotImg[i]->getFrameWidth() / 2,
+		//	_stoneShotPos[i].y + _stoneShotImg[i]->getFrameHeight() / 2, _stoneShotImg[i]->getFrameWidth(), _stoneShotImg[i]->getFrameHeight());
+
+		//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
+		if (!_isHit) {
+			_stoneShotRc[i] = RectMakeCenter(_stoneShotPos[i].x + _stoneShotImg[i]->getFrameWidth() / 2,
+				_stoneShotPos[i].y + _stoneShotImg[i]->getFrameHeight() / 2, _stoneShotImg[i]->getFrameWidth(), _stoneShotImg[i]->getFrameHeight());
+
+			_em->RcCollideBySkillFunc(&_stoneShotRc[i], ATK_DMG, &_isHit);
+		}
+
+		
 		if (_range * _range < getDistance(_firePos[i].x, _firePos[i].y, _stoneShotPos[i].x, _stoneShotPos[i].y) ||
 			!(*_vvMap)[(_stoneShotPos[i].y + _stoneShotImg[i]->getFrameHeight() / 2) / 32][(_stoneShotPos[i].x+ _stoneShotImg[i]->getFrameWidth()/2)/ 32]->getIsAvailMove())
 		{
 			_isRender[i] = false;
 			_stoneShotRc[i] = RectMake(-100, -100, 64, 64);
+
 		}
 	
 	}
@@ -145,6 +160,9 @@ void stoneShot::skillPosSet(player * Player)
 		_stoneShotImg[i]->SetFrameY(0);
 	}
 	//_isRender[0] = true;
+
+	//	재만추가
+	_isHit = false;
 }
 
 void stoneShot::destroySkill(int i)

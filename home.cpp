@@ -26,8 +26,10 @@ HRESULT home::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	_player->init(_vvMap);
+	//	¼ø¼­¹Ù²Þ
 	_player->enemyLink(_enemyMgr);
+	_player->init(_vvMap);
+	//_player->enemyLink(_enemyMgr);
 	_player->arrSkillInit();
 	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);

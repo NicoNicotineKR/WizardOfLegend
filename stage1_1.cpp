@@ -31,8 +31,10 @@ HRESULT stage1_1::init()
 	_tileNumY = 0;
 	//_aStarCount = 0;
 
-	_player->init(_vvMap);
+	//	재만 순서바꿈 - cuz 스킬과 연결
 	_player->enemyLink(_enemyMgr);
+	_player->init(_vvMap);
+	//_player->enemyLink(_enemyMgr);
 	_player->skillIconInit();
 	_player->arrSkillInit();
 	_enemyMgr->setPlayerAdress(_player);

@@ -46,5 +46,9 @@ public:
 	//ghoul == 114, Knight == 115, Lancer == 116, Archer == 117
 	void makeEnemy(int makeNum, POINTFLOAT enemyPos_LT);
 
+	//재만 추가 -> 스킬쪽에서 에너미메니저 불러와서, 벡터에 있는애들 충돌했는지 검사하고, 충돌한 애 있으면, 그놈에게 데미지를 줌.
+	void RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit);
+	void DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool* isHit);
+
 };
 

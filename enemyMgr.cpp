@@ -124,19 +124,19 @@ void enemyMgr::update()
 			//_vEnemy[i]->fixDirection();
 			//if (_vEnemy[i]->getAniDirection() == E_ANIDIRECTION::LEFT)
 			//{
-			//	_vEnemy[i]->setAniDirection(E_ANIDIRECTION::LEFT);
-			//	_vEnemy[i]->setState(E_STATE::MOVE);
-			//	_vEnemy[i]->currentEnemyState();
-			//	_vEnemy[i]->setIsAniOnce(true);
-			//	_vEnemy[i]->startAni();
+			//   _vEnemy[i]->setAniDirection(E_ANIDIRECTION::LEFT);
+			//   _vEnemy[i]->setState(E_STATE::MOVE);
+			//   _vEnemy[i]->currentEnemyState();
+			//   _vEnemy[i]->setIsAniOnce(true);
+			//   _vEnemy[i]->startAni();
 			//}
 			//else if (_vEnemy[i]->getAniDirection() == E_ANIDIRECTION::RIGHT)
 			//{
-			//	_vEnemy[i]->setAniDirection(E_ANIDIRECTION::RIGHT);
-			//	_vEnemy[i]->setState(E_STATE::MOVE);
-			//	_vEnemy[i]->currentEnemyState();
-			//	_vEnemy[i]->setIsAniOnce(true);
-			//	_vEnemy[i]->startAni();
+			//   _vEnemy[i]->setAniDirection(E_ANIDIRECTION::RIGHT);
+			//   _vEnemy[i]->setState(E_STATE::MOVE);
+			//   _vEnemy[i]->currentEnemyState();
+			//   _vEnemy[i]->setIsAniOnce(true);
+			//   _vEnemy[i]->startAni();
 			//}
 			E_ANIDIRECTION save = _vEnemy[i]->getAniDirection();
 			_vEnemy[i]->fixDirection();
@@ -153,39 +153,39 @@ void enemyMgr::update()
 
 
 		//맞았을때 -> 스킬에서 데미지주면서, em통해서 스테이터스 힛 해주겠음. 여기 밑에부분들 다 필요업뜸.
-		if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills1()->getCollisionRc()))
-		{
-			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
-			_vEnemy[i]->setState(E_STATE::HIT);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsHit(true);
-		}
-		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills2()->getCollisionRc()))
-		{
-			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
-			_vEnemy[i]->setState(E_STATE::HIT);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsHit(true);
-		}
-		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills3()->getCollisionRc()))
-		{
-			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
-			_vEnemy[i]->setState(E_STATE::HIT);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsHit(true);
-		}
-		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills4()->getCollisionRc()))
-		{
-			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
-			_vEnemy[i]->setState(E_STATE::HIT);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsHit(true);
-		}
-		// 피가 0이되어서 죽을떄 애니메이션
+		//if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills1()->getCollisionRc()))
+		//{
+		//	_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+		//	_vEnemy[i]->setState(E_STATE::HIT);
+		//	_vEnemy[i]->currentEnemyState();
+		//	_vEnemy[i]->setIsAniOnce(true);
+		//	_vEnemy[i]->setIsHit(true);
+		//}
+		//else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills2()->getCollisionRc()))
+		//{
+		//	_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+		//	_vEnemy[i]->setState(E_STATE::HIT);
+		//	_vEnemy[i]->currentEnemyState();
+		//	_vEnemy[i]->setIsAniOnce(true);
+		//	_vEnemy[i]->setIsHit(true);
+		//}
+		//else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills3()->getCollisionRc()))
+		//{
+		//	_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+		//	_vEnemy[i]->setState(E_STATE::HIT);
+		//	_vEnemy[i]->currentEnemyState();
+		//	_vEnemy[i]->setIsAniOnce(true);
+		//	_vEnemy[i]->setIsHit(true);
+		//}
+		//else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills4()->getCollisionRc()))
+		//{
+		//	_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+		//	_vEnemy[i]->setState(E_STATE::HIT);
+		//	_vEnemy[i]->currentEnemyState();
+		//	_vEnemy[i]->setIsAniOnce(true);
+		//	_vEnemy[i]->setIsHit(true);
+		//}
+		// 피가 0이되어서 죽을떄 애니메이션d  a   ss d a d d   wddddddw
 		if (_vEnemy[i]->getCurHP() < 0)
 		{
 			_vEnemy[i]->setState(E_STATE::DEATH);
@@ -261,4 +261,75 @@ void enemyMgr::makeEnemy(int makeNum, POINTFLOAT enemyPos_LT)
 		break;
 
 	}
+}
+
+void enemyMgr::RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit)
+{
+	RECT tmpRc;
+	//bool isOnceHit = false;
+	for (int i = 0; i < _vEnemy.size(); i++) {
+		if (IntersectRect(&tmpRc, skillRc, &_vEnemy[i]->getCollision())) {
+			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - dmg);
+			_vEnemy[i]->setState(E_STATE::HIT);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsHit(true);
+
+			//isOnceHit = true;
+			*isHit = true;
+		}
+
+		if (_vEnemy[i]->getCurHP() < 0)
+		{
+			_vEnemy[i]->setState(E_STATE::DEATH);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsDead(true);
+		}
+		//상태가 죽음이고 애니메이션 재생이 끝나면
+		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
+		{
+			_vEnemy.erase(_vEnemy.begin() + i);
+			break;
+		}
+	}
+	//모든 애들 검사한 후, isHit = true 가 한번이라도됐다면, 렉트 ㅃㅃ
+	if (*isHit)		*skillRc = { 0,0,0,0 };
+	//if(isOnceHit)		*skillRc = { 0,0,0,0 };
+	//else {
+	//	*isHit = false;
+	//}
+
+}
+
+void enemyMgr::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool* isHit)
+{
+	RECT tmpRc;
+	
+	for (int i = 0; i < _vEnemy.size(); i++) {
+		if (getDistance(_vEnemy[i]->getPos().x, _vEnemy[i]->getPos().y, skillPos.x, skillPos.y) < range) {
+			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - dmg);
+			_vEnemy[i]->setState(E_STATE::HIT);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsHit(true);
+
+			*isHit = true;
+		}
+
+		if (_vEnemy[i]->getCurHP() < 0)
+		{
+			_vEnemy[i]->setState(E_STATE::DEATH);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsDead(true);
+		}
+		//상태가 죽음이고 애니메이션 재생이 끝나면
+		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
+		{
+			_vEnemy.erase(_vEnemy.begin() + i);
+			break;
+		}
+	}
+	
 }

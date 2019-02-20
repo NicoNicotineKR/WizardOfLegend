@@ -28,6 +28,7 @@ HRESULT chainLightning::init(player* Player)
 	_isSkill = false;
 
 	//	재만추가 -> enemyMgr 주소 넣어줌 : 몹에게 데미지 줌
+	_isHit = false;
 	_em = Player->getEnemyMgrAddress();
 	return S_OK;
 }
@@ -70,9 +71,16 @@ void chainLightning::update(player* Player)
 						}
 						_pos.x = cosf(_angle) * 30 + _pos.x;
 						_pos.y = -sinf(_angle) * 30 + _pos.y;
-						_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2 - 135 / 2, 
-							_pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
+						//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2 - 135 / 2,
+						//	_pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
 
+						//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
+						if (!_isHit) {
+							_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2 - 135 / 2,
+								_pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
+							_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+						}
+						
 						_attackCount++;
 
 					}
@@ -116,6 +124,15 @@ void chainLightning::skillPosSet(player* Player)
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth()/2 - 135 / 2, _pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
 	_curCoolTime = 0;
 	_attackCount = 0;
+
+	//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
+	//if (!_isHit) {
+	//	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2 - 135 / 2, _pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
+	//	_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+	//}
+	_isHit = false;
+
+	
 }
 
 void chainLightning::destroySkill(int i)

@@ -11,6 +11,10 @@ private:
 	image* _img3;
 	bool	_isRender[3];
 
+	//		=== 재만 추가 ===
+	bool _isHit;
+	const int ATK_DMG = 10;
+
 public:
 
 	virtual HRESULT init(player* Player)		override;
