@@ -13,7 +13,6 @@ mainmenu::~mainmenu()
 
 HRESULT mainmenu::init()
 {
-	SOUNDMANAGER->addSound("titleMusic", "sound/intro.mp3", true, true);
 	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("titleScreen", "images/mainmenu/titleScreen.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("pressTheEnterButton", "images/mainmenu/pressTheEnterButton.bmp", 322, 20, true, RGB(255, 0, 255));
@@ -58,6 +57,10 @@ HRESULT mainmenu::init()
 
 	_mapEditor = new mapEditor;
 	SCENEMANAGER->addScene("mapEditor",_mapEditor);
+
+	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
+	SOUNDMANAGER->play("titleMusic", OPTIONMANAGER->getSoundBackVolume());
+	OPTIONMANAGER->setTempSoundName("titleMusic");
 
 	return S_OK;
 }

@@ -19,6 +19,19 @@ HRESULT optionManager::init()
 	IMAGEMANAGER->addFrameImage("optionButton", "images/option/optionButton.bmp", 356, 304, 2, 8, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("ShortButton", "images/option/button.bmp", 64, 32, 2, 1, true, RGB(255, 0, 255));
 
+	//=====================================사운드================================================
+	SOUNDMANAGER->addSound("logoSound", "sound/logoSound.mp3", true, false);
+	SOUNDMANAGER->addSound("titleMusic", "sound/intro.mp3", true, true);
+	SOUNDMANAGER->addSound("PlayerRoom", "sound/PlayerRoom.mp3", true, true);
+	SOUNDMANAGER->addSound("Ice", "sound/Ice.mp3", true, true);
+
+
+
+
+
+
+
+	//=====================================사운드================================================
 
 	_optionImg = IMAGEMANAGER->findImage("option");
 	_optionAlpha = 255;
@@ -129,10 +142,10 @@ void optionManager::render()
 		}
 	}
 
-	sprintf_s(str, "음향 : %f", _longButton[0].ratio);
-	TextOut(getMemDC(), WINSIZEX / 2, 100 + 20, str, strlen(str));
-	sprintf_s(str, "음악 : %f", _longButton[1].ratio);
-	TextOut(getMemDC(), WINSIZEX / 2, 100 + 40, str, strlen(str));
+	//sprintf_s(str, "음악 : %f", OPTIONMANAGER->getSoundBackVolume());
+	//TextOut(getMemDC(), WINSIZEX / 2, 100 + 40, str, strlen(str));
+	//sprintf_s(str, "음향 : %f", OPTIONMANAGER->getSoundEffectVolume());
+	//TextOut(getMemDC(), WINSIZEX / 2, 100 + 20, str, strlen(str));
 
 	_mouse->frameRender(getMemDC(), _ptMouse.x - _mouse->getFrameWidth() / 2, _ptMouse.y - _mouse->getFrameHeight() / 2, _smallButton[1].ratio, 0);
 	
@@ -329,11 +342,15 @@ void optionManager::longButtonControl()
 					_longButton[i].pos.x += CONTROLBAR_MOVE_SPEED;
 
 					_longButton[i].ratio = (float)(_longButton[i].pos.x - CONTROLBAR_START_XPOS) / CONTROLBAR_LENGTH;
+				
+					SOUNDMANAGER->volume(OPTIONMANAGER->getTempSoundName(), OPTIONMANAGER->getSoundBackVolume());
 				}
 				if (_longButton[i].pos.x >= CONTROLBAR_END_XPOS)
 				{
 					_longButton[i].pos.x = CONTROLBAR_END_XPOS;
 					_longButton[i].ratio = (float)(_longButton[i].pos.x - CONTROLBAR_START_XPOS) / CONTROLBAR_LENGTH;
+				
+					SOUNDMANAGER->volume(OPTIONMANAGER->getTempSoundName(), OPTIONMANAGER->getSoundBackVolume());
 				}
 
 			}
@@ -343,11 +360,15 @@ void optionManager::longButtonControl()
 				{
 					_longButton[i].pos.x -= CONTROLBAR_MOVE_SPEED;
 					_longButton[i].ratio = (float)(_longButton[i].pos.x - CONTROLBAR_START_XPOS) / CONTROLBAR_LENGTH;
+				
+					SOUNDMANAGER->volume(OPTIONMANAGER->getTempSoundName(), OPTIONMANAGER->getSoundBackVolume());
 				}
 				if (_longButton[i].pos.x <= CONTROLBAR_START_XPOS)
 				{
 					_longButton[i].pos.x = CONTROLBAR_START_XPOS;
 					_longButton[i].ratio = (float)(_longButton[i].pos.x - CONTROLBAR_START_XPOS) / CONTROLBAR_LENGTH;
+				
+					SOUNDMANAGER->volume(OPTIONMANAGER->getTempSoundName(), OPTIONMANAGER->getSoundBackVolume());
 				}
 			}
 		}
@@ -376,6 +397,8 @@ void optionManager::longButtonControl()
 				_longButton[i].pos.x = CONTROLBAR_END_XPOS;
 			}
 			_longButton[i].ratio = (float)(_longButton[i].pos.x - CONTROLBAR_START_XPOS) / CONTROLBAR_LENGTH;
+
+			SOUNDMANAGER->volume(OPTIONMANAGER->getTempSoundName(), OPTIONMANAGER->getSoundBackVolume());
 
 			_optionButton[_selectOption].idxX = 0;
 			_selectOption = i;

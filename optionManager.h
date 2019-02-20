@@ -52,6 +52,8 @@ private:
 	//마우스 커서
 	image* _mouse;
 
+	string _tempSoundName;
+
 	bool _isBarClick[3];
 
 	const int CONTROLBAR_MOVE_SPEED = 2;
@@ -88,7 +90,10 @@ public:
 	void setIsStartOption(bool isStartOption) { _isStartOption = isStartOption; }
 	bool getIsStartOption(){return _isStartOption;}
 
-	float getSoundVolume() { return _longButton[0].ratio; }
-	float getSoundMusic() { return _longButton[1].ratio; }
+	float getSoundBackVolume() { return _longButton[1].ratio; }
+	float getSoundEffectVolume() { return _longButton[0].ratio; }
+
+	void setTempSoundName(string tempSoundName) { _tempSoundName = tempSoundName; }
+	string getTempSoundName() { return _tempSoundName; }
 };
 

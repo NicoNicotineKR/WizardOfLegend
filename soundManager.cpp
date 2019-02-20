@@ -172,6 +172,22 @@ void soundManager::resume(string keyName)
 	}
 }
 
+void soundManager::volume(string KeyName, float volume)
+{
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (KeyName == iter->first)
+		{
+			_channel[count]->setVolume(volume);
+			break;
+		}
+	}
+}
+
 
 bool soundManager::isPlaySound(string keyName)
 {

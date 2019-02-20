@@ -17,7 +17,7 @@ HRESULT introScene::init()
 	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikoteam.bmp", 651, 85, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("niko", "images/introScene/niko.bmp", 651, 323, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("smoke", "images/introScene/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
-	SOUNDMANAGER->addSound("logoSound", "sound/logoSound.mp3", true, false);
+	
 
 	_nikotin = IMAGEMANAGER->findImage("nikonikotin");
 	_nikotinAlpha = 0;
@@ -122,7 +122,7 @@ void introScene::PlayVoiceOnce()
 	if (SOUNDMANAGER->isPlaySound("logoSound") == false && _isOncePlaySound == false)
 	{
 		bool tmpIsSoundPlay = false;
-		tmpIsSoundPlay = SOUNDMANAGER->play("logoSound", 1.0f);
+		tmpIsSoundPlay = SOUNDMANAGER->play("logoSound", OPTIONMANAGER->getSoundBackVolume());
 		_isOncePlaySound = true;
 	}
 }

@@ -52,8 +52,9 @@ HRESULT stage1_1::init()
 
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
 	
-
-
+	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
+	SOUNDMANAGER->play("Ice", OPTIONMANAGER->getSoundBackVolume());
+	OPTIONMANAGER->setTempSoundName("Ice");
 
 
 	return S_OK;

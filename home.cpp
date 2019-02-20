@@ -61,6 +61,10 @@ HRESULT home::init()
 	_isSkillbookMode = false;
 	_skillbookUI->LinkSkillBookUIMode(&_isSkillbookMode);
 
+	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
+	SOUNDMANAGER->play("PlayerRoom", OPTIONMANAGER->getSoundBackVolume());
+	OPTIONMANAGER->setTempSoundName("PlayerRoom");
+
 	return S_OK;
 }
 
