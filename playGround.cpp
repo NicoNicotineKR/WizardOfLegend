@@ -59,6 +59,7 @@ void playGround::update()
 
 	SCENEMANAGER->update();
 	OPTIONMANAGER->update();
+	KEYANIMANAGER->update();
 
 }
 

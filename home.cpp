@@ -108,6 +108,8 @@ void home::update()
 
 					if (i == 0) {
 						_isSkillbookMode = true;
+						//Ãß°¡
+						_isOnceEndSkillUi = true;
 					}
 
 				}
@@ -117,7 +119,15 @@ void home::update()
 
 
 
-
+		if (_isOnceEndSkillUi == true)
+		{
+			if (_isSkillbookMode == false)
+			{
+				_nm->getvNpce()[0]->setNpcState(stateNpc::UI1_ESC);
+				_nm->getvNpce()[0]->isOnceAniPlay(stateNpc::UI1_ESC);
+				_isOnceEndSkillUi = false;
+			}
+		}
 
 
 

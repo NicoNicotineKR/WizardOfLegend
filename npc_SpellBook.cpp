@@ -174,32 +174,32 @@ void npc_SpellBook::update()
 	//==========================================================
 
 	//UI1Сп
-	if (_state == stateNpc::UI1_ING)
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
-		{
-			_state = stateNpc::UI1_ESC;
-			isOnceAniPlay(_state);
-		}
-
-		if (KEYMANAGER->isOnceKeyDown('F'))
-		{
-			_state = stateNpc::UI2_ING;
-			isOnceAniPlay(_state);
-		}
-
-
-	}
-
-	//UI2Сп
-	if (_state == stateNpc::UI2_ING)
-	{
-		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
-		{
-			_state = stateNpc::UI2_ESC;
-			isOnceAniPlay(_state);
-		}
-	}
+	//if (_state == stateNpc::UI1_ING)
+	//{
+	//	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+	//	{
+	//		_state = stateNpc::UI1_ESC;
+	//		isOnceAniPlay(_state);
+	//	}
+	//
+	//	if (KEYMANAGER->isOnceKeyDown('F'))
+	//	{
+	//		_state = stateNpc::UI2_ING;
+	//		isOnceAniPlay(_state);
+	//	}
+	//
+	//
+	//}
+	//
+	////UI2Сп
+	//if (_state == stateNpc::UI2_ING)
+	//{
+	//	if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+	//	{
+	//		_state = stateNpc::UI2_ESC;
+	//		isOnceAniPlay(_state);
+	//	}
+	//}
 
 	//==========================================================
 

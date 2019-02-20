@@ -34,6 +34,9 @@ private:
 	bool _isTalk;
 	bool _isSkillbookMode;
 
+	//Ãß°¡
+	bool _isOnceEndSkillUi;
+
 public:
 	home();
 	~home();

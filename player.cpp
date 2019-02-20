@@ -115,7 +115,7 @@ void player::update()
 	_vec.x = 0;
 	_vec.y = 0;
 
-	KEYANIMANAGER->update();
+	//KEYANIMANAGER->update();
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
