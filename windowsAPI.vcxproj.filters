@@ -459,6 +459,9 @@
     <ClInclude Include="npcMgr.h">
       <Filter>PlayGround\units</Filter>
     </ClInclude>
+    <ClInclude Include="zOrder.h">
+      <Filter>2DFramework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -811,6 +814,9 @@
     </ClCompile>
     <ClCompile Include="npcMgr.cpp">
       <Filter>PlayGround\units</Filter>
+    </ClCompile>
+    <ClCompile Include="zOrder.cpp">
+      <Filter>2DFramework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

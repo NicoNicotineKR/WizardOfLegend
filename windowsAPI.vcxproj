@@ -277,6 +277,7 @@
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="waterdropRotate.h" />
+    <ClInclude Include="zOrder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
@@ -401,6 +402,7 @@
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="waterdropRotate.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
+    <ClCompile Include="zOrder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc" />
