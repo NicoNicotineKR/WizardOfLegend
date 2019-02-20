@@ -26,4 +26,9 @@ void enemy_State_Death::update(enemy * enemy)
 		enemy->getPath()->clear();
 	}
 	enemy->defaultAtkRc();
+
+	if (!enemy->getAni()->isPlay())
+	{
+		enemy->setIsDead(true);
+	}
 }

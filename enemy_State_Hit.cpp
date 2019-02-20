@@ -77,4 +77,12 @@ void enemy_State_Hit::update(enemy * enemy)
 		enemy->setVecY(0);
 	}
 
+	if (enemy->getCurHP() < 0)
+	{
+		enemy->setState(E_STATE::DEATH);
+		enemy->currentEnemyState();
+		enemy->setIsAniOnce(true);
+		enemy->startAni();
+	}
+
 }

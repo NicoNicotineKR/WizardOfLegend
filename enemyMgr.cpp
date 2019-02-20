@@ -186,15 +186,15 @@ void enemyMgr::update()
 		//	_vEnemy[i]->setIsHit(true);
 		//}
 		// 피가 0이되어서 죽을떄 애니메이션d  a   ss d a d d   wddddddw
-		if (_vEnemy[i]->getCurHP() < 0)
-		{
-			_vEnemy[i]->setState(E_STATE::DEATH);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsDead(true);
-		}
+		//if (_vEnemy[i]->getCurHP() < 0)
+		//{
+		//	_vEnemy[i]->setState(E_STATE::DEATH);
+		//	_vEnemy[i]->currentEnemyState();
+		//	_vEnemy[i]->setIsAniOnce(true);
+		//	_vEnemy[i]->setIsDead(true);
+		//}
 		//상태가 죽음이고 애니메이션 재생이 끝나면
-		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
+		if (_vEnemy[i]->getIsDead())
 		{
 			_vEnemy.erase(_vEnemy.begin() + i);
 			break;
@@ -268,7 +268,8 @@ void enemyMgr::RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit)
 	RECT tmpRc;
 	//bool isOnceHit = false;
 	for (int i = 0; i < _vEnemy.size(); i++) {
-		if (IntersectRect(&tmpRc, skillRc, &_vEnemy[i]->getCollision())) {
+	
+		if (_vEnemy[i]->getState() != E_STATE::DEATH && IntersectRect(&tmpRc, skillRc, &_vEnemy[i]->getCollision())) {
 			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - dmg);
 			_vEnemy[i]->setState(E_STATE::HIT);
 			_vEnemy[i]->currentEnemyState();
@@ -278,16 +279,8 @@ void enemyMgr::RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit)
 			//isOnceHit = true;
 			*isHit = true;
 		}
-
-		if (_vEnemy[i]->getCurHP() < 0)
-		{
-			_vEnemy[i]->setState(E_STATE::DEATH);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsDead(true);
-		}
 		//상태가 죽음이고 애니메이션 재생이 끝나면
-		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
+		if (_vEnemy[i]->getIsDead())
 		{
 			_vEnemy.erase(_vEnemy.begin() + i);
 			break;
@@ -307,7 +300,7 @@ void enemyMgr::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bo
 	RECT tmpRc;
 	
 	for (int i = 0; i < _vEnemy.size(); i++) {
-		if (getDistance(_vEnemy[i]->getPos().x, _vEnemy[i]->getPos().y, skillPos.x, skillPos.y) < range) {
+		if (_vEnemy[i]->getState() != E_STATE::DEATH && getDistance(_vEnemy[i]->getPos().x, _vEnemy[i]->getPos().y, skillPos.x, skillPos.y) < range) {
 			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - dmg);
 			_vEnemy[i]->setState(E_STATE::HIT);
 			_vEnemy[i]->currentEnemyState();
@@ -317,15 +310,7 @@ void enemyMgr::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bo
 			*isHit = true;
 		}
 
-		if (_vEnemy[i]->getCurHP() < 0)
-		{
-			_vEnemy[i]->setState(E_STATE::DEATH);
-			_vEnemy[i]->currentEnemyState();
-			_vEnemy[i]->setIsAniOnce(true);
-			_vEnemy[i]->setIsDead(true);
-		}
-		//상태가 죽음이고 애니메이션 재생이 끝나면
-		if (!_vEnemy[i]->getAni()->isPlay() && _vEnemy[i]->getState() == E_STATE::DEATH)
+		if (_vEnemy[i]->getIsDead())
 		{
 			_vEnemy.erase(_vEnemy.begin() + i);
 			break;

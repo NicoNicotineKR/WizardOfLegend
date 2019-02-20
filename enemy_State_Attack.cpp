@@ -21,6 +21,13 @@ void enemy_State_Attack::direction_right(enemy * enemy)
 
 void enemy_State_Attack::update(enemy * enemy)
 {
+	if (enemy->getCurHP() < 0)
+	{
+		enemy->setState(E_STATE::DEATH);
+		enemy->currentEnemyState();
+		enemy->setIsAniOnce(true);
+		enemy->startAni();
+	}
 	if (!enemy->getAni()->isPlay())
 	{
 		enemy->setState(E_STATE::MOVE);

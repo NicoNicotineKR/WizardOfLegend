@@ -25,4 +25,11 @@ void enemy_State_Spawn::update(enemy * enemy)
 	{
 		enemy->getPath()->clear();
 	}
+	if (enemy->getCurHP() < 0)
+	{
+		enemy->setState(E_STATE::DEATH);
+		enemy->currentEnemyState();
+		enemy->setIsAniOnce(true);
+		enemy->startAni();
+	}
 }

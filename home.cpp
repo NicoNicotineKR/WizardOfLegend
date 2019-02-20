@@ -140,8 +140,35 @@ void home::update()
 
 		if (_nm->getvNpce()[4]->getState() == stateNpc::UI1_ING)
 		{
+			SOUNDMANAGER->stop("logoSound");
+			SOUNDMANAGER->stop("titleMusic");
+			SOUNDMANAGER->stop("PlayerRoom");
+			SOUNDMANAGER->stop("Ice");
+
+			//플레이어	   
+			SOUNDMANAGER->stop("PlayerFootstep");
+			SOUNDMANAGER->stop("chainLightning");
+			SOUNDMANAGER->stop("chainLightning2");
+			SOUNDMANAGER->stop("flameStrike");
+			SOUNDMANAGER->stop("searingRush");
+			SOUNDMANAGER->stop("stoneShot");
+
+			//몬스터		
+			SOUNDMANAGER->stop("goul");
+			SOUNDMANAGER->stop("KnightAttack");
+
+			//보스		
+			SOUNDMANAGER->stop("Bossbackground");
+			SOUNDMANAGER->stop("IceBossHurt");
+			SOUNDMANAGER->stop("IceBossLaugh");
+			SOUNDMANAGER->stop("IceShakeLong");
+
+			//npc		  
+			SOUNDMANAGER->stop("Broom");
+
 			SCENEMANAGER->changeScene("stage1_1");
 			CAMERA2D->setPos({ 0,0 });
+			
 		}
 	}
 
