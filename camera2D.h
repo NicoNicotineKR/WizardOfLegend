@@ -11,6 +11,9 @@ private:
 	int _camPosY;
 
 	POINTFLOAT _playerPos;
+	
+	int _shakeCount;
+	int _shakeValue;
 
 
 public:
@@ -26,5 +29,7 @@ public:
 
 	void setPos(POINTFLOAT playerPos);
 	void getMapSize(int mapSizeX, int mapSizeY);
+	void ShakeYourBodyBabe(int shakeValue, int shakeCount);
+
 };
 

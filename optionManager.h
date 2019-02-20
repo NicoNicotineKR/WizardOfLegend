@@ -92,6 +92,7 @@ public:
 
 	float getSoundBackVolume() { return _longButton[1].ratio; }
 	float getSoundEffectVolume() { return _longButton[0].ratio; }
+	float getShakingValue(){return _longButton[2].ratio * 10;}
 
 	void setTempSoundName(string tempSoundName) { _tempSoundName = tempSoundName; }
 	string getTempSoundName() { return _tempSoundName; }

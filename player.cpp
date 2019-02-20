@@ -157,6 +157,9 @@ void player::update()
 				_isHit = true;
 				_curHp -= 100;
 				_playerStatusUI->setCurHp(_curHp);
+
+				CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
+
 				if(_curHp<=0)
 				{
 					_state = STATE::DEAD;

@@ -19,6 +19,9 @@ HRESULT camera2D::init()
 	_playerPos.x = 0;
 	_playerPos.y = 0;
 
+	_shakeValue = 0;
+	_shakeCount = 0;
+
 	return S_OK;
 }
 
@@ -31,6 +34,14 @@ void camera2D::update()
 
 	_camPosX = _playerPos.x;
 	_camPosY = _playerPos.y;
+
+	if (_shakeCount > 0) {
+		_shakeCount--;
+		int shakeX = RND->getFromIntTo(-1, 2);
+		int shakeY = RND->getFromIntTo(-1, 2);
+		_camPosX += shakeX * _shakeValue;
+		_camPosY += shakeY * _shakeValue;
+	}
 
 }
 
@@ -61,5 +72,11 @@ void camera2D::getMapSize(int mapSizeX, int mapSizeY)
 {
 	_mapSizeX = mapSizeX;
 	_mapSizeY = mapSizeY;
+}
+
+void camera2D::ShakeYourBodyBabe(int shakeValue, int shakeCount)
+{
+	_shakeValue = shakeValue;
+	_shakeCount = shakeCount;
 }
 
