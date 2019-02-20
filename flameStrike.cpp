@@ -97,6 +97,10 @@ void flameStrike::update(player * Player)
 				Player->startAni();
 
 				_isSkill = false;
+				for (int i = 0; i < 3; ++i)
+				{
+					_isRender[i] = false;
+				}
 			}
 			if (_index != _reLoadCount)
 			{

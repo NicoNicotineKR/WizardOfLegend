@@ -33,7 +33,7 @@ HRESULT stage1_1::init()
 
 	_player->init(_vvMap);
 	_player->enemyLink(_enemyMgr);
-
+	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);
 
 

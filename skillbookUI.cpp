@@ -291,7 +291,7 @@ void skillbookUI::update()
 						//	(_curSkillName)[_curSelectSkillKind] -> 내가 바꾼 스킬의 이름이 들어이따
 						//	이놈을 가지고, 내가 원하는 스킬을 직접 찾아서 쳐먹여주면된다 이말이야.
 						FindSkillAndAdjustToPlayer((_curSkillName)[_curSelectSkillKind], _curSelectSkillKind);
-
+						_player->changeSkillIcon(_curSelectSkillKind);
 					}
 					
 				}

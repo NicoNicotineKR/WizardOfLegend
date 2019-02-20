@@ -28,7 +28,8 @@ HRESULT home::init()
 
 	_player->init(_vvMap);
 	_player->enemyLink(_enemyMgr);
-
+	_player->arrSkillInit();
+	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);
 	_enemyMgr->setMapAdress(_vvMap);
 

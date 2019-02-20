@@ -798,32 +798,36 @@ void player::arrStateInit()
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)] = new searingRush;
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)]->init(this);
-	
+
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)] = new shockNova;
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)]->init(this);
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)] = new stoneShot;
 	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)]->init(this);
 
+
+	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
+
+}
+
+void player::arrSkillInit()
+{
+
 	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)];
 	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
 	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
 	_curSkills[3] = _arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)];
 
-	//string tmpName = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getName();
-	//int* tmpMaxReload = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getMaxReLoadAddress();
-	//int* tmpReloadCount = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getReLoadCountAddress();
-	//float* tmpTotalCoolTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getTotalCoolTimeAddress();
-	//float* tmpCurTime = _curSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->getCurCoolTimeAddress();
-	//
-	//_skillUI->ChangeSkill(0, tmpName, tmpMaxReload, tmpReloadCount, tmpTotalCoolTime, tmpCurTime);
+}
 
+void player::skillIconInit()
+{
 	_skillUI->ChangeSkill(0, _curSkills[0]->getName(),
 		_curSkills[0]->getMaxReLoadAddress(),
 		_curSkills[0]->getReLoadCountAddress(),
 		_curSkills[0]->getTotalCoolTimeAddress(),
-		_curSkills[0]->getCurCoolTimeAddress());	
-	
+		_curSkills[0]->getCurCoolTimeAddress());
+
 	_skillUI->ChangeSkill(1, _curSkills[1]->getName(),
 		_curSkills[1]->getMaxReLoadAddress(),
 		_curSkills[1]->getReLoadCountAddress(),
@@ -841,9 +845,15 @@ void player::arrStateInit()
 		_curSkills[3]->getReLoadCountAddress(),
 		_curSkills[3]->getTotalCoolTimeAddress(),
 		_curSkills[3]->getCurCoolTimeAddress());
+}
 
-	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
-
+void player::changeSkillIcon(int index)
+{
+	_skillUI->ChangeSkill(index, _curSkills[index]->getName(),
+		_curSkills[index]->getMaxReLoadAddress(),
+		_curSkills[index]->getReLoadCountAddress(),
+		_curSkills[index]->getTotalCoolTimeAddress(),
+		_curSkills[index]->getCurCoolTimeAddress());
 }
 
 void player::currentPlayerState()

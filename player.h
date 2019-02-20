@@ -155,6 +155,10 @@ public:
 	void inPutKey();
 	void startAni();
 	void arrStateInit();
+	void arrSkillInit();
+	void skillIconInit();
+
+	void changeSkillIcon(int index);
 
 	void currentPlayerState();
 	void playerCirclePosition();
