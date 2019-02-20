@@ -122,19 +122,8 @@ void enemyMgr::update()
 		if (_vEnemy[i]->getState() == E_STATE::MOVE)
 		{
 			_vEnemy[i]->fixDirection();
-			if (_vEnemy[i]->getAniDirection() == E_ANIDIRECTION::LEFT)
+			if (save != _vEnemy[i]->getAniDirection())
 			{
-				_vEnemy[i]->setAniDirection(E_ANIDIRECTION::LEFT);
-				_vEnemy[i]->setState(E_STATE::MOVE);
-				_vEnemy[i]->currentEnemyState();
-				_vEnemy[i]->setIsAniOnce(true);
-				_vEnemy[i]->startAni();
-			}
-			else if (_vEnemy[i]->getAniDirection() == E_ANIDIRECTION::RIGHT)
-			{
-				_vEnemy[i]->setAniDirection(E_ANIDIRECTION::RIGHT);
-				_vEnemy[i]->setState(E_STATE::MOVE);
-				_vEnemy[i]->currentEnemyState();
 				_vEnemy[i]->setIsAniOnce(true);
 				_vEnemy[i]->startAni();
 			}

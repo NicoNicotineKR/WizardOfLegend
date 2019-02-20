@@ -7,28 +7,42 @@
 class bossState;
 class player;
 
-//enum class B_ANIDIRECTION
-//{
-//	LEFT,
-//	RIGHT
-//};
+//구역 밟으면 트루됨.트루 설정해주는곳(스테이지든 어디든) 에서 보스 상태 spawn으로 설정하고 애니메이션 등등도 설정해줌
+//
+//spawn의 키애니메이션 끝나면 idle로 변경.idle이 되면서 다이얼로그도 출력
+//
+//다이얼로그를 종료하면 casting됨
+//
+//casting 후 스킬use함수로 스킬 총 3번씀
+//
+//스킬 3번다쓰면 mock
+//
+//->mock에서 안맞으면 casting 후 반복
+//
+//->mock에서 맞으면 stun->stun시간동안 스턴후 casting 후 반복
+//
+//
+//위 반복하다가 체력 다닳면 데스 스타트->다이얼로그 출력
+//
+//다이얼로그 종료하면 death하고 엔딩
+
 
 enum class B_STATE
 {
-	SLEEP,			// 보스 발견하기전 
-	SPAWN,			// 최초 다이얼로그 나오기전 스폰하는거
-	IDLE,			// 아이들...인데 있나?
-	CASTING,		// 조롱 or 스턴후 보스턴되기전에 손휘두름
-	MOCK,			// 스킬 다쓰고 조롱하는거 이떄 맞으면 스턴됨 (hit 없음)
-	STUN,			// 조롱하다가 1대라도 맞으면 스턴상태들어감
-	DASH,			// 스킬 4 사용 전 대쉬
-	SKILL_ONE,		// 물방울 회전!!!! 회오리!!!!!
-	SKILL_TWO,		// 눈송이 회전!! 회오리!!!!
-	SKILL_THREE,	// 창 3개 날리기
-	SKILL_FOUR,		// 돌진 얼음칼 돌리기
-	SKILL_FIVE,		// 고드름비
-	DEATH_START,	// 죽음 시작 -> 무릎꿇고 다이얼로그 뱉음
-	DEATH,			// 얼음되서 사라짐 (죽음 시작에서 나온 다이얼로그 에서 키눌러서 다이얼로그 종료되면 얼음되고 깨짐)
+	SLEEP,			// 보스 발견하기전																				// o			// 날개 없슴
+	SPAWN,			// 최초 다이얼로그 나오기전 스폰하는거																// o		    // 날개 작아짐
+	IDLE,			// 아이들...인데 있나?																			// o		    // 날개 커짐 -> 아이들유지
+	CASTING,		// 조롱 or 스턴후 보스턴되기전에 손휘두름															// x			// 날개 작아짐
+	MOCK,			// 스킬 다쓰고 조롱하는거 이떄 맞으면 스턴됨 (hit 없음)												// x			// 날개 커짐
+	STUN,			// 조롱하다가 1대라도 맞으면 스턴상태들어감															// x			// 날개 커짐
+	DASH,			// 스킬 4 사용 전 대쉬																			// x			// 이전꺼 유지
+	SKILL_ONE,		// 물방울 회전!!!! 회오리!!!!!																	// x			// 이전꺼 유지
+	SKILL_TWO,		// 눈송이 회전!! 회오리!!!!																		// x			// 이전꺼 유지
+	SKILL_THREE,	// 창 3개 날리기																					// x 			// 이전꺼 유지
+	SKILL_FOUR,		// 돌진 얼음칼 돌리기																				// x			// 이전꺼 유지
+	SKILL_FIVE,		// 고드름비																						// x			// 이전꺼 유지
+	DEATH_START,	// 죽음 시작 -> 무릎꿇고 다이얼로그 뱉음															// x			// 날개 커짐
+	DEATH,			// 얼음되서 사라짐 (죽음 시작에서 나온 다이얼로그 에서 키눌러서 다이얼로그 종료되면 얼음되고 깨짐)		// x			// 날개 작아짐
 	MAX
 };
 //버려진것들
@@ -60,7 +74,7 @@ private:
 	float			_hitAngle;			//맞을때 튕겨나갈 각도
 
 	bool			_isAniOnce;			//애니메이션 한번만 재생할 불값
-	bool			_isClose;			//플레이어가 근접해 있나?(구역의 타일을 플레이어가 밟으면 얘가 트루됨)
+	bool			_isArea;			//플레이어가 근접해 있나?(구역의 타일을 플레이어가 밟으면 얘가 트루됨)
 	bool			_isStun;			//스턴상태니?
 	bool			_isDeath;			//죽었니?
 
@@ -145,10 +159,13 @@ public:
 
 	// 그떄 그때 추가하는 목록인데 더러울것임.
 	//---------------------------------------------------------------------------------------------------------------------------------------
-	static void skillUse(void* obj);
+	static void wingIdle(void* obj);
 
 	void skillShuffle();
 	void useSkill();
+
+	//플레이어가 구역 밟을시 이함수 써줘야함
+	void setBossSpawn();
 
 	//다이얼로그 끝나면 캐스팅모드 들어가는거 - 형우형이 쓸예정
 	void setBossStateCasting();
@@ -179,7 +196,7 @@ public:
 	float					getHitAngle()									{ return _hitAngle; }
 
 	bool					getIsAniOnce()									{ return _isAniOnce; }
-	bool					getIsClose()									{ return _isClose; }
+	bool					getIsArea()										{ return _isArea; }
 	bool					getIsStun()										{ return _isStun; }
 	bool					getIsDead()										{ return _isDeath; }
 
@@ -221,7 +238,7 @@ public:
 	void					setHitAngle(float hitAngle)						{ _hitAngle = hitAngle; }
 
 	void					setIsAniOnce(bool isAniOnce)					{ _isAniOnce = isAniOnce; }
-	void					setIsClose(bool isClose)						{ _isClose = isClose; }
+	void					setIsArea(bool isClose)							{ _isArea = isClose; }
 	void					setIsStun(bool isStun)							{ _isStun = isStun; }
 	void					setIsDead(bool isDead)							{ _isDeath = isDead; }
 
@@ -230,6 +247,7 @@ public:
 
 	void					setWingImg(image* wingImg)						{ _wingImg = wingImg; }
 	void					setWingAni(animation* wingAni)					{ _wingAni = wingAni; }
+	void					setWingAniIdle() { _wingAni = KEYANIMANAGER->findAnimation("wingIdle"); }
 
 	void					setCrystalImg(image* crystalImg)				{ _crystalImg = crystalImg; }
 	void					setCrystalAni(animation* crystalAni)			{ _crystalAni = crystalAni; }

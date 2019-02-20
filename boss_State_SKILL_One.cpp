@@ -13,4 +13,11 @@ boss_State_SKILL_One::~boss_State_SKILL_One()
 
 void boss_State_SKILL_One::update(boss * boss)
 {
+	if (!boss->getAni()->isPlay())
+	{
+		boss->useSkill();
+		boss->bossCurrentState();
+		boss->setIsAniOnce(true);
+		boss->startAni();
+	}
 }

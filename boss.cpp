@@ -42,8 +42,8 @@ HRESULT boss::init()
 	//보스의 중점좌표
 	_vec.x = 0;
 	_vec.y = 0;
-	_pos.x = WINSIZEX /2;
-	_pos.y = WINSIZEY /2;
+	_pos.x = WINSIZEX /2 - 200;
+	_pos.y = WINSIZEY /2 - 200;
 	_rc = RectMakeCenter(_pos.x, _pos.y, 150, 200);
 
 	_maxHp = BOSS_HP;
@@ -54,7 +54,7 @@ HRESULT boss::init()
 	_hitAngle = 0;
 
 	_isAniOnce = false;
-	_isClose = false;
+	_isArea = false;
 	_isStun = false;
 	_isDeath = false;
 
@@ -74,13 +74,17 @@ void boss::release()
 void boss::update()
 {
 	//스테이지에서 플레이어가 보스방의 전투구역을 밟게되면 셋으로 isClose true만들어줌
-	if (_isClose)
+	if (_isArea)
 	{
 		_vec.x = 0;
 		_vec.y = 0;
 
 		_bossState->update(this);
 
+		if (KEYMANAGER->isOnceKeyDown(VK_F1))
+		{
+			setBossStateCasting();
+		}
 
 
 
@@ -95,11 +99,15 @@ void boss::update()
 
 void boss::render()
 {
-	if (_isClose)
+	if (_isArea)
 	{
-		_img->aniRender(getMemDC(), (_pos.x - IMG_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - IMG_SHAVE_Y) - CAMERA2D->getCamPosY(), _ani);
 		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
-		_crystalImg->aniRender(getMemDC(), (_pos.x - CRYSTAL_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - CRYSTAL_SHAVE_Y) - CAMERA2D->getCamPosY(), _crystalAni);
+		//크리스탈 이미지는 보스 스폰때랑 죽을때밖에 안나옴
+		if (_state == B_STATE::SPAWN || _state == B_STATE::DEATH)
+		{
+			_crystalImg->aniRender(getMemDC(), (_pos.x - CRYSTAL_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - CRYSTAL_SHAVE_Y) - CAMERA2D->getCamPosY(), _crystalAni);
+		}
+		_img->aniRender(getMemDC(), (_pos.x - IMG_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - IMG_SHAVE_Y) - CAMERA2D->getCamPosY(), _ani);
 	}
 }
 
@@ -125,17 +133,17 @@ void boss::bossKeyAnimationInit()
 
 	//casting
 	int casting[] = { 52,53 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 2, false);
 
 	//mock
 	int mock[] = { 78,79,80,79,80,79,80,79,80 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossMock", "boss", mock, 9, 9, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossMock", "boss", mock, 9, 5, false);
 	//조롱이 너무 길다거나 너무 짧으면 배열이랑 배열길이 수정하면됨.
 	//조롱 끝나면 캐스팅 ㄱ
 
 	//stun
 	int stun[] = { 66,67,68,67,68,67,68 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false);
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
 
 	//대쉬
@@ -150,31 +158,31 @@ void boss::bossKeyAnimationInit()
 	int skill1[] = { 22,23,
 					24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,
 					33,34,35,36,37,38,39,40,41,42,42 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 31, 31, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill1", "boss", skill1, 31, 5, false);
 
 	//skill2 - 눈송이 회전 많이 던지기
 	int skill2[] = { 22,23,
 					24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,24,25,26,27,28,29,30,31,32,
 					33,34,35,36,37,38,39,40,41,42,42 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill2", "boss", skill2, 58, 58, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill2", "boss", skill2, 58, 10, false);
 
 	//skill3 - 창 3개 날리기
 	int skill3[] = { 14,15,16,17 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill3", "boss", skill3, 4, 4, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill3", "boss", skill3, 4, 4, false);
 
 	//skill4 - 얼음대거 돌리기
 	int rightSkill4[] = { 55, // 딜레이 필요
 		56, 57, 58, 59, 60, 61 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Right", "boss", rightSkill4, 7, 7, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Right", "boss", rightSkill4, 7, 7, false);
 
 	int leftSkill4[] = { 99,
 		100, 101, 102, 103, 104, 105 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Left", "boss", leftSkill4, 7, 7, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Left", "boss", leftSkill4, 7, 7, false);
 
 	//skill5 - 고드름비 내리기
 	int skill5[] = { 48,48,48,48,48,		//딜레이 주는거 필요
 					49,49,49,49,49, };		//얘도
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill5", "boss", skill5, 10, 10, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill5", "boss", skill5, 10, 2, false);
 	//death_start 69
 	int deathStart[] = { 69 };
 	KEYANIMANAGER->addArrayFrameAnimation("bossDeathStart", "boss", deathStart, 1, 1, true);
@@ -193,24 +201,25 @@ void boss::wingKeyAnimationInit()
 	int idle[] = { 0,1,2,3,4,5,6 };
 	KEYANIMANAGER->addArrayFrameAnimation("wingIdle", "bossWing", idle, 7, 7, true);
 
+	//큰상태 - > 점점 작아짐
 	int decrease[] = { 7,8,9,10,11,12,13 };
 	KEYANIMANAGER->addArrayFrameAnimation("wingDecrease", "bossWing", decrease, 7, 7, false);
 
+	//작은상태 -> 점점커짐 -> 아이들
 	int increase[] = { 14,15,16,17,18,19,20 };
-	KEYANIMANAGER->addArrayFrameAnimation("wingIncrease", "bossWing", increase, 7, 7, false);
+	KEYANIMANAGER->addArrayFrameAnimation("wingIncrease", "bossWing", increase, 7, 7, false, wingIdle, this);
 }
 
 void boss::crystalKeyAnimationInit()
 {
-	IMAGEMANAGER->addFrameImage("bossCrystal", "images/boss/IceCrystal.bmp", 550, 300, 5, 2, true, 0xff00ff);
+	IMAGEMANAGER->addFrameImage("bossCrystal", "images/boss/IceCrystals.bmp", 550, 300, 5, 2, true, 0xff00ff);
 
 	int crystal[] = { 0,1,2,3,4,5,6,7,8 };
-	KEYANIMANAGER->addArrayFrameAnimation("crystal", "bosssCrystal", crystal, 9, 9, false);
+	KEYANIMANAGER->addArrayFrameAnimation("crystal", "bossCrystal", crystal, 9, 9, false);
 }
 
 void boss::bossArrStateInit()
 {
-	//슬립 추가하자
 	_arrState[static_cast<const int>(B_STATE::SLEEP)] = new boss_State_Sleep;
 	_arrState[static_cast<const int>(B_STATE::IDLE)] = new boss_State_Idle;
 	_arrState[static_cast<const int>(B_STATE::SPAWN)] = new boss_State_Spawn;
@@ -305,26 +314,44 @@ void boss::startAni()
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossSpawn");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingDecrease");
+			_wingAni->start();
+
+			_crystalAni = KEYANIMANAGER->findAnimation("crystal");
+			_crystalAni->start();
 		}
 		if (_state == B_STATE::IDLE)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossIdle");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingIncrease");
+			_wingAni->start();
 		}
 		if (_state == B_STATE::CASTING)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossCasting");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingDecrease");
+			_wingAni->start();
 		}
 		if (_state == B_STATE::MOCK)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossMock");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingIncrease");
+			_wingAni->start();
 		}
 		if (_state == B_STATE::STUN)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossStun");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingIncrease");
+			_wingAni->start();
 		}
 		if (_state == B_STATE::DASH)
 		{
@@ -383,24 +410,31 @@ void boss::startAni()
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossDeathStart");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingIncrease");
+			_wingAni->start();
 		}
 		if (_state == B_STATE::DEATH)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossDeath");
 			_ani->start();
+
+			_wingAni = KEYANIMANAGER->findAnimation("wingDecrease");
+			_wingAni->start();
+
+			_crystalAni = KEYANIMANAGER->findAnimation("crystal");
+			_crystalAni->start();
 		}
 		_isAniOnce = false;
 	}
 }
 
-void boss::skillUse(void * obj)
+void boss::wingIdle(void * obj)
 {
 	boss* _boss = (boss*)obj;
 
-	_boss->useSkill();
-	_boss->bossCurrentState();
-	_boss->setIsAniOnce(true);
-	_boss->startAni();
+	_boss->setWingAniIdle();
+	_boss->getWingAni()->start();
 }
 
 void boss::skillShuffle()
@@ -463,6 +497,15 @@ void boss::useSkill()
 	
 
 
+}
+
+void boss::setBossSpawn()
+{
+	_isArea = true;
+	_state = B_STATE::CASTING;
+	bossCurrentState();
+	_isAniOnce = true;
+	startAni();
 }
 
 void boss::setBossStateCasting()
