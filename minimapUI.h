@@ -28,6 +28,7 @@ private:
 
 	struct tagMinimap {
 		//enum E_TILE_ATR {TILE_NONE,	TILE_FLOOR,	TILE_WALL, TILE_HOLE,};
+		bool isEmpty;
 		bool isExplorerd;
 		image* tileImg;
 
@@ -65,6 +66,8 @@ private:
 	float _exploreRatio;
 	float _excuteEnemyRatio;
 
+	int adjustIdxX;
+	int adjustIdxY;
 
 	vector<enemy*>* _vEnemy;
 	

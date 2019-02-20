@@ -22,19 +22,17 @@ HRESULT stage1_1::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
-	//_aStar = new aStar;
+	_miniMap = new minimapUI;
 
 	_vvMap.clear();
 	_vObjects.clear();
 
 	_tileNumX = 0;
 	_tileNumY = 0;
-	//_aStarCount = 0;
 
 	//	재만 순서바꿈 - cuz 스킬과 연결
 	_player->enemyLink(_enemyMgr);
 	_player->init(_vvMap);
-	//_player->enemyLink(_enemyMgr);
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
@@ -47,9 +45,7 @@ HRESULT stage1_1::init()
 	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
 	_enemyMgr->setMapAdress(_vvMap);
 	_enemyMgr->init();
-	//_aStar->init();
-	//_aStar->setMap(&_vvMap);
-	//_stageMapLoader->release();
+	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 	delete _stageMapLoader;
 	_stageMapLoader = nullptr;
 
@@ -76,6 +72,7 @@ void stage1_1::update()
 		_player->tileCheckFunc();
 
 		_enemyMgr->update();
+		_miniMap->update();
 
 		CAMERA2D->setPos(_player->getPos());
 	}
@@ -129,6 +126,7 @@ void stage1_1::render()
 		}
 	}
 	_player->getSkillUI()->render();
+	_miniMap->render();
 }
 
 void stage1_1::TileMapRender()

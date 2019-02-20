@@ -166,22 +166,23 @@ void minimapUI::InitMinimapTile()
 			switch (tileAttr) {
 			case TILE_NONE:
 				_vvMinimap[i][j]->tileImg = IMAGEMANAGER->findImage("minimapNone");
+				_vvMinimap[i][j]->isEmpty = true;
 				_totalTileNum--;
 				break;
 
 			case TILE_FLOOR:
 				_vvMinimap[i][j]->tileImg = IMAGEMANAGER->findImage("minimapFloor");
-
+				_vvMinimap[i][j]->isEmpty = false;
 				break;
 
 			case TILE_WALL:
 				_vvMinimap[i][j]->tileImg = IMAGEMANAGER->findImage("minimapWall");
-
+				_vvMinimap[i][j]->isEmpty = false;
 				break;
 
 			case TILE_HOLE:
 				_vvMinimap[i][j]->tileImg = IMAGEMANAGER->findImage("minimapHole");
-
+				_vvMinimap[i][j]->isEmpty = false;
 				break;
 
 			}
@@ -196,8 +197,7 @@ void minimapUI::InitMinimapTile()
 
 void minimapUI::ChkExploreFunc()
 {
-	int adjustIdxX;
-	int adjustIdxY;
+	
 	//창에는 가로 50, 세로 28칸짜리 
 	for (int i = -14; i < 14; i++) {
 		for (int j = -25; j < 25; j++) {
@@ -206,6 +206,7 @@ void minimapUI::ChkExploreFunc()
 			//	맵 밖의 인덱스 로드 예외상황 처리
 			if (adjustIdxX < 0 || _tileNumX - 1 < adjustIdxX)	continue;
 			if (adjustIdxY < 0 || _tileNumY - 1 < adjustIdxY)	continue;
+			if (_vvMinimap[adjustIdxY][adjustIdxX]->isEmpty)	continue;
 
 			if (_vvMinimap[adjustIdxY][adjustIdxX]->isExplorerd == false) {
 				_vvMinimap[adjustIdxY][adjustIdxX]->isExplorerd = true;
@@ -233,7 +234,7 @@ void minimapUI::RenderMinimap()
 	int adjustIdxY;
 
 	for (int i = -29; i < 29; i++) {
-		for (int j = -56; j < 56; j++) {
+		for (int j = -36; j < 36; j++) {
 			adjustIdxX = _playerPosIdx.x + j;
 			adjustIdxY = _playerPosIdx.y + i;
 			//	맵 밖의 인덱스 로드 예외상황 처리
