@@ -59,6 +59,7 @@ HRESULT home::init()
 	_playerInfoBoxUI->init();
 
 	_playerInfoBox = new playerInfoBox;
+	_playerInfoBox->setPlayerAddreesLink(_player);
 	_playerInfoBox->init();
 
 
@@ -182,7 +183,7 @@ void home::update()
 
 	if (_allStop == false && !_isSkillbookMode)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE) && _allStop2 == false)
 		{
 			_allStop = true;
 			OPTIONMANAGER->setIsStartOption(true);
@@ -190,7 +191,7 @@ void home::update()
 	}
 	else if (_allStop == true)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
+		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE) && _allStop2 == false)
 		{
 			_allStop = false;
 			OPTIONMANAGER->setIsStartOption(false);
@@ -208,8 +209,11 @@ void home::update()
 
 	_skillbookUI->update();
 
-	_playerInfoBox->update();
-	_allStop2 = _playerInfoBox->getIsStart();
+	if (_allStop == false)
+	{
+		_playerInfoBox->update();
+		_allStop2 = _playerInfoBox->getIsStart();
+	}
 
 }
 

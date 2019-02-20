@@ -113,7 +113,6 @@ void player::update()
 	_vec.x = 0;
 	_vec.y = 0;
 
-	//KEYANIMANAGER->update();
 	_playerState->update(this);
 	inPutKey();
 	_playerStatusUI->update();
@@ -1231,4 +1230,15 @@ void player::tileCheckFunc()
 	vecZero();
 	_pos.x += _vec.x;
 	_pos.y += _vec.y;
+}
+
+void player::changeCurSkill(int index, string name)
+{
+	for (int i = 0; i < 5; ++i)
+	{
+		if (name == _arrSkills[i]->getName())
+
+			_curSkills[index] = _arrSkills[i];
+	}
+	changeSkillIcon(index);
 }

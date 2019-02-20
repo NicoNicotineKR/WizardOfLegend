@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "playerInfoBox.h"
+#include "player.h"
 
 
 playerInfoBox::playerInfoBox()
@@ -16,14 +17,11 @@ HRESULT playerInfoBox::init()
 	_isStart = false;
 
 	IMAGEMANAGER->addImage("box", "images/UIs/playerInfoBox/playerinfoBox.bmp", 480, 705, true, RGB(255, 0, 255));
-
 	IMAGEMANAGER->addImage("edge", "images/UIs/playerInfoBox/buttonFrameIcon2.bmp", 70, 70, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("changeFont", "images/UIs/playerInfoBox/changeFont.bmp", 354, 45, 3, 1, true, RGB(255, 0, 255));
-
 	IMAGEMANAGER->addFrameImage("button", "images/UIs/playerInfoBox/playerinfoBoxButton.bmp", 360, 60, 6, 1, true, RGB(255, 0, 255));
-
 	IMAGEMANAGER->addFrameImage("buttonBox", "images/UIs/playerInfoBox/buttonFrameIcon1.bmp", 120, 60, 2, 1, true, RGB(255, 0, 255));
-	
+
 	_box.img = IMAGEMANAGER->findImage("box");
 	_box.pos.x = 200;
 	_box.pos.y = 100;
@@ -64,6 +62,13 @@ HRESULT playerInfoBox::init()
 	_selectIdx = 0;
 	_isChanging = false;
 
+	_skillBox[0].skillName = _player->getCurSkills1()->getName();
+	_skillBox[1].skillName = _player->getCurSkills2()->getName();
+	_skillBox[2].skillName = _player->getCurSkills3()->getName();
+	_skillBox[3].skillName = _player->getCurSkills4()->getName();
+
+
+
 	return S_OK;
 }
 void playerInfoBox::release()
@@ -72,7 +77,6 @@ void playerInfoBox::release()
 }
 void playerInfoBox::update()
 {
-	//기능1 - tap 으로 켜기
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
 		if (_isStart == false)
@@ -82,6 +86,8 @@ void playerInfoBox::update()
 			_skillBoxEdge.pos.x = _skillBox[0].pos.x - 5;
 			_skillBoxEdge.pos.y = _skillBox[0].pos.y - 5;
 			_skillBoxEdge.rc = RectMakeCenter(_skillBoxEdge.pos.x, _skillBoxEdge.pos.y, 70, 70);
+
+
 		}
 		else if (_isStart == true)
 		{
@@ -119,8 +125,22 @@ void playerInfoBox::update()
 				_saveSkillName = _skillBox[_selectIdx].skillName;
 				//아까 스킬 저장된 스킬박스 번호를 클릭된 스킬박스에 넣어줌
 				_skillBox[_selectIdx].skillName = _skillBox[_currentboxNumber].skillName;
+				_player->changeCurSkill(_selectIdx, _skillBox[_currentboxNumber].skillName);
 				//아까 저장된 스킬박스를 저장된 Idx로 교환
 				_skillBox[_currentboxNumber].skillName = _saveSkillName;
+				_player->changeCurSkill(_currentboxNumber, _saveSkillName);
+
+				//_currentboxNumber, _selectIdx
+				//기존
+				//_player->changeCurSkill(_currentboxNumber, "FlameStrike");
+				////선택된애
+				//_player->changeCurSkill(_selectIdx, "flameStrike");
+
+
+
+
+
+
 
 				_skillBox[_currentboxNumber].isBlink = false;
 				_skillBox[_currentboxNumber].boxFrameX = 0;
@@ -168,7 +188,7 @@ void playerInfoBox::update()
 		}
 
 		//기능4 - 마우스선택
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (PtInRect(&_skillBox[i].rc, _ptMouse))
 			{
@@ -182,14 +202,14 @@ void playerInfoBox::update()
 		//기능4-1 - 키보드선택(오른쪽)
 		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
-			if (_selectIdx < 6)
+			if (_selectIdx < 4)
 			{
 				_selectIdx++;
 				_skillBoxEdge.pos.x = _skillBox[_selectIdx].pos.x - 5;
 				_skillBoxEdge.pos.y = _skillBox[_selectIdx].pos.y - 5;
 				_skillBoxEdge.rc = RectMakeCenter(_skillBoxEdge.pos.x, _skillBoxEdge.pos.y, 70, 70);
 			}
-			if (_selectIdx >= 6)
+			if (_selectIdx >= 4)
 			{
 				_selectIdx = 0;
 				_skillBoxEdge.pos.x = _skillBox[_selectIdx].pos.x - 5;
@@ -288,17 +308,15 @@ void playerInfoBox::render()
 			_button[i].img->frameRender(getMemDC(), _button[i].pos.x, _button[i].pos.y, _button[i].frameX, 0);
 
 			_skillBox[i].img->alphaFrameRenderFixed(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top, _skillBox[i].boxFrameX, 0, _skillBox[i].alpha);
-			//Rectangle(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top, _skillBox[i].rc.right, _skillBox[i].rc.bottom);
 
-			//SetTextColor(getMemDC(),RGB(255,0,0));
-			//sprintf_s(str,"%s", _skillBox[i].skillName);
-			//TextOut(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top,str,strlen(str));
+			sprintf_s(str, "%s", _skillBox[i].skillName.c_str());
+			TextOut(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top, str, strlen(str));
 		}
 
 		_skillBoxEdge.image->alphaRender(getMemDC(), _skillBoxEdge.rc.left, _skillBoxEdge.rc.top, _skillBoxEdge.alpha);
 		_changeModeImg.image->alphaFrameRenderFixed(getMemDC(), _changeModeImg.rc.left, _changeModeImg.rc.top, _changeModeImg.FrameX, 0, _changeModeImg.alpha);
 	}
 
-	//sprintf_s(str, "_change : %d _currentIdx : %d , _saveIdx : %s, _selectIdx : %d", _isChanging, _currentboxNumber, _saveSkillName, _selectIdx);
-	//TextOut(getMemDC(), 20, 400, str, strlen(str));
+	sprintf_s(str, "_currentboxNumber : %d _selectIdx : %d", _currentboxNumber, _selectIdx);
+	TextOut(getMemDC(), 20, 400, str, strlen(str));
 }

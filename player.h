@@ -60,10 +60,7 @@ enum class CURRENTSKILL
 {
 	FLAMESTRIKE,
 	CHAINLIGHTNING,
-	FROSTFAN,
-	REBOUNDINGCICLES,
 	SEARINGRUSH,
-	SHATTERINGSTRIKE,
 	SHOCKNOVA,
 	STONESHOT,
 	MAX
@@ -167,6 +164,7 @@ public:
 	void enemyAngleCal(float angle);
 	//타일 충돌 예외처리
 	void tileCheckFunc();
+	virtual void changeCurSkill(int index, string name);
 
 	//애니메이션 콜백함수
 	static void playerIdle(void* obj);

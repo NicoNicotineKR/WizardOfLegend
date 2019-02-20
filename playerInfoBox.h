@@ -1,6 +1,8 @@
 #pragma once
 #include "gameNode.h"
 
+class player;
+
 struct tagBox // 전체적인 큰창
 {
 	image* img;
@@ -27,7 +29,6 @@ struct tagSkillBox // 교환박스
 	int boxFrameX;
 
 	//진짜 바꿀아무거나
-	//int idx;
 	string skillName;
 };
 struct tagUI // 테두리
@@ -65,7 +66,7 @@ private:
 	//=======
 	int _selectIdx;
 
-
+	player* _player;
 
 
 
@@ -81,6 +82,7 @@ public:
 	void update();
 	void render();
 
-	bool getIsStart(){return _isStart;}
+	bool getIsStart() { return _isStart; }
+	void setPlayerAddreesLink(player* player) { _player = player; }
 };
 
