@@ -36,6 +36,7 @@ public:
 		int			frameWidth;		//프레임이미지의 가로크기
 		int			frameHeight;	//프레임이미지의 세로크기
 		BYTE		loadType;
+		float		zOrderY;
 
 		tagImageInfo()
 		{
@@ -134,6 +135,10 @@ public:
 	//=================================================
 	// 이미지 관련 접근자, 설정자 이제부터 편하게 쓰세용 ^_^)/
 	//=================================================
+
+	//	Z-order용 추가
+	inline void SetZorderY(float zOrderY) { _imageInfo->zOrderY = zOrderY; }
+	inline float GetZorderY() { return _imageInfo->zOrderY; }
 
 	//이미지 좌표 X 
 	inline void SetX(float x) { _imageInfo->x = x; }
