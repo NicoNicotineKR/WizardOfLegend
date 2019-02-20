@@ -223,8 +223,8 @@ public:
 	//inline bool getIsUsingSkill() { return _isUsingSkill; }
 	//inline void setIsUsingSkill(bool isUsingSkill) { _isUsingSkill = isUsingSkill; }
 	inline skills* getCurSkills1() { return _curSkills[0]; }
-	inline skills* getCurSkills2() { return _curSkills[2]; }
-	inline skills* getCurSkills3() { return _curSkills[1]; }
+	inline skills* getCurSkills2() { return _curSkills[1]; }
+	inline skills* getCurSkills3() { return _curSkills[2]; }
 	inline skills* getCurSkills4() { return _curSkills[3]; }
 
 	inline vvMap* getVVMapMemoryAddress() { return _vvMap; }

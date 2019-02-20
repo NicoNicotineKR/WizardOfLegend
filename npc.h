@@ -91,5 +91,6 @@ public:
 	virtual stateNpc getState() { return _state; }
 	virtual void setNpcState(stateNpc state) { _state = state; }
 	virtual void isOnceAniPlay(stateNpc EnumNumber);
+	virtual RECT getNpcRc() { return _rc; }
 };
 

@@ -35,8 +35,9 @@ HRESULT stage1_1::init()
 	_player->enemyLink(_enemyMgr);
 	_player->init(_vvMap);
 	//_player->enemyLink(_enemyMgr);
-	_player->skillIconInit();
 	_player->arrSkillInit();
+	_player->skillIconInit();
+
 	_enemyMgr->setPlayerAdress(_player);
 
 
@@ -109,10 +110,25 @@ void stage1_1::render()
 	VObjectRender();
 
 	//_player->render(getMemDC());
+	//_player->CamRender(getMemDC());
+	//_enemyMgr->render();
+	for (int i = 0; i < _enemyMgr->getVEnemy().size(); ++i)
+	{
+
+		if (_player->getPlayerTileCheckRc().bottom >= _enemyMgr->getVEnemy()[i]->getCollision().bottom)
+		{
+			_enemyMgr->getVEnemy()[i]->CamRender();
+		}
+	}
 	_player->CamRender(getMemDC());
-	_enemyMgr->render();
-
-
+	for (int i = 0; i < _enemyMgr->getVEnemy().size(); ++i)
+	{
+		if (_player->getPlayerTileCheckRc().bottom < _enemyMgr->getVEnemy()[i]->getCollision().bottom)
+		{
+			_enemyMgr->getVEnemy()[i]->CamRender();
+		}
+	}
+	_player->getSkillUI()->render();
 }
 
 void stage1_1::TileMapRender()

@@ -28,12 +28,12 @@ player::~player()
 
 HRESULT player::init(vvMap& vvMapLink)
 {
-	_skillUI = new skillCooldownUI;
-	_skillUI->init();
+
 
 	_vvMap = &vvMapLink;
 	playerKeyAnimationInit();
-	arrStateInit();
+
+	//arrStateInit();
 	_img = IMAGEMANAGER->findImage("player");
 	_ani = KEYANIMANAGER->findAnimation("frontIdle");
 	_playerCircleImg = IMAGEMANAGER->findImage("playerCircle");
@@ -57,8 +57,6 @@ HRESULT player::init(vvMap& vvMapLink)
 
 	_isPlayerAniOnce = false;
 
-	_playerStatusUI = new playerStatusUI;
-	_playerStatusUI->init();
 
 	_boolMoveDirection = BOOLMOVEDIRECTION::NONE;
 	_isLeftTopCheck = false;
@@ -144,6 +142,7 @@ void player::update()
 	_curSkills[1]->update(this);
 	_curSkills[2]->update(this);
 	_curSkills[3]->update(this);
+
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -219,7 +218,7 @@ void player::render(HDC hdc)
 void player::CamRender(HDC hdc)
 {
 	_playerStatusUI->render();
-	_skillUI->render();
+	//_skillUI->render();
 
 	_curSkills[0]->render(this);
 	_curSkills[1]->render(this);
@@ -576,7 +575,7 @@ void player::startAni()
 	}
 	
 	//번개 선더
-	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_TWO)
+	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_THREE)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
@@ -584,7 +583,7 @@ void player::startAni()
 			_ani->start();
 		}
 	}
-	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_TWO)
+	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_THREE)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
@@ -592,7 +591,7 @@ void player::startAni()
 			_ani->start();
 		}
 	}
-	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_TWO)
+	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_THREE)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
@@ -600,7 +599,7 @@ void player::startAni()
 			_ani->start();
 		}
 	}
-	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_TWO)
+	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_THREE)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
@@ -789,6 +788,12 @@ void player::startAni()
 
 void player::arrStateInit()
 {
+	_skillUI = new skillCooldownUI;
+	_skillUI->init();
+
+	_playerStatusUI = new playerStatusUI;
+	_playerStatusUI->init();
+
 	_arrState[static_cast<const int>(STATE::IDLE)] = new state_Idle();
 	_arrState[static_cast<const int>(STATE::MOVE)] = new state_Move();
 	_arrState[static_cast<const int>(STATE::DASH)] = new state_Dash();
@@ -802,33 +807,40 @@ void player::arrStateInit()
 	_arrState[static_cast<const int>(STATE::DEAD)] = new state_Dead();
 	
 	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)] = new chainLightning;
-	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->init(this);
+	
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)] = new flameStrike;
-	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->init(this);
+
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)] = new searingRush;
-	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)]->init(this);
+
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)] = new shockNova;
-	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)]->init(this);
+
 
 	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)] = new stoneShot;
+
+
+	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)]->init(this);
 	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)]->init(this);
-
-
+	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)];
+	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
+	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
+	_curSkills[3] = _arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)];
 	_playerState = _arrState[static_cast<const int>(STATE::IDLE)];
 
 }
 
 void player::arrSkillInit()
 {
-
-	_curSkills[0] = _arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)];
-	_curSkills[1] = _arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)];
-	_curSkills[2] = _arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)];
-	_curSkills[3] = _arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)];
-
+	_arrSkills[static_cast<const int>(CURRENTSKILL::CHAINLIGHTNING)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SEARINGRUSH)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::FLAMESTRIKE)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::SHOCKNOVA)]->init(this);
+	_arrSkills[static_cast<const int>(CURRENTSKILL::STONESHOT)]->init(this);
 }
 
 void player::skillIconInit()

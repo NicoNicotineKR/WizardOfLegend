@@ -30,6 +30,7 @@ HRESULT home::init()
 	_player->enemyLink(_enemyMgr);
 	_player->init(_vvMap);
 	//_player->enemyLink(_enemyMgr);
+	_player->arrStateInit();
 	_player->arrSkillInit();
 	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);
@@ -217,15 +218,31 @@ void home::render()
 	TileMapRender();
 	VObjectRender();
 
-	_player->CamRender(getMemDC());
+	//_player->CamRender(getMemDC());
 	_enemyMgr->render();
-	_nm->render();
+	//_nm->render();
+	for (int i = 0; i < _nm->getvNpce().size(); ++i)
+	{
+		if (_nm->getvNpce()[i]->getNpcRc().bottom <= _player->getCollisionRc().bottom)
+		{
+			_nm->getvNpce()[i]->render();
+		}
+	}
+	_player->CamRender(getMemDC());
+	for (int i = 0; i < _nm->getvNpce().size(); ++i)
+	{
+		if (_nm->getvNpce()[i]->getNpcRc().bottom > _player->getCollisionRc().bottom)
+		{
+			_nm->getvNpce()[i]->render();
+		}
+	}
+
 	_dialogueMaker->render();
 	_skillbookUI->render();
 
 	_playerInfoBoxUI->render();
 	_playerInfoBox->render();
-
+	_player->getSkillUI()->render();
 }
 
 void home::TileMapRender()

@@ -100,6 +100,7 @@ void searingRush::update(player * Player)
 	else
 	{
 		_isSkill = false;
+		_reLoadCount = _maxReLoad;
 	}
 }
 
@@ -114,12 +115,12 @@ void searingRush::render(player* Player)
 			_flameImg[i]->frameRender(Player->getPlayerMemDC(), _flamePos[i].x - _flameImg[i]->getFrameWidth()/2 +20 - CAMERA2D->getCamPosX(),
 				_flamePos[i].y - CAMERA2D->getCamPosY());
 
-			RECT tmprc = _flameRc[i];
-			tmprc.left -= CAMERA2D->getCamPosX();
-			tmprc.right -= CAMERA2D->getCamPosX();
-			tmprc.top -= CAMERA2D->getCamPosY();
-			tmprc.bottom -= CAMERA2D->getCamPosY();
-			Rectangle(Player->getMemDC(), tmprc);
+			//RECT tmprc = _flameRc[i];
+			//tmprc.left -= CAMERA2D->getCamPosX();
+			//tmprc.right -= CAMERA2D->getCamPosX();
+			//tmprc.top -= CAMERA2D->getCamPosY();
+			//tmprc.bottom -= CAMERA2D->getCamPosY();
+			//Rectangle(Player->getMemDC(), tmprc);
 		}
 		
 		

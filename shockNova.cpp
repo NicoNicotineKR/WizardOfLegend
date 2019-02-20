@@ -116,7 +116,7 @@ void shockNova::skillPosSet(player * Player)
 	_pos.x = Player->getPlayerTileCheckRc().right - (Player->getPlayerTileCheckRc().right - Player->getPlayerTileCheckRc().left);
 	_pos.y = Player->getPlayerTileCheckRc().bottom - (Player->getPlayerTileCheckRc().bottom - Player->getPlayerTileCheckRc().top);
 	//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight()/2, 50, 50);
-
+	_reLoadCount = 0;
 	_curCoolTime = 0;
 	_attackCount = 0;
 	_isHit = false;
