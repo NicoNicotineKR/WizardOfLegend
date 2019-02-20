@@ -11,14 +11,6 @@ boss_State_SKILL_Four::~boss_State_SKILL_Four()
 {
 }
 
-void boss_State_SKILL_Four::Direction_left(boss * boss)
-{
-}
-
-void boss_State_SKILL_Four::Direction_right(boss * boss)
-{
-}
-
 void boss_State_SKILL_Four::update(boss * boss)
 {
 }

@@ -82,7 +82,7 @@ protected:
 	int _atkIdX;
 	int _atkIdY;
 	int _countIdY;
-	image* _weaponImg[36];
+	//image* _weaponImg[36];
 
 	//맞은상태니?
 	bool _isHit;

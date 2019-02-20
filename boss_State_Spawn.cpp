@@ -11,14 +11,13 @@ boss_State_Spawn::~boss_State_Spawn()
 {
 }
 
-void boss_State_Spawn::Direction_left(boss * boss)
-{
-}
-
-void boss_State_Spawn::Direction_right(boss * boss)
-{
-}
-
 void boss_State_Spawn::update(boss * boss)
 {
+	if (!boss->getAni()->isPlay())
+	{
+		boss->setState(B_STATE::IDLE);
+		boss->bossCurrentState();
+		boss->setIsAniOnce(true);
+		boss->startAni();
+	}
 }

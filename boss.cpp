@@ -39,11 +39,30 @@ HRESULT boss::init()
 	_crystalImg = IMAGEMANAGER->findImage("bossCrystal");
 	_crystalAni = KEYANIMANAGER->findAnimation("crystal");
 
+	//보스의 중점좌표
+	_vec.x = 0;
+	_vec.y = 0;
+	_pos.x = WINSIZEX /2;
+	_pos.y = WINSIZEY /2;
+	_rc = RectMakeCenter(_pos.x, _pos.y, 150, 200);
+
 	_maxHp = BOSS_HP;
 	_curHp = BOSS_HP;
 
 	_speed = 400.f;
 	_angle = 0;
+	_hitAngle = 0;
+
+	_isAniOnce = false;
+	_isClose = false;
+	_isStun = false;
+	_isDeath = false;
+
+	_state = B_STATE::SLEEP;
+	_direction = NULL;
+
+	_skill_Usage_Count = 0;
+	skillShuffle();
 
 	return S_OK;
 }
@@ -54,10 +73,34 @@ void boss::release()
 
 void boss::update()
 {
+	//스테이지에서 플레이어가 보스방의 전투구역을 밟게되면 셋으로 isClose true만들어줌
+	if (_isClose)
+	{
+		_vec.x = 0;
+		_vec.y = 0;
+
+		_bossState->update(this);
+
+
+
+
+
+		_playerPos.x = _player->getTileCheckRcPos().x + TOP_TILESIZE / 2;
+		_playerPos.y = _player->getTileCheckRcPos().y + TOP_TILESIZE / 2;
+
+		_pos.x += _vec.x;
+		_pos.y += _vec.y;
+	}
 }
 
 void boss::render()
 {
+	if (_isClose)
+	{
+		_img->aniRender(getMemDC(), (_pos.x - IMG_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - IMG_SHAVE_Y) - CAMERA2D->getCamPosY(), _ani);
+		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
+		_crystalImg->aniRender(getMemDC(), (_pos.x - CRYSTAL_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - CRYSTAL_SHAVE_Y) - CAMERA2D->getCamPosY(), _crystalAni);
+	}
 }
 
 void boss::bossKeyAnimationInit()
@@ -122,11 +165,11 @@ void boss::bossKeyAnimationInit()
 	//skill4 - 얼음대거 돌리기
 	int rightSkill4[] = { 55, // 딜레이 필요
 		56, 57, 58, 59, 60, 61 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossRightSkill4", "boss", rightSkill4, 7, 7, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Right", "boss", rightSkill4, 7, 7, false, skillUse, this);
 
 	int leftSkill4[] = { 99,
 		100, 101, 102, 103, 104, 105 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossLeftSkill4", "boss", leftSkill4, 7, 7, false, skillUse, this);
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill4_Left", "boss", leftSkill4, 7, 7, false, skillUse, this);
 
 	//skill5 - 고드름비 내리기
 	int skill5[] = { 48,48,48,48,48,		//딜레이 주는거 필요
@@ -255,6 +298,99 @@ void boss::bossCurrentState()
 
 void boss::startAni()
 {
+
+	if (_isAniOnce)
+	{
+		if (_state == B_STATE::SPAWN)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossSpawn");
+			_ani->start();
+		}
+		if (_state == B_STATE::IDLE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossIdle");
+			_ani->start();
+		}
+		if (_state == B_STATE::CASTING)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossCasting");
+			_ani->start();
+		}
+		if (_state == B_STATE::MOCK)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossMock");
+			_ani->start();
+		}
+		if (_state == B_STATE::STUN)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossStun");
+			_ani->start();
+		}
+		if (_state == B_STATE::DASH)
+		{
+			if (_playerPos.x <= _pos.x)
+			{
+				//애니메이션 왼쪽
+				_ani = KEYANIMANAGER->findAnimation("bossLeftDash");
+				_ani->start();
+				_direction = DIRECTION_LEFT;
+			}
+			else if (_playerPos.x > _pos.x)
+			{
+				//애니메이션 오른쪽
+				_ani = KEYANIMANAGER->findAnimation("bossRightDash");
+				_ani->start();
+				_direction = DIRECTION_RIGHT;
+			}
+		}
+		if (_state == B_STATE::SKILL_ONE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossSkill1");
+			_ani->start();
+		}
+		if (_state == B_STATE::SKILL_TWO)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossSkill2");
+			_ani->start();
+		}
+		if (_state == B_STATE::SKILL_THREE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossSkill3");
+			_ani->start();
+		}
+		if (_state == B_STATE::SKILL_FOUR)
+		{
+			//대쉬에서 정해준 방향이 오른쪽이냐 왼쪽이냐에 따라 이미지 좌우가다름
+			if (_direction == DIRECTION_LEFT)
+			{
+				_ani = KEYANIMANAGER->findAnimation("bossSkill4_Left");
+				_ani->start();
+				_direction = NULL;
+			}
+			else if (_direction == DIRECTION_RIGHT)
+			{
+				_ani = KEYANIMANAGER->findAnimation("bossSkill4_Right");
+				_ani->start();
+				_direction = NULL;
+			}
+		}
+		if (_state == B_STATE::SKILL_FIVE)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossSkill5");
+			_ani->start();
+		}
+		if (_state == B_STATE::DEATH_START)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossDeathStart");
+			_ani->start();
+		}
+		if (_state == B_STATE::DEATH)
+		{
+			_ani = KEYANIMANAGER->findAnimation("bossDeath");
+			_ani->start();
+		}
+		_isAniOnce = false;
+	}
 }
 
 void boss::skillUse(void * obj)
@@ -277,7 +413,7 @@ void boss::skillShuffle()
 	//shuffle;
 	int destNum, sourNum;
 	int temp;
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < SHUFFLE_NUM; i++)
 	{
 		destNum = RND->getInt(5);
 		sourNum = RND->getInt(5);
@@ -327,4 +463,12 @@ void boss::useSkill()
 	
 
 
+}
+
+void boss::setBossStateCasting()
+{
+	_state = B_STATE::CASTING;
+	bossCurrentState();
+	_isAniOnce = true;
+	startAni();
 }

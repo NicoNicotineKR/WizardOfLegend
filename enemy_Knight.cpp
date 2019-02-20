@@ -224,9 +224,9 @@ void enemy_Knight::enemyKeyAnimationInit()
 
 	//attack
 	int rightAttack[] = { 19 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_rightAttack", "knight", rightAttack, 1, 1, false, knight_Move, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_rightAttack", "knight", rightAttack, 1, 1, false);
 	int leftAttack[] = { 20 };
-	KEYANIMANAGER->addArrayFrameAnimation("knight_leftAttack", "knight", leftAttack, 1, 1, false, knight_Move, this);
+	KEYANIMANAGER->addArrayFrameAnimation("knight_leftAttack", "knight", leftAttack, 1, 1, false);
 
 	//hit
 	int rightHit[] = { 24,25 };
@@ -350,17 +350,6 @@ void enemy_Knight::move()
 			_enemyState->direction_right(this);
 		}
 	}
-}
-
-void enemy_Knight::knight_Move(void * obj)
-{
-	enemy_Knight* knight = (enemy_Knight*)obj;
-
-	knight->setState(E_STATE::MOVE);
-	knight->fixDirection();
-	knight->currentEnemyState();
-	knight->setIsAniOnce(true);
-	knight->startAni();
 }
 
 //void enemy_Knight::knight_rightAttack(void * obj)

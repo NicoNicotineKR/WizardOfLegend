@@ -7,17 +7,17 @@
 class bossState;
 class player;
 
-enum class B_ANIDIRECTION
-{
-	LEFT,
-	RIGHT
-};
+//enum class B_ANIDIRECTION
+//{
+//	LEFT,
+//	RIGHT
+//};
 
 enum class B_STATE
 {
 	SLEEP,			// 보스 발견하기전 
-	IDLE,			// 아이들...인데 있나?
 	SPAWN,			// 최초 다이얼로그 나오기전 스폰하는거
+	IDLE,			// 아이들...인데 있나?
 	CASTING,		// 조롱 or 스턴후 보스턴되기전에 손휘두름
 	MOCK,			// 스킬 다쓰고 조롱하는거 이떄 맞으면 스턴됨 (hit 없음)
 	STUN,			// 조롱하다가 1대라도 맞으면 스턴상태들어감
@@ -31,21 +31,27 @@ enum class B_STATE
 	DEATH,			// 얼음되서 사라짐 (죽음 시작에서 나온 다이얼로그 에서 키눌러서 다이얼로그 종료되면 얼음되고 깨짐)
 	MAX
 };
+//버려진것들
+//	POINTFLOAT		_imgPos;			//이미지 출력용 좌표
+//	RECT			_collisionRc;		//히트 판정용 렉트
+//	POINTFLOAT		_collisionPos;		//히트 판정 좌표
+//	B_ANIDIRECTION	_aniDirection;		//애니메이션
+//	POINTFLOAT		_wingPos;			//날개 좌표 (보스 띄우는 좌표 + 매직넘버 해줘야함)
+//	POINTFLOAT		_crystalPos;		//크리스탈 좌표 (보스 띄우는 좌표 + 매직넘버 해줘야함)
+
+//	vector<vector<tile*>> _vvMap;
+//	void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
 
 class boss : public gameNode
 {
 private:    
 	// 순혈
 	image*			_img;				//이미지
-	POINTFLOAT		_imgPos;			//이미지 출력용 좌표
 	animation*		_ani;				//애니메이션
 
-	POINTFLOAT		_pos;				//중심 좌표
 	POINTFLOAT		_vec;				//벡터 값
-	RECT			_rc;				//중심 렉트(타일충돌에 쓰임)
-
-	RECT			_collisionRc;		//히트 판정용 렉트
-	POINTFLOAT		_collisionPos;		//히트 판정 좌표
+	POINTFLOAT		_pos;				//중심 좌표
+	RECT			_rc;				//중심 렉트(맞는판정에쓰임)
 
 	int				_maxHp;				//최대체력
 	int				_curHp;				//현재체력
@@ -58,8 +64,8 @@ private:
 	bool			_isStun;			//스턴상태니?
 	bool			_isDeath;			//죽었니?
 
-	B_ANIDIRECTION	_aniDirection;		//애니메이션
 	B_STATE			_state;				//상태
+	int				_direction;			//대쉬에서만 쓸 방향
 
 	bossState*		_bossState;
 	bossState*		_arrState[static_cast<const int>(B_STATE::MAX)];
@@ -67,18 +73,14 @@ private:
 	//날개
 	image*			_wingImg;			//날개 이미지
 	animation*		_wingAni;			//날개 애니메이션
-	POINTFLOAT		_wingPos;			//날개 좌표 (보스 띄우는 좌표 + 매직넘버 해줘야함)
 
 	//등장 and 죽음용 crystal img
 	image*			_crystalImg;		//크리스탈 이미지
 	animation*		_crystalAni;		//크리스탈 애니메이션
-	POINTFLOAT		_crystalPos;		//크리스탈 좌표 (보스 띄우는 좌표 + 매직넘버 해줘야함)
 
 	// 혼혈
-
 	player* _player;					//플레이어 주소 여따 넣을거임
 	POINTFLOAT _playerPos;				//플레이어 좌표 박을거임
-	vector<vector<tile*>> _vvMap;
 
 	//	재만 추가목록 ----------------------------
 	//	스킬
@@ -96,6 +98,17 @@ private:
 private:
 //콘스트 변수 넣을공간
 	const int BOSS_HP = 1000;
+	const int IMG_SHAVE_X = 0;
+	const int IMG_SHAVE_Y = 0;
+	const int COLLISION_SHAVE_X = 0;
+	const int COLLISION_SHAVE_Y = 0;
+	const int WING_SHAVE_X = 0;
+	const int WING_SHAVE_Y = 0;
+	const int CRYSTAL_SHAVE_X = 0;
+	const int CRYSTAL_SHAVE_Y = 0;
+	const int SHUFFLE_NUM = 30;
+	const int DIRECTION_LEFT = -1;
+	const int DIRECTION_RIGHT = 1;
 public:
 	boss();
 	~boss();
@@ -105,7 +118,6 @@ public:
 	void update();
 	void render();
 
-	void setMapAdress(vector<vector<tile*>> vvMap) { _vvMap = vvMap; }
 	void setPlayerAdress(player* player) { _player = player; }
 
 	//보스 키 애니메이션 초기화
@@ -138,20 +150,27 @@ public:
 	void skillShuffle();
 	void useSkill();
 
-	//---------------------------------------------------------------------------------------------------------------------------------------
+	//다이얼로그 끝나면 캐스팅모드 들어가는거 - 형우형이 쓸예정
+	void setBossStateCasting();
 
+	//---------------------------------------------------------------------------------------------------------------------------------------
+	//버려진것
+//	POINTFLOAT				getImgPos()										{ return _imgPos; }
+//	RECT					getCollisionRc()								{ return _collisionRc; }
+//	POINTFLOAT				getCollisionPos()								{ return _collisionPos; }
+//	B_ANIDIRECTION			getAniDirection()								{ return _aniDirection; }
+//	POINTFLOAT				getWingPos()									{ return _wingPos; }
+//	POINTFLOAT				getCrystalPos()									{ return _crystalPos; }
+//	vector<vector<tile*>>	getMap()										{ return _vvMap; }
 	//get
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	image*					getImg()										{ return _img; }
-	POINTFLOAT				getImgPos()										{ return _imgPos; }
 	animation*				getAni()										{ return _ani; }
 
 	POINTFLOAT				getPos()										{ return _pos; }
 	POINTFLOAT				getVec()										{ return _vec; }
 	RECT					getRc()											{ return _rc; }
 
-	RECT					getCollisionRc()								{ return _collisionRc; }
-	POINTFLOAT				getCollisionPos()								{ return _collisionPos; }
 
 	int						getMaxHp()										{ return _maxHp; }
 	int						getCurHp()										{ return _curHp; }
@@ -164,35 +183,36 @@ public:
 	bool					getIsStun()										{ return _isStun; }
 	bool					getIsDead()										{ return _isDeath; }
 
-	B_ANIDIRECTION			getAniDirection()								{ return _aniDirection; }
 	B_STATE					getState()										{ return _state; }
 	bossState*				getBossState()									{ return _bossState; }
 
 	image*					getWingImg()									{ return _wingImg; }
 	animation*				getWingAni()									{ return _wingAni; }
-	POINTFLOAT				getWingPos()									{ return _wingPos; }
 
 	image*					getCrystalImg()									{ return _crystalImg; }
 	animation*				getCrystalAni()									{ return _crystalAni; }
-	POINTFLOAT				getCrystalPos()									{ return _crystalPos; }
 
 	player*					getPlayer()										{ return _player; }
 	POINTFLOAT				getPlayerPos()									{ return _playerPos; }
-	vector<vector<tile*>>	getMap()										{ return _vvMap; }
 	//---------------------------------------------------------------------------------------------------------------------------------------
 
+	//버려진것
+//	void					setCollisionRc(RECT collisionRc)				{ _collisionRc = collisionRc; }
+//	void					setCollisionPos(POINTFLOAT collisionPos)		{ _collisionPos = collisionPos; }
+//	void					setAniDirection(B_ANIDIRECTION aniDirection)	{ _aniDirection = aniDirection; }
+//	void					setWingPos(POINTFLOAT wingPos)					{ _wingPos = wingPos; }
+//	void					setCrystalPos(POINTFLOAT crystalPOs)			{ _crystalPos = crystalPOs; }
+//	vector<vector<tile*>>	setMap(vector<vector<tile*>> vvMap)				{ _vvMap = vvMap; }
+//	void					setImgPos(POINTFLOAT imgPos)					{ _imgPos = imgPos; }
 	//set
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	void					setImg(image* img)								{ _img = img; }
-	void					setImgPos(POINTFLOAT imgPos)					{ _imgPos = imgPos; }
 	void					setAni(animation* ani)							{ _ani = ani; }
 
 	void					setPos(POINTFLOAT pos)							{ _pos = pos; }
 	void					setVec(POINTFLOAT vec)							{ _vec = vec; }
 	void					setRc(RECT rc)									{ _rc = rc; }
 
-	void					setCollisionRc(RECT collisionRc)				{ _collisionRc = collisionRc; }
-	void					setCollisionPos(POINTFLOAT collisionPos)		{ _collisionPos = collisionPos; }
 
 	void					setMaxHp(int maxHp)								{ _maxHp = maxHp; }
 	void					setCurHp(int curHp)								{ _curHp = curHp; }
@@ -205,21 +225,17 @@ public:
 	void					setIsStun(bool isStun)							{ _isStun = isStun; }
 	void					setIsDead(bool isDead)							{ _isDeath = isDead; }
 
-	void					setAniDirection(B_ANIDIRECTION aniDirection)	{ _aniDirection = aniDirection; }
 	void					setState(B_STATE state)							{ _state = state; }
 	void					setBossState(bossState* bossState)				{ _bossState = bossState; }
 
 	void					setWingImg(image* wingImg)						{ _wingImg = wingImg; }
 	void					setWingAni(animation* wingAni)					{ _wingAni = wingAni; }
-	void					setWingPos(POINTFLOAT wingPos)					{ _wingPos = wingPos; }
 
 	void					setCrystalImg(image* crystalImg)				{ _crystalImg = crystalImg; }
 	void					setCrystalAni(animation* crystalAni)			{ _crystalAni = crystalAni; }
-	void					setCrystalPos(POINTFLOAT crystalPOs)			{ _crystalPos = crystalPOs; }
 
 	player*					setPlayer(player* player)						{ _player = player; }
 	POINTFLOAT				setPlayerPos(POINTFLOAT playerPos)				{ _playerPos = playerPos; }
-	vector<vector<tile*>>	setMap(vector<vector<tile*>> vvMap)				{ _vvMap = vvMap; }
 	//---------------------------------------------------------------------------------------------------------------------------------------
 };
 

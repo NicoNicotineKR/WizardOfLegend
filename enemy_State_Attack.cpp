@@ -21,6 +21,15 @@ void enemy_State_Attack::direction_right(enemy * enemy)
 
 void enemy_State_Attack::update(enemy * enemy)
 {
+	if (!enemy->getAni()->isPlay())
+	{
+		enemy->setState(E_STATE::MOVE);
+		enemy->fixDirection();
+		enemy->currentEnemyState();
+		enemy->setIsAniOnce(true);
+		enemy->startAni();
+	}
+
 	if (enemy->getPath()->size() > 0)
 	{
 		enemy->getPath()->clear();

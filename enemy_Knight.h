@@ -29,9 +29,5 @@ public:
 
 	int getAtkRange() { return ATTACK_RANGE; }
 	int getWeaponRange() { return WEAPON_RANGE; }
-
-	static void knight_Move(void* obj);
-//	static void knight_rightAttack(void* obj);
-//	static void knight_leftAttack(void* obj);
 };
 

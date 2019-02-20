@@ -93,6 +93,8 @@ HRESULT enemy_Ghoul::init()
 	_effectTime = 15;
 	_effect_Shave_PosY = POS_Y_HIT_SHAVE;
 
+
+
 	return S_OK;
 }
 
@@ -159,10 +161,10 @@ void enemy_Ghoul::render()
 		TextOut(getMemDC(), 50, 200, str, strlen(str));
 
 	}
-//	char str[128];
-//	sprintf_s(str, "idx : %f", _hitAngle);
-//
-//	TextOut(getMemDC(), 100, 200, str, strlen(str));
+	char str[128];
+	sprintf_s(str, "idx : %d",sizeof(_effectImg));
+
+	TextOut(getMemDC(), 100, 200, str, strlen(str));
 
 	//Rectangle(getMemDC(), _player->getPos().x, _player->getPos().y, _player->getPos().x + 10, _player->getPos().y + 10);
 
@@ -226,9 +228,9 @@ void enemy_Ghoul::enemyKeyAnimationInit()
 
 	//attack
 	int rightAttack[] = { 2 };
-	KEYANIMANAGER->addArrayFrameAnimation("ghoul_rightAttack", "ghoul", rightAttack, 1, 2, false, ghoul_Move, this);
+	KEYANIMANAGER->addArrayFrameAnimation("ghoul_rightAttack", "ghoul", rightAttack, 1, 2, false);
 	int leftAttack[] = { 3 };
-	KEYANIMANAGER->addArrayFrameAnimation("ghoul_leftAttack", "ghoul", leftAttack, 1, 2, false, ghoul_Move, this);
+	KEYANIMANAGER->addArrayFrameAnimation("ghoul_leftAttack", "ghoul", leftAttack, 1, 2, false);
 
 	//hit
 	int rightHit[] = { 29,18 };
@@ -351,15 +353,4 @@ void enemy_Ghoul::move()
 			_enemyState->direction_right(this);
 		}
 	}
-}
-
-void enemy_Ghoul::ghoul_Move(void * obj)
-{
-	enemy_Ghoul* ghoul = (enemy_Ghoul*)obj;
-
-	ghoul->setState(E_STATE::MOVE);
-	ghoul->fixDirection();
-	ghoul->currentEnemyState();
-	ghoul->setIsAniOnce(true);
-	ghoul->startAni();
 }

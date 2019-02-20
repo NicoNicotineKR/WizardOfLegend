@@ -29,7 +29,5 @@ public:
 
 	int getAtkRange() { return ATTACK_RANGE; }
 	int getWeaponRange() { return WEAPON_RANGE; }
-
-	static void ghoul_Move(void* obj);
 };
 
