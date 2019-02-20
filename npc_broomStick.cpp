@@ -61,11 +61,13 @@ void npc_broomStick::update()
 			{
 				if (RndNumber == 0)
 				{
+					SOUNDMANAGER->stop("Broom");
 					_state = stateNpc::IDLE;
 					isOnceAniPlay(_state);
 				}
 				if (RndNumber == 1)
 				{
+					SOUNDMANAGER->play("Broom", OPTIONMANAGER->getSoundEffectVolume());
 					_state = stateNpc::IDLE_ACT1;
 					isOnceAniPlay(_state);
 				}
@@ -74,11 +76,13 @@ void npc_broomStick::update()
 			{
 				if (RndNumber == 0)
 				{
+					SOUNDMANAGER->stop("Broom");
 					_state = stateNpc::IDLE;
 					isOnceAniPlay(_state);
 				}
 				if (RndNumber == 1)
 				{
+					SOUNDMANAGER->play("Broom", OPTIONMANAGER->getSoundEffectVolume());
 					_state = stateNpc::IDLE_ACT1;
 					isOnceAniPlay(_state);
 				}

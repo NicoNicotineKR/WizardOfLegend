@@ -454,21 +454,25 @@ void player::startAni()
 	//MOVE 애니메이션
 	if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::MOVE)
 	{
+		SOUNDMANAGER->play("PlayerFootstep", OPTIONMANAGER->getSoundEffectVolume());
 		_ani = KEYANIMANAGER->findAnimation("rightMove");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::MOVE)
 	{
+		SOUNDMANAGER->play("PlayerFootstep", OPTIONMANAGER->getSoundEffectVolume());
 		_ani = KEYANIMANAGER->findAnimation("leftMove");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::MOVE)
 	{
+		SOUNDMANAGER->play("PlayerFootstep", OPTIONMANAGER->getSoundEffectVolume());
 		_ani = KEYANIMANAGER->findAnimation("backMove");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::MOVE)
 	{
+		SOUNDMANAGER->play("PlayerFootstep", OPTIONMANAGER->getSoundEffectVolume());
 		_ani = KEYANIMANAGER->findAnimation("frontMove");
 		_ani->start();
 	}
@@ -476,21 +480,25 @@ void player::startAni()
 	//IDLE 애니메이션
 	if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::IDLE)
 	{
+		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("rightIdle");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::IDLE)
 	{
+		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("leftIdle");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::IDLE)
 	{
+		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("backIdle");
 		_ani->start();
 	}
 	else if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::IDLE)
 	{
+		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("frontIdle");
 		_ani->start();
 	}

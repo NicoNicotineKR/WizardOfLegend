@@ -20,15 +20,32 @@ HRESULT optionManager::init()
 	IMAGEMANAGER->addFrameImage("ShortButton", "images/option/button.bmp", 64, 32, 2, 1, true, RGB(255, 0, 255));
 
 	//=====================================사운드================================================
+	//백그라운드 음악
 	SOUNDMANAGER->addSound("logoSound", "sound/logoSound.mp3", true, false);
 	SOUNDMANAGER->addSound("titleMusic", "sound/intro.mp3", true, true);
 	SOUNDMANAGER->addSound("PlayerRoom", "sound/PlayerRoom.mp3", true, true);
 	SOUNDMANAGER->addSound("Ice", "sound/Ice.mp3", true, true);
 
+	//플레이어
+	SOUNDMANAGER->addSound("PlayerFootstep", "sound/PlayerFootstep.mp3", true, true);
+	SOUNDMANAGER->addSound("chainLightning", "sound/chainLightning.mp3", true, true);
+	SOUNDMANAGER->addSound("chainLightning2", "sound/chainLightning2.mp3", true, true);
+	SOUNDMANAGER->addSound("flameStrike", "sound/flameStrike.mp3", true, false);
+	SOUNDMANAGER->addSound("searingRush", "sound/searingRush.mp3", true, false);
+	SOUNDMANAGER->addSound("stoneShot", "sound/stoneShot.mp3", true, false);
 
+	//몬스터
+	SOUNDMANAGER->addSound("goul", "sound/goul.mp3", true, false);
+	SOUNDMANAGER->addSound("KnightAttack", "sound/KnightAttack.mp3", true, false);
 
+	//보스
+	SOUNDMANAGER->addSound("Bossbackground", "sound/Bossbackground.mp3", true, false);
+	SOUNDMANAGER->addSound("IceBossHurt", "sound/IceBossHurt.mp3", true, false);
+	SOUNDMANAGER->addSound("IceBossLaugh", "sound/IceBossLaugh.mp3", true, false);
+	SOUNDMANAGER->addSound("IceShakeLong", "sound/IceShakeLong.mp3", true, false);
 
-
+	//npc
+	SOUNDMANAGER->addSound("Broom", "sound/Broom.mp3", true, true);
 
 
 	//=====================================사운드================================================

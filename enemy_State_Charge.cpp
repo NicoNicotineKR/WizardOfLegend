@@ -26,6 +26,15 @@ void enemy_State_Charge::direction_Left(enemy * enemy)
 		enemy->currentEnemyState();
 		enemy->setIsAniOnce(true);
 		enemy->startAni();
+
+		if (enemy->getWhoIM() == GHOUL)
+		{
+			SOUNDMANAGER->play("goul", OPTIONMANAGER->getSoundEffectVolume());
+		}
+		if (enemy->getWhoIM() == KNIGHT)
+		{
+			SOUNDMANAGER->play("KnightAttack", OPTIONMANAGER->getSoundEffectVolume());
+		}
 	}
 }
 
