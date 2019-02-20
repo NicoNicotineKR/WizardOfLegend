@@ -54,6 +54,12 @@ HRESULT home::init()
 	_skillbookUI->LinkToPlayer(_player);
 	_skillbookUI->init();
 
+	_playerInfoBoxUI = new playerInfoBoxUI;
+	_playerInfoBoxUI->init();
+
+	_playerInfoBox = new playerInfoBox;
+	_playerInfoBox->init();
+
 
 	//시작지점
 	_player->setPosX(1000);
@@ -62,6 +68,7 @@ HRESULT home::init()
 	_isTalk = false;
 	_isSkillbookMode = false;
 	_skillbookUI->LinkSkillBookUIMode(&_isSkillbookMode);
+	_allStop2 = false;
 
 	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
 	SOUNDMANAGER->play("PlayerRoom", OPTIONMANAGER->getSoundBackVolume());
@@ -78,7 +85,7 @@ void home::update()
 {
 	if (_allStop == false)
 	{
-		if (_dialogueMaker->getisStart() == false && !_isSkillbookMode)
+		if (_dialogueMaker->getisStart() == false && !_isSkillbookMode && _allStop2 == false)
 		{
 			_player->update();
 		}
@@ -200,6 +207,9 @@ void home::update()
 
 	_skillbookUI->update();
 
+	_playerInfoBox->update();
+	_allStop2 = _playerInfoBox->getIsStart();
+
 }
 
 void home::render()
@@ -212,6 +222,9 @@ void home::render()
 	_nm->render();
 	_dialogueMaker->render();
 	_skillbookUI->render();
+
+	_playerInfoBoxUI->render();
+	_playerInfoBox->render();
 
 }
 

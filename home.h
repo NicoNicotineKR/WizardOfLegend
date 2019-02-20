@@ -7,6 +7,9 @@
 #include "npcMgr.h"
 #include "skillbookUI.h"
 
+#include "playerInfoBoxUI.h"
+#include "playerInfoBox.h"
+
 
 class home : public gameNode
 {
@@ -25,6 +28,9 @@ private:
 	npcMgr* _nm;
 	skillbookUI* _skillbookUI;
 
+	playerInfoBoxUI* _playerInfoBoxUI;
+	playerInfoBox* _playerInfoBox;
+	bool _allStop2;
 
 	int _tileNumX;
 	int _tileNumY;

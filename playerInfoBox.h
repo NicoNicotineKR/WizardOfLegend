@@ -80,5 +80,7 @@ public:
 	void release();
 	void update();
 	void render();
+
+	bool getIsStart(){return _isStart;}
 };
 

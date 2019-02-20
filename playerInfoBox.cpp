@@ -16,11 +16,14 @@ HRESULT playerInfoBox::init()
 	_isStart = false;
 
 	IMAGEMANAGER->addImage("box", "images/UIs/playerInfoBox/playerinfoBox.bmp", 480, 705, true, RGB(255, 0, 255));
+
 	IMAGEMANAGER->addImage("edge", "images/UIs/playerInfoBox/buttonFrameIcon2.bmp", 70, 70, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("changeFont", "images/UIs/playerInfoBox/changeFont.bmp", 354, 45, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("button", "images/UIs/playerInfoBox/playerinfoBoxButton.bmp", 360, 60, 6, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("buttonBox", "images/UIs/playerInfoBox/buttonFrameIcon1.bmp", 120, 60, 2, 1, true, RGB(255, 0, 255));
 
+	IMAGEMANAGER->addFrameImage("button", "images/UIs/playerInfoBox/playerinfoBoxButton.bmp", 360, 60, 6, 1, true, RGB(255, 0, 255));
+
+	IMAGEMANAGER->addFrameImage("buttonBox", "images/UIs/playerInfoBox/buttonFrameIcon1.bmp", 120, 60, 2, 1, true, RGB(255, 0, 255));
+	
 	_box.img = IMAGEMANAGER->findImage("box");
 	_box.pos.x = 200;
 	_box.pos.y = 100;
@@ -91,7 +94,6 @@ void playerInfoBox::update()
 		//기능2 - 스킬번호바꾸기 
 		if (_isChanging == false)
 		{
-			//나는 형우 짱짱맨 <- 정신나갔네(재만)
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON) || KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
 				//현제 선택된 Idx를 선택된 스킬박스로 만듬
@@ -178,7 +180,7 @@ void playerInfoBox::update()
 		}
 
 		//기능4-1 - 키보드선택(오른쪽)
-		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		if (KEYMANAGER->isOnceKeyDown('D'))
 		{
 			if (_selectIdx < 6)
 			{
@@ -196,7 +198,7 @@ void playerInfoBox::update()
 			}
 		}
 		//기능4-2 - 키보드선택(왼쪽)
-		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
 			if (_selectIdx > -1)
 			{
