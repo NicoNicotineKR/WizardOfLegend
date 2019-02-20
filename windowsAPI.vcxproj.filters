@@ -462,6 +462,9 @@
     <ClInclude Include="zOrder.h">
       <Filter>2DFramework</Filter>
     </ClInclude>
+    <ClInclude Include="stage1_Boss.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -817,6 +820,9 @@
     </ClCompile>
     <ClCompile Include="zOrder.cpp">
       <Filter>2DFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="stage1_Boss.cpp">
+      <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

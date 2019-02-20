@@ -251,6 +251,7 @@
     <ClInclude Include="snowflakeRotate.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stage1_1.h" />
+    <ClInclude Include="stage1_Boss.h" />
     <ClInclude Include="stageBoss1.h" />
     <ClInclude Include="stageMapLoader.h" />
     <ClInclude Include="state_Dash.h" />
@@ -373,6 +374,7 @@
     <ClCompile Include="snowflakeRotate.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="stage1_1.cpp" />
+    <ClCompile Include="stage1_Boss.cpp" />
     <ClCompile Include="stageBoss1.cpp" />
     <ClCompile Include="stageMapLoader.cpp" />
     <ClCompile Include="state_Dash.cpp" />

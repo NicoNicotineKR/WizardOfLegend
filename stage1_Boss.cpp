@@ -1,24 +1,18 @@
 #include "stdafx.h"
-#include "stage1_1.h"
+#include "stage1_Boss.h"
 
 
-stage1_1::stage1_1()
+stage1_Boss::stage1_Boss()
 {
 }
 
 
-stage1_1::~stage1_1()
+stage1_Boss::~stage1_Boss()
 {
 }
 
-HRESULT stage1_1::init()
+HRESULT stage1_Boss::init()
 {
-	IMAGEMANAGER->addFrameImage("tileIce", "images/map/IceBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
-	IMAGEMANAGER->addFrameImage("objIce", "images/map/IceBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
-	IMAGEMANAGER->addFrameImage("objEarth", "images/map/EarthBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
-	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
-	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
-
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
 	_miniMap = new minimapUI;
@@ -30,15 +24,13 @@ HRESULT stage1_1::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	//	재만 순서바꿈 - cuz 스킬과 연결
 	_player->enemyLink(_enemyMgr);
 	_player->init(_vvMap);
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
-	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 12);
+	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 14);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
-	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
 
 	_enemyMgr->setPlayerAdress(_player);
 	_enemyMgr->setMapAdress(_vvMap);
@@ -50,30 +42,28 @@ HRESULT stage1_1::init()
 	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
-	
+
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
-	
+
 	delete _stageMapLoader;
 	_stageMapLoader = nullptr;
 
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
-	
+
 	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
-	SOUNDMANAGER->play("Ice", OPTIONMANAGER->getSoundBackVolume());
-	OPTIONMANAGER->setTempSoundName("Ice");
+	SOUNDMANAGER->play("Bossbackground", OPTIONMANAGER->getSoundBackVolume());
+	OPTIONMANAGER->setTempSoundName("Bossbackground");
 
-	_isOneSavePlayerHp = false;
-
+	_player->setCurHp(_savePlayerHp);
 
 	return S_OK;
 }
 
-void stage1_1::release()
+void stage1_Boss::release()
 {
-
 }
 
-void stage1_1::update()
+void stage1_Boss::update()
 {
 	if (_allStop == false)
 	{
@@ -106,21 +96,14 @@ void stage1_1::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
-
-
 }
 
-void stage1_1::render()
+void stage1_Boss::render()
 {
-	//기능1. 클리핑추가해야됨 ############################################
 	TileMapRender();
-	//기능2. 클리핑추가해야됨 ############################################
 	VObjectRender();
 
 	_boss->render();
-	//_player->render(getMemDC());
-	//_player->CamRender(getMemDC());
-	//_enemyMgr->render();
 	for (int i = 0; i < _enemyMgr->getVEnemy().size(); ++i)
 	{
 
@@ -139,17 +122,9 @@ void stage1_1::render()
 	}
 	_player->getSkillUI()->render();
 	_miniMap->render();
-
-
-	if (KEYMANAGER->isOnceKeyDown(VK_F5))
-	{
-		_isOneSavePlayerHp = true;
-		_savePlayerHp = _player->getCurHp();
-		SCENEMANAGER->changeScene("stage1_Boss");
-	}
 }
 
-void stage1_1::TileMapRender()
+void stage1_Boss::TileMapRender()
 {
 	for (int i = _player->getLeftBottomIndex().x - 52; i < _player->getLeftBottomIndex().x + 52; i++)
 	{
@@ -165,7 +140,7 @@ void stage1_1::TileMapRender()
 	}
 }
 
-void stage1_1::VObjectRender()
+void stage1_Boss::VObjectRender()
 {
 	for (int i = 0; i < _vObjects.size(); i++)
 	{

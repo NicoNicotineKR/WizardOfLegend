@@ -6,22 +6,13 @@
 #include "minimapUI.h"
 #include "boss.h"
 
-class stage1_1 : public gameNode
+
+class stage1_Boss : public gameNode
 {
 private:
 	typedef vector<tile*> vLine;
 	typedef vector<vLine> vvMap;
 	typedef vector<objectInfo*> vObjects;
-
-	//타일의 포인터형을 담는 백터의 이름을 vLine만들겠다.
-	//vLine담는 백터를 vvMap이라고 이름을 짓겟다.
-
-	//vector<objectInfo*>			_vObjMgr;
-	//vector<objectInfo*>::iterator	_viObjMgr;
-
-	//objectInfo포인터형을 담는 백터를 만들겠다.
-	//vector<int>
-	//int자료형을 담는 백터를 만들겠다.
 
 	stageMapLoader* _stageMapLoader;
 	vvMap		_vvMap;
@@ -37,12 +28,11 @@ private:
 
 	bool _allStop;
 
-
-	int _savePlayerHp;
-	bool _isOneSavePlayerHp;
+	int		_savePlayerHp;
+	bool	_isOneSavePlayerHp;
 public:
-	stage1_1();
-	~stage1_1();
+	stage1_Boss();
+	~stage1_Boss();
 
 	HRESULT init();
 	void release();
@@ -54,8 +44,6 @@ public:
 	void VObjectRender();
 
 	void setPlayerLink(player* player) { _player = player; }
-	int getPlayerHp(){return _savePlayerHp;}
-	int getIsOneSavePlayerHp(){return _isOneSavePlayerHp;}
-
+	void setPlayerStartHp(int playerHp){ _savePlayerHp = playerHp;}
 };
 

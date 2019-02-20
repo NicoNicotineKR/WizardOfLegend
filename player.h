@@ -256,6 +256,7 @@ public:
 	inline POINTFLOAT getDashLastPos() { return _dashLastPos; }
 
 	inline int getCurHp() { return _curHp; }
+	inline void setCurHp(int _savePlayerHp){ _curHp = _savePlayerHp;}
 
 
 	//	재만추가
