@@ -263,5 +263,7 @@ public:
 	//	재만추가
 	inline skills* getSkillsInfo(int skillEnum) { return _arrSkills[skillEnum]; }
 	inline void setPlayerSkill(int idx, skills* skill) {_curSkills[idx] = skill; }
+	
+	inline enemyMgr* getEnemyMgrAddress() { return _em; }
 };
 

@@ -26,6 +26,9 @@ HRESULT chainLightning::init(player* Player)
 	_thunderFloorImg->SetFrameX(0);
 	_thunderFloorImg->SetFrameY(0);
 	_isSkill = false;
+
+	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
+	_em = Player->getEnemyMgrAddress();
 	return S_OK;
 }
 

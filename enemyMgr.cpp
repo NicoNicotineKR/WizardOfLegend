@@ -145,8 +145,32 @@ void enemyMgr::update()
 
 
 
-		//맞았을때
+		//맞았을때 -> 스킬에서 데미지주면서, em통해서 스테이터스 힛 해주겠음. 여기 밑에부분들 다 필요업뜸.
 		if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills1()->getCollisionRc()))
+		{
+			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+			_vEnemy[i]->setState(E_STATE::HIT);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsHit(true);
+		}
+		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills2()->getCollisionRc()))
+		{
+			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+			_vEnemy[i]->setState(E_STATE::HIT);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsHit(true);
+		}
+		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills3()->getCollisionRc()))
+		{
+			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
+			_vEnemy[i]->setState(E_STATE::HIT);
+			_vEnemy[i]->currentEnemyState();
+			_vEnemy[i]->setIsAniOnce(true);
+			_vEnemy[i]->setIsHit(true);
+		}
+		else if (_vEnemy[i]->getState() != E_STATE::DEATH &&IntersectRect(&temp, &_vEnemy[i]->getCollision(), &_player->getCurSkills4()->getCollisionRc()))
 		{
 			_vEnemy[i]->setCurHP(_vEnemy[i]->getCurHP() - 1);
 			_vEnemy[i]->setState(E_STATE::HIT);

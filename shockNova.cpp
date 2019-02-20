@@ -28,6 +28,9 @@ HRESULT shockNova::init(player * Player)
 	_thunderSharftImg->SetFrameX(0);
 	_thunderSharftImg->SetFrameY(0);
 	_isSkill = false;
+
+	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
+	_em = Player->getEnemyMgrAddress();
 	return S_OK;
 }
 

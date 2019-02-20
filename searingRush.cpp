@@ -32,6 +32,9 @@ HRESULT searingRush::init(player * Player)
 	_attackCount = 0;
 
 	_isSkill = false;
+
+	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
+	_em = Player->getEnemyMgrAddress();
 	return S_OK;
 }
 

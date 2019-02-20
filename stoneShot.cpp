@@ -27,6 +27,9 @@ HRESULT stoneShot::init(player * Player)
 		_stoneShotPos[i].x = 0;
 		_stoneShotPos[i].y = 0;
 	}
+
+	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
+	_em = Player->getEnemyMgrAddress();
 	return S_OK;
 }
 

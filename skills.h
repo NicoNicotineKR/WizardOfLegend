@@ -3,6 +3,7 @@
 #include "tileNode.h"
 #include "tile.h"
 #include "player.h"
+#include "enemyMgr.h"
 
 class player;
 
@@ -34,6 +35,9 @@ protected:
 
 	RECT	_flameRc[5];
 	RECT	_stoneShotRc[3];
+
+	//	재만추가 -> 에너미들한테 스킬이 데미지줘야함
+	enemyMgr* _em;
 
 public:
 
