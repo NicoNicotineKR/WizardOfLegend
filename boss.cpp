@@ -133,12 +133,12 @@ void boss::render()
 {
 	if (_isArea)
 	{
-		char str[128];
-		sprintf_s(str, "보스체력 %d", _curHp);
-		TextOut(getMemDC(), 300, 300, str, strlen(str));
-
-		sprintf_s(str, "보스상태 %d", _state);
-		TextOut(getMemDC(), 300, 350, str, strlen(str));
+		//char str[128];
+		//sprintf_s(str, "보스체력 %d", _curHp);
+		//TextOut(getMemDC(), 300, 300, str, strlen(str));
+		//
+		//sprintf_s(str, "보스상태 %d", _state);
+		//TextOut(getMemDC(), 300, 350, str, strlen(str));
 
 		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
 		

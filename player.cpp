@@ -213,9 +213,9 @@ void player::CamRender(HDC hdc)
 		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
 	}
 	_img->aniRender(hdc, _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
-	char str[128];
-	sprintf_s(str, "%d, _state", _state, strlen(str));
-	TextOut(getMemDC(), 200, 200, str, strlen(str));
+	//char str[128];
+	//sprintf_s(str, "%d, _state", _state, strlen(str));
+	//TextOut(getMemDC(), 200, 200, str, strlen(str));
 }
 
 void player::playerKeyAnimationInit()

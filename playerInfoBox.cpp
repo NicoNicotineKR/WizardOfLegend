@@ -332,6 +332,6 @@ void playerInfoBox::render()
 		_changeModeImg.image->alphaFrameRenderFixed(getMemDC(), _changeModeImg.rc.left, _changeModeImg.rc.top, _changeModeImg.FrameX, 0, _changeModeImg.alpha);
 	}
 
-	sprintf_s(str, "_currentboxNumber : %d _selectIdx : %d", _currentboxNumber, _selectIdx);
-	TextOut(getMemDC(), 20, 400, str, strlen(str));
+	//sprintf_s(str, "_currentboxNumber : %d _selectIdx : %d", _currentboxNumber, _selectIdx);
+	//TextOut(getMemDC(), 20, 400, str, strlen(str));
 }

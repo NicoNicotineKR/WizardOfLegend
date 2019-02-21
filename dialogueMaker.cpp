@@ -92,9 +92,9 @@ void dialogueMaker::render()
 		DeleteObject(font);
 	}
 
-	char str[128];
-	sprintf_s(str, "%d", _printLen);
-	TextOut(getMemDC(), WINSIZEX / 2, 100, str, strlen(str));
+	//char str[128];
+	//sprintf_s(str, "%d", _printLen);
+	//TextOut(getMemDC(), WINSIZEX / 2, 100, str, strlen(str));
 }
 
 void dialogueMaker::setDialogue(image* npcPicture, string text, float talkSpeed)

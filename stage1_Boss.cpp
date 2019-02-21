@@ -258,9 +258,9 @@ void stage1_Boss::render()
 		_dialogueMaker->render();
 	}
 
-	char str[128];
-	sprintf_s(str, "%f ,%f   º¸½º¸Ê»óÅÂ : %d", _player->getPos().x, _player->getPos().y, _stateBossStage);
-	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
+	//char str[128];
+	//sprintf_s(str, "%f ,%f   º¸½º¸Ê»óÅÂ : %d", _player->getPos().x, _player->getPos().y, _stateBossStage);
+	//TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
 }
 
 void stage1_Boss::TileMapRender()
