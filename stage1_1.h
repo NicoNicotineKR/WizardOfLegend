@@ -5,6 +5,8 @@
 #include "aStar.h"
 #include "minimapUI.h"
 #include "boss.h"
+#include "npc_warp.h"
+#include "dialogueMaker.h"
 
 class stage1_1 : public gameNode
 {
@@ -36,6 +38,13 @@ private:
 	int _tileNumY;
 
 	bool _allStop;
+
+	npc_warp* _npc_warp;
+	dialogueMaker* _dialogueMaker;
+	image* _npcFaceImg;
+	string _npcFaceText1;
+	string _npcFaceText2;
+	bool _IsTalk;
 
 //	int _savePlayerHp;
 //	bool _isOneSavePlayerHp;

@@ -18,6 +18,10 @@ HRESULT stage1_1::init()
 	IMAGEMANAGER->addFrameImage("objEarth", "images/map/EarthBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
+	IMAGEMANAGER->addImage("warpNpcFace", "images/npc/warpNpcFace.bmp", 187, 189, true, 0xff00ff);
+	_npcFaceImg = IMAGEMANAGER->findImage("warpNpcFace");
+	_npcFaceText1 = "몬스터가 남아있구마";
+	_npcFaceText2 = "가야될곳으로 안내해주께";
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
@@ -65,6 +69,13 @@ HRESULT stage1_1::init()
 	SOUNDMANAGER->play("Ice", OPTIONMANAGER->getSoundBackVolume());
 	OPTIONMANAGER->setTempSoundName("Ice");
 
+	_npc_warp = new npc_warp;
+	_npc_warp->init();
+
+	_dialogueMaker = new dialogueMaker;
+	_dialogueMaker->init();
+
+	_npc_warp->setPos({1800,2900});
 	//_isOneSavePlayerHp = false;
 
 
@@ -78,7 +89,17 @@ void stage1_1::release()
 
 void stage1_1::update()
 {
-	if (_allStop == false)
+	if (_npc_warp->getNpcClosePlayer() == true && _dialogueMaker->getisStart() == false)
+	{
+		if (KEYMANAGER->isOnceKeyDown('F'))
+		{
+			_IsTalk = true;
+		}
+	}
+
+	_dialogueMaker->update();
+
+	if (_allStop == false && _IsTalk == false)
 	{
 		_player->update();
 		_player->tileCheckFunc();
@@ -87,6 +108,9 @@ void stage1_1::update()
 		_miniMap->update();
 
 		_boss->update();
+
+		_npc_warp->update();
+		_npc_warp->setPlayerPos(_player->getPos());
 
 		CAMERA2D->setPos(_player->getPos());
 	}
@@ -109,6 +133,7 @@ void stage1_1::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
+
 	RECT temp;
 	for (int i = 0; i < _vObjects.size(); ++i)
 	{
@@ -120,6 +145,39 @@ void stage1_1::update()
 		}
 	}
 
+	if (_IsTalk == true)
+	{
+		if (_enemyMgr->getVEnemy().size() == 0)
+		{
+			if (_dialogueMaker->getPrintLen() == 0)
+			{
+				_dialogueMaker->setDialogue(_npcFaceImg, _npcFaceText2, 0.1);
+				_dialogueMaker->setIsStart(true);
+			}
+			else if (_dialogueMaker->getisStart() == false)
+			{
+				_dialogueMaker->setPrintLen(0);
+				SCENEMANAGER->changeScene("stage1_Boss");
+				_IsTalk = false;
+			}
+		}
+		else if (_enemyMgr->getVEnemy().size() != 0)
+		{
+			if (_dialogueMaker->getPrintLen() == 0)
+			{
+				_dialogueMaker->setDialogue(_npcFaceImg, _npcFaceText1, 0.1);
+				_dialogueMaker->setIsStart(true);
+			}
+			else if (_dialogueMaker->getisStart() == false)
+			{
+				_dialogueMaker->setPrintLen(0);
+				_IsTalk = false;
+			}
+		}
+	}
+
+
+	//SCENEMANAGER->changeScene("stage1_Boss");
 }
 
 void stage1_1::render()
@@ -153,12 +211,10 @@ void stage1_1::render()
 	_miniMap->render();
 
 
-	if (KEYMANAGER->isOnceKeyDown(VK_F5))
-	{
-		//_isOneSavePlayerHp = true;
-		//_savePlayerHp = _player->getCurHp();
-		SCENEMANAGER->changeScene("stage1_Boss");
-	}
+
+
+	_npc_warp->render();
+	_dialogueMaker->render();
 }
 
 void stage1_1::TileMapRender()

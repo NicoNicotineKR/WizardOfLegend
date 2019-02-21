@@ -102,7 +102,7 @@ void stage1_Boss::update()
 		{
 			_player->update();
 		}
-		else
+		else if(_stateBossStage == CAMERAMOVE || _stateBossStage == TALK)
 		{
 			_player->setState(STATE::IDLE);
 			_player->currentPlayerState();
