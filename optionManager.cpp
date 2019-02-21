@@ -31,7 +31,7 @@ HRESULT optionManager::init()
 	SOUNDMANAGER->addSound("chainLightning", "sound/chainLightning.mp3", true, true);
 	SOUNDMANAGER->addSound("chainLightning2", "sound/chainLightning2.mp3", true, true);
 	SOUNDMANAGER->addSound("flameStrike", "sound/flameStrike.mp3", true, false);
-	SOUNDMANAGER->addSound("searingRush", "sound/searingRush.mp3", true, false);
+	SOUNDMANAGER->addSound("searingRush", "sound/searingRush.mp3", true, true);
 	SOUNDMANAGER->addSound("stoneShot", "sound/stoneShot.mp3", true, false);
 
 	//∏ÛΩ∫≈Õ

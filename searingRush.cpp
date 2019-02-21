@@ -77,6 +77,7 @@ void searingRush::update(player * Player)
 				{
 					if (_flameImg[i]->getFrameX() == _flameImg[i]->getMaxFrameX())
 					{
+						SOUNDMANAGER->stop("searingRush");
 						_flamePos[i] = { -500, -500 };
 						_flameRc[i] = { -500,-500,-500 ,-500 };
 						continue;
@@ -147,6 +148,7 @@ void searingRush::render(player* Player)
 void searingRush::skillPosSet(player * Player)
 {
 
+	SOUNDMANAGER->play("searingRush", OPTIONMANAGER->getSoundEffectVolume());
 	//_pos.x = Player->getTileCheckRcPos().x;
 	//_pos.y = Player->getTileCheckRcPos().y;
 	//_flamePos[0].x = _pos.x;

@@ -68,6 +68,7 @@ void stoneShot::update(player * Player)
 
 			if (_index != _reLoadCount)
 			{
+				SOUNDMANAGER->play("stoneShot", OPTIONMANAGER->getSoundEffectVolume());
 				_index = _reLoadCount;
 				_attackCount = 0;
 				//	재만추가
@@ -155,6 +156,7 @@ void stoneShot::render(player * Player)
 
 void stoneShot::skillPosSet(player * Player)
 {
+	
 	_reLoadCount = 0;
 	_curCoolTime = 0;
 	_index = -1;

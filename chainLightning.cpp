@@ -106,10 +106,14 @@ void chainLightning::update(player* Player)
 			}
 			else
 			{
+				//SOUNDMANAGER->stop("chainLightning2");
 				_attackCount = 10;
 			}
 		}
-
+		else
+		{
+			SOUNDMANAGER->stop("chainLightning2");
+		}
 	}
 
 }
@@ -132,6 +136,7 @@ void chainLightning::render(player* Player)
 
 void chainLightning::skillPosSet(player* Player)
 {
+	SOUNDMANAGER->play("chainLightning2", OPTIONMANAGER->getSoundEffectVolume());
 	_angle = Player->getPlayerAngle();
 	_pos.x = cosf(_angle) * 100 + (Player->getTileCheckRcPos().x + 14);
 	_pos.y = -sinf(_angle) * 100 + (Player->getTileCheckRcPos().y + 14);

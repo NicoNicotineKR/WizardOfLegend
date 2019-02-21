@@ -67,6 +67,7 @@ void shockNova::update(player * Player)
 					_thunderSharftImg->SetFrameX(0);
 					_attackCount++;
 					_isHit = false;
+
 				}
 				if (_img->getMaxFrameX() == _img->getFrameX())
 				{
@@ -95,6 +96,10 @@ void shockNova::update(player * Player)
 				}
 			}
 		}
+		else
+		{
+			SOUNDMANAGER->stop("chainLightning");
+		}
 	}
 	else if (_isSkill)
 	{
@@ -120,6 +125,7 @@ void shockNova::render(player * Player)
 
 void shockNova::skillPosSet(player * Player)
 {
+	SOUNDMANAGER->play("chainLightning", OPTIONMANAGER->getSoundEffectVolume());
 	_pos.x = Player->getPlayerTileCheckRc().right - (Player->getPlayerTileCheckRc().right - Player->getPlayerTileCheckRc().left);
 	_pos.y = Player->getPlayerTileCheckRc().bottom - (Player->getPlayerTileCheckRc().bottom - Player->getPlayerTileCheckRc().top);
 	//_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight()/2, 50, 50);

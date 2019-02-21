@@ -92,7 +92,6 @@ void flameStrike::update(player * Player)
 		_attackCount += TIMEMANAGER->getElapsedTime();
 		if (_maxReLoad >= _reLoadCount)
 		{
-
 			if (_attackCount > 0.5f)
 			{
 				_attackCount = 0;
@@ -111,7 +110,7 @@ void flameStrike::update(player * Player)
 			{
 				//	재만 추가
 				_isHit = false;
-
+				
 				_angle = Player->getPlayerAngle();
 				if (Player->getAniDirection() != ANIDIRECTION::FRONT)
 				{
@@ -203,7 +202,7 @@ void flameStrike::skillPosSet(player * Player)
 		_pos.y = -sinf(_angle) * 50 + (Player->getTileCheckRcPos().y + 14) - 128;
 	}
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth()/2, _pos.y + _img->getFrameHeight()/2, 200, 200);
-	
+	SOUNDMANAGER->play("flameStrike", OPTIONMANAGER->getSoundEffectVolume());
 	//	재만 추가 -- 충돌렉트 업데이트했으면, 맞았는지 검사해야게찌?
 	//if (!_isHit) {
 	//	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 200, 200);

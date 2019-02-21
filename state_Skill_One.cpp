@@ -112,6 +112,7 @@ void state_Skill_One::onButtonLB(player* Player)
 		{
 			if (Player->getArrCurSkills(num)->getReLoadCount() < 3)
 			{
+				SOUNDMANAGER->play("flameStrike", OPTIONMANAGER->getSoundEffectVolume());
 				Player->getArrCurSkills(num)->setReLoadCount(Player->getArrCurSkills(num)->getReLoadCount() + 1);
 			}
 
