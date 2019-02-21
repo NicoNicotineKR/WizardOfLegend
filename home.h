@@ -10,6 +10,9 @@
 #include "playerInfoBoxUI.h"
 #include "playerInfoBox.h"
 
+#include "boss.h"
+
+
 
 class home : public gameNode
 {
@@ -24,6 +27,7 @@ private:
 
 	player*	_player;
 	enemyMgr* _enemyMgr;
+	//boss* _boss;
 	dialogueMaker* _dialogueMaker;
 	npcMgr* _nm;
 	skillbookUI* _skillbookUI;

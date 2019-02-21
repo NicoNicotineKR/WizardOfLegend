@@ -11,8 +11,6 @@
 #include "boss_State_SKILL_One.h"
 #include "boss_State_SKILL_Two.h"
 #include "boss_State_SKILL_Three.h"
-#include "boss_State_SKILL_Four.h"
-#include "boss_State_SKILL_Five.h"
 #include "boss_State_Death_Start.h"
 #include "boss_State_Death.h"
 
@@ -82,6 +80,10 @@ void boss::update()
 		setBossSpawn();
 	}
 
+	if (KEYMANAGER->isOnceKeyDown(VK_F3))
+	{
+		setBossMock();
+	}
 	//스테이지에서 플레이어가 보스방의 전투구역을 밟게되면 셋으로 isClose true만들어줌
 	if (_isArea)
 	{
@@ -119,8 +121,11 @@ void boss::render()
 	if (_isArea)
 	{
 		char str[128];
-		sprintf_s(str, "보스상태 %d", _curHp);
+		sprintf_s(str, "보스체력 %d", _curHp);
 		TextOut(getMemDC(), 300, 300, str, strlen(str));
+
+		sprintf_s(str, "보스상태 %d", _state);
+		TextOut(getMemDC(), 300, 350, str, strlen(str));
 
 		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
 		
@@ -264,8 +269,6 @@ void boss::bossArrStateInit()
 	_arrState[static_cast<const int>(B_STATE::SKILL_ONE)] = new boss_State_SKILL_One;
 	_arrState[static_cast<const int>(B_STATE::SKILL_TWO)] = new boss_State_SKILL_Two;
 	_arrState[static_cast<const int>(B_STATE::SKILL_THREE)] = new boss_State_SKILL_Three;
-	_arrState[static_cast<const int>(B_STATE::SKILL_FOUR)] = new boss_State_SKILL_Four;
-	_arrState[static_cast<const int>(B_STATE::SKILL_FIVE)] = new boss_State_SKILL_Five;
 	_arrState[static_cast<const int>(B_STATE::DEATH_START)] = new boss_State_Death_Start;
 	_arrState[static_cast<const int>(B_STATE::DEATH)] = new boss_State_Death;
 
@@ -322,12 +325,6 @@ void boss::bossCurrentState()
 		break;
 		case B_STATE::SKILL_THREE:
 			_bossState = _arrState[static_cast<const int>(B_STATE::SKILL_THREE)];
-		break;
-		case B_STATE::SKILL_FOUR:
-			_bossState = _arrState[static_cast<const int>(B_STATE::SKILL_FOUR)];
-		break;
-		case B_STATE::SKILL_FIVE:
-			_bossState = _arrState[static_cast<const int>(B_STATE::SKILL_FIVE)];
 		break;
 		case B_STATE::DEATH_START:
 			_bossState = _arrState[static_cast<const int>(B_STATE::DEATH_START)];
@@ -418,27 +415,6 @@ void boss::startAni()
 			_ani = KEYANIMANAGER->findAnimation("bossSkill3");
 			_ani->start();
 		}
-		if (_state == B_STATE::SKILL_FOUR)
-		{
-			//대쉬에서 정해준 방향이 오른쪽이냐 왼쪽이냐에 따라 이미지 좌우가다름
-			if (_direction == DIRECTION_LEFT)
-			{
-				_ani = KEYANIMANAGER->findAnimation("bossSkill4_Left");
-				_ani->start();
-				_direction = NULL;
-			}
-			else if (_direction == DIRECTION_RIGHT)
-			{
-				_ani = KEYANIMANAGER->findAnimation("bossSkill4_Right");
-				_ani->start();
-				_direction = NULL;
-			}
-		}
-		if (_state == B_STATE::SKILL_FIVE)
-		{
-			_ani = KEYANIMANAGER->findAnimation("bossSkill5");
-			_ani->start();
-		}
 		if (_state == B_STATE::DEATH_START)
 		{
 			_ani = KEYANIMANAGER->findAnimation("bossDeathStart");
@@ -472,31 +448,30 @@ void boss::wingIdle(void * obj)
 
 void boss::skillShuffle()
 {
-	for (int i = 0; i < 5; i++)
-	{
-		_skillNum[i] = i;
-	}
+	_skillNum[0] = 3;
+	_skillNum[1] = RND->getInt(3);
+
 
 	//shuffle;
-	int destNum, sourNum;
-	int temp;
-	for (int i = 0; i < SHUFFLE_NUM; i++)
-	{
-		destNum = RND->getInt(5);
-		sourNum = RND->getInt(5);
-
-		if (destNum == sourNum) continue;
-
-		temp = _skillNum[destNum];
-
-		_skillNum[destNum] = _skillNum[sourNum];
-		_skillNum[sourNum] = temp;
-	}
+	//int destNum, sourNum;
+	//int temp;
+	//for (int i = 0; i < SHUFFLE_NUM; i++)
+	//{
+	//	destNum = RND->getInt(5);
+	//	sourNum = RND->getInt(5);
+	//
+	//	if (destNum == sourNum) continue;
+	//
+	//	temp = _skillNum[destNum];
+	//
+	//	_skillNum[destNum] = _skillNum[sourNum];
+	//	_skillNum[sourNum] = temp;
+	//}
 }
 
 void boss::useSkill()
 {
-	if (_skill_Usage_Count <= 2)
+	if (_skill_Usage_Count <= 1)
 	{
 		switch (_skillNum[_skill_Usage_Count])
 		{
@@ -510,17 +485,14 @@ void boss::useSkill()
 			_state = B_STATE::SKILL_THREE;
 			_skill3->UseSkill(&_pos, &_playerPos, 5);
 			break;
-		case 3: //돌진(도착하면 얼음칼돌림)
+		case 3: //돌진
 			_state = B_STATE::DASH;
-			break;
-		case 4: //고드름 비오기
-			_state = B_STATE::SKILL_FIVE;
 			break;
 		}
 
 		_skill_Usage_Count += 1;
 	}
-	else if (_skill_Usage_Count >= 3)
+	else if (_skill_Usage_Count >= 2)
 	{
 		//스킬 다쓰면 조롱
 		_state = B_STATE::MOCK;
@@ -537,6 +509,14 @@ void boss::setBossSpawn()
 {
 	_isArea = true;
 	_state = B_STATE::SPAWN;
+	bossCurrentState();
+	_isAniOnce = true;
+	startAni();
+}
+
+void boss::setBossMock()
+{
+	_state = B_STATE::MOCK;
 	bossCurrentState();
 	_isAniOnce = true;
 	startAni();
@@ -561,9 +541,6 @@ void boss::RcCollideBySkillFunc(RECT * skillRc, int dmg, bool * isHit)
 		//모크 상태였으면
 		if (_state == B_STATE::MOCK)
 		{
-			_state == B_STATE::STUN;
-			bossCurrentState();
-			_isAniOnce = true;
 			_isStun = true;
 		}
 
@@ -574,6 +551,7 @@ void boss::RcCollideBySkillFunc(RECT * skillRc, int dmg, bool * isHit)
 			bossCurrentState();
 			_isAniOnce = true;
 			_isDeath = true;
+			startAni();
 		}
 	}
 	if (*isHit)
@@ -594,7 +572,7 @@ void boss::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool *
 		//모크 상태였으면
 		if (_state == B_STATE::MOCK)
 		{
-			_state == B_STATE::STUN;
+			_state = B_STATE::STUN;
 			bossCurrentState();
 			_isAniOnce = true;
 			_isStun = true;
@@ -603,7 +581,7 @@ void boss::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool *
 		if (_curHp <= 0)
 		{
 			//원래는 에너미 지워줬는데 여긴 보스 상태를 데스로 바꿔주는걸 넣자
-			_state == B_STATE::DEATH_START;
+			_state = B_STATE::DEATH_START;
 			bossCurrentState();
 			_isAniOnce = true;
 			_isDeath = true;

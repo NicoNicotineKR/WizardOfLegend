@@ -165,8 +165,6 @@
     <ClInclude Include="boss_State_Death_Start.h" />
     <ClInclude Include="boss_State_Idle.h" />
     <ClInclude Include="boss_State_Mock.h" />
-    <ClInclude Include="boss_State_SKILL_Five.h" />
-    <ClInclude Include="boss_State_SKILL_Four.h" />
     <ClInclude Include="boss_State_SKILL_One.h" />
     <ClInclude Include="boss_State_SKILL_Three.h" />
     <ClInclude Include="boss_State_SKILL_Two.h" />
@@ -294,8 +292,6 @@
     <ClCompile Include="boss_State_Death_Start.cpp" />
     <ClCompile Include="boss_State_Idle.cpp" />
     <ClCompile Include="boss_State_Mock.cpp" />
-    <ClCompile Include="boss_State_SKILL_Five.cpp" />
-    <ClCompile Include="boss_State_SKILL_Four.cpp" />
     <ClCompile Include="boss_State_SKILL_One.cpp" />
     <ClCompile Include="boss_State_SKILL_Three.cpp" />
     <ClCompile Include="boss_State_SKILL_Two.cpp" />

@@ -396,12 +396,6 @@
     <ClInclude Include="boss_State_SKILL_One.h">
       <Filter>PlayGround\units\bossState</Filter>
     </ClInclude>
-    <ClInclude Include="boss_State_SKILL_Four.h">
-      <Filter>PlayGround\units\bossState</Filter>
-    </ClInclude>
-    <ClInclude Include="boss_State_SKILL_Five.h">
-      <Filter>PlayGround\units\bossState</Filter>
-    </ClInclude>
     <ClInclude Include="boss_State_Death_Start.h">
       <Filter>PlayGround\units\bossState</Filter>
     </ClInclude>
@@ -744,12 +738,6 @@
       <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
     <ClCompile Include="boss_State_Death_Start.cpp">
-      <Filter>PlayGround\units\bossState</Filter>
-    </ClCompile>
-    <ClCompile Include="boss_State_SKILL_Five.cpp">
-      <Filter>PlayGround\units\bossState</Filter>
-    </ClCompile>
-    <ClCompile Include="boss_State_SKILL_Four.cpp">
       <Filter>PlayGround\units\bossState</Filter>
     </ClCompile>
     <ClCompile Include="boss_State_SKILL_One.cpp">

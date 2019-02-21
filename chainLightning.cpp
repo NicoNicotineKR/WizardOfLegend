@@ -31,6 +31,7 @@ HRESULT chainLightning::init(player* Player)
 	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
 	_isHit = false;
 	_em = Player->getEnemyMgrAddress();
+
 	_boss = Player->getBossAdresss();
 	return S_OK;
 }

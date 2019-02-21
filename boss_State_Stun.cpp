@@ -16,6 +16,7 @@ void boss_State_Stun::update(boss * boss)
 	if (!boss->getAni()->isPlay())
 	{
 		boss->setState(B_STATE::CASTING);
+		boss->setIsStun(false);
 		boss->bossCurrentState();
 		boss->setIsAniOnce(true);
 		boss->startAni();

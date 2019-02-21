@@ -3,6 +3,9 @@
 #include "tile.h"
 #include "rotateImgMaker.h"
 #include "throwIceSpear.h"
+#include "waterdropRotate.h"
+#include "snowflakeRotate.h"
+#include "chargeIceSlash.h"
 
 class bossState;
 class player;
@@ -39,8 +42,8 @@ enum class B_STATE
 	SKILL_ONE = 7,		// 물방울 회전!!!! 회오리!!!!!																	// x			// 이전꺼 유지
 	SKILL_TWO = 8,		// 눈송이 회전!! 회오리!!!!																		// x			// 이전꺼 유지
 	SKILL_THREE = 9,	// 창 3개 날리기																					// o 			// 이전꺼 유지
-	SKILL_FOUR = 10,	// 돌진 얼음칼 돌리기																				// x			// 이전꺼 유지
-	SKILL_FIVE = 11,	// 고드름비																						// x			// 이전꺼 유지
+//	SKILL_FOUR = 10,	// 돌진 얼음칼 돌리기																				// x			// 이전꺼 유지
+//	SKILL_FIVE = 11,	// 고드름비																						// x			// 이전꺼 유지
 	DEATH_START = 12,	// 죽음 시작 -> 무릎꿇고 다이얼로그 뱉음															// x			// 날개 커짐
 	DEATH = 13,			// 얼음되서 사라짐 (죽음 시작에서 나온 다이얼로그 에서 키눌러서 다이얼로그 종료되면 얼음되고 깨짐)		// x			// 날개 작아짐
 	MAX
@@ -104,12 +107,15 @@ private:
 	//	스킬
 	//vector<skills*> _vSkills;
 	throwIceSpear* _skill3;
+	waterdropRotate* _skill1;
+	snowflakeRotate* _skill2;
+	chargeIceSlash* _skill4;
 
 	// 그떄 그때 추가하는 목록인데 더러울것임.
 	//---------------------------------------------------------------------------------------------------------------------------------------
 
 	int _skill_Usage_Count;				//스킬 사용 횟수((캐스팅할때 0이되고 스킬쓸때마다 +1하고 3에서 4가될때 조롱모드 들감)
-	int _skillNum[5];					//스킬 겹치지않게 쓸려고 만듬(셔플해서 앞에꺼 쓸거임)
+	int _skillNum[2];					//스킬 겹치지않게 쓸려고 만듬(셔플해서 앞에꺼 쓸거임)
 	
 	bool _isNeedCal;					//계산 필요하니?
 
@@ -119,7 +125,7 @@ private:
 
 private:
 //콘스트 변수 넣을공간
-	const int BOSS_HP = 1000;
+	const int BOSS_HP = 100;
 	const int IMG_SHAVE_X = 75;
 	const int IMG_SHAVE_Y = 100;
 	const int COLLISION_SHAVE_X = 75;
@@ -176,6 +182,7 @@ public:
 
 	//보스 발견 or 보스룸 입장시 이함수 쓰면됌
 	void setBossSpawn();
+	void setBossMock();
 
 	//다이얼로그 끝나면 캐스팅모드 들어가는거 - 형우형이 쓸예정
 	void setBossStateCasting();
@@ -197,6 +204,9 @@ public:
 
 	bool					getIsNeedCal()									{ return _isNeedCal; }
 	throwIceSpear*			getSKill3()										{ return _skill3; }
+	waterdropRotate*		getSkill1()										{ return _skill1; }
+	snowflakeRotate*		getSkill2()										{ return _skill2; }
+	chargeIceSlash*			getSkill4()										{ return _skill4; }
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	image*					getImg()										{ return _img; }
 	animation*				getAni()										{ return _ani; }

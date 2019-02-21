@@ -19,6 +19,8 @@ HRESULT home::init()
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
+	//_boss = new boss;
+
 
 	_vvMap.clear();
 	_vObjects.clear();
@@ -28,6 +30,7 @@ HRESULT home::init()
 
 	//	¼ø¼­¹Ù²Þ
 	_player->enemyLink(_enemyMgr);
+	//_player->bossLink(_boss);
 	_player->init(_vvMap);
 	//_player->enemyLink(_enemyMgr);
 	_player->arrStateInit();
@@ -35,13 +38,17 @@ HRESULT home::init()
 	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);
 	_enemyMgr->setMapAdress(_vvMap);
+	//_boss->setPlayerAdress(_player);
 
 	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 13);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 	_enemyMgr->init();
+	//_boss->init();
 
 	delete _stageMapLoader;
 	_stageMapLoader = nullptr;
+
+//	_boss->setPlayerAdress(_player);
 
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
 
@@ -95,6 +102,7 @@ void home::update()
 		_player->tileCheckFunc();
 
 		_enemyMgr->update();
+//		_boss->update();
 
 		CAMERA2D->setPos(_player->getPos());
 
@@ -233,6 +241,7 @@ void home::render()
 
 	//_player->CamRender(getMemDC());
 	_enemyMgr->render();
+//	_boss->render();
 	//_nm->render();
 	for (int i = 0; i < _nm->getvNpce().size(); ++i)
 	{

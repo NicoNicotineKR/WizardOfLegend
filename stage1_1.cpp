@@ -51,8 +51,8 @@ HRESULT stage1_1::init()
 	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
-//	_player->bossLink(_boss);
-	_player->bossLink(nullptr);
+	_player->bossLink(_boss);
+//	_player->bossLink(nullptr);
 	
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 	

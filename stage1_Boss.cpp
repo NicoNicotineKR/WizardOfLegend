@@ -25,6 +25,9 @@ HRESULT stage1_Boss::init()
 	_npcFaceImg = IMAGEMANAGER->findImage("bossImg");
 	_npcFaceText = "잡어 잡어잡어잡어";
 
+
+
+
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
 	_miniMap = new minimapUI;
@@ -38,17 +41,8 @@ HRESULT stage1_Boss::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	_player->enemyLink(_enemyMgr);
-	_player->init(_vvMap);
-	_player->arrSkillInit();
-	_player->skillIconInit();
-
 	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 20);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
-
-	_enemyMgr->setPlayerAdress(_player);
-	_enemyMgr->setMapAdress(_vvMap);
-	_enemyMgr->init();
 
 	_boss->setPlayerAdress(_player);
 	_boss->init();
@@ -56,6 +50,20 @@ HRESULT stage1_Boss::init()
 	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
+	_player->bossLink(_boss);
+
+	_player->init(_vvMap);
+	_player->arrSkillInit();
+	_player->skillIconInit();
+
+	
+
+	_enemyMgr->setPlayerAdress(_player);
+	_enemyMgr->setMapAdress(_vvMap);
+	_enemyMgr->init();
+	_player->enemyLink(_enemyMgr);
+
+	
 
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 

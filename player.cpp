@@ -17,6 +17,7 @@
 #include "enemyMgr.h"
 #include "shockNova.h"
 #include "stoneShot.h"
+#include "boss.h"
 player::player()
 {
 }
