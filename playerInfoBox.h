@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "skillIconList.h"
 
 class player;
 
@@ -29,6 +30,7 @@ struct tagSkillBox // 교환박스
 	int boxFrameX;
 
 	//진짜 바꿀아무거나
+	image* skillImg;
 	string skillName;
 };
 struct tagUI // 테두리
@@ -67,7 +69,7 @@ private:
 	int _selectIdx;
 
 	player* _player;
-
+	skillIconList* _skillIconList;
 
 
 	const int BLINK_ALPHA_SPEED = 5;

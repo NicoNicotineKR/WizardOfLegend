@@ -22,6 +22,9 @@ HRESULT playerInfoBox::init()
 	IMAGEMANAGER->addFrameImage("button", "images/UIs/playerInfoBox/playerinfoBoxButton.bmp", 360, 60, 6, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("buttonBox", "images/UIs/playerInfoBox/buttonFrameIcon1.bmp", 120, 60, 2, 1, true, RGB(255, 0, 255));
 
+	_skillIconList = new skillIconList;
+	_skillIconList->init();
+
 	_box.img = IMAGEMANAGER->findImage("box");
 	_box.pos.x = 200;
 	_box.pos.y = 100;
@@ -47,6 +50,7 @@ HRESULT playerInfoBox::init()
 		sprintf_s(str2, "%d", i);
 		_skillBox[i].skillName = str2;
 		_skillBox[i].rc = RectMakeCenter(_skillBox[i].pos.x, _skillBox[i].pos.y, 70, 70);
+		_skillBox[i].skillImg = IMAGEMANAGER->findImage("skillIcons");
 	}
 
 	_skillBoxEdge.image = IMAGEMANAGER->findImage("edge");
@@ -77,6 +81,8 @@ void playerInfoBox::release()
 }
 void playerInfoBox::update()
 {
+	_skillIconList->update();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
 		if (_isStart == false)
@@ -190,6 +196,8 @@ void playerInfoBox::update()
 		//기능4 - 마우스선택
 		for (int i = 0; i < 4; i++)
 		{
+			if (i == 1)continue;
+
 			if (PtInRect(&_skillBox[i].rc, _ptMouse))
 			{
 				_selectIdx = _skillBox[i].boxNumber;
@@ -205,6 +213,7 @@ void playerInfoBox::update()
 			if (_selectIdx < 4)
 			{
 				_selectIdx++;
+				if (_selectIdx == 1) { _selectIdx++; }
 				_skillBoxEdge.pos.x = _skillBox[_selectIdx].pos.x - 5;
 				_skillBoxEdge.pos.y = _skillBox[_selectIdx].pos.y - 5;
 				_skillBoxEdge.rc = RectMakeCenter(_skillBoxEdge.pos.x, _skillBoxEdge.pos.y, 70, 70);
@@ -223,13 +232,14 @@ void playerInfoBox::update()
 			if (_selectIdx > -1)
 			{
 				_selectIdx--;
+				if (_selectIdx == 1) { _selectIdx--; }
 				_skillBoxEdge.pos.x = _skillBox[_selectIdx].pos.x - 5;
 				_skillBoxEdge.pos.y = _skillBox[_selectIdx].pos.y - 5;
 				_skillBoxEdge.rc = RectMakeCenter(_skillBoxEdge.pos.x, _skillBoxEdge.pos.y, 70, 70);
 			}
 			if (_selectIdx <= -1)
 			{
-				_selectIdx = 5;
+				_selectIdx = 3;
 				_skillBoxEdge.pos.x = _skillBox[_selectIdx].pos.x - 5;
 				_skillBoxEdge.pos.y = _skillBox[_selectIdx].pos.y - 5;
 				_skillBoxEdge.rc = RectMakeCenter(_skillBoxEdge.pos.x, _skillBoxEdge.pos.y, 70, 70);
@@ -297,20 +307,25 @@ void playerInfoBox::update()
 }
 void playerInfoBox::render()
 {
+	_skillIconList->render();
+
 	char str[128];
 
 	if (_isStart == true)
 	{
 		_box.img->render(getMemDC(), _box.pos.x, _box.pos.y);
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			_button[i].img->frameRender(getMemDC(), _button[i].pos.x, _button[i].pos.y, _button[i].frameX, 0);
 
 			_skillBox[i].img->alphaFrameRenderFixed(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top, _skillBox[i].boxFrameX, 0, _skillBox[i].alpha);
 
-			sprintf_s(str, "%s", _skillBox[i].skillName.c_str());
-			TextOut(getMemDC(), _skillBox[i].rc.left, _skillBox[i].rc.top, str, strlen(str));
+			_skillBox[i].skillImg->frameRender(getMemDC(), _skillBox[i].rc.left + 10, _skillBox[i].rc.top + 10,_skillIconList->FindSkillIdx(_skillBox[i].skillName).x, _skillIconList->FindSkillIdx(_skillBox[i].skillName).y);
+
+			
+
+
 		}
 
 		_skillBoxEdge.image->alphaRender(getMemDC(), _skillBoxEdge.rc.left, _skillBoxEdge.rc.top, _skillBoxEdge.alpha);
