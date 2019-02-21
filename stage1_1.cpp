@@ -106,8 +106,16 @@ void stage1_1::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
-
-
+	RECT temp;
+	for (int i = 0; i < _vObjects.size(); ++i)
+	{
+		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
+		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
+		{
+			_vObjects.erase(_vObjects.begin() + i);
+			break;
+		}
+	}
 }
 
 void stage1_1::render()
