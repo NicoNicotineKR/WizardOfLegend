@@ -42,8 +42,8 @@ private:
 
 	bool _allStop;
 
-	int		_savePlayerHp;
-	bool	_isOneSavePlayerHp;
+	//int		_savePlayerHp;
+	//bool	_isOneSavePlayerHp;
 
 	//보스이미지
 	image* _npcFaceImg;
@@ -67,6 +67,6 @@ public:
 	void VObjectRender();
 
 	void setPlayerLink(player* player) { _player = player; }
-	void setPlayerStartHp(int playerHp) { _savePlayerHp = playerHp; }
+	//void setPlayerStartHp(int playerHp) { _savePlayerHp = playerHp; }
 };
 

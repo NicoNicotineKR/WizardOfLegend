@@ -35,6 +35,7 @@ HRESULT stage1_Boss::init()
 	_boss = new boss;
 	_dialogueMaker = new dialogueMaker;
 	_bossHpBar = new bossHpProgressBarUI;
+	_player->bossLink(_boss);
 	_dialogueMaker->init();
 
 	_vvMap.clear();
@@ -52,7 +53,7 @@ HRESULT stage1_Boss::init()
 	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
-	_player->bossLink(_boss);
+	
 
 	_player->init(_vvMap);
 	_player->arrSkillInit();
@@ -76,11 +77,11 @@ HRESULT stage1_Boss::init()
 
 	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
 
-	_player->setCurHp(_savePlayerHp);
+	//_player->setCurHp(_savePlayerHp);
 	_player->setPosX(600);
 	_player->setPosY(2000);
 
-	_boss->setPos({ 800,800 });
+	_boss->setPos({ 690,600 });
 	_bossHpBar->init(_boss->getMaxHpAdress(), _boss->getCurHpAdress(), _boss->getIsAreaAdress());
 
 	_stateBossStage = NON;
@@ -213,7 +214,16 @@ void stage1_Boss::update()
 			_boss->setBossDeath();
 		}
 	}
-
+	RECT temp;
+	for (int i = 0; i < _vObjects.size(); ++i)
+	{
+		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
+		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
+		{
+			_vObjects.erase(_vObjects.begin() + i);
+			break;
+		}
+	}
 
 }
 
