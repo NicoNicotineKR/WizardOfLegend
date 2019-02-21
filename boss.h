@@ -81,6 +81,7 @@ private:
 //	bool			_isHit;				//맞았니?			-> mock 상태에서 isHit가 트루가되면 stun상태로 변경함. isHit될때마다 
 	bool			_isStun;			//스턴상태니?
 	bool			_isDeath;			//죽었니?
+	bool			_isSkillEnd;		// 스킬그만하니?
 
 	B_STATE			_state;				//상태
 	int				_direction;			//대쉬에서만 쓸 방향
@@ -183,12 +184,17 @@ public:
 	//보스 발견 or 보스룸 입장시 이함수 쓰면됌
 	void setBossSpawn();
 	void setBossMock();
+	void setBossDeath();
 
 	//다이얼로그 끝나면 캐스팅모드 들어가는거 - 형우형이 쓸예정
 	void setBossStateCasting();
 
 	void RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit);
 	void DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool* isHit);
+
+	int* getMaxHpAdress() { return &_maxHp; }
+	int* getCurHpAdress() { return &_curHp; }
+	bool* getIsAreaAdress() { return &_isArea; }
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -207,6 +213,7 @@ public:
 	waterdropRotate*		getSkill1()										{ return _skill1; }
 	snowflakeRotate*		getSkill2()										{ return _skill2; }
 	chargeIceSlash*			getSkill4()										{ return _skill4; }
+	bool					getIsSkillEnd() { return _isSkillEnd; }
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	image*					getImg()										{ return _img; }
 	animation*				getAni()										{ return _ani; }
@@ -253,6 +260,7 @@ public:
 
 	void					setWingAniIdle() { _wingAni = KEYANIMANAGER->findAnimation("wingIdle"); }
 	void					setIsNeedCal(bool isNeedCal)					{ _isNeedCal = isNeedCal; }
+	void					setIsSkillEnd(bool isSkillEnd) { _isSkillEnd = isSkillEnd; }
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	void					setImg(image* img)								{ _img = img; }
 	void					setAni(animation* ani)							{ _ani = ani; }

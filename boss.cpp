@@ -40,8 +40,8 @@ HRESULT boss::init()
 	//보스의 중점좌표
 	_vec.x = 0;
 	_vec.y = 0;
-	_pos.x = WINSIZEX /2 - 200;
-	_pos.y = WINSIZEY /2 - 200;
+	_pos.x = 0;
+	_pos.y = 0;
 	_rc = RectMakeCenter(_pos.x, _pos.y, COLLISION_WIDTH, COLLISION_HEIGHT);
 
 	_maxHp = BOSS_HP;
@@ -55,6 +55,7 @@ HRESULT boss::init()
 	_isArea = false;
 	_isStun = false;
 	_isDeath = false;
+	_isSkillEnd = false;
 
 	_state = B_STATE::SLEEP;
 	_direction = NULL;
@@ -90,6 +91,10 @@ void boss::update()
 	{
 		setBossMock();
 	}
+	if (KEYMANAGER->isOnceKeyDown(VK_F4))
+	{
+		setBossDeath();
+	}
 	//스테이지에서 플레이어가 보스방의 전투구역을 밟게되면 셋으로 isClose true만들어줌
 	if (_isArea)
 	{
@@ -105,11 +110,13 @@ void boss::update()
 
 		
 		//스킬들 업데이트
-		_skill3->update();
-		_skill1->update();
-		_skill2->update();
-		_skill4->update();
-
+		if (!_isSkillEnd)
+		{
+			_skill3->update();
+			_skill1->update();
+			_skill2->update();
+			_skill4->update();
+		}
 
 
 		_playerPos.x = _player->getTileCheckRcPos().x + TOP_TILESIZE / 2;
@@ -137,11 +144,13 @@ void boss::render()
 		
 		//스킬 렌더-------------------------------------------------------------------------------------------------
 		
-		_skill3->render();
-		_skill1->render();
-		_skill2->render();
-		_skill4->render();
-
+		if (!_isSkillEnd)
+		{
+			_skill3->render();
+			_skill1->render();
+			_skill2->render();
+			_skill4->render();
+		}
 		//-------------------------------------------------------------------------------------------------
 		
 		
@@ -180,8 +189,8 @@ void boss::bossKeyAnimationInit()
 	// 다이얼로그를 종료하면 내상태를 캐스팅으로 바꿔줌(다이얼로그 종료할때 내상태 캐스팅으로 바꿈)
 
 	//casting
-	int casting[] = { 52,53 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 2, 1, false);
+	int casting[] = { 52,52,52,52,53,53,53,53 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossCasting", "boss", casting, 8, 4, false);
 
 	//mock
 	int mock[] = { 78,79,80,79,80,79,80,79,80 };
@@ -190,8 +199,8 @@ void boss::bossKeyAnimationInit()
 	//조롱 끝나면 캐스팅 ㄱ
 
 	//stun
-	int stun[] = { 66,67,68,67,68,67,68 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 7, 7, false);
+	int stun[] = { 66,67,68,67,68,67,68,67,68,67,68,67,68 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossStun", "boss", stun, 13, 6, false);
 	//조롱때 맞으면 스턴됨. 조롱과 똑같이 너무 길거나 짧으면 배열이랑 배열길이 수정
 
 	//대쉬
@@ -215,8 +224,8 @@ void boss::bossKeyAnimationInit()
 	KEYANIMANAGER->addArrayFrameAnimation("bossSkill2", "boss", skill2, 58, 10, false);
 
 	//skill3 - 창 3개 날리기
-	int skill3[] = { 14,15,16,17 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossSkill3", "boss", skill3, 4, 4, false);
+	int skill3[] = { 14,14,15,15,16,16,17,17 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossSkill3", "boss", skill3, 8, 4, false);
 
 	//skill4 - 얼음대거 돌리기
 	int rightSkill4[] = { 55, // 딜레이 필요
@@ -507,6 +516,9 @@ void boss::useSkill()
 	else if (_skill_Usage_Count >= 2)
 	{
 		//스킬 다쓰면 조롱
+		
+		SOUNDMANAGER->play("IceBossLaugh", OPTIONMANAGER->getSoundEffectVolume());
+
 		_state = B_STATE::MOCK;
 		_skill_Usage_Count = 0;
 		skillShuffle();
@@ -534,6 +546,14 @@ void boss::setBossMock()
 	startAni();
 }
 
+void boss::setBossDeath()
+{
+	_state = B_STATE::DEATH;
+	bossCurrentState();
+	_isAniOnce = true;
+	startAni();
+}
+
 void boss::setBossStateCasting()
 {
 	_state = B_STATE::CASTING;
@@ -550,6 +570,10 @@ void boss::RcCollideBySkillFunc(RECT * skillRc, int dmg, bool * isHit)
 		//일단 피까고
 		_curHp -= dmg;
 		*isHit = true;
+		if (!SOUNDMANAGER->isPlaySound("IceBossHurt"))
+		{
+			SOUNDMANAGER->play("IceBossHurt",OPTIONMANAGER->getSoundEffectVolume());
+		}
 		//모크 상태였으면
 		if (_state == B_STATE::MOCK)
 		{
@@ -558,12 +582,8 @@ void boss::RcCollideBySkillFunc(RECT * skillRc, int dmg, bool * isHit)
 
 		if (_curHp <= 0)
 		{
-			//원래는 에너미 지워줬는데 여긴 보스 상태를 데스로 바꿔주는걸 넣자
-			_state == B_STATE::DEATH_START;
-			bossCurrentState();
-			_isAniOnce = true;
 			_isDeath = true;
-			startAni();
+			_isSkillEnd = true;
 		}
 	}
 	if (*isHit)
@@ -584,19 +604,13 @@ void boss::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool *
 		//모크 상태였으면
 		if (_state == B_STATE::MOCK)
 		{
-			_state = B_STATE::STUN;
-			bossCurrentState();
-			_isAniOnce = true;
 			_isStun = true;
 		}
 
 		if (_curHp <= 0)
 		{
-			//원래는 에너미 지워줬는데 여긴 보스 상태를 데스로 바꿔주는걸 넣자
-			_state = B_STATE::DEATH_START;
-			bossCurrentState();
-			_isAniOnce = true;
 			_isDeath = true;
+			_isSkillEnd = true;
 		}
 	}
 }

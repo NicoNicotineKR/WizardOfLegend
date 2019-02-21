@@ -33,6 +33,7 @@ HRESULT stage1_Boss::init()
 	_miniMap = new minimapUI;
 	_boss = new boss;
 	_dialogueMaker = new dialogueMaker;
+	_bossHpBar = new bossHpProgressBarUI;
 	_dialogueMaker->init();
 
 	_vvMap.clear();
@@ -80,6 +81,8 @@ HRESULT stage1_Boss::init()
 	_player->setPosX(600);
 	_player->setPosY(2000);
 
+	_boss->setPos({800,800});
+	_bossHpBar->init(_boss->getMaxHpAdress(), _boss->getCurHpAdress(), _boss->getIsAreaAdress());
 
 	_stateBossStage = NON;
 
@@ -115,7 +118,7 @@ void stage1_Boss::update()
 		_miniMap->update();
 
 		_boss->update();
-
+		_bossHpBar->update();
 		CAMERA2D->setPos(_player->getPos());
 	}
 
@@ -142,6 +145,7 @@ void stage1_Boss::update()
 
 	if (_player->getPos().y <= 1000 && _stateBossStage == NON)
 	{
+		_boss->setBossSpawn();
 		_stateBossStage = CAMERAMOVE;
 		CAMERA2D->setStateCamera(1);
 	}
@@ -178,11 +182,20 @@ void stage1_Boss::update()
 					}
 				}
 			}
+			_boss->setBossStateCasting();
 			CAMERA2D->setStateCamera(0);
 			_stateBossStage = BATTLE;
 		}
 	}
 
+	//형우형 선물 
+	if (_boss->getIsDead())
+	{
+		//여기에 다이얼로그 시작
+
+		//끝나면 
+	}
+	
 
 
 }
@@ -193,6 +206,7 @@ void stage1_Boss::render()
 	VObjectRender();
 
 	_boss->render();
+	_bossHpBar->render();
 	for (int i = 0; i < _enemyMgr->getVEnemy().size(); ++i)
 	{
 

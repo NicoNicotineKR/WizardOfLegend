@@ -6,6 +6,7 @@
 #include "minimapUI.h"
 #include "boss.h"
 #include "dialogueMaker.h"
+#include "bossHpProgressBarUI.h"
 
 enum stateBossStage
 {
@@ -32,6 +33,7 @@ private:
 	minimapUI* _miniMap;
 	boss* _boss;
 	dialogueMaker* _dialogueMaker;
+	bossHpProgressBarUI* _bossHpBar;
 
 	int _tileNumX;
 	int _tileNumY;

@@ -55,7 +55,7 @@ private:
 	const int SPEAR_MAXNUM = 20;			//	최대로 쏠 수 있는 창의 갯수
 	const float SPEAR_SPD = 35;				//	창이 날라가는 스피드
 	const float SPEAR_TIP_LENGTH = 17.0f;	//	창날의 길이(판정렉트 생성에 사용)
-	const double PREPARE_SHOTTIME = 1.5;	//	쏘기전까지 대기시간
+	const double PREPARE_SHOTTIME = 1.0f;	//	쏘기전까지 대기시간
 	const int JUDGERC_WID = 25;				//	판정렉트 한변 길이
 	
 

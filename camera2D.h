@@ -5,7 +5,6 @@ enum stateCamera
 {
 	PLAYER,
 	BOSS,
-
 };
 
 
