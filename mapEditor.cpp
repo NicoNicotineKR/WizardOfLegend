@@ -1865,7 +1865,7 @@ void mapEditor::InitSampleIceObj()
 					if (32 <= j && j <= 36)
 					{
 						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(true);
-						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE18);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
 					}
 				}
 				if (i == 12)
@@ -1873,7 +1873,7 @@ void mapEditor::InitSampleIceObj()
 					if (32 <= j && j <= 36)
 					{
 						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setIsAvailMove(false);
-						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_FURNITURE18);
+						_totalSamples[SELECT_OBJ][ICE_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
 					}
 				}
 
@@ -3015,11 +3015,11 @@ void mapEditor::InitSampleCommonObj()
 				}
 			}
 
-			//3페이지
+			//3페이지 - 마법진
 			if (0 <= i && i <= 13) {
 				if (28 <= j && j <= 41) {
-					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setIsAvailMove(true);
-					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
+					_totalSamples[SELECT_TILE][COMMON_TILE][i][j]->setIsAvailMove(true);
+					_totalSamples[SELECT_TILE][COMMON_TILE][i][j]->setTopTileAttr(TILE_FLOOR);
 				}
 			}
 
@@ -3798,7 +3798,7 @@ void mapEditor::InitSampleCommonObj()
 			if (4 <= i && i <= 7) {
 				if (107 <= j && j <= 111) {
 					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setIsAvailMove(true);
-					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setTopObjAttr(OBJ_STARTPOINT);
+					_totalSamples[SELECT_OBJ][COMMON_OBJ][i][j]->setTopObjAttr(OBJ_UNBREAKABLE);
 				}
 			}
 
@@ -4196,7 +4196,7 @@ void mapEditor::ArrowClickFunc()
 											_curTileSampleIdx = COMMONTILE_KINDS_END - 1;
 										}
 									}
-									
+
 									//	==== if잘못걸려있어서 위와같이 수정함 ====
 									//if (_curTileKind == CASTLE_TILE) {
 									//	if (_curTileSampleIdx < 0) {
@@ -4303,7 +4303,7 @@ void mapEditor::ArrowClickFunc()
 										//	_curTileSampleIdx = COMMON_ENEMY_KINDS_END - 1;
 										//}
 									}
-										
+
 								}
 								break;
 							}
@@ -4832,7 +4832,7 @@ void mapEditor::PreviewSampleRender()
 							(_cursorMapIdx.y + (i - iStart)) * TOP_TILESIZE - _camLeftTop.y };
 				//	이미지랑 프레임, 필요한 정보만 넣어줘야함, 렉트까지 넣어주지말고
 				//_vvMap[mapIdxY + (i-iStart)][mapIdxX + (j-jStart)] = _castleTileSample[adjustIdxY][adjustIdxX];
-				
+
 				//	터지는거 방지용
 				if (_totalSamples[_curSampleKind][_curTileKind][adjustIdxY][adjustIdxX]->getTopTileImg() == nullptr) continue;
 
