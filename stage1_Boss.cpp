@@ -24,6 +24,7 @@ HRESULT stage1_Boss::init()
 	IMAGEMANAGER->addImage("bossImg", "images/npc/bossImg.bmp", 188, 189, true, 0xff00ff);
 	_npcFaceImg = IMAGEMANAGER->findImage("bossImg");
 	_npcFaceText = "잡어 잡어잡어잡어";
+	_npcFaceText2 = "으윽 너무아팡";
 
 
 
@@ -57,14 +58,14 @@ HRESULT stage1_Boss::init()
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
-	
+
 
 	_enemyMgr->setPlayerAdress(_player);
 	_enemyMgr->setMapAdress(_vvMap);
 	_enemyMgr->init();
 	_player->enemyLink(_enemyMgr);
 
-	
+
 
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 
@@ -74,14 +75,12 @@ HRESULT stage1_Boss::init()
 	CAMERA2D->getMapSize(_tileNumX*TOP_TILESIZE, _tileNumY*TOP_TILESIZE);
 
 	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
-	SOUNDMANAGER->play("Bossbackground", OPTIONMANAGER->getSoundBackVolume());
-	OPTIONMANAGER->setTempSoundName("Bossbackground");
 
-	//_player->setCurHp(_savePlayerHp);
+	_player->setCurHp(_savePlayerHp);
 	_player->setPosX(600);
 	_player->setPosY(2000);
 
-	_boss->setPos({800,800});
+	_boss->setPos({ 800,800 });
 	_bossHpBar->init(_boss->getMaxHpAdress(), _boss->getCurHpAdress(), _boss->getIsAreaAdress());
 
 	_stateBossStage = NON;
@@ -98,7 +97,7 @@ void stage1_Boss::update()
 {
 	if (_allStop == false)
 	{
-		if (_stateBossStage == NON || _stateBossStage == BATTLE)
+		if (_stateBossStage == NON || _stateBossStage == BATTLE || _stateBossStage == ENDBOSS)
 		{
 			_player->update();
 		}
@@ -145,6 +144,9 @@ void stage1_Boss::update()
 
 	if (_player->getPos().y <= 1000 && _stateBossStage == NON)
 	{
+		SOUNDMANAGER->play("Bossbackground", OPTIONMANAGER->getSoundBackVolume());
+		OPTIONMANAGER->setTempSoundName("Bossbackground");
+
 		_boss->setBossSpawn();
 		_stateBossStage = CAMERAMOVE;
 		CAMERA2D->setStateCamera(1);
@@ -182,30 +184,35 @@ void stage1_Boss::update()
 					}
 				}
 			}
+			_dialogueMaker->setPrintLen(0);
 			_boss->setBossStateCasting();
 			CAMERA2D->setStateCamera(0);
 			_stateBossStage = BATTLE;
 		}
 	}
-	//옵젝 충돌
-	RECT temp;
-	for (int i = 0; i < _vObjects.size(); ++i)
+
+
+	if (_boss->getCurHp() <= 0 && _stateBossStage == BATTLE)
 	{
-		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
-		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
+		_stateBossStage = BOSSDEAD;
+	}
+
+	if (_stateBossStage == BOSSDEAD)
+	{
+		_dialogueMaker->update();
+		if (_dialogueMaker->getPrintLen() == 0)
 		{
-			_vObjects.erase(_vObjects.begin() + i);
-			break;
+			_dialogueMaker->setDialogue(_npcFaceImg, _npcFaceText2, 0.1);
+			_dialogueMaker->setIsStart(true);
+		}
+		else if (_dialogueMaker->getisStart() == false)
+		{
+			_boss->setBossStateCasting();
+			_stateBossStage = ENDBOSS;
+
+			_boss->setBossDeath();
 		}
 	}
-	//형우형 선물 
-	if (_boss->getIsDead())
-	{
-		//여기에 다이얼로그 시작
-
-		//끝나면 
-	}
-	
 
 
 }
@@ -236,7 +243,7 @@ void stage1_Boss::render()
 	_player->getSkillUI()->render();
 	_miniMap->render();
 
-	if (_stateBossStage == TALK)
+	if (_stateBossStage == TALK || _stateBossStage == BOSSDEAD)
 	{
 		_dialogueMaker->render();
 	}

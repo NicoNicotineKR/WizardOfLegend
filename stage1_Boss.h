@@ -14,6 +14,8 @@ enum stateBossStage
 	CAMERAMOVE,
 	TALK,
 	BATTLE,
+	BOSSDEAD,
+	ENDBOSS,
 };
 
 
@@ -40,12 +42,13 @@ private:
 
 	bool _allStop;
 
-	//int		_savePlayerHp;
-	//bool	_isOneSavePlayerHp;
+	int		_savePlayerHp;
+	bool	_isOneSavePlayerHp;
 
 	//보스이미지
 	image* _npcFaceImg;
 	string _npcFaceText;
+	string _npcFaceText2;
 
 	stateBossStage _stateBossStage;
 
@@ -64,6 +67,6 @@ public:
 	void VObjectRender();
 
 	void setPlayerLink(player* player) { _player = player; }
-	//void setPlayerStartHp(int playerHp) { _savePlayerHp = playerHp; }
+	void setPlayerStartHp(int playerHp) { _savePlayerHp = playerHp; }
 };
 
