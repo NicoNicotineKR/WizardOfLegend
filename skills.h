@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "player.h"
 #include "enemyMgr.h"
+#include "boss.h"
 
 class player;
 
@@ -38,6 +39,7 @@ protected:
 
 	//	재만추가 -> 에너미들한테 스킬이 데미지줘야함
 	enemyMgr* _em;
+	boss* _boss;
 
 public:
 

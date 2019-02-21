@@ -32,6 +32,7 @@ HRESULT stage1_1::init()
 
 	//	재만 순서바꿈 - cuz 스킬과 연결
 	_player->enemyLink(_enemyMgr);
+//	_player->enemyLink(nullptr);
 	_player->init(_vvMap);
 	_player->arrSkillInit();
 	_player->skillIconInit();
@@ -50,6 +51,8 @@ HRESULT stage1_1::init()
 	float bossPosY = _vvMap[13][16]->getTopTilePos().y;
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
+//	_player->bossLink(_boss);
+	_player->bossLink(nullptr);
 	
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 	
@@ -64,15 +67,6 @@ HRESULT stage1_1::init()
 
 	_isOneSavePlayerHp = false;
 
-	_playerInfoBoxUI = new playerInfoBoxUI;
-	_playerInfoBoxUI->init();
-
-	_playerInfoBox = new playerInfoBox;
-	_playerInfoBox->setPlayerAddreesLink(_player);
-	_playerInfoBox->init();
-
-
-
 
 	return S_OK;
 }
@@ -84,7 +78,7 @@ void stage1_1::release()
 
 void stage1_1::update()
 {
-	if (_allStop == false && _allStop2 == false)
+	if (_allStop == false)
 	{
 		_player->update();
 		_player->tileCheckFunc();
@@ -97,7 +91,7 @@ void stage1_1::update()
 		CAMERA2D->setPos(_player->getPos());
 	}
 
-	if (_allStop == false && _allStop2 == false)
+	if (_allStop == false)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 		{
@@ -115,23 +109,8 @@ void stage1_1::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
-	RECT temp;
-	for (int i = 0; i < _vObjects.size(); ++i)
-	{
-		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
-		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
-		{
-			_vObjects.erase(_vObjects.begin() + i);
-			break;
-		}
-	}
 
-	if (_allStop == false)
-	{
-		_playerInfoBox->update();
-		_allStop2 = _playerInfoBox->getIsStart();
-	}
-	
+
 }
 
 void stage1_1::render()
@@ -171,10 +150,6 @@ void stage1_1::render()
 		_savePlayerHp = _player->getCurHp();
 		SCENEMANAGER->changeScene("stage1_Boss");
 	}
-
-	_playerInfoBoxUI->render();
-	_playerInfoBox->render();
-	_player->getSkillUI()->render();
 }
 
 void stage1_1::TileMapRender()

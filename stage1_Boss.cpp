@@ -24,7 +24,7 @@ HRESULT stage1_Boss::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	_player->enemyLink(_enemyMgr);
+	_player->enemyLink(nullptr);
 	_player->init(_vvMap);
 	_player->arrSkillInit();
 	_player->skillIconInit();
@@ -43,6 +43,9 @@ HRESULT stage1_Boss::init()
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
 
+	//보스 링크----------------------------------------------------------------------------------------------
+	_player->bossLink(_boss);
+	//------------------------------------------------------------------------------------------------------
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 
 	delete _stageMapLoader;

@@ -31,6 +31,7 @@ HRESULT chainLightning::init(player* Player)
 	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
 	_isHit = false;
 	_em = Player->getEnemyMgrAddress();
+	_boss = Player->getBossAdresss();
 	return S_OK;
 }
 
@@ -85,7 +86,14 @@ void chainLightning::update(player* Player)
 						if (!_isHit) {
 							_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2 - 135 / 2,
 								_pos.y + _img->getFrameHeight() - 25 - 900, 50, 50);
-							_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+							if (_em != nullptr)
+							{
+								_em->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+							}
+							if (_boss != nullptr)
+							{
+								_boss->RcCollideBySkillFunc(&_collisionRc, ATK_DMG, &_isHit);
+							}
 						}
 
 						_attackCount++;

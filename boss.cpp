@@ -119,7 +119,7 @@ void boss::render()
 	if (_isArea)
 	{
 		char str[128];
-		sprintf_s(str, "보스상태 %d", _state);
+		sprintf_s(str, "보스상태 %d", _curHp);
 		TextOut(getMemDC(), 300, 300, str, strlen(str));
 
 		_wingImg->aniRender(getMemDC(), (_pos.x - WING_SHAVE_X) - CAMERA2D->getCamPosX(), (_pos.y - WING_SHAVE_Y) - CAMERA2D->getCamPosY(), _wingAni);
@@ -548,4 +548,65 @@ void boss::setBossStateCasting()
 	bossCurrentState();
 	_isAniOnce = true;
 	startAni();
+}
+
+void boss::RcCollideBySkillFunc(RECT * skillRc, int dmg, bool * isHit)
+{
+	RECT tmpRc;
+	if ((_state != B_STATE::DEATH_START && _state != B_STATE::DEATH) && IntersectRect(&tmpRc, skillRc, &_rc))
+	{
+		//일단 피까고
+		_curHp -= dmg;
+		*isHit = true;
+		//모크 상태였으면
+		if (_state == B_STATE::MOCK)
+		{
+			_state == B_STATE::STUN;
+			bossCurrentState();
+			_isAniOnce = true;
+			_isStun = true;
+		}
+
+		if (_curHp <= 0)
+		{
+			//원래는 에너미 지워줬는데 여긴 보스 상태를 데스로 바꿔주는걸 넣자
+			_state == B_STATE::DEATH_START;
+			bossCurrentState();
+			_isAniOnce = true;
+			_isDeath = true;
+		}
+	}
+	if (*isHit)
+	{
+		*skillRc = { 0, 0, 0, 0 };
+	}
+}
+
+void boss::DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool * isHit)
+{
+	RECT tmpRc;
+
+	if ((_state != B_STATE::DEATH_START && _state != B_STATE::DEATH) && getDistance(_pos.x,_pos.y,skillPos.x,skillPos.y) < range)
+	{
+		//일단 피까고
+		_curHp -= dmg;
+		*isHit = true;
+		//모크 상태였으면
+		if (_state == B_STATE::MOCK)
+		{
+			_state == B_STATE::STUN;
+			bossCurrentState();
+			_isAniOnce = true;
+			_isStun = true;
+		}
+
+		if (_curHp <= 0)
+		{
+			//원래는 에너미 지워줬는데 여긴 보스 상태를 데스로 바꿔주는걸 넣자
+			_state == B_STATE::DEATH_START;
+			bossCurrentState();
+			_isAniOnce = true;
+			_isDeath = true;
+		}
+	}
 }

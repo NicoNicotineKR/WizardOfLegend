@@ -8,6 +8,7 @@
 
 
 class enemyMgr;
+class boss;
 class skills;
 class playerState;
 
@@ -80,6 +81,7 @@ private:
 
 	vvMap* _vvMap;
 	enemyMgr* _em;
+	boss*	_boss;
 
 	image*			_img;					//플레이어 이미지
 	animation*		_ani;					//플레이어 애니(만화 영화아님)
@@ -149,6 +151,7 @@ public:
 	void CamRender(HDC hdc);
 
 	inline void enemyLink(enemyMgr* em) { _em = em; }
+	inline void bossLink(boss* boss) { _boss = boss; }
 
 	void playerKeyAnimationInit();
 	void inPutKey();
@@ -267,6 +270,7 @@ public:
 	inline void setPlayerSkill(int idx, skills* skill) {_curSkills[idx] = skill; }
 	
 	inline enemyMgr* getEnemyMgrAddress() { return _em; }
+	inline boss* getBossAdresss() { return _boss; }
 
 	inline int getBasicSkillNum() { return _basicSkillNum; }
 	inline void setBasicSkillNum(int i) { _basicSkillNum = i; }

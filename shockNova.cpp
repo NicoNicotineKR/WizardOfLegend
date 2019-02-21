@@ -31,6 +31,7 @@ HRESULT shockNova::init(player * Player)
 
 	//	재만추가 -> enemyMgr 주소 넣어줌 : 몹에게 데미지 줌
 	_em = Player->getEnemyMgrAddress();
+	_boss = Player->getBossAdresss();
 	_isHit = false;
 	return S_OK;
 }
@@ -48,8 +49,14 @@ void shockNova::update(player * Player)
 		if (6 > _attackCount)
 		{
 			//	재만추가
-			_em->DistanceBySkillFunc(_pos, ATK_RANGE, ATK_DMG, &_isHit);
-		
+			if (_em != nullptr)
+			{
+				_em->DistanceBySkillFunc(_pos, ATK_RANGE, ATK_DMG, &_isHit);
+			}
+			if (_boss != nullptr)
+			{
+				_boss->DistanceBySkillFunc(_pos, ATK_RANGE, ATK_DMG, &_isHit);
+			}
 
 
 			if (_imgCount > 0.05f)

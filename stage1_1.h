@@ -5,8 +5,6 @@
 #include "aStar.h"
 #include "minimapUI.h"
 #include "boss.h"
-#include "playerInfoBoxUI.h"
-#include "playerInfoBox.h"
 
 class stage1_1 : public gameNode
 {
@@ -34,15 +32,10 @@ private:
 	minimapUI* _miniMap;
 	boss* _boss;
 
-	playerInfoBoxUI* _playerInfoBoxUI;
-	playerInfoBox* _playerInfoBox;
-	bool _allStop2;
-
 	int _tileNumX;
 	int _tileNumY;
 
 	bool _allStop;
-
 
 	int _savePlayerHp;
 	bool _isOneSavePlayerHp;

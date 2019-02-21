@@ -30,6 +30,7 @@ HRESULT stoneShot::init(player * Player)
 
 	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
 	_em = Player->getEnemyMgrAddress();
+	_boss = Player->getBossAdresss();
 	_isHit = false;
 	return S_OK;
 }
@@ -116,8 +117,14 @@ void stoneShot::update(player * Player)
 		if (!_isHit) {
 			_stoneShotRc[i] = RectMakeCenter(_stoneShotPos[i].x + _stoneShotImg[i]->getFrameWidth() / 2,
 				_stoneShotPos[i].y + _stoneShotImg[i]->getFrameHeight() / 2, _stoneShotImg[i]->getFrameWidth(), _stoneShotImg[i]->getFrameHeight());
-
-			_em->RcCollideBySkillFunc(&_stoneShotRc[i], ATK_DMG, &_isHit);
+			if (_em != nullptr)
+			{
+				_em->RcCollideBySkillFunc(&_stoneShotRc[i], ATK_DMG, &_isHit);
+			}
+			if (_boss != nullptr)
+			{
+				_boss->RcCollideBySkillFunc(&_stoneShotRc[i], ATK_DMG, &_isHit);
+			}
 		}
 
 		

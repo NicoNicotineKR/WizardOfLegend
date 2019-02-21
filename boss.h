@@ -2,7 +2,6 @@
 #include "gameNode.h"
 #include "tile.h"
 #include "rotateImgMaker.h"
-#include "skills.h"
 #include "throwIceSpear.h"
 
 class bossState;
@@ -76,7 +75,7 @@ private:
 
 	bool			_isAniOnce;			//애니메이션 한번만 재생할 불값
 	bool			_isArea;			//플레이어가 근접해 있나?(구역의 타일을 플레이어가 밟으면 얘가 트루됨)
-	bool			_isHit;				//맞았니?			-> mock 상태에서 isHit가 트루가되면 stun상태로 변경함. isHit될때마다 
+//	bool			_isHit;				//맞았니?			-> mock 상태에서 isHit가 트루가되면 stun상태로 변경함. isHit될때마다 
 	bool			_isStun;			//스턴상태니?
 	bool			_isDeath;			//죽었니?
 
@@ -103,7 +102,7 @@ private:
 
 	//	재만 추가목록 ----------------------------
 	//	스킬
-	vector<skills*> _vSkills;
+	//vector<skills*> _vSkills;
 	throwIceSpear* _skill3;
 
 	// 그떄 그때 추가하는 목록인데 더러울것임.
@@ -180,6 +179,9 @@ public:
 
 	//다이얼로그 끝나면 캐스팅모드 들어가는거 - 형우형이 쓸예정
 	void setBossStateCasting();
+
+	void RcCollideBySkillFunc(RECT* skillRc, int dmg, bool* isHit);
+	void DistanceBySkillFunc(POINTFLOAT skillPos, float range, int dmg, bool* isHit);
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	

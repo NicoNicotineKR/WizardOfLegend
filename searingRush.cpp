@@ -35,6 +35,7 @@ HRESULT searingRush::init(player * Player)
 
 	//	Àç¸¸Ãß°¡ -> enemyMgr ÁÖ¼Ò ³Ö¾îÁÜ : ¸÷¿¡°Ô µ¥¹ÌÁö ÁÜ
 	_em = Player->getEnemyMgrAddress();
+	_boss = Player->getBossAdresss();
 	for (int i = 0; i < 5; i++) {
 		_isHit[5] = false;
 	}
@@ -51,7 +52,14 @@ void searingRush::update(player * Player)
 	for (int i = 0; i < 5; i++) {
 		if (!_isHit[i]) {
 			_flameRc[i] = RectMakeCenter(_flamePos[i].x, _flamePos[i].y + 78, 50, 50);
-			_em->RcCollideBySkillFunc(&_flameRc[i], ATK_DMG, &_isHit[i]);
+			if (_em != nullptr)
+			{
+				_em->RcCollideBySkillFunc(&_flameRc[i], ATK_DMG, &_isHit[i]);
+			}
+			if (_boss != nullptr)
+			{
+				_boss->RcCollideBySkillFunc(&_flameRc[i], ATK_DMG, &_isHit[i]);
+			}
 		}
 	}
 	
@@ -125,15 +133,15 @@ void searingRush::render(player* Player)
 		
 		
 	}
-	for (int i = 0; i < _em->getVEnemy().size(); i++) {
-
-		RECT tmprc = _em->getVEnemy()[i]->getCollision();
-		tmprc.left -= CAMERA2D->getCamPosX();
-		tmprc.right -= CAMERA2D->getCamPosX();
-		tmprc.top -= CAMERA2D->getCamPosY();
-		tmprc.bottom -= CAMERA2D->getCamPosY();
-		Rectangle(Player->getMemDC(), tmprc);
-	}
+//	for (int i = 0; i < _em->getVEnemy().size(); i++) {
+//
+//		RECT tmprc = _em->getVEnemy()[i]->getCollision();
+//		tmprc.left -= CAMERA2D->getCamPosX();
+//		tmprc.right -= CAMERA2D->getCamPosX();
+//		tmprc.top -= CAMERA2D->getCamPosY();
+//		tmprc.bottom -= CAMERA2D->getCamPosY();
+//		Rectangle(Player->getMemDC(), tmprc);
+//	}
 }
 
 void searingRush::skillPosSet(player * Player)
