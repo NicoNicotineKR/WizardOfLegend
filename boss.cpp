@@ -245,8 +245,8 @@ void boss::bossKeyAnimationInit()
 	KEYANIMANAGER->addArrayFrameAnimation("bossDeathStart", "boss", deathStart, 1, 1, true);
 
 	//death 87
-	int death[] = { 87 };
-	KEYANIMANAGER->addArrayFrameAnimation("bossDeath", "boss",death, 1, 1, true);
+	int death[] = { 87,87,87,87,87,86,86,86,86 };
+	KEYANIMANAGER->addArrayFrameAnimation("bossDeath", "boss",death, 9, 3, false);
 
 }
 
@@ -265,6 +265,9 @@ void boss::wingKeyAnimationInit()
 	//작은상태 -> 점점커짐 -> 아이들
 	int increase[] = { 14,15,16,17,18,19,20 };
 	KEYANIMANAGER->addArrayFrameAnimation("wingIncrease", "bossWing", increase, 7, 7, false, wingIdle, this);
+
+	int disappear[] = { 20,20,20,20,20,25,25,25,25 };
+	KEYANIMANAGER->addArrayFrameAnimation("wingDisappear", "bossWing", disappear, 9, 3, false);
 }
 
 void boss::crystalKeyAnimationInit()
@@ -446,7 +449,7 @@ void boss::startAni()
 			_ani = KEYANIMANAGER->findAnimation("bossDeath");
 			_ani->start();
 
-			_wingAni = KEYANIMANAGER->findAnimation("wingDecrease");
+			_wingAni = KEYANIMANAGER->findAnimation("wingDisappear");
 			_wingAni->start();
 
 			_crystalAni = KEYANIMANAGER->findAnimation("crystal");
