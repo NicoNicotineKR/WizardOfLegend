@@ -64,6 +64,15 @@ HRESULT stage1_1::init()
 
 	_isOneSavePlayerHp = false;
 
+	_playerInfoBoxUI = new playerInfoBoxUI;
+	_playerInfoBoxUI->init();
+
+	_playerInfoBox = new playerInfoBox;
+	_playerInfoBox->setPlayerAddreesLink(_player);
+	_playerInfoBox->init();
+
+
+
 
 	return S_OK;
 }
@@ -75,7 +84,7 @@ void stage1_1::release()
 
 void stage1_1::update()
 {
-	if (_allStop == false)
+	if (_allStop == false && _allStop2 == false)
 	{
 		_player->update();
 		_player->tileCheckFunc();
@@ -88,7 +97,7 @@ void stage1_1::update()
 		CAMERA2D->setPos(_player->getPos());
 	}
 
-	if (_allStop == false)
+	if (_allStop == false && _allStop2 == false)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 		{
@@ -116,6 +125,13 @@ void stage1_1::update()
 			break;
 		}
 	}
+
+	if (_allStop == false)
+	{
+		_playerInfoBox->update();
+		_allStop2 = _playerInfoBox->getIsStart();
+	}
+	
 }
 
 void stage1_1::render()
@@ -155,6 +171,10 @@ void stage1_1::render()
 		_savePlayerHp = _player->getCurHp();
 		SCENEMANAGER->changeScene("stage1_Boss");
 	}
+
+	_playerInfoBoxUI->render();
+	_playerInfoBox->render();
+	_player->getSkillUI()->render();
 }
 
 void stage1_1::TileMapRender()
