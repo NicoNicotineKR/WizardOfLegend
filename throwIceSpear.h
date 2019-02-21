@@ -21,8 +21,10 @@ private:
 		POINTFLOAT pos;				//	쏘기전, 한번만 set
 		POINT adjustPos;		//	보스 머리 위 중심에서 얼마나 떨어져있는가. 보정용 (창이 여러개일경우)
 		RECT rc;					//	쏘기전, 한번만 set -> 쏜 후, 계속 갱신
-		POINTFLOAT judgePos[2];		//	쏠때 한번만 set, 쏜후, 계속 갱신
-		RECT judgeRc[2];			//	쏜 후 계속 갱신
+		//POINTFLOAT judgePos[2];		//	쏠때 한번만 set, 쏜후, 계속 갱신
+		//RECT judgeRc[2];			//	쏜 후 계속 갱신
+		POINTFLOAT judgePos;
+		RECT judgeRc;
 		POINTFLOAT vec;				//	쏠때 한번만 set
 		//	POINTFLOAT atkDestPos;		//	쏠때 한번만 set		//안씀
 		float angle;				//	쏘기전, 실시간 set
@@ -54,7 +56,7 @@ private:
 	const float SPEAR_SPD = 10;				//	창이 날라가는 스피드
 	const float SPEAR_TIP_LENGTH = 17.0f;	//	창날의 길이(판정렉트 생성에 사용)
 	const double PREPARE_SHOTTIME = 3.0;	//	쏘기전까지 대기시간
-	const int JUDGERC_WID = 17;				//	판정렉트 한변 길이
+	const int JUDGERC_WID = 25;				//	판정렉트 한변 길이
 	
 
 	const float END_SKILLTIME = 10.0f;		//	최대 지속시간 및, 시간다되면 초기화
@@ -85,6 +87,9 @@ public:
 	void setIsStart(bool value) { _isStart = value; }
 	bool getIsStart() { return _isStart; }
 
+	vector<tagIceSpear*> getVMissle() { return _iceSpear; }
+	//	set판정렉트
+	void setJudgeRc(int idx, RECT rc) { _iceSpear[idx]->rc = rc; }
 	
 };
 

@@ -36,31 +36,7 @@ HRESULT throwIceSpear::init()
 	_prepareShotElapsedTime = 0.f;
 	_totalSkillElapsedTime = 0.f;
 	
-	for (int i = -1; i < SPEAR_MAXNUM-1; i++) {
-		tagIceSpear* tmpIceSpear = new tagIceSpear;
-		tmpIceSpear->alpha = 0;
-
-		//	첫 번째면,
-		if (i == -1)
-		{
-			tmpIceSpear->adjustPos = { 0,0 };
-		}
-		//	짝수번째면,
-		else if (i % 2 == 0)
-		{
-			tmpIceSpear->adjustPos = { 100* ((i / 2)+1) ,0 };
-		}
-		//	홀수번째면
-		else
-		{
-			tmpIceSpear->adjustPos = { 100 * ((i / 2)+1), 0 };
-		}
-
-		//tmpIceSpear->isOnceSetSpearPrepareValue = false;
-		tmpIceSpear->isOnceSetSpearShotValue = false;
-		
-		_iceSpear.push_back(tmpIceSpear);
-	}
+	
 	
 	_augAlpha = 255 / (PREPARE_SHOTTIME*60);
 
@@ -73,6 +49,16 @@ HRESULT throwIceSpear::init()
 
 void throwIceSpear::release()
 {
+	_isStart = false;
+	_isRdyToShot = false;
+	//_prepareShotElapsedTime = 0;
+	_totalSkillElapsedTime = 0;
+
+	for (int i = 0; i < _iceSpear.size(); i++) {
+		delete _iceSpear[i];
+		_iceSpear[i] = nullptr;
+	}
+	_iceSpear.clear();
 }
 
 void throwIceSpear::update()
@@ -119,7 +105,9 @@ void throwIceSpear::update()
 		_totalSkillElapsedTime += TIMEMANAGER->getElapsedTime();
 
 		if (_totalSkillElapsedTime > END_SKILLTIME) {
-			ResetAll();
+			//ResetAll();
+			this->release();
+			return;
 		}
 	}
 }
@@ -131,6 +119,7 @@ void throwIceSpear::render()
 			_iceSpear[i]->img->alphaRender(getMemDC(), _iceSpear[i]->rc.left, _iceSpear[i]->rc.top, _iceSpear[i]->alpha);
 		}
 	}
+	
 
 	//for (int i = 0; i < 36; i++) {
 	//	if (i < 12) {
@@ -144,6 +133,16 @@ void throwIceSpear::render()
 	//	}
 	//}
 	
+
+	/*
+	for (int i = 0; i < _iceSpear.size(); i++) {
+		//Rectangle(getMemDC(), _iceSpear[i]->judgeRc[0]);
+		//Rectangle(getMemDC(), _iceSpear[i]->judgeRc[1]);
+		
+	}
+	*/
+
+	/*
 	char str[128];
 	
 	
@@ -161,7 +160,7 @@ void throwIceSpear::render()
 			//TextOut(getMemDC(), 50, 50 + i * 20, str, strlen(str));
 		//}
 	}
-	
+	*/
 	
 }
 
@@ -176,7 +175,31 @@ void throwIceSpear::UseSkill(POINTFLOAT * bossPos, POINTFLOAT * playerPos, int s
 		_spearNum = spearNum;
 	}
 	
+	for (int i = -1; i < SPEAR_MAXNUM - 1; i++) {
+		tagIceSpear* tmpIceSpear = new tagIceSpear;
+		tmpIceSpear->alpha = 0;
 
+		//	첫 번째면,
+		if (i == -1)
+		{
+			tmpIceSpear->adjustPos = { 0,0 };
+		}
+		//	짝수번째면,
+		else if (i % 2 == 0)
+		{
+			tmpIceSpear->adjustPos = { 100 * ((i / 2) + 1) ,0 };
+		}
+		//	홀수번째면
+		else
+		{
+			tmpIceSpear->adjustPos = { 100 * ((i / 2) + 1), 0 };
+		}
+
+		//tmpIceSpear->isOnceSetSpearPrepareValue = false;
+		tmpIceSpear->isOnceSetSpearShotValue = false;
+
+		_iceSpear.push_back(tmpIceSpear);
+	}
 	
 	
 	_isStart = true;
@@ -231,12 +254,21 @@ void throwIceSpear::SetSpearPrepareValue(int idx, POINTFLOAT playerPos, POINTFLO
 void throwIceSpear::SetSpearShotValueOnce(int idx)
 {
 	//	판정렉트 좌표
-	_iceSpear[idx]->judgePos[0].x = _iceSpear[idx]->pos.x + (SPEAR_TIP_LENGTH * 3 / 4) * cosf(_iceSpear[idx]->angle);
-	_iceSpear[idx]->judgePos[0].y = _iceSpear[idx]->pos.y + (SPEAR_TIP_LENGTH * 3 / 4) * -sinf(_iceSpear[idx]->angle);
-											   
-	_iceSpear[idx]->judgePos[1].x = _iceSpear[idx]->pos.x + (SPEAR_TIP_LENGTH * 1 / 4) * cosf(_iceSpear[idx]->angle);
-	_iceSpear[idx]->judgePos[1].y = _iceSpear[idx]->pos.y + (SPEAR_TIP_LENGTH * 1 / 4) * -sinf(_iceSpear[idx]->angle);
+	//_iceSpear[idx]->judgePos[0].x = _iceSpear[idx]->pos.x + (SPEAR_TIP_LENGTH * 3 / 4) * cosf(_iceSpear[idx]->angle);
+	//_iceSpear[idx]->judgePos[0].y = _iceSpear[idx]->pos.y + (SPEAR_TIP_LENGTH * 3 / 4) * sinf(_iceSpear[idx]->angle);
+	//										   
+	//_iceSpear[idx]->judgePos[1].x = _iceSpear[idx]->pos.x + (SPEAR_TIP_LENGTH * 1 / 4) * cosf(_iceSpear[idx]->angle);
+	//_iceSpear[idx]->judgePos[1].y = _iceSpear[idx]->pos.y + (SPEAR_TIP_LENGTH * 1 / 4) * sinf(_iceSpear[idx]->angle);
 
+	/*
+	_iceSpear[idx]->judgePos[0].x = _iceSpear[idx]->pos.x;
+	_iceSpear[idx]->judgePos[0].y = _iceSpear[idx]->pos.y;
+														 
+	_iceSpear[idx]->judgePos[1].x = _iceSpear[idx]->pos.x;
+	_iceSpear[idx]->judgePos[1].y = _iceSpear[idx]->pos.y;
+	*/
+	_iceSpear[idx]->judgePos.x = _iceSpear[idx]->pos.x;
+	_iceSpear[idx]->judgePos.y = _iceSpear[idx]->pos.y;
 
 	//	vector 계산
 	_iceSpear[idx]->vec.x = SPEAR_SPD * cosf(_iceSpear[idx]->angle);
@@ -251,27 +283,31 @@ void throwIceSpear::SetSpearShotValue(int idx)
 	_iceSpear[idx]->rc = RectMakeCenter(_iceSpear[idx]->pos.x, _iceSpear[idx]->pos.y, _iceSpearDefault->GetWidth() / 2, _iceSpearDefault->GetHeight() / 2);
 
 	//	판정렉트도 이동해서 다시그리기
-	_iceSpear[idx]->judgePos[0].x += _iceSpear[idx]->vec.x;
-	_iceSpear[idx]->judgePos[0].x += _iceSpear[idx]->vec.y;
-	_iceSpear[idx]->judgePos[1].x += _iceSpear[idx]->vec.x;
-	_iceSpear[idx]->judgePos[1].x += _iceSpear[idx]->vec.y;
-	_iceSpear[idx]->judgeRc[0] = RectMakeCenter(_iceSpear[idx]->judgePos[0].x, _iceSpear[idx]->judgePos[0].y, JUDGERC_WID, JUDGERC_WID);
-	_iceSpear[idx]->judgeRc[1] = RectMakeCenter(_iceSpear[idx]->judgePos[1].x, _iceSpear[idx]->judgePos[1].y, JUDGERC_WID, JUDGERC_WID);
+	//_iceSpear[idx]->judgePos[0].x += _iceSpear[idx]->vec.x;
+	//_iceSpear[idx]->judgePos[0].y += _iceSpear[idx]->vec.y;
+	//_iceSpear[idx]->judgePos[1].x += _iceSpear[idx]->vec.x;
+	//_iceSpear[idx]->judgePos[1].y += _iceSpear[idx]->vec.y;
+	//_iceSpear[idx]->judgeRc[0] = RectMakeCenter(_iceSpear[idx]->judgePos[0].x, _iceSpear[idx]->judgePos[0].y, JUDGERC_WID, JUDGERC_WID);
+	//_iceSpear[idx]->judgeRc[1] = RectMakeCenter(_iceSpear[idx]->judgePos[1].x, _iceSpear[idx]->judgePos[1].y, JUDGERC_WID, JUDGERC_WID);
+	_iceSpear[idx]->judgePos.x += _iceSpear[idx]->vec.x;
+	_iceSpear[idx]->judgePos.y += _iceSpear[idx]->vec.y;
+	_iceSpear[idx]->judgeRc = RectMakeCenter(_iceSpear[idx]->judgePos.x, _iceSpear[idx]->judgePos.y, JUDGERC_WID, JUDGERC_WID);
+	
 }
 
 void throwIceSpear::ResetAll()
 {
-	_isStart = false;
-	_isRdyToShot = false;
-	//_prepareShotElapsedTime = 0;
-	_totalSkillElapsedTime = 0;
-
-	for (int i = 0; i < _iceSpear.size(); i++) {
-		//_iceSpear[i]->isOnceSetSpearPrepareValue = false;
-		_iceSpear[i]->isOnceSetSpearShotValue = false;
-		_iceSpear[i]->alpha = 0;
-
-	}
+	//_isStart = false;
+	//_isRdyToShot = false;
+	////_prepareShotElapsedTime = 0;
+	//_totalSkillElapsedTime = 0;
+	//
+	//for (int i = 0; i < _iceSpear.size(); i++) {
+	//	//_iceSpear[i]->isOnceSetSpearPrepareValue = false;
+	//	_iceSpear[i]->isOnceSetSpearShotValue = false;
+	//	_iceSpear[i]->alpha = 0;
+	//
+	//}
 
 	
 
