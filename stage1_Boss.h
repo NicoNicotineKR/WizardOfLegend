@@ -5,6 +5,15 @@
 #include "aStar.h"
 #include "minimapUI.h"
 #include "boss.h"
+#include "dialogueMaker.h"
+
+enum stateBossStage
+{
+	NON,
+	CAMERAMOVE,
+	TALK,
+	BATTLE,
+};
 
 
 class stage1_Boss : public gameNode
@@ -22,6 +31,7 @@ private:
 	enemyMgr* _enemyMgr;
 	minimapUI* _miniMap;
 	boss* _boss;
+	dialogueMaker* _dialogueMaker;
 
 	int _tileNumX;
 	int _tileNumY;
@@ -30,6 +40,14 @@ private:
 
 	int		_savePlayerHp;
 	bool	_isOneSavePlayerHp;
+
+	//보스이미지
+	image* _npcFaceImg;
+	string _npcFaceText;
+
+	stateBossStage _stateBossStage;
+
+
 public:
 	stage1_Boss();
 	~stage1_Boss();
@@ -44,6 +62,6 @@ public:
 	void VObjectRender();
 
 	void setPlayerLink(player* player) { _player = player; }
-	void setPlayerStartHp(int playerHp){ _savePlayerHp = playerHp;}
+	void setPlayerStartHp(int playerHp) { _savePlayerHp = playerHp; }
 };
 

@@ -1,6 +1,14 @@
 #pragma once
 #include "singletonBase.h"
 
+enum stateCamera
+{
+	PLAYER,
+	BOSS,
+
+};
+
+
 class camera2D : public singletonBase<camera2D>
 {
 private:
@@ -11,11 +19,13 @@ private:
 	int _camPosY;
 
 	POINTFLOAT _playerPos;
-	
+
 	int _shakeCount;
 	int _shakeValue;
 
+	int _stateCamera;
 
+	const int CAMERA_SPEED = 2;
 public:
 	camera2D();
 	~camera2D();
@@ -30,6 +40,8 @@ public:
 	void setPos(POINTFLOAT playerPos);
 	void getMapSize(int mapSizeX, int mapSizeY);
 	void ShakeYourBodyBabe(int shakeValue, int shakeCount);
+
+	void setStateCamera(int stateCamera) { _stateCamera = stateCamera; }
 
 };
 

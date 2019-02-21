@@ -22,6 +22,8 @@ HRESULT camera2D::init()
 	_shakeValue = 0;
 	_shakeCount = 0;
 
+	_stateCamera = 0;
+
 	return S_OK;
 }
 
@@ -31,9 +33,11 @@ void camera2D::release()
 
 void camera2D::update()
 {
-
-	_camPosX = _playerPos.x;
-	_camPosY = _playerPos.y;
+	if (_stateCamera == PLAYER)
+	{
+		_camPosX = _playerPos.x;
+		_camPosY = _playerPos.y;
+	}
 
 	if (_shakeCount > 0) {
 		_shakeCount--;
@@ -41,6 +45,18 @@ void camera2D::update()
 		int shakeY = RND->getFromIntTo(-1, 2);
 		_camPosX += shakeX * _shakeValue;
 		_camPosY += shakeY * _shakeValue;
+	}
+
+	if (_stateCamera == BOSS)
+	{
+		if (_camPosY > 200)
+		{
+			_camPosY -= CAMERA_SPEED;
+		}
+		if (_camPosY <= 200)
+		{
+			_camPosY = 200;
+		}
 	}
 
 }
@@ -51,7 +67,7 @@ void camera2D::setPos(POINTFLOAT playerPos)
 	{
 		_playerPos.x = playerPos.x - WINSIZEX / 2;
 	}
-	else if(playerPos.x <= WINSIZEX / 2)
+	else if (playerPos.x <= WINSIZEX / 2)
 	{
 		_playerPos.x = 0;
 	}

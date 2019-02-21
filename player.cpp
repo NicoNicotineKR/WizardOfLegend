@@ -42,7 +42,6 @@ HRESULT player::init(vvMap& vvMapLink)
 	_playerCircleDirectionAngle = -90 * (180 / PI);
 	_playerCircleRadius = 50;
 	_maxHp = 500;					
-	_curHp = 500;					
 
 	_speed = 300.0f;					
 	//_angle = ;					
@@ -827,11 +826,11 @@ void player::startAni()
 void player::arrStateInit()
 {
 	_skillUI = new skillCooldownUI;
-	_skillUI->init();
-
 	_playerStatusUI = new playerStatusUI;
+	_skillUI->init();
 	_playerStatusUI->init();
 
+	_curHp = 500;
 	_arrState[static_cast<const int>(STATE::IDLE)] = new state_Idle();
 	_arrState[static_cast<const int>(STATE::MOVE)] = new state_Move();
 	_arrState[static_cast<const int>(STATE::DASH)] = new state_Dash();

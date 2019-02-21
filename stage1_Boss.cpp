@@ -13,10 +13,24 @@ stage1_Boss::~stage1_Boss()
 
 HRESULT stage1_Boss::init()
 {
+	IMAGEMANAGER->addFrameImage("tileIce", "images/map/IceBaseTileSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objIce", "images/map/IceBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objEarth", "images/map/EarthBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
+
+
+	// 추가 - 다이얼로그
+	IMAGEMANAGER->addImage("bossImg", "images/npc/bossImg.bmp", 188, 189, true, 0xff00ff);
+	_npcFaceImg = IMAGEMANAGER->findImage("bossImg");
+	_npcFaceText = "잡어 잡어잡어잡어";
+
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
 	_miniMap = new minimapUI;
 	_boss = new boss;
+	_dialogueMaker = new dialogueMaker;
+	_dialogueMaker->init();
 
 	_vvMap.clear();
 	_vObjects.clear();
@@ -24,12 +38,12 @@ HRESULT stage1_Boss::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	_player->enemyLink(nullptr);
+	_player->enemyLink(_enemyMgr);
 	_player->init(_vvMap);
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
-	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 14);
+	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 20);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 
 	_enemyMgr->setPlayerAdress(_player);
@@ -43,9 +57,6 @@ HRESULT stage1_Boss::init()
 	POINTFLOAT bossPos = { bossPosX,bossPosY };
 	_boss->setPos(bossPos);
 
-	//보스 링크----------------------------------------------------------------------------------------------
-	_player->bossLink(_boss);
-	//------------------------------------------------------------------------------------------------------
 	_miniMap->init(&_vvMap, _player->getPosAddress(), _enemyMgr->getVEnemyAdress());
 
 	delete _stageMapLoader;
@@ -58,6 +69,12 @@ HRESULT stage1_Boss::init()
 	OPTIONMANAGER->setTempSoundName("Bossbackground");
 
 	_player->setCurHp(_savePlayerHp);
+	_player->setPosX(600);
+	_player->setPosY(2000);
+
+
+	_stateBossStage = NON;
+
 
 	return S_OK;
 }
@@ -70,7 +87,20 @@ void stage1_Boss::update()
 {
 	if (_allStop == false)
 	{
-		_player->update();
+		if (_stateBossStage == NON || _stateBossStage == BATTLE)
+		{
+			_player->update();
+		}
+		else
+		{
+			_player->setState(STATE::IDLE);
+			_player->currentPlayerState();
+			_player->startAni();
+			_player->setPosY(1000);
+		}
+
+
+
 		_player->tileCheckFunc();
 
 		_enemyMgr->update();
@@ -99,6 +129,54 @@ void stage1_Boss::update()
 	}
 
 	_allStop = OPTIONMANAGER->getIsStartOption();
+
+
+
+	if (_player->getPos().y <= 1000 && _stateBossStage == NON)
+	{
+		_stateBossStage = CAMERAMOVE;
+		CAMERA2D->setStateCamera(1);
+	}
+
+	if (CAMERA2D->getCamPosY() == 200 && _stateBossStage == CAMERAMOVE)
+	{
+		_stateBossStage = TALK;
+	}
+
+	if (_stateBossStage == TALK)
+	{
+		_dialogueMaker->update();
+
+		if (_dialogueMaker->getPrintLen() == 0)
+		{
+			_dialogueMaker->setDialogue(_npcFaceImg, _npcFaceText, 0.1);
+			_dialogueMaker->setIsStart(true);
+		}
+		else if (_dialogueMaker->getisStart() == false)
+		{
+			for (int i = 40; i < 44; ++i)
+			{
+				for (int j = 18; j < 25; ++j)
+				{
+					_vvMap[i][j]->setIsAvailMove(false);
+					_vvMap[i][j]->setTopTileFrameX(16);
+
+					for (int k = 0; k < 4; k++)
+					{
+						if (i == 40 + k)
+						{
+							_vvMap[i][j]->setTopTileFrameY(k);
+						}
+					}
+				}
+			}
+			CAMERA2D->setStateCamera(0);
+			_stateBossStage = BATTLE;
+		}
+	}
+
+
+
 }
 
 void stage1_Boss::render()
@@ -125,6 +203,15 @@ void stage1_Boss::render()
 	}
 	_player->getSkillUI()->render();
 	_miniMap->render();
+
+	if (_stateBossStage == TALK)
+	{
+		_dialogueMaker->render();
+	}
+
+	char str[128];
+	sprintf_s(str, "%f ,%f   보스맵상태 : %d", _player->getPos().x, _player->getPos().y, _stateBossStage);
+	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str, strlen(str));
 }
 
 void stage1_Boss::TileMapRender()
