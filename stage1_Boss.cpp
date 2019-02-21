@@ -77,7 +77,7 @@ HRESULT stage1_Boss::init()
 	SOUNDMANAGER->play("Bossbackground", OPTIONMANAGER->getSoundBackVolume());
 	OPTIONMANAGER->setTempSoundName("Bossbackground");
 
-	_player->setCurHp(_savePlayerHp);
+	//_player->setCurHp(_savePlayerHp);
 	_player->setPosX(600);
 	_player->setPosY(2000);
 
@@ -187,7 +187,17 @@ void stage1_Boss::update()
 			_stateBossStage = BATTLE;
 		}
 	}
-
+	//옵젝 충돌
+	RECT temp;
+	for (int i = 0; i < _vObjects.size(); ++i)
+	{
+		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
+		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
+		{
+			_vObjects.erase(_vObjects.begin() + i);
+			break;
+		}
+	}
 	//형우형 선물 
 	if (_boss->getIsDead())
 	{

@@ -69,11 +69,11 @@ void playGround::update()
 	OPTIONMANAGER->update();
 	KEYANIMANAGER->update();
 
-	if (_stage1_1->getIsOneSavePlayerHp() == false)
-	{
-		_savePlayerHp = _stage1_1->getPlayerHp();
-		_stage1_Boss->setPlayerStartHp(_savePlayerHp);
-	}
+	//if (_stage1_1->getIsOneSavePlayerHp() == false)
+	//{
+	//	_savePlayerHp = _stage1_1->getPlayerHp();
+	//	_stage1_Boss->setPlayerStartHp(_savePlayerHp);
+	//}
 }
 
 

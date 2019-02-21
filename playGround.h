@@ -21,7 +21,7 @@ private:
 
 	stage1_Boss* _stage1_Boss;
 
-	int _savePlayerHp;
+//	int _savePlayerHp;
 	
 public:
 	virtual HRESULT init();

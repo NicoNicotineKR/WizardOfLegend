@@ -29,11 +29,12 @@ HRESULT home::init()
 	_tileNumY = 0;
 
 	//	¼ø¼­¹Ù²Þ
+	_player->arrStateInit();
 	_player->enemyLink(_enemyMgr);
 	//_player->bossLink(_boss);
 	_player->init(_vvMap);
 	//_player->enemyLink(_enemyMgr);
-	_player->arrStateInit();
+
 	_player->arrSkillInit();
 	_player->skillIconInit();
 	_enemyMgr->setPlayerAdress(_player);

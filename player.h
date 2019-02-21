@@ -171,6 +171,8 @@ public:
 	void tileCheckFunc();
 	virtual void changeCurSkill(int index, string name);
 
+	void hitFunc();
+
 	//애니메이션 콜백함수
 	static void playerIdle(void* obj);
 	static void playerFall(void* obj);

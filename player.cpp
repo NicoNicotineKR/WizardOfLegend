@@ -32,7 +32,7 @@ HRESULT player::init(vvMap& vvMapLink)
 
 
 	_vvMap = &vvMapLink;
-	playerKeyAnimationInit();
+
 
 	//arrStateInit();
 	_img = IMAGEMANAGER->findImage("player");
@@ -146,36 +146,8 @@ void player::update()
 	_collisionRc = RectMakeCenter(_pos.x + _img->getFrameWidth() / 2, _pos.y + _img->getFrameHeight() / 2, 80, 150);
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	RECT temp;
-	for (int i = 0; i < _em->getVEnemy().size(); i++)
-	{
-		if (IntersectRect(&temp, &_collisionRc, &_em->getVEnemy()[i]->getAtkRc()))
-		{
-			if (!_isHit)
-			{
-				_isHit = true;
-				_curHp -= 100;
-				_playerStatusUI->setCurHp(_curHp);
+	hitFunc();
 
-				CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
-
-				if(_curHp<=0)
-				{
-					_state = STATE::DEAD;
-					currentPlayerState();
-				}
-				else
-				{
-					_state = STATE::HIT;
-					currentPlayerState();
-					enemyAngleCal(_em->getVEnemy()[i]->getAngle());
-					_vec.x = _vec.y = 0;
-				}
-
-			}
-		}
-	
-	}
 
 }
 
@@ -826,6 +798,7 @@ void player::startAni()
 
 void player::arrStateInit()
 {
+	playerKeyAnimationInit();
 	_skillUI = new skillCooldownUI;
 	_playerStatusUI = new playerStatusUI;
 	_skillUI->init();
@@ -1280,4 +1253,144 @@ void player::changeCurSkill(int index, string name)
 			_curSkills[index] = _arrSkills[i];
 	}
 	changeSkillIcon(index);
+}
+
+void player::hitFunc()
+{
+	RECT temp;
+	for (int i = 0; i < _em->getVEnemy().size(); i++)
+	{
+		if (IntersectRect(&temp, &_collisionRc, &_em->getVEnemy()[i]->getAtkRc()))
+		{
+			if (!_isHit)
+			{
+				_isHit = true;
+				_curHp -= 100;
+				_playerStatusUI->setCurHp(_curHp);
+
+				CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
+
+				if (_curHp <= 0)
+				{
+					_state = STATE::DEAD;
+					currentPlayerState();
+				}
+				else
+				{
+					_state = STATE::HIT;
+					currentPlayerState();
+					enemyAngleCal(_em->getVEnemy()[i]->getAngle());
+					_vec.x = _vec.y = 0;
+				}
+
+			}
+		}
+
+	}
+	if (_boss != nullptr)
+	{
+		for (int i = 0; i < _boss->getSkill1()->getVMissle().size(); ++i)
+		{
+			if (IntersectRect(&temp, &_collisionRc, &_boss->getSkill1()->getVMissle()[i]->rc))
+			{
+				_boss->getSkill1()->getVMissle()[i]->pos.x = -10000;
+				_boss->getSkill1()->getVMissle()[i]->pos.y = -10000;
+				if (!_isHit)
+				{
+					_isHit = true;
+					_curHp -= 5;
+					_playerStatusUI->setCurHp(_curHp);
+	
+					CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
+	
+					if (_curHp <= 0)
+					{
+						_state = STATE::DEAD;
+						currentPlayerState();
+					}
+					else
+					{
+						_state = STATE::HIT;
+						currentPlayerState();
+						float angle;
+						angle = getAngle(_boss->getSkill1()->getVMissle()[i]->pos.x, _boss->getSkill1()->getVMissle()[i]->pos.y,
+							_tileCheckRcPos.x, _tileCheckRcPos.y);
+						enemyAngleCal(angle);
+						_vec.x = _vec.y = 0;
+					}
+	
+				}
+			}
+		}
+	}
+	if (_boss!= nullptr)
+	{
+		for (int i = 0; i < _boss->getSkill2()->getVMissle().size(); ++i)
+		{
+			if (IntersectRect(&temp, &_collisionRc, &_boss->getSkill2()->getVMissle()[i]->rc))
+			{
+				_boss->getSkill2()->getVMissle()[i]->pos.x = -10000;
+				_boss->getSkill2()->getVMissle()[i]->pos.y = -10000;
+				if (!_isHit)
+				{
+
+					_isHit = true;
+					_curHp -= 10;
+					_playerStatusUI->setCurHp(_curHp);
+	
+					CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
+	
+					if (_curHp <= 0)
+					{
+						_state = STATE::DEAD;
+						currentPlayerState();
+					}
+					else
+					{
+						_state = STATE::HIT;
+						currentPlayerState();
+						float angle;
+						angle = getAngle(_boss->getSkill2()->getVMissle()[i]->pos.x, _boss->getSkill2()->getVMissle()[i]->pos.y,
+							_tileCheckRcPos.x, _tileCheckRcPos.y);
+						enemyAngleCal(angle);
+						_vec.x = _vec.y = 0;
+					}
+	
+				}
+			}
+		}
+	}
+	if (_boss != nullptr)
+	{
+		for (int i = 0; i < _boss->getSKill3()->getVMissle().size(); ++i)
+		{
+			if (IntersectRect(&temp, &_collisionRc, &_boss->getSKill3()->getVMissle()[i]->rc))
+			{
+				_boss->getSKill3()->getVMissle()[i]->pos.x = -10000;
+				_boss->getSKill3()->getVMissle()[i]->pos.y = -10000;
+				if (!_isHit)
+				{
+					_isHit = true;
+					_curHp -= 20;
+					_playerStatusUI->setCurHp(_curHp);
+	
+					CAMERA2D->ShakeYourBodyBabe(OPTIONMANAGER->getShakingValue(), 20);
+	
+					if (_curHp <= 0)
+					{
+						_state = STATE::DEAD;
+						currentPlayerState();
+					}
+					else
+					{
+						_state = STATE::HIT;
+						currentPlayerState();
+						enemyAngleCal(_boss->getSKill3()->getVMissle()[i]->angle);
+						_vec.x = _vec.y = 0;
+					}
+	
+				}
+			}
+		}
+	}
 }

@@ -37,8 +37,8 @@ private:
 
 	bool _allStop;
 
-	int _savePlayerHp;
-	bool _isOneSavePlayerHp;
+//	int _savePlayerHp;
+//	bool _isOneSavePlayerHp;
 public:
 	stage1_1();
 	~stage1_1();
@@ -53,8 +53,8 @@ public:
 	void VObjectRender();
 
 	void setPlayerLink(player* player) { _player = player; }
-	int getPlayerHp(){return _savePlayerHp;}
-	int getIsOneSavePlayerHp(){return _isOneSavePlayerHp;}
+//	int getPlayerHp(){return _savePlayerHp;}
+	//int getIsOneSavePlayerHp(){return _isOneSavePlayerHp;}
 
 };
 
