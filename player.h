@@ -136,6 +136,8 @@ private:
 	image* _tileBlanket[25];
 	POINTFLOAT  _tileBlanketPos[25];
 	POINT		_tileBlanketIndex[25];
+
+	int			_basicSkillNum;
 public:
 	player();
 	~player();
@@ -224,6 +226,7 @@ public:
 	inline skills* getCurSkills2() { return _curSkills[1]; }
 	inline skills* getCurSkills3() { return _curSkills[2]; }
 	inline skills* getCurSkills4() { return _curSkills[3]; }
+	inline skills* getArrCurSkills(int index) { return _curSkills[index]; }
 
 	inline vvMap* getVVMapMemoryAddress() { return _vvMap; }
 	inline skillCooldownUI* getSkillUI() {return _skillUI;}
@@ -264,5 +267,8 @@ public:
 	inline void setPlayerSkill(int idx, skills* skill) {_curSkills[idx] = skill; }
 	
 	inline enemyMgr* getEnemyMgrAddress() { return _em; }
+
+	inline int getBasicSkillNum() { return _basicSkillNum; }
+	inline void setBasicSkillNum(int i) { _basicSkillNum = i; }
 };
 

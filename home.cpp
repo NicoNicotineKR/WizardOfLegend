@@ -214,7 +214,16 @@ void home::update()
 		_playerInfoBox->update();
 		_allStop2 = _playerInfoBox->getIsStart();
 	}
-
+	RECT temp;
+	for (int i = 0; i < _vObjects.size(); ++i)
+	{
+		if (_vObjects[i]->getAttr() == OBJ_UNBREAKABLE) continue;
+		if (IntersectRect(&temp, &_player->getPlayerTileCheckRc(), &_vObjects[i]->getRc()))
+		{
+			_vObjects.erase(_vObjects.begin() + i);
+			break;
+		}
+	}
 }
 
 void home::render()

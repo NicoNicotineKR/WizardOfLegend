@@ -100,6 +100,7 @@ HRESULT player::init(vvMap& vvMapLink)
 		_tileBlanketIndex[i].x = NULL;
 		_tileBlanketIndex[i].y = NULL;
 	}
+	_basicSkillNum = 0;
 	return S_OK;
 }
 
@@ -240,6 +241,9 @@ void player::CamRender(HDC hdc)
 		_playerCircleDirectionImg->alphaRender(getMemDC(), _playerCircleDirectionPos.x - CAMERA2D->getCamPosX(), _playerCircleDirectionPos.y - CAMERA2D->getCamPosY(), 200);
 	}
 	_img->aniRender(hdc, _pos.x - CAMERA2D->getCamPosX(), _pos.y - CAMERA2D->getCamPosY(), _ani);
+	char str[128];
+	sprintf_s(str, "%d, _state", _state, strlen(str));
+	TextOut(getMemDC(), 200, 200, str, strlen(str));
 }
 
 void player::playerKeyAnimationInit()
@@ -251,7 +255,7 @@ void player::playerKeyAnimationInit()
 	IMAGEMANAGER->addFrameImage("lightningChain", "images/player/lightningChain.bmp", 540, 1800, 4, 2, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("flameStrike", "images/player/flameStrike.bmp", 2560, 256, 10, 1, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("thunderFloor", "images/player/thunderFloor.bmp",540, 124, 3, 1, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addFrameImage("searingRush1", "images/player/searingRush.bmp", 2048, 64, 32, 1, true, RGB(255, 0, 255));
+	//IMAGEMANAGER->addFrameImage("searingRush1", "images/player/searingRush.bmp", 2048, 64, 32, 1, true, RGB(255, 0, 255));
 
 	//idle
 	int frontIdle[] = { 0 };
@@ -481,24 +485,28 @@ void player::startAni()
 		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("rightIdle");
 		_ani->start();
+
 	}
 	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::IDLE)
 	{
 		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("leftIdle");
 		_ani->start();
+
 	}
 	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::IDLE)
 	{
 		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("backIdle");
 		_ani->start();
+
 	}
 	else if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::IDLE)
 	{
 		SOUNDMANAGER->stop("PlayerFootstep");
 		_ani = KEYANIMANAGER->findAnimation("frontIdle");
 		_ani->start();
+
 	}
 	
 	//DASH 애니메이션
@@ -574,215 +582,246 @@ void player::startAni()
 	}
 	
 	//번개 선더
-	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_THREE)
+	if (_aniDirection == ANIDIRECTION::FRONT) //&& _state == STATE::SKILL_THREE)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
 			_ani = KEYANIMANAGER->findAnimation("frontLightningChain");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
-	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_THREE)
+	if (_aniDirection == ANIDIRECTION::BACK)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
 			_ani = KEYANIMANAGER->findAnimation("backLightningChain");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
-	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_THREE)
+	else if (_aniDirection == ANIDIRECTION::RIGHT)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
 			_ani = KEYANIMANAGER->findAnimation("rightLightningChain");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
-	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_THREE)
+	else if (_aniDirection == ANIDIRECTION::LEFT)
 	{
 		if (_usingSkillName == "thunderingChain")
 		{
 			_ani = KEYANIMANAGER->findAnimation("leftLightningChain");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
 
 	//플레임 화염
-	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_ONE)
+	if (_aniDirection == ANIDIRECTION::FRONT)
 	{
 		if (_usingSkillName == "FlameStrike")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeStart");
 				_ani->start();
 			}
-			else if(_curSkills[0]->getReLoadCount() == 1)
+			else if(_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
 		if (_usingSkillName == "stoneShot")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("frontStoneShotEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
+
 	}
-	if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_ONE)
+	if (_aniDirection == ANIDIRECTION::BACK)
 	{
 		if (_usingSkillName == "FlameStrike")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
 		if (_usingSkillName == "stoneShot")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("backStoneShotEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
+
 	}
-	else if (_aniDirection == ANIDIRECTION::RIGHT && _state == STATE::SKILL_ONE)
+	else if (_aniDirection == ANIDIRECTION::RIGHT)
 	{
 		if (_usingSkillName == "FlameStrike")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
 		if (_usingSkillName == "stoneShot")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("rightStoneShotEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
+
 	}
-	else if (_aniDirection == ANIDIRECTION::LEFT && _state == STATE::SKILL_ONE)
+	else if (_aniDirection == ANIDIRECTION::LEFT)
 	{
 		if (_usingSkillName == "FlameStrike")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
+
 		}
 		if (_usingSkillName == "stoneShot")
 		{
-			if (_curSkills[0]->getReLoadCount() == 0)
+			if (_curSkills[_basicSkillNum]->getReLoadCount() == 0)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeStart");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 1)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 1)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftFlameStrikeSecond");
 				_ani->start();
 			}
-			else if (_curSkills[0]->getReLoadCount() == 2)
+			else if (_curSkills[_basicSkillNum]->getReLoadCount() == 2)
 			{
 				_ani = KEYANIMANAGER->findAnimation("leftStoneShotEnd");
 				_ani->start();
+				_usingSkillName = "";
 			}
 		}
+
 	}
 
-	if (_aniDirection == ANIDIRECTION::FRONT && _state == STATE::SKILL_FOUR)
+	if (_aniDirection == ANIDIRECTION::FRONT)
 	{
 		if (_usingSkillName == "shockNova")
 		{
 			_ani = KEYANIMANAGER->findAnimation("frontShockNova");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
-	else if (_aniDirection == ANIDIRECTION::BACK && _state == STATE::SKILL_FOUR)
+	else if (_aniDirection == ANIDIRECTION::BACK)
 	{
 		if (_usingSkillName == "shockNova")
 		{
 			_ani = KEYANIMANAGER->findAnimation("backShockNova");
 			_ani->start();
+			_usingSkillName = "";
 		}
+
 	}
 
-	
+	_usingSkillName = "";
 }
 
 void player::arrStateInit()

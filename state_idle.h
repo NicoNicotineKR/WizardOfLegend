@@ -22,5 +22,7 @@ public:
 	virtual void onButtonLB(player* Player)		override;
 	virtual void onButtonRB(player* Player)		override;
 	virtual void update(player* Player)			override;
+
+	virtual void skillUse(int index, string skillName, player* Player);
 };
 
