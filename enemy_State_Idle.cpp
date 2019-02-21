@@ -60,7 +60,7 @@ void enemy_State_Idle::update(enemy * enemy)
 		enemy->getPath()->clear();
 	}
 	enemy->defaultAtkRc();
-	if (enemy->getCurHP() < 0)
+	if (enemy->getCurHP() <= 0)
 	{
 		enemy->setState(E_STATE::DEATH);
 		enemy->currentEnemyState();

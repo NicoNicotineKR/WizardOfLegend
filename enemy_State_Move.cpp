@@ -172,7 +172,7 @@ void enemy_State_Move::update(enemy * enemy)
 			enemy->getPath()->pop_front();
 		}
 	}
-	if (enemy->getCurHP() < 0)
+	if (enemy->getCurHP() <= 0)
 	{
 		enemy->setState(E_STATE::DEATH);
 		enemy->currentEnemyState();

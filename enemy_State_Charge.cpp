@@ -67,7 +67,7 @@ void enemy_State_Charge::direction_right(enemy * enemy)
 
 void enemy_State_Charge::update(enemy * enemy)
 {
-	if (enemy->getCurHP() < 0)
+	if (enemy->getCurHP() <= 0)
 	{
 		enemy->setState(E_STATE::DEATH);
 		enemy->currentEnemyState();
