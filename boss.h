@@ -76,6 +76,7 @@ private:
 
 	bool			_isAniOnce;			//애니메이션 한번만 재생할 불값
 	bool			_isArea;			//플레이어가 근접해 있나?(구역의 타일을 플레이어가 밟으면 얘가 트루됨)
+	bool			_isHit;				//맞았니?			-> mock 상태에서 isHit가 트루가되면 stun상태로 변경함. isHit될때마다 
 	bool			_isStun;			//스턴상태니?
 	bool			_isDeath;			//죽었니?
 
