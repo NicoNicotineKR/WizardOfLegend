@@ -30,7 +30,7 @@ private:
 	POINTFLOAT* _bossPos;
 	POINTFLOAT* _playerPos;
 
-	const float END_TIME = 1.5f;
+	const float END_TIME = 0.3f;
 	//const float MOVESPD = 20.f;
 
 public:
@@ -46,6 +46,7 @@ public:
 	//	slashNum 은 아무의미없다.
 	void UseSkill(POINTFLOAT* bossPos, POINTFLOAT* playerPos, int slashNum);
 
+	bool getIsStart() { return _isStart; }
 
 
 };

@@ -129,7 +129,7 @@ void waterdropRotate::render()
 	if (_isStart) {
 		for (int i = 0; i < _waterDropNum; i++) {
 			_vWaterDrops[i]->img->alphaFrameRenderFixed(getMemDC(),
-				_vWaterDrops[i]->rc.left, _vWaterDrops[i]->rc.top,
+				_vWaterDrops[i]->rc.left - CAMERA2D->getCamPosX(), _vWaterDrops[i]->rc.top - CAMERA2D->getCamPosY(),
 				_vWaterDrops[i]->img->getFrameX(), _vWaterDrops[i]->img->getFrameY(),
 				_vWaterDrops[i]->alpha);
 

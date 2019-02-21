@@ -43,7 +43,7 @@ private:
 	const float ROTATE_AUG_ANGLESPD = PI / 256;		//	
 
 	const float SHOOTING_SPD = 0.08f;			//	½î´Â¼Óµµ
-	const float MISSILE_SPD = 20.f;
+	const float MISSILE_SPD = 35.f;
 
 	const float PREPARE_TIME = 3.0f;
 	const float END_TIME = 8.0f;

@@ -116,7 +116,7 @@ void throwIceSpear::render()
 {
 	if (_isStart) {
 		for (int i = 0; i < _spearNum; i++) {
-			_iceSpear[i]->img->alphaRender(getMemDC(), _iceSpear[i]->rc.left, _iceSpear[i]->rc.top, _iceSpear[i]->alpha);
+			_iceSpear[i]->img->alphaRender(getMemDC(), _iceSpear[i]->rc.left - CAMERA2D->getCamPosX(), _iceSpear[i]->rc.top - CAMERA2D->getCamPosY(), _iceSpear[i]->alpha);
 		}
 	}
 	

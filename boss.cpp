@@ -65,6 +65,12 @@ HRESULT boss::init()
 	//스킬들
 	_skill3 = new throwIceSpear;
 	_skill3->init();
+	_skill1 = new waterdropRotate;
+	_skill1->init();
+	_skill2 = new snowflakeRotate;
+	_skill2->init();
+	_skill4 = new chargeIceSlash;
+	_skill4->init();
 
 	return S_OK;
 }
@@ -100,9 +106,9 @@ void boss::update()
 		
 		//스킬들 업데이트
 		_skill3->update();
-		
-		
-
+		_skill1->update();
+		_skill2->update();
+		_skill4->update();
 
 
 
@@ -132,6 +138,9 @@ void boss::render()
 		//스킬 렌더-------------------------------------------------------------------------------------------------
 		
 		_skill3->render();
+		_skill1->render();
+		_skill2->render();
+		_skill4->render();
 
 		//-------------------------------------------------------------------------------------------------
 		
@@ -477,9 +486,11 @@ void boss::useSkill()
 		{
 		case 0: //물방울 회전 회오리
 			_state = B_STATE::SKILL_ONE;
+			_skill1->UseSkill(&_pos, &_playerPos, 10);
 			break;
 		case 1:	//눈송이 회전 회오리
 			_state = B_STATE::SKILL_TWO;
+			_skill2->UseSkill(&_pos, &_playerPos, 20);
 			break;
 		case 2: //창 3개 날리기
 			_state = B_STATE::SKILL_THREE;
@@ -487,6 +498,7 @@ void boss::useSkill()
 			break;
 		case 3: //돌진
 			_state = B_STATE::DASH;
+			_skill4->UseSkill(&_pos, &_playerPos, 0);
 			break;
 		}
 

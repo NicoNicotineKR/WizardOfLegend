@@ -112,8 +112,8 @@ void snowflakeRotate::render()
 	if (_isStart) {
 		for (int i = 0; i < _vSnowFlakes.size(); i++) {
 			_vSnowFlakes[i]->img->frameRender(getMemDC(),
-				_vSnowFlakes[i]->rc.left,
-				_vSnowFlakes[i]->rc.top,
+				_vSnowFlakes[i]->rc.left - CAMERA2D->getCamPosX(),
+				_vSnowFlakes[i]->rc.top - CAMERA2D->getCamPosY(),
 				_vSnowFlakes[i]->frameX,
 				0);
 
