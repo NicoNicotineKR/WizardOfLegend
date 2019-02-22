@@ -46,6 +46,8 @@ HRESULT npc_wardrobe::init()
 
 void npc_wardrobe::release()
 {
+	//IMAGEMANAGER->deleteImage("wardrobe");
+	//IMAGEMANAGER->deleteImage("wardrobeFace");
 }
 
 void npc_wardrobe::update()

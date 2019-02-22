@@ -21,7 +21,7 @@ HRESULT npc_warp::init()
 	// 추가 - 다이얼로그
 	IMAGEMANAGER->addImage("warpNpcFace", "images/npc/warpNpcFace.bmp", 187, 189, true, 0xff00ff);
 	_npcFaceImg = IMAGEMANAGER->findImage("warpNpcFace");
-	_npcFaceText = "좋은 여행이야";
+	_npcFaceText = "개발자들의 거처로 안내해주지";
 
 	int idle[] = { 0 };
 	KEYANIMANAGER->addArrayFrameAnimation("warpNpc_Idle", "warpNpc", idle, 1, 10, false);
@@ -35,6 +35,8 @@ HRESULT npc_warp::init()
 
 void npc_warp::release()
 {
+	//IMAGEMANAGER->deleteImage("warpNpc");
+	//IMAGEMANAGER->deleteImage("warpNpcFace");
 }
 
 void npc_warp::update()

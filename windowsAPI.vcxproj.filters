@@ -459,6 +459,9 @@
     <ClInclude Include="stage1_Boss.h">
       <Filter>PlayGround\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="endingScene.h">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -810,6 +813,9 @@
       <Filter>2DFramework</Filter>
     </ClCompile>
     <ClCompile Include="stage1_Boss.cpp">
+      <Filter>PlayGround\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="endingScene.cpp">
       <Filter>PlayGround\Scenes</Filter>
     </ClCompile>
   </ItemGroup>

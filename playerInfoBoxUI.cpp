@@ -28,6 +28,8 @@ HRESULT playerInfoBoxUI::init()
 
 void playerInfoBoxUI::release()
 {
+	IMAGEMANAGER->deleteImage("icon");
+	IMAGEMANAGER->deleteImage("icon2");
 }
 
 void playerInfoBoxUI::update()

@@ -42,6 +42,8 @@ HRESULT npc_mimi::init()
 
 void npc_mimi::release()
 {
+	//IMAGEMANAGER->deleteImage("mimi");
+	//IMAGEMANAGER->deleteImage("mimiFace");
 }
 
 void npc_mimi::update()

@@ -178,6 +178,7 @@
     <ClInclude Include="dmgNumUI.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="endingScene.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyMgr.h" />
     <ClInclude Include="enemyState.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="dmgNumUI.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="endingScene.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyMgr.cpp" />
     <ClCompile Include="enemy_Archer.cpp" />

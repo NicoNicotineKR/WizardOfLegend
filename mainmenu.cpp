@@ -13,7 +13,7 @@ mainmenu::~mainmenu()
 
 HRESULT mainmenu::init()
 {
-	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
+	//IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("titleScreen", "images/mainmenu/titleScreen.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("pressTheEnterButton", "images/mainmenu/pressTheEnterButton.bmp", 322, 20, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("titleLogo", "images/mainmenu/titleLogo.bmp", 1000, 185, true, RGB(255, 0, 255));
@@ -55,8 +55,9 @@ HRESULT mainmenu::init()
 
 	_mainMenuState = RUN_WIZARD;
 
-	_mapEditor = new mapEditor;
-	SCENEMANAGER->addScene("mapEditor",_mapEditor);
+	//	재만수정 -> 플그로 가랏
+	//_mapEditor = new mapEditor;
+	//SCENEMANAGER->addScene("mapEditor",_mapEditor);
 
 	SOUNDMANAGER->stop(OPTIONMANAGER->getTempSoundName());
 	SOUNDMANAGER->play("titleMusic", OPTIONMANAGER->getSoundBackVolume());
@@ -67,6 +68,7 @@ HRESULT mainmenu::init()
 
 void mainmenu::release()
 {
+	
 }
 
 void mainmenu::update()
@@ -111,29 +113,45 @@ void mainmenu::update()
 				SCENEMANAGER->changeScene("mapEditor");
 			}
 		}
-	}
-
-	if (_mainMenuState == MAIN_MENU)
-	{
-		if (_selectMenu == END)
+		else if (_selectMenu == END)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
 			{
 				PostQuitMessage(0);
 			}
 		}
-	}
-
-	if (_mainMenuState == MAIN_MENU)
-	{
-		if (_selectMenu == SINGLE_PLAYER)
+		else if (_selectMenu == SINGLE_PLAYER)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
 			{
 				SCENEMANAGER->changeScene("home"); 
 			}
 		}
+		else if (_selectMenu == STAFF_ROLL)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
+			{
+				SCENEMANAGER->changeScene("endingScene");
+			}
+		}
+
 	}
+
+	//if (_mainMenuState == MAIN_MENU)
+	//{
+	//	
+	//}
+	//
+	//if (_mainMenuState == MAIN_MENU)
+	//{
+	//	if (_selectMenu == SINGLE_PLAYER)
+	//	{
+	//		if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || (KEYMANAGER->isOnceKeyDown(VK_LBUTTON)))
+	//		{
+	//			SCENEMANAGER->changeScene("home"); 
+	//		}
+	//	}
+	//}
 
 
 
@@ -141,18 +159,82 @@ void mainmenu::update()
 
 void mainmenu::render()
 {
-	IMAGEMANAGER->render("blackWindow", getMemDC());
-	_loading->alphaFrameRender(getMemDC(), WINSIZEX - 150, WINSIZEY - 150, _loadingIdx, 0, _loadingAlpha);
-	_title->alphaRender(getMemDC(), _titleAlpha);
-	_pressTheEnterButton->alphaRender(getMemDC(), WINSIZEX / 2 - _pressTheEnterButton->GetWidth() / 2, WINSIZEY - 200, _pressTheEnterButtonAlpha);
-	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//IMAGEMANAGER->render("blackWindow", getMemDC());
 
-
+	if (_loadingAlpha != 0)
+	{
+		_loading->alphaFrameRender(getMemDC(), WINSIZEX - 150, WINSIZEY - 150, _loadingIdx, 0, _loadingAlpha);
+	}
+	if (_titleAlpha != 0)
+	{
+		_title->alphaRender(getMemDC(), _titleAlpha);
+	}
+	if (_titleLogoAlpha != 0)
+	{
+		_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	}
+	if (_pressTheEnterButtonAlpha != 0 && _mainMenuState == PRESS_ENTER)
+	{
+		_pressTheEnterButton->alphaRender(getMemDC(), WINSIZEX / 2 - _pressTheEnterButton->GetWidth() / 2, WINSIZEY - 200, _pressTheEnterButtonAlpha);
+	}
 	for (int i = 0; i < 5; i++)
 	{
 		//Rectangle(getMemDC(), _button[i].rc);
-		_button[i].img->alphaFrameRender(getMemDC(), _button[i].rc.left, _button[i].rc.top, _button[i].idxX, _button[i].idxY, _button[i].imgAlpha);
+		if(_button[i].imgAlpha !=0)
+		{
+			_button[i].img->alphaFrameRender(getMemDC(), _button[i].rc.left, _button[i].rc.top, _button[i].idxX, _button[i].idxY, _button[i].imgAlpha);
+		}
+		
 	}
+	
+
+
+	//if (_mainMenuState == RUN_WIZARD)
+	//{
+	//	_loading->alphaFrameRender(getMemDC(), WINSIZEX - 150, WINSIZEY - 150, _loadingIdx, 0, _loadingAlpha);
+	//}
+	//
+	//else if (_mainMenuState == TITLE_ALPHA_UP) 
+	//{
+	//	
+	//	_loading->alphaFrameRender(getMemDC(), WINSIZEX - 150, WINSIZEY - 150, _loadingIdx, 0, _loadingAlpha);
+	//	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//}
+	//
+	//else if (_mainMenuState == PRESS_ENTER)
+	//{
+	//	_title->alphaRender(getMemDC(), _titleAlpha);
+	//	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//	_pressTheEnterButton->alphaRender(getMemDC(), WINSIZEX / 2 - _pressTheEnterButton->GetWidth() / 2, WINSIZEY - 200, _pressTheEnterButtonAlpha);
+	//}
+	//else if (_mainMenuState == TITLE_ALPHA_UP)
+	//{	
+	//	_title->alphaRender(getMemDC(), _titleAlpha);
+	//	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//}
+	//else if (_mainMenuState == MOVE_THE_TITLE_FONT) 
+	//{
+	//	_title->alphaRender(getMemDC(), _titleAlpha);
+	//	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//}
+	//else if (_mainMenuState == MAIN_MENU)
+	//{
+	//	_title->alphaRender(getMemDC(), _titleAlpha);
+	//	_titleLogo->alphaRender(getMemDC(), WINSIZEX / 2 - _titleLogo->GetWidth() / 2, _titleLogoIdxY, _titleLogoAlpha);
+	//	for (int i = 0; i < 5; i++)
+	//	{
+	//		//Rectangle(getMemDC(), _button[i].rc);
+	//		_button[i].img->alphaFrameRender(getMemDC(), _button[i].rc.left, _button[i].rc.top, _button[i].idxX, _button[i].idxY, _button[i].imgAlpha);
+	//	}
+	//}
+
+
+
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	//Rectangle(getMemDC(), _button[i].rc);
+	//	_button[i].img->alphaFrameRender(getMemDC(), _button[i].rc.left, _button[i].rc.top, _button[i].idxX, _button[i].idxY, _button[i].imgAlpha);
+	//}
 
 
 	//char str[128];
@@ -167,11 +249,13 @@ void mainmenu::RunWizard()
 	{
 		_loadingFrameCount++;
 
-		if (_loadingFrameCount / 10 > 0)
+		//if (_loadingFrameCount / 10 > 0)
+		if (_loadingFrameCount > 10)
 		{
 			_loadingIdx++;
 			_loadingFrameCount = 0;
-			if (_loadingIdx == 10)
+			//if (_loadingIdx == 10)
+			if (_loadingIdx >= 10)
 			{
 				_loadingIdx = 0;
 			}
@@ -201,13 +285,17 @@ void mainmenu::TitleAlphaUp()
 		if (_loadingAlpha > 0)
 		{
 			_loadingAlpha -= LOADING_ALPHA_SPEED;
+			if (_loadingAlpha < 0)
+			{
+				_loadingAlpha = 0;
+			}
 		}
-		if (_loadingAlpha <= 0)
-		{
-			_loadingAlpha = 0;
-		}
+		//if (_loadingAlpha < 0)
+		//{
+		//	_loadingAlpha = 0;
+		//}
 
-		if (_loadingAlpha == 0)
+		else if (_loadingAlpha == 0)
 		{
 			if (_titleAlpha < 255)
 			{
@@ -237,12 +325,17 @@ void mainmenu::PressTheEnterButton()
 			if (_pressTheEnterButtonAlpha < 255)
 			{
 				_pressTheEnterButtonAlpha += PRESS_THE_ENTER_BUTTON_BLINK_SPEED;
+				if (_pressTheEnterButtonAlpha >= 255) 
+				{
+					_pressTheEnterButtonAlpha = 255;
+					_isPressTheEnterButtonBlink = true;
+				}
 			}
-			if (_pressTheEnterButtonAlpha >= 255)
-			{
-				_pressTheEnterButtonAlpha = 255;
-				_isPressTheEnterButtonBlink = true;
-			}
+			//else if (_pressTheEnterButtonAlpha >= 255)
+			//{
+			//	_pressTheEnterButtonAlpha = 255;
+			//	_isPressTheEnterButtonBlink = true;
+			//}
 		}
 
 		if (_isPressTheEnterButtonBlink == true)
@@ -250,20 +343,25 @@ void mainmenu::PressTheEnterButton()
 			if (_pressTheEnterButtonAlpha > PRESS_THE_ENTER_BUTTON_ALPHA_MIN)
 			{
 				_pressTheEnterButtonAlpha -= PRESS_THE_ENTER_BUTTON_BLINK_SPEED;
+				if (_pressTheEnterButtonAlpha <= PRESS_THE_ENTER_BUTTON_ALPHA_MIN)
+				{
+					_pressTheEnterButtonAlpha = PRESS_THE_ENTER_BUTTON_ALPHA_MIN;
+					_isPressTheEnterButtonBlink = false;
+				}
 			}
-			if (_pressTheEnterButtonAlpha <= PRESS_THE_ENTER_BUTTON_ALPHA_MIN)
-			{
-				_pressTheEnterButtonAlpha = PRESS_THE_ENTER_BUTTON_ALPHA_MIN;
-				_isPressTheEnterButtonBlink = false;
-			}
+			//else if (_pressTheEnterButtonAlpha <= PRESS_THE_ENTER_BUTTON_ALPHA_MIN)
+			//{
+			//	_pressTheEnterButtonAlpha = PRESS_THE_ENTER_BUTTON_ALPHA_MIN;
+			//	_isPressTheEnterButtonBlink = false;
+			//}
 		}
 	}
 
 	//렌더부분
-	if (_mainMenuState != PRESS_ENTER)
-	{
-		_pressTheEnterButtonAlpha = 0;
-	}
+	//if (_mainMenuState != PRESS_ENTER)
+	//{
+	//	_pressTheEnterButtonAlpha = 0;
+	//}
 }
 
 void mainmenu::MoveTheTitleFont()
@@ -283,7 +381,7 @@ void mainmenu::MoveTheTitleFont()
 		{
 			_titleAlpha -= TITLE_ALPHA_DOWN_SPEED;
 		}
-		if (_titleAlpha <= TITLE_ALPHA_MIN)
+		else if (_titleAlpha <= TITLE_ALPHA_MIN)
 		{
 			_titleAlpha = TITLE_ALPHA_MIN;
 		}
@@ -293,7 +391,7 @@ void mainmenu::MoveTheTitleFont()
 		{
 			_titleLogoIdxY -= TITLELOGO_MOVE_SPEED;
 		}
-		if (_titleLogoIdxY <= TITLELOGO_POS_Y)
+		else if (_titleLogoIdxY <= TITLELOGO_POS_Y)
 		{
 			_titleLogoIdxY = TITLELOGO_POS_Y;
 		}
@@ -382,19 +480,23 @@ void mainmenu::EnterTheOption()
 		{
 			_titleLogoAlpha -= TITLELOGO_ALPHA_DOWN_SPEED;
 		}
-		if (_titleLogoAlpha <= 0)
+		else if (_titleLogoAlpha <= 0)
 		{
 			_titleLogoAlpha = 0;
 		}
-	}
-
-	if (_mainMenuState == SELECT_OPTION)
-	{
 		if (OPTIONMANAGER->getIsStartOption() == false)
 		{
 			this->OptionPressBack(4, 255);
 		}
 	}
+
+	//if (_mainMenuState == SELECT_OPTION)
+	//{
+	//	if (OPTIONMANAGER->getIsStartOption() == false)
+	//	{
+	//		this->OptionPressBack(4, 255);
+	//	}
+	//}
 
 }
 

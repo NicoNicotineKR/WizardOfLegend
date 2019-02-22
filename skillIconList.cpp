@@ -26,6 +26,7 @@ HRESULT skillIconList::init()
 
 void skillIconList::release()
 {
+	IMAGEMANAGER->deleteImage("skillIcons");
 }
 
 void skillIconList::update()

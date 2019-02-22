@@ -32,6 +32,7 @@ void dialogueMaker::release()
 {
 	//폰트가 실행됨
 	//폰트가 모두 진행됫다는걸 알려줌
+	//IMAGEMANAGER->deleteImage("chatBoxImg");
 }
 
 void dialogueMaker::update()
@@ -87,7 +88,7 @@ void dialogueMaker::render()
 
 		_npcPicture->render(getMemDC(), 100, WINSIZEY - 265);
 
-		TextOut(getMemDC(), 330, WINSIZEY - _chatBoxImg->GetHeight() + 50, _text.c_str(), _printLen);
+		TextOut(getMemDC(), 330, WINSIZEY - _chatBoxImg->GetHeight() + 10, _text.c_str(), _printLen);
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(font);
 	}

@@ -1,6 +1,6 @@
 #pragma once
 #include "gameNode.h"
-#include "mapEditor.h"
+//#include "mapEditor.h"
 
 enum stateMainMenu
 {
@@ -16,7 +16,7 @@ enum stateSelectMenu
 	SINGLE_PLAYER = 0,
 	MAP_TOOL = 1,
 	OPTION = 2,
-	STAFF = 3,
+	STAFF_ROLL = 3,
 	END = 4,
 };
 struct tagButton
@@ -62,7 +62,8 @@ private:
 	tagButton _button[5];
 	int _selectMenu;
 
-	mapEditor* _mapEditor;
+	//	재만수정 -> 플그로 보냄
+	//mapEditor* _mapEditor;
 
 
 	//mainMenuState = 1

@@ -39,6 +39,7 @@ HRESULT npc_broomStick::init()
 
 void npc_broomStick::release()
 {
+	//IMAGEMANAGER->deleteImage("broomStick");
 }
 
 void npc_broomStick::update()

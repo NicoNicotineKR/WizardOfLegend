@@ -77,7 +77,11 @@ HRESULT playerInfoBox::init()
 }
 void playerInfoBox::release()
 {
-
+	IMAGEMANAGER->deleteImage("box");
+	IMAGEMANAGER->deleteImage("edge");
+	IMAGEMANAGER->deleteImage("changeFont");
+	IMAGEMANAGER->deleteImage("button");
+	IMAGEMANAGER->deleteImage("buttonBox");
 }
 void playerInfoBox::update()
 {

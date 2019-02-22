@@ -13,7 +13,7 @@ introScene::~introScene()
 
 HRESULT introScene::init()
 {
-	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
+	//IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikoteam.bmp", 651, 85, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("niko", "images/introScene/niko.bmp", 651, 323, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("smoke", "images/introScene/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
@@ -42,6 +42,13 @@ HRESULT introScene::init()
 
 void introScene::release()
 {
+	//IMAGEMANAGER->deleteAll();
+	
+	//IMAGEMANAGER->deleteImage("blackWindow");
+	//IMAGEMANAGER->deleteImage("nikonikotin");
+	//IMAGEMANAGER->deleteImage("niko");
+	//IMAGEMANAGER->deleteImage("smoke");
+	
 }
 
 void introScene::update()
@@ -49,6 +56,7 @@ void introScene::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_RETURN) || KEYMANAGER->isOnceKeyDown(VK_ESCAPE))
 	{
 		SCENEMANAGER->changeScene("mainmenu");
+		return;
 	}
 
 	//기다리는 프레임이다되면, _isStart를 true로한다.
@@ -76,7 +84,7 @@ void introScene::update()
 
 void introScene::render()
 {
-	IMAGEMANAGER->render("blackWindow", getMemDC());
+	//IMAGEMANAGER->render("blackWindow", getMemDC());
 	_niko->alphaRender(getMemDC(), WINSIZEX / 3 - 50, WINSIZEY / 3 - 50, _nikoAlpha);
 	_nikotin->alphaRender(getMemDC(), WINSIZEX / 3 - 50, WINSIZEY / 3 - 100, _nikotinAlpha);
 

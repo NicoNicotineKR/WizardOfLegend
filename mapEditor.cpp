@@ -145,6 +145,23 @@ HRESULT mapEditor::init()
 
 void mapEditor::release()
 {
+
+	_currentCursorTileInfo = nullptr;
+
+	for (int i = 0; i < _tileNumY; i++) {
+		for (int j = 0; j < _tileNumX; j++) {
+			SAFE_DELETE(_vvMap[i][j]);
+			_vvMap[i][j] = nullptr;
+		}
+		_vvMap[i].clear();
+	}
+	_vvMap.clear();
+
+	
+
+	//IMAGEMANAGER->deleteImage("");		//	이거 다해줘야함
+
+	
 }
 
 void mapEditor::update()

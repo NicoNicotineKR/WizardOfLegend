@@ -89,6 +89,26 @@ HRESULT home::init()
 
 void home::release()
 {
+	//IMAGEMANAGER->deleteImage("tileCommon");
+	//IMAGEMANAGER->deleteImage("objCommon");
+	//IMAGEMANAGER->deleteImage("objEarth");
+	
+	//SAFE_RELEASE(_dialogueMaker);
+	//SAFE_DELETE(_dialogueMaker);
+	//
+	//
+	//SAFE_RELEASE(_nm);
+	//SAFE_DELETE(_nm);
+	//
+	//SAFE_RELEASE(_skillbookUI);
+	//SAFE_DELETE(_skillbookUI);
+	//
+	//SAFE_RELEASE(_playerInfoBoxUI);
+	//SAFE_DELETE(_playerInfoBoxUI);
+	//
+	//SAFE_RELEASE(_playerInfoBox);
+	//SAFE_DELETE(_playerInfoBox);
+
 }
 
 void home::update()
@@ -186,6 +206,7 @@ void home::update()
 
 			SCENEMANAGER->changeScene("stage1_1");
 			CAMERA2D->setPos({ 0,0 });
+			return;
 			
 		}
 	}
@@ -260,12 +281,13 @@ void home::render()
 		}
 	}
 
-	_dialogueMaker->render();
+	
 	_skillbookUI->render();
 
 	_playerInfoBoxUI->render();
 	_playerInfoBox->render();
 	_player->getSkillUI()->render();
+	_dialogueMaker->render();
 }
 
 void home::TileMapRender()

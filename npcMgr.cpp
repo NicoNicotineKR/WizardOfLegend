@@ -43,6 +43,12 @@ HRESULT npcMgr::init()
 
 void npcMgr::release()
 {
+	for (int i = 0; i < _vNpc.size(); i++) {
+		SAFE_RELEASE(_vNpc[i]);
+		SAFE_DELETE(_vNpc[i]);
+	}
+	_vNpc.clear();
+
 }
 
 void npcMgr::update()

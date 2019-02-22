@@ -18,13 +18,14 @@ HRESULT stage1_Boss::init()
 	IMAGEMANAGER->addFrameImage("objEarth", "images/map/EarthBaseObjSet.bmp", 1792, 448, 56, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
+	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
 
 
 	// 추가 - 다이얼로그
 	IMAGEMANAGER->addImage("bossImg", "images/npc/bossImg.bmp", 188, 189, true, 0xff00ff);
 	_npcFaceImg = IMAGEMANAGER->findImage("bossImg");
 	_npcFaceText = "잡어 잡어잡어잡어";
-	_npcFaceText2 = "으윽 너무아팡";
+	_npcFaceText2 = "아..아직도 엔딩크레딧씬이 남아있다니...";
 
 
 
@@ -44,7 +45,7 @@ HRESULT stage1_Boss::init()
 	_tileNumX = 0;
 	_tileNumY = 0;
 
-	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 20);
+	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 30);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 
 	_boss->setPlayerAdress(_player);
@@ -196,6 +197,10 @@ void stage1_Boss::update()
 	if (_boss->getCurHp() <= 0 && _stateBossStage == BATTLE)
 	{
 		_stateBossStage = BOSSDEAD;
+		_boss->getSkill1()->release();
+		_boss->getSkill2()->release();
+		_boss->getSKill3()->release();
+		_boss->getSkill4()->release();
 	}
 
 	if (_stateBossStage == BOSSDEAD)

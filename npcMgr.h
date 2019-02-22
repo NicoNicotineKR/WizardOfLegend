@@ -15,6 +15,8 @@ private:
 	vector<npc*>::iterator			_viNpc;
 
 	POINTFLOAT _playerPos;
+
+
 public:
 	npcMgr();
 	~npcMgr();

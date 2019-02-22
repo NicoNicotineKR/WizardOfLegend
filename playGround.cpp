@@ -26,7 +26,7 @@ HRESULT playGround::init()
 	_player = new player;
 	_home->setPlayerLink(_player);
 	//	======	재만 테스트용 ======
-	//_mapEditor = new mapEditor;
+	_mapEditor = new mapEditor;
 	_testStage = new testStage;
 
 	_stage1_1 = new stage1_1;
@@ -35,19 +35,24 @@ HRESULT playGround::init()
 	_stage1_Boss = new stage1_Boss;
 	_stage1_Boss->setPlayerLink(_player);
 
+	_endingScene = new endingScene;
 
-	//	======	공유 테스트용 ======
+
+
+	//	======	씬 추가 ======
 	SCENEMANAGER->addScene("introScene",_introScene);
 	SCENEMANAGER->addScene("mainmenu", _mainmenu);
-	//SCENEMANAGER->addScene("mapEditor", _mapEditor);		//	테스트해볼 씬 추가하고
+	SCENEMANAGER->addScene("mapEditor", _mapEditor);
 	SCENEMANAGER->addScene("testStage", _testStage);
 	SCENEMANAGER->addScene("stage1_1", _stage1_1);
 	SCENEMANAGER->addScene("stage1_Boss", _stage1_Boss);
+	SCENEMANAGER->addScene("endingScene", _endingScene);
 
 	SCENEMANAGER->addScene("home", _home);
 
 	SCENEMANAGER->changeScene("introScene");	
-	//	체인지 해준다.
+	//SCENEMANAGER->changeScene("endingScene");		//	체인지 해준다.
+	
 
 	return S_OK;
 }

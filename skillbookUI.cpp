@@ -224,6 +224,23 @@ HRESULT skillbookUI::init()
 
 void skillbookUI::release()
 {
+
+	IMAGEMANAGER->deleteImage("skillbookArrowbig");
+	IMAGEMANAGER->deleteImage("skillbookArrowsmall");
+	IMAGEMANAGER->deleteImage("skillbookCardAtrTab");
+	IMAGEMANAGER->deleteImage("skillbookCardEffect");
+	IMAGEMANAGER->deleteImage("skillbookCardImg");
+	IMAGEMANAGER->deleteImage("skillAtrSmallImg");
+	IMAGEMANAGER->deleteImage("skillbookEmpty");
+	IMAGEMANAGER->deleteImage("skillKindsTxt");
+	IMAGEMANAGER->deleteImage("skillKindsTxtDot");
+	IMAGEMANAGER->deleteImage("upperWinFrame");
+	IMAGEMANAGER->deleteImage("upperWinMask");
+
+	SAFE_RELEASE(_skillIconList);
+	SAFE_DELETE(_skillIconList);
+	
+
 }
 
 void skillbookUI::update()

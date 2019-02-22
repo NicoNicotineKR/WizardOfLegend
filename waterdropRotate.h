@@ -56,7 +56,7 @@ private:
 	const int WATERDROP_WID = 60;			//	건들지마시오
 	const int JUDGE_RC_WID = 38;			//	판정렉트 가로세로
 	const float PREPARE_TIME = 0.5f;		//	쏘기까지 준비시간
-	const int AUG_ALPHA = 60;				//	마지막놈이 알파 255되야 실제로 쏨
+	const int AUG_ALPHA = 30;				//	마지막놈이 알파 255되야 실제로 쏨
 	const float ROTATE_RAD = 150.0f;		//	회전반지름
 	const float ROTATE_ANGLE_SPD = PI / 64;		//	나누는 숫자 작아질수록 빨리돔
 	const float END_SKILTIME = 10.0f;		//	스킬 끝나서 초기화되는시간.

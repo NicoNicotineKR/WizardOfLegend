@@ -88,6 +88,8 @@ HRESULT npc_SpellBook::init()
 
 void npc_SpellBook::release()
 {
+	//IMAGEMANAGER->deleteImage("spellBook");
+	//IMAGEMANAGER->deleteImage("speelBookFace");
 }
 
 void npc_SpellBook::update()

@@ -7,6 +7,8 @@
 #include "stage1_Boss.h"
 #include "home.h"
 #include "player.h"
+#include "mapEditor.h"
+#include "endingScene.h"
 
 
 class playGround : public gameNode
@@ -18,8 +20,10 @@ private:
 	stage1_1* _stage1_1;
 	home* _home;
 	player* _player;
+	mapEditor* _mapEditor;
 
 	stage1_Boss* _stage1_Boss;
+	endingScene* _endingScene;
 
 //	int _savePlayerHp;
 	

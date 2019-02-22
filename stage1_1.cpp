@@ -19,9 +19,11 @@ HRESULT stage1_1::init()
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
 	IMAGEMANAGER->addImage("warpNpcFace", "images/npc/warpNpcFace.bmp", 187, 189, true, 0xff00ff);
+	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
+
 	_npcFaceImg = IMAGEMANAGER->findImage("warpNpcFace");
 	_npcFaceText1 = "몬스터가 남아있구마";
-	_npcFaceText2 = "가야될곳으로 안내해주께";
+	_npcFaceText2 = "마지막 개발자가 있는 곳으로 안내하지";
 
 	_stageMapLoader = new stageMapLoader;
 	_enemyMgr = new enemyMgr;
@@ -41,7 +43,7 @@ HRESULT stage1_1::init()
 	_player->arrSkillInit();
 	_player->skillIconInit();
 
-	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 12);
+	_stageMapLoader->LoadMap(&_vvMap, &_tileNumX, &_tileNumY, 31);
 	_stageMapLoader->MakeObjects(&_vvMap, &_vObjects, _enemyMgr);
 	//	로더에서 몹 밀어넣어주고, 에니미 매니저가 몹들 이닛해줘야함 -> 순서주의
 
@@ -84,7 +86,21 @@ HRESULT stage1_1::init()
 
 void stage1_1::release()
 {
+	SAFE_RELEASE(_enemyMgr);
+	SAFE_DELETE(_enemyMgr);
 
+	SAFE_RELEASE(_miniMap);
+	SAFE_DELETE(_miniMap);
+
+	SAFE_RELEASE(_boss);
+	SAFE_DELETE(_boss);
+
+	SAFE_RELEASE(_npc_warp);
+	SAFE_DELETE(_npc_warp);
+
+	SAFE_RELEASE(_dialogueMaker);
+	SAFE_DELETE(_dialogueMaker);
+	
 }
 
 void stage1_1::update()

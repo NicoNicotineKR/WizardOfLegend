@@ -76,6 +76,21 @@ void enemyMgr::release()
 	
 		_vEnemy[i]->release();
 	}
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 36; j++) {
+			SAFE_RELEASE(_ghoulEff[i][j]);
+			SAFE_DELETE(_ghoulEff[i][j]);
+			SAFE_RELEASE(_knightEff[i][j]);
+			SAFE_DELETE(_knightEff[i][j]);
+			
+		}
+	}
+
+
+
+	SAFE_RELEASE(_aStar);
+	SAFE_DELETE(_aStar);
 }
 
 void enemyMgr::update()

@@ -66,10 +66,13 @@ HRESULT sceneManager::changeScene(string sceneName)
 	if (find == _mSceneList.end()) return E_FAIL;
 
 	if (find->second == _currentScene) return S_OK;
-
+	
+	//if (_currentScene) _currentScene->release();		//	재만추가 (위치바꿈)	-> 실패함...
 	//성공적으로 씬이 변경이되면 init함수를 실행
 	if (SUCCEEDED(find->second->init()))
 	{
+		//	===	재만수정. deleteAll Img 하게되면, 위에 바꿀 씬의 이닛을 먼저 해버려서, 바뀔 씬의 이미지까지 날리게됨.
+		//	그래서 현재 씬의 릴리즈를 먼저 실행하겠음. (바꿀것의 이닛을 성공했는지 아닌지 몰라서 위험하긴하지만, 그래도 되겠지?) -> 응 안되네...
 		//현재 어떤 씬의 정보가 들어있을수도 있으므로 릴리즈 시켜주고
 		if (_currentScene) _currentScene->release();
 
