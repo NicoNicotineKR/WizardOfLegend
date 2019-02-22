@@ -125,7 +125,8 @@ HRESULT endingScene::init()
 	AddString("*¾ÆÄ§Ä®±â»ó        ->     ¹ÚÂùÈñ");
 	AddString("*³ÝÇÃ¸¯½º          ->     ¹ÚÂùÈñ");
 	AddString("*ÇÖ½ºÆÌ¼ÅÆ²        ->     ¹ÚÂùÈñ");
-	
+	AddString("*³­ ¼ö³»°¡ ½È¾ú¾î!  ->     ¹ÚÂùÈñ");
+
 
 	//	µµÇü2
 	//AddString("*È­Àå½Ç ºô·±       ->     Å·µµÇü");
