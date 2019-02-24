@@ -130,11 +130,20 @@ HRESULT endingScene::init()
 
 	//	도형2
 	//AddString("*화장실 빌런       ->     킹도형");
-	AddString("*휴지 빌런         ->     킹도형");
-	AddString("*빵구 빌런         ->     킹도형");
-	AddString("*맵 디자인 디렉터   ->     킹도형");
-	AddString("*사운드아트 디렉터  ->     킹도형");
-	AddString("*치킨을 양보하는 자  ->    킹도형");
+	AddString("*빵구 빌런          ->     킹도형");
+	AddString("*맵 디자인 디렉터    ->     킹도형");
+	AddString("*사운드아트 디렉터   ->     킹도형");
+	AddString("*치킨밴			   ->    킹도형");
+	AddString("*저희 피자먹죠?	  ->     킹도형");
+	AddString("*수면빌런			  ->     킹도형");
+	AddString("*금연때매	 제명당할뻔->     킹도형");
+	AddString("*현재 줄이는중		  ->     킹도형");
+	AddString("*형 20분만 쉴게요	  ->     킹도형");
+	AddString("*푸시할게여~~~	  ->     킹도형");
+	AddString("*젠하이저			  ->     킹도형");
+	AddString("*모멘텀			  ->     킹도형");
+	AddString("*트루				  ->     킹도형");
+	AddString("*와이어리스		  ->     킹도형");
 
 	//	외부
 	AddString("");
