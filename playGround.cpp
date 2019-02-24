@@ -86,12 +86,16 @@ void playGround::update()
 void playGround::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
-	
+	SetTextColor(getMemDC(), RGB(255, 255, 255));
+	SetBkMode(getMemDC(), TRANSPARENT);
+
+
 	SCENEMANAGER->render();
 	OPTIONMANAGER->render();
 
 
-	TIMEMANAGER->render(getMemDC());
+
+	//TIMEMANAGER->render(getMemDC());
 	//===========================================================
 	IMAGEMANAGER->findImage("backBuffer")->render(getHDC(), 0, 0);
 }

@@ -19,7 +19,7 @@ HRESULT stage1_Boss::init()
 	IMAGEMANAGER->addFrameImage("objCommon", "images/map/CommonBaseObjSet.bmp", 3584, 448, 112, 14, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("enemyCommon", "images/map/enemyUnitSet.bmp", 384, 160, 12, 5, true, 0xFF00FF);
 	IMAGEMANAGER->addFrameImage("objCastle", "images/map/CastleBaseObjSet.bmp", 736, 384, 23, 12, true, 0xFF00FF);
-
+	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, false, 0x000000);
 
 	// 추가 - 다이얼로그
 	IMAGEMANAGER->addImage("bossImg", "images/npc/bossImg.bmp", 188, 189, true, 0xff00ff);
@@ -87,6 +87,10 @@ HRESULT stage1_Boss::init()
 
 	_stateBossStage = NON;
 
+	_blackMaskImg = IMAGEMANAGER->findImage("blackWindow");
+	_maskAlpha = 0;
+	_alphaStartCount = 0;
+
 
 	return S_OK;
 }
@@ -97,6 +101,8 @@ void stage1_Boss::release()
 
 void stage1_Boss::update()
 {
+	
+
 	if (_allStop == false)
 	{
 		if (_stateBossStage == NON || _stateBossStage == BATTLE || _stateBossStage == ENDBOSS)
@@ -158,6 +164,22 @@ void stage1_Boss::update()
 	{
 		_stateBossStage = TALK;
 	}
+
+	if (_stateBossStage == ENDBOSS) 
+	{
+		_alphaStartCount++;
+		if (_alphaStartCount > ALPHA_STARTCOUNT_MAX) {
+			_maskAlpha++;
+			if (_maskAlpha >= 255)
+			{
+				_maskAlpha = 0;
+				SOUNDMANAGER->stop("Bossbackground");
+				SCENEMANAGER->changeScene("endingScene");
+			}
+		}
+		
+	}
+
 
 	if (_stateBossStage == TALK)
 	{
@@ -261,6 +283,11 @@ void stage1_Boss::render()
 	if (_stateBossStage == TALK || _stateBossStage == BOSSDEAD)
 	{
 		_dialogueMaker->render();
+	}
+
+	if (_stateBossStage == ENDBOSS)
+	{
+		_blackMaskImg->alphaRenderFixed(getMemDC(), 0, 0, 0, 0, 1600, 900, _maskAlpha);
 	}
 
 	//char str[128];

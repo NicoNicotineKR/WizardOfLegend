@@ -42,6 +42,9 @@ private:
 
 	bool _allStop;
 
+	image* _blackMaskImg;
+	int _maskAlpha;
+	int _alphaStartCount;
 	//int		_savePlayerHp;
 	//bool	_isOneSavePlayerHp;
 
@@ -51,6 +54,11 @@ private:
 	string _npcFaceText2;
 
 	stateBossStage _stateBossStage;
+
+	
+
+	const int ALPHA_AUG = 1;
+	const int ALPHA_STARTCOUNT_MAX = 200;
 
 
 public:

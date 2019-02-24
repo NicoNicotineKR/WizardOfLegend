@@ -12,10 +12,16 @@ endingScene::~endingScene()
 
 HRESULT endingScene::init()
 {
-	IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
+	//IMAGEMANAGER->addImage("blackWindow", "images/blackBackground.bmp", 1600, 900, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("nikonikotin", "images/introScene/nikonikoteam.bmp", 651, 85, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("niko", "images/introScene/niko.bmp", 651, 323, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("smoke", "images/introScene/smoke.bmp", 768, 92, 12, 1, true, RGB(255, 0, 255));
+
+	SOUNDMANAGER->stop("Bossbackground");
+	SOUNDMANAGER->stop("titleMusic");
+	//if (!(SOUNDMANAGER->isPlaySound("titleMusic"))) {
+		SOUNDMANAGER->play("titleMusic");
+	//}
 
 	_nikoImg = IMAGEMANAGER->findImage("niko");
 	_teamLogoTxtImg = IMAGEMANAGER->findImage("nikonikotin");
@@ -95,11 +101,12 @@ HRESULT endingScene::init()
 	AddString("*야 코딩 다했냐?   ->      Zeniz");
 	AddString("*요리 담당         ->      Zeniz");
 	AddString("*맛있지? 맛있다고 말해 ->  Zeniz");
-	AddString("*학원 셔틀         ->      Zeniz");
-	AddString("*형우야! 뭐하고있냐 ->      Zeniz");
-	AddString("*인생은 담배와 같지 ->      Zeniz");
+	AddString("*학원 셔틀 기사     ->      Zeniz");
+	AddString("*형우야! 뭐하고있냐  ->      Zeniz");
 	AddString("*코딩력은 니코틴과 비례한다 -> Zeniz");
 	AddString("*엎고 다시 해      ->      Zeniz");
+	AddString("*영상 편집 살려주세요..  ->    Zeniz");
+	AddString("*브금 타이밍 맞추려넣은 한줄 ->  Zeniz");
 	
 	
 
@@ -115,11 +122,12 @@ HRESULT endingScene::init()
 	AddString("*사운드 전체 장인   ->     유형우");
 	AddString("*정글러(사실도시락) ->     유형우");
 	AddString("*버섯커            ->     유형우");
+	AddString("*형우 궁디 팡팡     ->     Zeniz");
 
 	//	찬희2
 	AddString("*아재 유우머       ->     박찬희");
 	AddString("*필라이트 10개     ->     박찬희");
-	AddString("*그 중 8개는 혼자마심 ->  박찬희");
+	AddString("*그 중 8개는 혼자마신 ->  박찬희");
 	AddString("*사과 10개         ->     박찬희");
 	AddString("*꿀맛 장조림 3끼니  ->     박찬희");
 	AddString("*아침칼기상        ->     박찬희");
@@ -136,9 +144,11 @@ HRESULT endingScene::init()
 	AddString("*치킨밴			   ->    킹도형");
 	AddString("*저희 피자먹죠?	  ->     킹도형");
 	AddString("*수면빌런			  ->     킹도형");
+	AddString("*화장실 갱킹		  ->     킹도형");
 	AddString("*금연때매	 제명당할뻔->     킹도형");
 	AddString("*현재 줄이는중		  ->     킹도형");
 	AddString("*형 20분만 쉴게요	  ->     킹도형");
+	AddString("*진짜 20분이었을까?  ->     Zeniz");
 	AddString("*푸시할게여~~~	  ->     킹도형");
 	AddString("*젠하이저			  ->     킹도형");
 	AddString("*모멘텀			  ->     킹도형");
@@ -153,6 +163,7 @@ HRESULT endingScene::init()
 	AddString("*SPECIAL THANKS TO [2] ->    최치영");
 	AddString("*SPECIAL THANKS TO [3] ->    수호행님");
 
+	AddString("");
 	AddString("");
 	AddString(" === THANKS FOR WATCHING === ");
 	AddString("");
@@ -174,6 +185,7 @@ HRESULT endingScene::init()
 
 void endingScene::release()
 {
+	SOUNDMANAGER->stop("titleMusic");
 	for (int i = 0; i < _vTxt.size(); i++) {
 		_vTxt[i]->txt.clear();
 	}
