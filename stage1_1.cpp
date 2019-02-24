@@ -214,13 +214,48 @@ void stage1_1::render()
 		{
 			_enemyMgr->getVEnemy()[i]->CamRender();
 		}
+
+		//	aStar¿ë ·ºÆ® ·»´õ
+
+		if (KEYMANAGER->isToggleKey(VK_F9))
+		{
+			list<POINT>::iterator showPathI = _enemyMgr->getVEnemy()[i]->getPath()->begin();
+			for (; showPathI != _enemyMgr->getVEnemy()[i]->getPath()->end(); showPathI++)
+			{
+				int idX = (*showPathI).x;
+				int idY = (*showPathI).y;
+
+				RECT temp = _vvMap[idY][idX]->getTopTileRc();
+
+				Rectangle(getMemDC(), temp.left - CAMERA2D->getCamPosX(), temp.top - CAMERA2D->getCamPosY(), temp.right - CAMERA2D->getCamPosX(), temp.bottom - CAMERA2D->getCamPosY());
+
+			}
+		}
+
 	}
 	_player->CamRender(getMemDC());
+
 	for (int i = 0; i < _enemyMgr->getVEnemy().size(); ++i)
 	{
 		if (_player->getPlayerTileCheckRc().bottom < _enemyMgr->getVEnemy()[i]->getCollision().bottom)
 		{
 			_enemyMgr->getVEnemy()[i]->CamRender();
+
+			if (KEYMANAGER->isToggleKey(VK_F9))
+			{
+				list<POINT>::iterator showPathI = _enemyMgr->getVEnemy()[i]->getPath()->begin();
+				for (; showPathI != _enemyMgr->getVEnemy()[i]->getPath()->end(); showPathI++)
+				{
+					int idX = (*showPathI).x;
+					int idY = (*showPathI).y;
+
+					RECT temp = _vvMap[idY][idX]->getTopTileRc();
+
+					Rectangle(getMemDC(), temp.left - CAMERA2D->getCamPosX(), temp.top - CAMERA2D->getCamPosY(), temp.right - CAMERA2D->getCamPosX(), temp.bottom - CAMERA2D->getCamPosY());
+
+				}
+			}
+
 		}
 	}
 	_player->getSkillUI()->render();
